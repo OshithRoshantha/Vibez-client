@@ -3,6 +3,6 @@ import './Styles/Signup.css'
 
 export default function Signup() {
   return (
-    <div>Signup</div>
+    <div className='second-container'></div>
   )
 }
