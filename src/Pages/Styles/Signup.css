@@ -1,0 +1,10 @@
+.second-container{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url('wallpaper2.png');
+    background-size: cover;
+}
