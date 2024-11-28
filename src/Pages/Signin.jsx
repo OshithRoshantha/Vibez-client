@@ -37,7 +37,7 @@ export default function Signin() {
             <GoogleLogin
                 shape="pill"
                 theme="outline"
-                width={290}
+                width={282}
               onSuccess={credentialResponse => {
                 console.log(credentialResponse);
               }}
@@ -52,9 +52,9 @@ export default function Signin() {
               <div className='divider-line'></div>
             </div>
             <Label htmlFor="email">Enter your email address</Label>
-            <Input className='rounded-custom-md' type="email" id="email" placeholder="jhon@example.com" />
+            <Input className='rounded-custom-md input-group' type="email" id="email" placeholder="jhon@example.com" />
             <Label htmlFor="email">Enter your password</Label>
-            <Input className='rounded-custom-md' type="password" id="email" placeholder="Password" />
+            <Input className='rounded-custom-md input-group' type="password" id="email" placeholder="Password" />
             <Button className='sign-in-btn-main rounded-custom-md' onClick={handleSwipe}>Sign In</Button>
           </CardContent>
           <CardFooter>
