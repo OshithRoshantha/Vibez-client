@@ -33,14 +33,18 @@ export default function Signin() {
             <CardTitle className='card-heading'>Sign In</CardTitle>
           </CardHeader>
           <CardContent>
+          <div className='google-login'>
             <GoogleLogin
+                shape="pill"
+                theme="outline"
+                width={290}
               onSuccess={credentialResponse => {
                 console.log(credentialResponse);
               }}
               onError={() => {
                 console.log('Login Failed');
               }}
-            />
+            /></div>
             <br/>
             <div className='divider'>
               <div className='divider-line'></div>
@@ -48,10 +52,10 @@ export default function Signin() {
               <div className='divider-line'></div>
             </div>
             <Label htmlFor="email">Enter your email address</Label>
-            <Input type="email" id="email" placeholder="jhon@example.com" />
+            <Input className='rounded-custom-md' type="email" id="email" placeholder="jhon@example.com" />
             <Label htmlFor="email">Enter your password</Label>
-            <Input type="password" id="email" placeholder="Password" />
-            <Button className='sign-in-btn-main' onClick={handleSwipe}>Sign In</Button>
+            <Input className='rounded-custom-md' type="password" id="email" placeholder="Password" />
+            <Button className='sign-in-btn-main rounded-custom-md' onClick={handleSwipe}>Sign In</Button>
           </CardContent>
           <CardFooter>
             <p>No account? <a className='signup-link'>Sign Up</a></p>
