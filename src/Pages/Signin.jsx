@@ -13,6 +13,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { GoogleLogin } from '@react-oauth/google';
+import LandingAnimation from '@/Components/LandingAnimation';
+
 
 export default function Signin() {
   const [swiped, setSwiped] = useState(false);
@@ -25,6 +27,9 @@ export default function Signin() {
             <img src={mainLogo} className='main-logo' alt='Main Logo'/>
             <h1 className='main-hero'>A place for meaningful conversations</h1>
             <h1 className="display-4 main-sub">Sign in to stay connected with your friends and team.</h1>
+            <div className='cta'>
+              <LandingAnimation/>
+            </div>
         </div>
         <div className='right-side'>
         <Card className='login-card'>
