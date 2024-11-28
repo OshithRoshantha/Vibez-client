@@ -1,8 +1,8 @@
-import './Styles/Login.css'
+import './Styles/Signin.css'
 import mainLogo from '../assets/Icons/main-logo.png'
 import { useState } from 'react';
 
-export default function Login() {
+export default function Signin() {
   const [swiped, setSwiped] = useState(false);
   const handleSwipe = () => {
     setSwiped(!swiped);
@@ -15,7 +15,6 @@ export default function Login() {
             <h1 className="display-4 main-sub">Sign in to stay connected with your friends and team.</h1>
         </div>
         <div className='right-side'>
-
         </div>
     </div>
   )
