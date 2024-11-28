@@ -42,6 +42,11 @@ export default function Signin() {
               }}
             />
             <br/>
+            <div className='divider'>
+              <div className='divider-line'></div>
+              &nbsp;&nbsp;Or&nbsp;&nbsp;
+              <div className='divider-line'></div>
+            </div>
             <Label htmlFor="email">Enter your email address</Label>
             <Input type="email" id="email" placeholder="jhon@example.com" />
             <Label htmlFor="email">Enter your password</Label>
