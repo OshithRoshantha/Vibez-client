@@ -55,12 +55,12 @@
     width: 19%;
 }
 
-.login-container.swiped .left-side {
-    transform: translateX(-100%);
+.main-container.swiped .left-side {
+    transform: translateX(-100%);  
 }
 
-.login-container.swiped .right-side {
-    transform: translateX(100%);
+.main-container.swiped .right-side {
+    transform: translateX(100%); 
 }
 
 .text-logo{
@@ -76,7 +76,9 @@
     margin-top: 10.5%;
     width: 100%;
 }
-
+.sign-in-btn-main:hover{
+    background-color: #3600a1;
+}
 .card-heading{
     font-size: 250%;
 }

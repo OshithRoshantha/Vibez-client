@@ -14,13 +14,22 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { GoogleLogin } from '@react-oauth/google';
 import LandingAnimation from '@/Components/LandingAnimation';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function Signin() {
+  const navigate = useNavigate();
   const [swiped, setSwiped] = useState(false);
   const handleSwipe = () => {
     setSwiped(!swiped);
+    console.log(swiped);
   };
+  const navSignup = () => {
+    setTimeout(() => {
+      navigate('/Signup');
+    }, 400);
+  };
+
   return (
     <div className={`main-container ${swiped ? 'swiped' : ''}`}>
         <div className='left-side'>
@@ -32,41 +41,58 @@ export default function Signin() {
             </div>
         </div>
         <div className='right-side'>
-        <Card className='login-card'>
-          <CardHeader>
-            <CardDescription>Welcome to&nbsp;<img src={mainLogo} className='text-logo' alt='Main Logo'/> </CardDescription>
-            <CardTitle className='card-heading'>Sign In</CardTitle>
-          </CardHeader>
-          <CardContent>
-          <div className='google-login'>
-            <GoogleLogin
-                shape="pill"
-                theme="outline"
-                width={282}
-              onSuccess={credentialResponse => {
-                console.log(credentialResponse);
-              }}
-              onError={() => {
-                console.log('Login Failed');
-              }}
-            /></div>
-            <br/>
-            <div className='divider'>
-              <div className='divider-line'></div>
-              &nbsp;&nbsp;Or&nbsp;&nbsp;
-              <div className='divider-line'></div>
-            </div>
-            <Label htmlFor="email">Enter your email address</Label>
-            <Input className='rounded-custom-md input-group' type="email" id="email" placeholder="jhon@example.com" />
-            <Label htmlFor="email">Enter your password</Label>
-            <Input className='rounded-custom-md input-group' type="password" id="email" placeholder="Password" />
-            <Button className='sign-in-btn-main rounded-custom-md' onClick={handleSwipe}>Sign In</Button>
-          </CardContent>
-          <CardFooter>
-            <p>No account? <a className='signup-link'>Sign Up</a></p>
-          </CardFooter>
-        </Card>
+            <Card className='login-card'>
+                <CardHeader>
+                    <CardDescription>
+                        Welcome to <img src={mainLogo} className='text-logo' alt='Main Logo'/>
+                    </CardDescription>
+                    <CardTitle className='card-heading'>{swiped ? 'Sign Up' : 'Sign In'}</CardTitle>  {/* Conditionally render */}
+                </CardHeader>
+                <CardContent>
+                    {swiped ? (
+                        <>
+                            <Label htmlFor="email">Enter your email address</Label>
+                            <Input className='rounded-custom-md input-group' type="email" id="email" placeholder="Jhon@example.com" />
+                            <Label htmlFor="password">Enter your password</Label>
+                            <Input className='rounded-custom-md input-group' type="password" id="password" placeholder="Password" />
+                            <Button className='sign-in-btn-main rounded-custom-md'>Sign Up</Button>
+                        </>
+                    ) : (
+                        <>
+                            <div className='google-login'>
+                                <GoogleLogin
+                                    shape="pill"
+                                    theme="outline"
+                                    width={282}
+                                    onSuccess={credentialResponse => {
+                                        console.log(credentialResponse);
+                                        handleSwipe();
+                                    }}
+                                    onError={() => {
+                                        console.log('Login Failed');
+                                    }}
+                                />
+                            </div>
+                            <br/>
+                            <div className='divider'>
+                                <div className='divider-line'></div>
+                                &nbsp;&nbsp;Or&nbsp;&nbsp;
+                                <div className='divider-line'></div>
+                            </div>
+                            <Label htmlFor="email">Enter your email address</Label>
+                            <Input className='rounded-custom-md input-group' type="email" id="email" placeholder="Jhon@example.com" />
+                            <Label htmlFor="email">Enter your password</Label>
+                            <Input className='rounded-custom-md input-group' type="password" id="email" placeholder="Password" />
+                            <Button className='sign-in-btn-main rounded-custom-md' onClick={() => { handleSwipe(); }}>Sign In</Button>
+                        </>
+                    )}
+                </CardContent>
+                <CardFooter>
+                    <p>No account? <a className='signup-link' onClick={() => { handleSwipe(); navSignup(); }}>Sign Up</a></p>
+                </CardFooter>
+            </Card>
         </div>
+
     </div>
   )
 }
