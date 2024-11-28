@@ -64,7 +64,7 @@ const reviews = [
     },
   ];
 
-const firstRow = reviews.slice(0, reviews.length / 2);
+const firstRow = reviews;
 
 const ReviewCard = ({ img, name, username, body }) => {
   return (
