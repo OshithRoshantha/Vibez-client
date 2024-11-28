@@ -72,9 +72,14 @@
 
 .sign-in-btn-main{
     margin-top: 10.5%;
+    width: 100%;
 }
 
 .card-heading{
     font-size: 250%;
 }
 
+.login-card{
+    width: 60%;
+    border-radius: 25px;
+}

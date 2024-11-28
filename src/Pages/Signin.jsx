@@ -27,7 +27,7 @@ export default function Signin() {
             <h1 className="display-4 main-sub">Sign in to stay connected with your friends and team.</h1>
         </div>
         <div className='right-side'>
-        <Card>
+        <Card className='login-card'>
           <CardHeader>
             <CardDescription>Welcome to&nbsp;<img src={mainLogo} className='text-logo' alt='Main Logo'/> </CardDescription>
             <CardTitle className='card-heading'>Sign In</CardTitle>
@@ -41,6 +41,7 @@ export default function Signin() {
                 console.log('Login Failed');
               }}
             />
+            <br/>
             <Label htmlFor="email">Enter your email address</Label>
             <Input type="email" id="email" placeholder="jhon@example.com" />
             <Label htmlFor="email">Enter your password</Label>
