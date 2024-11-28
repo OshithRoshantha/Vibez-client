@@ -60,3 +60,21 @@
 .login-container.swiped .right-side {
     transform: translateX(100%);
 }
+
+.text-logo{
+    height: 35px;
+    display:inline;
+}
+
+.signup-link{
+    cursor: pointer;
+}
+
+.sign-in-btn-main{
+    margin-top: 10.5%;
+}
+
+.card-heading{
+    font-size: 250%;
+}
+

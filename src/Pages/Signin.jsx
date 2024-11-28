@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
+import { GoogleLogin } from '@react-oauth/google';
 
 export default function Signin() {
   const [swiped, setSwiped] = useState(false);
@@ -28,14 +29,26 @@ export default function Signin() {
         <div className='right-side'>
         <Card>
           <CardHeader>
-            <CardTitle>Card Title</CardTitle>
-            <CardDescription>Card Description</CardDescription>
+            <CardDescription>Welcome to&nbsp;<img src={mainLogo} className='text-logo' alt='Main Logo'/> </CardDescription>
+            <CardTitle className='card-heading'>Sign In</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>Card Content</p>
+            <GoogleLogin
+              onSuccess={credentialResponse => {
+                console.log(credentialResponse);
+              }}
+              onError={() => {
+                console.log('Login Failed');
+              }}
+            />
+            <Label htmlFor="email">Enter your email address</Label>
+            <Input type="email" id="email" placeholder="jhon@example.com" />
+            <Label htmlFor="email">Enter your password</Label>
+            <Input type="password" id="email" placeholder="Password" />
+            <Button className='sign-in-btn-main' onClick={handleSwipe}>Sign In</Button>
           </CardContent>
           <CardFooter>
-            <p>Card Footer</p>
+            <p>No account? <a className='signup-link'>Sign Up</a></p>
           </CardFooter>
         </Card>
         </div>
