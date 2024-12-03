@@ -67,6 +67,8 @@ export default function Signin() {
                                     onSuccess={credentialResponse => {
                                         console.log(credentialResponse);
                                         handleSwipe();
+                                        const token = credentialResponse.credential;
+                                        console.log("Google JWT Token:", token);
                                     }}
                                     onError={() => {
                                         console.log('Login Failed');
