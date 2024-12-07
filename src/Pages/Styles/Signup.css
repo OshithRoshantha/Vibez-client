@@ -7,9 +7,20 @@
     align-items: center;
     background-image: url('wallpaper2.png');
     background-size: cover;
+    row-gap: 7%;
 }
 .signup-container{
     width: 40%;
     height: 50%;
     border-radius: 30px;
+}
+.header{
+    margin-top: -5%;
+    width: 50%;
+}
+.signup-sub{
+    font-size: 120%;
+}
+.signup-main{
+    font-size: 300%;
 }

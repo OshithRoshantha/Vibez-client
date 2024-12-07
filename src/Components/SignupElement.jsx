@@ -1,5 +1,5 @@
 import React from 'react'
-import './Styles/StepperElement.css'
+import './Styles/SignupElement.css'
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -9,7 +9,7 @@ import { Card } from './ui/card';
 import { useNavigate } from 'react-router-dom';
 
 
-export default function StepperElement() {
+export default function SignupElement() {
   const steps = ['Basic Information', 'Add Password', 'Personalize and Finalize'];
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = React.useState(0);
@@ -57,6 +57,11 @@ export default function StepperElement() {
       </Stepper>
     </Box>
     </Card>
+    <div className='stepper-content'>
+        {activeStep === 0 && <div>Basic Information</div>}
+        {activeStep === 1 && <div>Add Password</div>}
+        {activeStep === 2 && <div>Personalize and Finalize</div>}
+    </div>
     <div className='stepper-buttons'>
     <Box sx={{ display: 'flex', flexDirection: 'row',columnGap:'10px'}}>
             <Button
