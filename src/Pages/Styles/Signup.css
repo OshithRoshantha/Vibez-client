@@ -7,7 +7,7 @@
     align-items: center;
     background-image: url('wallpaper2.png');
     background-size: cover;
-    row-gap: 7%;
+    row-gap: 4%;
 }
 .signup-container{
     width: 40%;
