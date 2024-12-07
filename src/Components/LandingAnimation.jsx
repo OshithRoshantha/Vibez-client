@@ -94,7 +94,7 @@ const ReviewCard = ({ img, name, username, body }) => {
 export default function LandingAnimation() {
   return (
     <div className="relative flex h-[500px] w-full flex-col items-center justify-center overflow-hidden rounded-lg ">
-      <Marquee pauseOnHover className="[--duration:20s]">
+      <Marquee pauseOnHover className="[--duration:50s]">
         {firstRow.map((review) => (
           <ReviewCard key={review.username} {...review} />
         ))}
