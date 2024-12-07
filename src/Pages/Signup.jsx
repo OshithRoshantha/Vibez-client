@@ -1,4 +1,3 @@
-import React from 'react'
 import './Styles/Signup.css'
 import SignupElement from '@/Components/SignupElement'
 import mainLogo from '../assets/Icons/main-logo.png'
