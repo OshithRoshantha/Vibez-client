@@ -1,8 +1,9 @@
-.stepper-area{
-    background-color: blue;
+.stepper-buttons{
     width: 100%;
-    height: 15%;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.stepper-body{
+    border-radius: 25px;
 }

@@ -1,20 +1,19 @@
 import React from 'react'
+import './Styles/StepperElement.css'
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import { Card } from './ui/card';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function StepperElement() {
   const steps = ['Basic Information', 'Add Password', 'Personalize and Finalize'];
+  const navigate = useNavigate();
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
-
-  const isStepOptional = (step) => {
-    return step === 1;
-  };
 
   const isStepSkipped = (step) => {
     return skipped.has(step);
@@ -22,6 +21,9 @@ export default function StepperElement() {
 
   const handleNext = () => {
     let newSkipped = skipped;
+    if (activeStep === 2) {
+      navigate('/');
+    }
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
@@ -35,25 +37,10 @@ export default function StepperElement() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
-  };
   return (
-    <div className='stepper-area'>
-      <Box sx={{ width: '100%' ,paddingTop:'3.5%',paddingX:'3%'}}>
+    <div>
+    <Card className='stepper-body'>
+      <Box sx={{ width: '100%',paddingX:'3%',paddingY:'2.5%'}}>
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
           const stepProps = {};
@@ -68,32 +55,26 @@ export default function StepperElement() {
           );
         })}
       </Stepper>
-      {activeStep === steps.length ? (
-        <React.Fragment>
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Box sx={{ flex: '1 1 auto' }} />
-            <Button onClick={handleReset}>Reset</Button>
-          </Box>
-        </React.Fragment>
-      ) : (
-        <React.Fragment>
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+    </Box>
+    </Card>
+    <div className='stepper-buttons'>
+    <Box sx={{ display: 'flex', flexDirection: 'row',columnGap:'10px'}}>
             <Button
               color="inherit"
               disabled={activeStep === 0}
               onClick={handleBack}
-              sx={{ mr: 1 }}
+              sx={{paddingX:'25px',paddingY:'7px', borderRadius:'20px'}}
             >
               Back
             </Button>
-            <Box sx={{ flex: '1 1 auto' }} />
-            <Button onClick={handleNext}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            <Box />
+            <Button onClick={handleNext}
+              sx={{color:'white', fontSize:'700' ,backgroundColor:'#0d6efd', paddingX:'25px',paddingY:'7px' , borderRadius:'20px'}}
+            >
+              {activeStep === steps.length - 1 ? 'Create' : 'Continue'}
             </Button>
-          </Box>
-        </React.Fragment>
-      )}
     </Box>
+    </div>
     </div>
   )
 }
