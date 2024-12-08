@@ -6,6 +6,8 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import { Card } from './ui/card';
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { useNavigate } from 'react-router-dom';
 
 
@@ -58,7 +60,10 @@ export default function SignupElement() {
     </Box>
     </Card>
     <div className='stepper-content'>
-        {activeStep === 0 && <div>Basic Information</div>}
+        {activeStep === 0 && <div>
+          <Label htmlFor="email">Full Name</Label>
+          <Input type="text" id="fName" placeholder="John Doe" />
+        </div>}
         {activeStep === 1 && <div>Add Password</div>}
         {activeStep === 2 && <div>Personalize and Finalize</div>}
     </div>
