@@ -21,6 +21,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@react-oauth/google": "^0.12.1",
     "bootstrap": "^5.3.3",
+    "check-password-strength": "^2.0.10",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
