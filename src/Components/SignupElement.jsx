@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import { Card } from './ui/card';
 import { useNavigate } from 'react-router-dom';
 import { PatternFormat } from "react-number-format";
+import ContactField from "./ContactField";
 
 export default function SignupElement() {
   const steps = ['Basic Information', 'Add Password', 'Personalize and Finalize'];
@@ -63,24 +64,13 @@ export default function SignupElement() {
             <div className='field-box'>
             <Box
               component="form"
-              sx={{ '& > :not(style)': { m: 1, width: '100%',marginLeft:'-20%'} }}
+              sx={{ '& > :not(style)': { m: 1, width: '120%',marginLeft:'-20%'} }}
               noValidate
               autoComplete="off"
             >
               <TextField id="outlined-basic" label="Full Name" variant="outlined" placeholder="John Doe" InputProps={{sx: { borderRadius: '20px'}}}/><br></br>
               <TextField id="outlined-email" label="Email Address" variant="outlined" placeholder="john@example.com" InputProps={{sx: { borderRadius: '20px' }}}/>
-              <PatternFormat
-                format="(+94) ## ### ####"
-                allowEmptyFormatting
-                customInput={TextField}
-                label="Contact Number"
-                variant="outlined"
-                placeholder="(+94) 76 918 2392"
-                InputProps={{
-                  sx: { borderRadius: '20px' ,width:'50%'}, 
-                }}
-              />
-
+              <ContactField/>
             </Box></div>
             
         </div>}
