@@ -13,17 +13,49 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { passwordStrength } from 'check-password-strength'
 
 export default function SignupElement() {
   const steps = ['Basic Information', 'Add Password', 'Personalize and Finalize'];
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordStrengthValue, setPasswordStrengthValue] = useState(0);
 
-  const isStepSkipped = (step) => {
-    return skipped.has(step);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  function handlePasswordChange(event) {
+    const newPassword = event.target.value;
+    setPassword(newPassword);
+    setPasswordStrengthValue(passwordStrength(newPassword).id);
+  }
+
+  const handleConfirmPasswordChange = (event) => {
+    setConfirmPassword(event.target.value);
   };
 
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
+
+  const getStrengthColor = (strength) => {
+    switch (strength) {
+      case 0:
+        return { color: 'red' };
+      case 1:
+        return { color: 'orange' };
+      case 2:
+        return { color: 'yellow' };
+      case 3:
+        return { color: 'green' };
+      default:
+        return { color: 'black' };
+    }
+  };
+
+  const isStepSkipped = (step) => skipped.has(step);
   const handleNext = () => {
     let newSkipped = skipped;
     if (activeStep === 2) {
@@ -33,17 +65,11 @@ export default function SignupElement() {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
-
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
   };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleBack = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
 
   return (
     <div>
@@ -87,38 +113,16 @@ export default function SignupElement() {
             <div className='field-box2'>
               <Box
                 component="form"
-                sx={{ '& > :not(style)': { m: 1, width: '70%',marginLeft:'10%' } }}
+                sx={{ '& > :not(style)': { m: 1, width: '70%', marginLeft: '10%' } }}
                 noValidate
                 autoComplete="off"
               >
-              <TextField
+                <TextField
                   id="outlined-password"
                   label="Password"
                   variant="outlined"
                   placeholder="Enter Password"
-                  type={showPassword ? "text" : "password"}
-                  InputProps={{
-                    sx: { borderRadius: '20px', backgroundColor: 'white'},
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={handleClickShowPassword}
-                          onMouseDown={(e) => e.preventDefault()}
-                          edge="end"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-                <p className="password-strength">Password Strength: </p>
-                <TextField
-                  id="outlined-password"
-                  label="Confirm Password"
-                  variant="outlined"
-                  placeholder="Confirm Password"
-                  type={showPassword ? "text" : "password"}
+                  onChange={handlePasswordChange}
                   InputProps={{
                     sx: { borderRadius: '20px', backgroundColor: 'white' },
                     endAdornment: (
@@ -133,6 +137,37 @@ export default function SignupElement() {
                       </InputAdornment>
                     ),
                   }}
+                  type={showPassword ? "text" : "password"}
+                />
+                <p className="password-strength">Password Strength:&nbsp;
+                  <span style={getStrengthColor(passwordStrengthValue)}>
+                    {passwordStrengthValue === 0 ? 'Too weak' :
+                      passwordStrengthValue === 1 ? 'Weak' :
+                      passwordStrengthValue === 2 ? 'Medium' :
+                      'Strong'}
+                  </span>
+                </p>
+                <TextField
+                  id="outlined-confirm-password"
+                  label="Confirm Password"
+                  variant="outlined"
+                  placeholder="Confirm Password"
+                  onChange={handleConfirmPasswordChange}
+                  InputProps={{
+                    sx: { borderRadius: '20px', backgroundColor: 'white' },
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={handleClickShowConfirmPassword}
+                          onMouseDown={(e) => e.preventDefault()}
+                          edge="end"
+                        >
+                          {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  type={showConfirmPassword ? "text" : "password"}
                 />
               </Box>
             </div>
