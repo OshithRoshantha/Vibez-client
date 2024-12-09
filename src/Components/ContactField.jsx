@@ -69,7 +69,7 @@ const ContactNumberInput = () => {
           value={countryCode}
           onChange={handleCountryCodeChange}
           label="Code"
-          sx={{ borderRadius: '20px' }}
+          sx={{ borderRadius: '20px' ,backgroundColor:'white'}}
           MenuProps={{
             PaperProps: {
               sx: {
@@ -96,7 +96,7 @@ const ContactNumberInput = () => {
         variant="outlined"
         placeholder={`${countryCode} 76 918 2392`}
         InputProps={{
-          sx: { borderRadius: '20px', width: '134%' },
+          sx: { borderRadius: '20px', width: '134%',backgroundColor:'white' },
         }}
       />
     </div>
