@@ -68,8 +68,8 @@ export default function SignupElement() {
               noValidate
               autoComplete="off"
             >
-              <TextField id="outlined-basic" label="Full Name" variant="outlined" placeholder="John Doe" InputProps={{sx: { borderRadius: '20px'}}}/><br></br>
-              <TextField id="outlined-email" label="Email Address" variant="outlined" placeholder="john@example.com" InputProps={{sx: { borderRadius: '20px' }}}/>
+              <TextField id="outlined-basic" label="Full Name" variant="outlined" placeholder="John Doe" InputProps={{sx: { borderRadius: '20px',backgroundColor:'white'}}}/><br></br>
+              <TextField id="outlined-email" label="Email Address" variant="outlined" placeholder="john@example.com" InputProps={{sx: { borderRadius: '20px' ,backgroundColor:'white'}}}/>
               <ContactField/>
             </Box></div>
             
