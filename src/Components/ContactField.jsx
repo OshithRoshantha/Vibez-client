@@ -87,7 +87,6 @@ const ContactNumberInput = () => {
           ))}
         </Select>
       </FormControl>
-
       <PatternFormat
         format={`${countryCode} ## ### ####`}
         allowEmptyFormatting
