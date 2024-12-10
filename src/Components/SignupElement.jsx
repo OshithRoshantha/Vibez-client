@@ -14,6 +14,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { passwordStrength } from 'check-password-strength'
+import { Progress } from "@/components/ui/progress"
+import { set } from "date-fns";
 
 export default function SignupElement() {
   const steps = ['Basic Information', 'Add Password', 'Personalize and Finalize'];
@@ -22,6 +24,7 @@ export default function SignupElement() {
   const [skipped, setSkipped] = React.useState(new Set());
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [progress, setProgress] = useState(25);
   const [passwordStrengthValue, setPasswordStrengthValue] = useState(0);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -31,6 +34,21 @@ export default function SignupElement() {
     const newPassword = event.target.value;
     setPassword(newPassword);
     setPasswordStrengthValue(passwordStrength(newPassword).id);
+    if (passwordStrength(newPassword).id === 0) {
+      setProgress(25);
+    }
+    else if (passwordStrength(newPassword).id === 1) {
+      setProgress(50);
+    }
+    else if (passwordStrength(newPassword).id === 2) {
+      setProgress(75);
+    }
+    else if (passwordStrength(newPassword).id === 3) {
+      setProgress(100);
+    }
+    else {
+      setProgress(0);
+    }
   }
 
   const handleConfirmPasswordChange = (event) => {
@@ -146,6 +164,11 @@ export default function SignupElement() {
                       passwordStrengthValue === 2 ? 'Medium' :
                       'Strong'}
                   </span>
+                  <div className="progress-bar">
+                    <Progress value={progress} 
+                        className={`progress-${passwordStrengthValue}`}
+                        style={{ width: '50%', height: '7px' }}/>
+                  </div>
                 </p>
                 <TextField
                   id="outlined-confirm-password"
