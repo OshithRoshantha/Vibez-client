@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from 'react';
 import './Styles/SignupElement.css'
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -15,7 +15,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { passwordStrength } from 'check-password-strength'
 import { Progress } from "@/components/ui/progress"
-import { set } from "date-fns";
+import AvatarEditor from 'react-avatar-editor'
 
 export default function SignupElement() {
   const steps = ['Basic Information', 'Add Password', 'Personalize and Finalize'];
@@ -26,9 +26,20 @@ export default function SignupElement() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [progress, setProgress] = useState(25);
   const [passwordStrengthValue, setPasswordStrengthValue] = useState(0);
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const fileInputRef = useRef(null);
+
+    const uploadImg = () => {
+      fileInputRef.current.click();
+    };
+
+    const handleFileChange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        console.log('Selected file:', file.name);
+      }
+    };
 
   function handlePasswordChange(event) {
     const newPassword = event.target.value;
@@ -196,7 +207,23 @@ export default function SignupElement() {
             </div>
           </div>
         )}
-        {activeStep === 2 && <div>Personalize and Finalize</div>}
+        {activeStep === 2 && <div>
+            <div className="field-box3">
+              <div className='profile-pic' onClick={uploadImg}>
+                <span className='camera-icon'><i className="bi bi-camera-fill"></i></span>ADD PROFILE PICTURE
+              </div>
+              <input
+                type='file'
+                accept='image/*'
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
+              />
+              <div className='about-input'>
+                <TextField id="outlined-basic" label="About" variant="outlined" placeholder="Can't talk, Vibez only" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' ,width:'180%'} }} />
+              </div>
+            </div>
+          </div>}
       </div>
       <div className='stepper-buttons'>
         <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: '10px' }}>
