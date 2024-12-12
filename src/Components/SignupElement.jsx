@@ -234,8 +234,9 @@ export default function SignupElement() {
         )}
         {activeStep === 2 && <div>
             <div className="field-box3">
-              <div className='profile-pic' onClick={uploadImg}   style={{
-                backgroundImage: 'url(${selectedImage})', 
+              <div className='profile-pic' onClick={uploadImg}   
+              style={{
+                backgroundImage: `url(${selectedImage})`, 
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}>
