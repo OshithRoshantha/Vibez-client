@@ -1,0 +1,35 @@
+.second-container{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url('wallpaper2.png');
+    background-size: cover;
+    row-gap: 4%;
+}
+.signup-container{
+    width: 40%;
+    height: 50%;
+    border-radius: 30px;
+}
+.header{
+    margin-top: -5%;
+    width: 50%;
+    display: flex;
+    column-gap: 15%;
+}
+.signup-sub{
+    font-size: 120%;
+}
+.signup-main{
+    font-size: 300%;
+}
+.logo{
+    width: 180px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
