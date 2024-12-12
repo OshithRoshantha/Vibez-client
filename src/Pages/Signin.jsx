@@ -25,6 +25,7 @@ export default function Signin() {
     setSwiped(!swiped);
     console.log(swiped);
   };
+
   const navSignup = () => {
     setTimeout(() => {
       navigate('/Signup');
