@@ -13,6 +13,7 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Slider from '@mui/material/Slider';
 import { passwordStrength } from 'check-password-strength'
 import { Progress } from "@/components/ui/progress"
 import AvatarEditor from 'react-avatar-editor'
@@ -28,18 +29,28 @@ export default function SignupElement() {
   const [passwordStrengthValue, setPasswordStrengthValue] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [editPictureForm, setEditPictureForm] = useState(true);
+  const [cropFactor, setCropFactor] = useState(1);
   const fileInputRef = useRef(null);
 
-    const uploadImg = () => {
-      fileInputRef.current.click();
-    };
+  function editPictureFormHandler() {
+    setEditPictureForm(!editPictureForm);
+  }
 
-    const handleFileChange = (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        console.log('Selected file:', file.name);
-      }
-    };
+  const handleSliderChange = (event, newValue) => { 
+    setCropFactor(newValue);  
+  };
+
+  const uploadImg = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      editPictureFormHandler();
+    }
+  };
 
   function handlePasswordChange(event) {
     const newPassword = event.target.value;
@@ -219,6 +230,22 @@ export default function SignupElement() {
                 style={{ display: 'none' }}
                 onChange={handleFileChange}
               />
+              {editPictureForm && <div className='edit-picture-form'>
+                  <AvatarEditor
+                    image="https://2.img-dpreview.com/files/p/E~C1000x0S4000x4000T1200x1200~articles/3925134721/0266554465.jpeg"
+                    width={180}
+                    height={180}
+                    border={0}
+                    borderRadius={150}
+                    color={[255, 255, 255, 0.6]} 
+                    scale={cropFactor}
+                  />
+                  <Slider defaultValue={[1]} min={1} max={10} step={1} style={{ width: '70%'}} onChange={handleSliderChange} value={cropFactor}/>
+                  <div className='edit-picture-buttons'>
+                    <Button onClick={editPictureFormHandler} sx={{width:'20%',borderRadius: '20px'}}>Back</Button>
+                    <Button onClick={editPictureFormHandler} sx={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</Button>
+                  </div>
+                </div>}
               <div className='about-input'>
                 <TextField id="outlined-basic" label="About" variant="outlined" placeholder="Can't talk, Vibez only" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' ,width:'180%'} }} />
               </div>
