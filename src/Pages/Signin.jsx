@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button"
 import { GoogleLogin } from '@react-oauth/google';
 import LandingAnimation from '@/Components/LandingAnimation';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
 
 
 export default function Signin() {
@@ -65,10 +66,9 @@ export default function Signin() {
                                     theme="outline"
                                     width={282}
                                     onSuccess={credentialResponse => {
-                                        console.log(credentialResponse);
                                         handleSwipe();
-                                        const token = credentialResponse.credential;
-                                        console.log("Google JWT Token:", token);
+                                        const decoded = jwtDecode(credentialResponse.credential);
+                                        console.log(decoded);
                                     }}
                                     onError={() => {
                                         console.log('Login Failed');
