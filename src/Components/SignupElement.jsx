@@ -29,9 +29,12 @@ export default function SignupElement() {
   const [passwordStrengthValue, setPasswordStrengthValue] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [editPictureForm, setEditPictureForm] = useState(true);
+  const [editPictureForm, setEditPictureForm] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [cropFactor, setCropFactor] = useState(1);
   const fileInputRef = useRef(null);
+  const avatarEditorRef = useRef(null);
+
 
   function editPictureFormHandler() {
     setEditPictureForm(!editPictureForm);
@@ -48,10 +51,21 @@ export default function SignupElement() {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setSelectedImage(imageUrl);
       editPictureFormHandler();
     }
   };
-
+  
+  const handleCrop = () => {
+    if (avatarEditorRef.current) {
+      const canvas = avatarEditorRef.current.getImageScaledToCanvas();
+      const croppedImageUrl = canvas.toDataURL();  
+      setSelectedImage(croppedImageUrl);  
+      editPictureFormHandler();  
+    }
+  };
+  
   function handlePasswordChange(event) {
     const newPassword = event.target.value;
     setPassword(newPassword);
@@ -220,7 +234,11 @@ export default function SignupElement() {
         )}
         {activeStep === 2 && <div>
             <div className="field-box3">
-              <div className='profile-pic' onClick={uploadImg}>
+              <div className='profile-pic' onClick={uploadImg}   style={{
+                backgroundImage: 'url(${selectedImage})', 
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}>
                 <span className='camera-icon'><i className="bi bi-camera-fill"></i></span>ADD PROFILE PICTURE
               </div>
               <input
@@ -232,18 +250,19 @@ export default function SignupElement() {
               />
               {editPictureForm && <div className='edit-picture-form'>
                   <AvatarEditor
-                    image="https://2.img-dpreview.com/files/p/E~C1000x0S4000x4000T1200x1200~articles/3925134721/0266554465.jpeg"
+                    ref={avatarEditorRef}
+                    image={selectedImage}
                     width={180}
                     height={180}
                     border={0}
                     borderRadius={150}
-                    color={[255, 255, 255, 0.6]} 
+                    color={[0, 0, 0, 0.5]} 
                     scale={cropFactor}
                   />
                   <Slider defaultValue={[1]} min={1} max={10} step={1} style={{ width: '70%'}} onChange={handleSliderChange} value={cropFactor}/>
                   <div className='edit-picture-buttons'>
                     <Button onClick={editPictureFormHandler} sx={{width:'20%',borderRadius: '20px'}}>Back</Button>
-                    <Button onClick={editPictureFormHandler} sx={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</Button>
+                    <Button onClick={handleCrop} sx={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</Button>
                   </div>
                 </div>}
               <div className='about-input'>
