@@ -35,7 +35,8 @@ export default function SignupElement() {
   const fileInputRef = useRef(null);
   const avatarEditorRef = useRef(null);
 
-
+  const defaultImage = "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=";
+  
   function editPictureFormHandler() {
     setEditPictureForm(!editPictureForm);
   }
@@ -236,7 +237,7 @@ export default function SignupElement() {
             <div className="field-box3">
               <div className='profile-pic' onClick={uploadImg}   
               style={{
-                backgroundImage: `url(${selectedImage})`, 
+                backgroundImage: selectedImage ? `url(${selectedImage})` : `url(${defaultImage})`, 
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}>
