@@ -57,10 +57,10 @@ export default function SignupElement() {
   };
 
   useEffect(() => {
-    if (!emailError && !fullNameError){
+    if (validateEmail(email) && validateFullName(fullName)) {
       setDisableContinueBtn(false);
     }
-  }, [fullName, email]);
+  }, [fullName,email]);
 
   function editPictureFormHandler() {
     setEditPictureForm(!editPictureForm);
