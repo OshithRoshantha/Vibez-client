@@ -60,7 +60,7 @@ export default function SignupElement() {
     if (emailError && fullNameError){
       setDisableContinueBtn(false);
     }
-  }, [emailError, fullNameError]);
+  }, [fullName, email]);
 
   function editPictureFormHandler() {
     setEditPictureForm(!editPictureForm);
