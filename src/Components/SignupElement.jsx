@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import './Styles/SignupElement.css'
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -32,11 +32,36 @@ export default function SignupElement() {
   const [editPictureForm, setEditPictureForm] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [cropFactor, setCropFactor] = useState(1);
+  const [cropedImage, setCropedImage] = useState(null);
   const fileInputRef = useRef(null);
   const avatarEditorRef = useRef(null);
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [fullNameError, setFullNameError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [disableContinueBtn, setDisableContinueBtn] = useState(true);
 
   const defaultImage = "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=";
-  
+
+  const validateFullName = (name) => /^[a-zA-Z\s]{3,}$/.test(name);
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  const handleFullNameChange = (event) => {
+    setFullName(event.target.value);
+    setFullNameError(!validateFullName(event.target.value));
+  };
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+    setEmailError(!validateEmail(event.target.value));
+  };
+
+  useEffect(() => {
+    if (!emailError && !fullNameError){
+      setDisableContinueBtn(false);
+    }
+  }, [fullName, email]);
+
   function editPictureFormHandler() {
     setEditPictureForm(!editPictureForm);
   }
@@ -62,7 +87,8 @@ export default function SignupElement() {
     if (avatarEditorRef.current) {
       const canvas = avatarEditorRef.current.getImageScaledToCanvas();
       const croppedImageUrl = canvas.toDataURL();  
-      setSelectedImage(croppedImageUrl);  
+      setSelectedImage(croppedImageUrl); 
+      setCropedImage(croppedImageUrl); 
       editPictureFormHandler();  
     }
   };
@@ -156,8 +182,8 @@ export default function SignupElement() {
                 noValidate
                 autoComplete="off"
               >
-                <TextField id="outlined-basic" label="Full Name" variant="outlined" placeholder="John Doe" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} /><br />
-                <TextField id="outlined-email" label="Email Address" variant="outlined" placeholder="john@example.com" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} />
+                <TextField id="outlined-basic" label="Full Name" helperText={fullNameError ? 'Full name must be at least 3 characters long.' : ''} value={fullName} onChange={handleFullNameChange} error={fullNameError} variant="outlined" placeholder="John Doe" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} /><br />
+                <TextField id="outlined-email" label="Email Address" helperText={emailError ? 'Please enter a valid email address.' : ''} value={email} onChange={handleEmailChange} error={emailError} variant="outlined" placeholder="john@example.com" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} />
                 <ContactField />
               </Box>
             </div>
@@ -237,7 +263,7 @@ export default function SignupElement() {
             <div className="field-box3">
               <div className='profile-pic' onClick={uploadImg}   
               style={{
-                backgroundImage: selectedImage ? `url(${selectedImage})` : `url(${defaultImage})`, 
+                backgroundImage: cropedImage ? `url(${cropedImage})` : `url(${defaultImage})`, 
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}>
@@ -284,9 +310,8 @@ export default function SignupElement() {
             Back
           </Button>
           <Box />
-          <Button onClick={handleNext}
-            sx={{ color: 'white', fontSize: '700', backgroundColor: '#0d6efd', paddingX: '25px', paddingY: '7px', borderRadius: '20px' }}
-          >
+          <Button onClick={handleNext} disabled={fullNameError || emailError || disableContinueBtn}
+            sx={{ color: 'white', fontSize: '700', backgroundColor: '#0d6efd', paddingX: '25px', paddingY: '7px', borderRadius: '20px' }}>
             {activeStep === steps.length - 1 ? 'Create' : 'Continue'}
           </Button>
         </Box>
