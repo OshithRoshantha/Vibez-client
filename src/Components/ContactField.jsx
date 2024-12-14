@@ -14,11 +14,11 @@ function ContactField({setContactNumberError, setContact}) {
   
   function handleContactNumberChange(value) {
     setContactNumber(value);
-    setContact(value);
   }
   
   useEffect(function() {
     const pattern = /^\d{9}$/;
+    setContact(contactNumber);
     setContactNumberError(pattern.test(contactNumber));
   }, [contactNumber, countryCode]);
 

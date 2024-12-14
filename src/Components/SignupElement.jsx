@@ -68,7 +68,6 @@ export default function SignupElement() {
     if (activeStep === 0) {
       if (validateEmail(email) && validateFullName(fullName) && contactNumberError) {
         setDisableContinueBtn(false);
-        console.log(contact);
       }
     }
     if (activeStep === 1) {
