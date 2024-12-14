@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { TextField, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { PatternFormat } from 'react-number-format';
 import Flag from 'react-world-flags';
 
-function ContactField({setContactNumberError}) {
+function ContactField({setContactNumberError, setContact}) {
   const [countryCode, setCountryCode] = useState('+94');
   const [contactNumber, setContactNumber] = useState('');
 
@@ -14,6 +14,7 @@ function ContactField({setContactNumberError}) {
   
   function handleContactNumberChange(value) {
     setContactNumber(value);
+    setContact(value);
   }
   
   useEffect(function() {
@@ -110,4 +111,5 @@ export default ContactField;
 
 ContactField.propTypes = {
   setContactNumberError: PropTypes.func.isRequired,
+  setContact: PropTypes.func.isRequired,
 }
