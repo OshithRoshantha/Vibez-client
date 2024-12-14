@@ -18,8 +18,8 @@ function ContactField({setContactNumberError, setContact}) {
   }
   
   useEffect(function() {
-    const pattern = new RegExp(`^${countryCode.replace('+', '\\+')} \\d{2} \\d{3} \\d{4}$`);
-    setContactNumberError(pattern.test(contactNumber)); 
+    const pattern = /^\d{9}$/;
+    setContactNumberError(pattern.test(contactNumber));
   }, [contactNumber, countryCode]);
 
   const countries = [
@@ -96,7 +96,6 @@ function ContactField({setContactNumberError, setContact}) {
         customInput={TextField}
         label="Contact Number"
         variant="outlined"
-        placeholder={`${countryCode} 76 918 2392`}
         value={contactNumber}
         onValueChange={(values) => handleContactNumberChange(values.value)}
         InputProps={{
