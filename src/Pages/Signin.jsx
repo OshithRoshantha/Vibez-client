@@ -21,16 +21,17 @@ import { jwtDecode } from "jwt-decode";
 export default function Signin() {
   const navigate = useNavigate();
   const [swiped, setSwiped] = useState(false);
-  const handleSwipe = () => {
+  
+  function handleSwipe() {
     setSwiped(!swiped);
     console.log(swiped);
-  };
-
-  const navSignup = () => {
-    setTimeout(() => {
+  }
+  
+  function navSignup() {
+    setTimeout(function() {
       navigate('/Signup');
     }, 400);
-  };
+  }
 
   return (
     <div className={`main-container ${swiped ? 'swiped' : ''}`}>

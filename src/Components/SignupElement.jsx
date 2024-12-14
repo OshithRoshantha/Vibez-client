@@ -44,55 +44,60 @@ export default function SignupElement() {
 
   const defaultImage = "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=";
 
-  const validateFullName = (name) => /^[a-zA-Z\s]{3,}$/.test(name);
-  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
-  const handleFullNameChange = (event) => {
+  function validateFullName(name) {
+    return /^[a-zA-Z\s]{3,}$/.test(name);
+  }
+  
+  function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+  
+  function handleFullNameChange(event) {
     setFullName(event.target.value);
     setFullNameError(!validateFullName(event.target.value));
-  };
-
-  const handleEmailChange = (event) => {
+  }
+  
+  function handleEmailChange(event) {
     setEmail(event.target.value);
     setEmailError(!validateEmail(event.target.value));
-  };
-
-  useEffect(() => {
+  }
+  
+  useEffect(function() {
     if (validateEmail(email) && validateFullName(fullName) && validContact) {
       setDisableContinueBtn(false);
     }
-  }, [fullName,email]);
-
+  }, [fullName, email]);
+  
   function editPictureFormHandler() {
     setEditPictureForm(!editPictureForm);
   }
-
-  const handleSliderChange = (event, newValue) => { 
-    setCropFactor(newValue);  
-  };
-
-  const uploadImg = () => {
+  
+  function handleSliderChange(event, newValue) {
+    setCropFactor(newValue);
+  }
+  
+  function uploadImg() {
     fileInputRef.current.click();
-  };
-
-  const handleFileChange = (event) => {
+  }
+  
+  function handleFileChange(event) {
     const file = event.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setSelectedImage(imageUrl);
       editPictureFormHandler();
     }
-  };
+  }
   
-  const handleCrop = () => {
+  function handleCrop() {
     if (avatarEditorRef.current) {
       const canvas = avatarEditorRef.current.getImageScaledToCanvas();
-      const croppedImageUrl = canvas.toDataURL();  
-      setSelectedImage(croppedImageUrl); 
-      setCropedImage(croppedImageUrl); 
-      editPictureFormHandler();  
+      const croppedImageUrl = canvas.toDataURL();
+      setSelectedImage(croppedImageUrl);
+      setCropedImage(croppedImageUrl);
+      editPictureFormHandler();
     }
-  };
+  }
   
   function handlePasswordChange(event) {
     const newPassword = event.target.value;
@@ -114,15 +119,20 @@ export default function SignupElement() {
       setProgress(0);
     }
   }
-
-  const handleConfirmPasswordChange = (event) => {
+  
+  function handleConfirmPasswordChange(event) {
     setConfirmPassword(event.target.value);
-  };
-
-  const handleClickShowPassword = () => setShowPassword(!showPassword);
-  const handleClickShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
-
-  const getStrengthColor = (strength) => {
+  }
+  
+  function handleClickShowPassword() {
+    setShowPassword(!showPassword);
+  }
+  
+  function handleClickShowConfirmPassword() {
+    setShowConfirmPassword(!showConfirmPassword);
+  }
+  
+  function getStrengthColor(strength) {
     switch (strength) {
       case 0:
         return { color: 'red' };
@@ -135,10 +145,13 @@ export default function SignupElement() {
       default:
         return { color: 'black' };
     }
-  };
-
-  const isStepSkipped = (step) => skipped.has(step);
-  const handleNext = () => {
+  }
+  
+  function isStepSkipped(step) {
+    return skipped.has(step);
+  }
+  
+  function handleNext() {
     let newSkipped = skipped;
     if (activeStep === 2) {
       navigate('/');
@@ -147,11 +160,18 @@ export default function SignupElement() {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setActiveStep(function(prevActiveStep) {
+      return prevActiveStep + 1;
+    });
     setSkipped(newSkipped);
-  };
-
-  const handleBack = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  }
+  
+  function handleBack() {
+    setActiveStep(function(prevActiveStep) {
+      return prevActiveStep - 1;
+    });
+  }
+  
 
   return (
     <div>
