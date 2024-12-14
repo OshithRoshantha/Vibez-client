@@ -37,7 +37,7 @@ export default function SignupElement() {
   const avatarEditorRef = useRef(null);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
-  //const [contactNumber, setContactNumber] = useState('');
+  const [contact, setContact] = useState('');
   const [fullNameError, setFullNameError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [contactNumberError, setContactNumberError] = useState(false);
@@ -68,6 +68,7 @@ export default function SignupElement() {
     if (activeStep === 0) {
       if (validateEmail(email) && validateFullName(fullName) && contactNumberError) {
         setDisableContinueBtn(false);
+        console.log(contact);
       }
     }
     if (activeStep === 1) {
@@ -76,7 +77,7 @@ export default function SignupElement() {
         setDisableContinueBtn(false);
       }
     }
-  }, [fullName, email, password, confirmPassword, activeStep]);
+  }, [fullName, email, contact, password, confirmPassword, activeStep]);
   
   function editPictureFormHandler() {
     setEditPictureForm(!editPictureForm);
@@ -219,7 +220,7 @@ export default function SignupElement() {
               >
                 <TextField id="outlined-basic" label="Full Name" helperText={fullNameError ? 'Full name must be at least 3 characters long.' : ''} value={fullName} onChange={handleFullNameChange} error={fullNameError} variant="outlined" placeholder="John Doe" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} /><br />
                 <TextField id="outlined-email" label="Email Address" helperText={emailError ? 'Please enter a valid email address.' : ''} value={email} onChange={handleEmailChange} error={emailError} variant="outlined" placeholder="john@example.com" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} />
-                <ContactField setContactNumberError={setContactNumberError}/>
+                <ContactField setContactNumberError={setContactNumberError} setContact={setContact}/>
               </Box>
             </div>
           </div>
