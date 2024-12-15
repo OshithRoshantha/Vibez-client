@@ -33,6 +33,10 @@ export default function Signin() {
     }, 400);
   }
 
+  function navDashboard() {
+      navigate('/Dashboard');
+  }
+
   return (
     <div className={`main-container ${swiped ? 'swiped' : ''}`}>
         <div className='left-side'>
@@ -49,7 +53,7 @@ export default function Signin() {
                     <CardDescription>
                         Welcome to <img src={mainLogo} className='text-logo' alt='Main Logo'/>
                     </CardDescription>
-                    <CardTitle className='card-heading'>{swiped ? 'Sign Up' : 'Sign In'}</CardTitle>  {/* Conditionally render */}
+                    <CardTitle className='card-heading'>{swiped ? 'Sign Up' : 'Sign In'}</CardTitle>  
                 </CardHeader>
                 <CardContent>
                     {swiped ? (
@@ -87,7 +91,7 @@ export default function Signin() {
                             <Input className='rounded-custom-md input-group' type="email" id="email" placeholder="Jhon@example.com" />
                             <Label htmlFor="email">Enter your password</Label>
                             <Input className='rounded-custom-md input-group' type="password" id="email" placeholder="Password" />
-                            <Button className='sign-in-btn-main rounded-custom-md' onClick={() => { handleSwipe(); }}>Sign In</Button>
+                            <Button className='sign-in-btn-main rounded-custom-md' onClick={() => { handleSwipe(); navDashboard();}}>Sign In</Button>
                         </>
                     )}
                 </CardContent>
