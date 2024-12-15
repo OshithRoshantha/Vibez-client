@@ -25,7 +25,7 @@ return (
                     <img src="https://placehold.co/40x40" alt="Settings" className="w-8 h-8" />
                 </div>
                 <div className="flex items-center justify-center mt-auto mb-4">
-                    <img src="https://placehold.co/50x50" alt="Profile" className="w-10 h-10 rounded-full" />
+                    <img src="https://placehold.co/50x50" alt="Profile" className="w-15 h-15 rounded-full" />
                 </div>
             </div>
             <div className="border-r border-border p-4 chats-column">
