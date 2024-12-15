@@ -5,6 +5,29 @@ export default function Dashboard() {
 return (
     <div className='dashboard-conatiner'>
         <div className="flex h-screen bg-background text-foreground">
+            <div className="flex flex-col h-screen bg-background border-r border-border  button-column">
+                <div className="flex items-center justify-center mt-4">
+                    <div className="relative">
+                        <img src="https://placehold.co/40x40" alt="Inbox" className="w-8 h-8" />
+                        <span className="absolute top-0 right-0 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">8</span>
+                    </div>
+                </div>
+                <div className="flex items-center justify-center mt-4">
+                    <img src="https://placehold.co/40x40" alt="Search" className="w-8 h-8" />
+                </div>
+                <div className="flex items-center justify-center mt-4">
+                    <img src="https://placehold.co/40x40" alt="Messages" className="w-8 h-8" />
+                </div>
+                <div className="flex items-center justify-center mt-4">
+                    <img src="https://placehold.co/40x40" alt="Users" className="w-8 h-8" />
+                </div>
+                <div className="flex items-center justify-center mt-4">
+                    <img src="https://placehold.co/40x40" alt="Settings" className="w-8 h-8" />
+                </div>
+                <div className="flex items-center justify-center mt-auto mb-4">
+                    <img src="https://placehold.co/50x50" alt="Profile" className="w-10 h-10 rounded-full" />
+                </div>
+            </div>
             <div className="border-r border-border p-4 chats-column">
                 <h2 className="text-lg font-semibold">Chats</h2>
                 <input type="text" placeholder="Search" className="w-full p-2 border border-border rounded mb-4" />

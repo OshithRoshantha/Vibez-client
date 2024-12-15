@@ -4,6 +4,9 @@
 .messages-column{
 
 }
+.button-column{
+    width: 5%;
+}
 .dashboard-conatiner{
     width: 100vw;
     height: 100vh;
