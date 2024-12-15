@@ -24,7 +24,6 @@ export default function Signin() {
   
   function handleSwipe() {
     setSwiped(!swiped);
-    console.log(swiped);
   }
   
   function navSignup() {
@@ -73,6 +72,7 @@ export default function Signin() {
                                     width={282}
                                     onSuccess={credentialResponse => {
                                         handleSwipe();
+                                        navDashboard();
                                         const decoded = jwtDecode(credentialResponse.credential);
                                         console.log(decoded);
                                     }}
