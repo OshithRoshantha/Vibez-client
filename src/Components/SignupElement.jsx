@@ -44,7 +44,7 @@ export default function SignupElement() {
   const [passwordUnmatchError, setPasswordUnmatchError] = useState(false);
   const [disableContinueBtn, setDisableContinueBtn] = useState(true);
 
-  const defaultImage = "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=";
+  const defaultImage = "https://www.pngitem.com/pimgs/m/22-223968_default-profile-picture-circle-hd-png-download.png";
 
   function validateFullName(name) {
     return /^[a-zA-Z\s]{3,}$/.test(name);
