@@ -12,8 +12,9 @@
 .btns{
     font-size: 150%;
     cursor: pointer;
+    margin-left: -50%;
 }
 
-.friends-column{
+.friends-column, .chats-column{
     width: 32vw;
 }
