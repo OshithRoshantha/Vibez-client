@@ -1,9 +1,16 @@
 import { useState } from 'react';
 import './Styles/Column2.css'
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+  } from "@/components/ui/popover"
+  
 
 export default function Friends() {
     const[friendRequests, setFriendRequests] = useState(true);
     const[yourFriends, setYourFriends] = useState(false);
+    const[enablePopup, setEnablePopup] = useState(false);
     var friendCount = 56;
 
     function handleFriendRequests() {
@@ -14,6 +21,10 @@ export default function Friends() {
     function handleYourFriends() {
         setYourFriends(!yourFriends);
         setFriendRequests(false);
+    }
+
+    function handlePopup() {
+        setEnablePopup(!enablePopup);
     }
 
   return (
@@ -53,11 +64,18 @@ export default function Friends() {
                         </div>
                     </div>
                     <div className='btn-container'>
-                        <div className='mr-4 btns'><i className="bi bi-chat-left-dots-fill"></i></div>
-                        <div className='btns'><i className="bi bi-three-dots-vertical"></i></div>
-                    </div>
+                        <div className='ml-mr-4 btns'><i className="bi bi-chat-left-dots-fill"></i></div>
+                        <Popover>
+                        <PopoverTrigger asChild>
+                            <div className='btns'><i className="bi bi-three-dots-vertical"></i></div>
+                        </PopoverTrigger>
+                        <PopoverContent style={{width: '250px', marginRight: '200px'}}>	
+
+                        </PopoverContent>
+                        </Popover>
                     </div>
                 </div>
+                    </div>
                 </div>}
             </div>
     </div>
