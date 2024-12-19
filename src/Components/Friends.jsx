@@ -5,6 +5,8 @@ import {
     PopoverContent,
     PopoverTrigger,
   } from "@/components/ui/popover"
+import { Height } from '@mui/icons-material';
+import { width } from '@mui/system';
   
 
 export default function Friends() {
@@ -12,6 +14,7 @@ export default function Friends() {
     const[yourFriends, setYourFriends] = useState(false);
     const[enablePopup, setEnablePopup] = useState(false);
     var friendCount = 56;
+    var user="testUser";
 
     function handleFriendRequests() {
         setFriendRequests(!friendRequests);
@@ -26,6 +29,7 @@ export default function Friends() {
     function handlePopup() {
         setEnablePopup(!enablePopup);
     }
+
 
   return (
     <div>
@@ -43,7 +47,7 @@ export default function Friends() {
                     <div className="flex items-center">
                         <img src="https://placehold.co/40x40" className="rounded-full mr-2 w-25 h-25" />
                         <div>
-                            <p className="font-medium">Oshith Roshantha Edirisuriya</p>
+                            <p className="font-medium">{user}</p>
                         </div>
                     </div>
                     <div className='btn-container'>
@@ -58,9 +62,9 @@ export default function Friends() {
                 <div className="space-y-4">
                     <div className="flex items-center justify-between border-b border-border py-2">
                     <div className="flex items-center">
-                        <img src="https://placehold.co/40x40" className="rounded-full mr-2 w-25 h-25" />
+                        <img src="https://placehold.co/40x40" className="rounded-full mr-2" />
                         <div>
-                            <p className="font-medium">Oshith Roshantha Edirisuriya</p>
+                            <p className="font-medium">{user}</p>
                         </div>
                     </div>
                     <div className='btn-container'>
@@ -69,8 +73,27 @@ export default function Friends() {
                         <PopoverTrigger asChild>
                             <div className='btns'><i className="bi bi-three-dots-vertical"></i></div>
                         </PopoverTrigger>
-                        <PopoverContent style={{width: '250px', marginRight: '200px'}}>	
-
+                        <PopoverContent style={{width: '250px', marginRight: '200px', height: '230px'}}>	
+                        <div className="bg-card text-card-foreground p-0 rounded-lg">
+                            <div className="space-y-2 flex-grow friend-buttons">
+                                <button className="flex flex-grow items-center w-full p-2 text-left bg-secondary text-secondary-foreground rounded hover:bg-secondary/80">
+                                    <span className="material-icons"></span>
+                                    <span className="ml-2">Message {user}</span>
+                                </button>
+                                <button className="flex flex-grow items-center w-full p-2 text-left bg-muted text-muted-foreground rounded hover:bg-muted/80">
+                                    <span className="material-icons"></span>
+                                    <span className="ml-2">Unfollow {user}</span>
+                                </button>
+                                <button className="flex flex-grow items-center w-full p-2 text-left bg-destructive text-destructive-foreground rounded hover:bg-destructive/80">
+                                    <span className="material-icons"></span>
+                                    <span className="ml-2">Block {user}</span>
+                                </button>
+                                <button className="flex flex-grow items-center w-full p-2 text-left bg-destructive text-destructive-foreground rounded hover:bg-destructive/80">
+                                    <span className="material-icons"></span>
+                                    <span className="ml-2">Unfriend {user}</span>
+                                </button>
+                            </div>
+                            </div>
                         </PopoverContent>
                         </Popover>
                     </div>
