@@ -14,7 +14,7 @@ export default function Chats() {
                 </div>
                 <div className="space-y-2" style={{cursor: 'pointer'}}>
                     <div className="flex items-center p-2 hover:bg-muted rounded">
-                        <img src="https://placehold.co/40x40" alt="User" className="rounded-full mr-2" />
+                        <img src="https://placehold.co/40x40" alt="User" className="rounded-full mr-2 w-18 h-18" />
                         <div>
                             <div className="font-medium">GroupName</div>
                             <div className="text-sm text-muted-foreground">User1: Lorem ipsum dolor sit amet.</div>
