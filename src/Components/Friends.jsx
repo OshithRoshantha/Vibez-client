@@ -44,7 +44,7 @@ export default function Friends() {
                     </div>
                     <div className='btn-container'>
                         <button className="bg-primary text-primary-foreground px-3 py-1 mr-2 rounded">Confirm</button>
-                        <button className="btn px-3 py-1 btn-outline-danger rounded">Delete</button>
+                        <button className="px-3 py-1 rounded bg-muted text-muted-foreground border-none hover:bg-gray-300">Delete</button>
                     </div>
                     </div>
                 </div>
