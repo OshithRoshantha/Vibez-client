@@ -9,10 +9,12 @@ export default function Dashboard() {
 
     function handleFriendsMenu() {
         setFriendsMenu(!friendsMenu);
+        setChatsMenu(false);
     }
 
     function handleChatsMenu() {
         setChatsMenu(!chatsMenu);
+        setFriendsMenu(false);
     }
 
 return (

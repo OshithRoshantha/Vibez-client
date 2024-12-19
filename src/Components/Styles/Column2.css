@@ -3,3 +3,8 @@
     margin-bottom: 3.5%;
     margin-top: 2%;
 }
+.btn-container{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2%;
+}
