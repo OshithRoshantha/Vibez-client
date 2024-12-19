@@ -18,7 +18,7 @@ export default function Friends() {
 
   return (
     <div>
-        <div className="border-r border-border p-4">
+        <div className="border-r border-border p-4 friends-column">
                 <h2 className="text-lg font-semibold column-header">Friends</h2>
                 <input type="text" placeholder="Search" className="w-full p-2 border border-border rounded mb-4" />
                 <div className="flex space-x-2 mb-4">
@@ -53,8 +53,8 @@ export default function Friends() {
                         </div>
                     </div>
                     <div className='btn-container'>
-                        <button className="bg-primary text-primary-foreground px-3 py-1 mr-2 rounded">Confirm</button>
-                        <button className="btn px-3 py-1 btn-outline-danger rounded">Delete</button>
+                        <div className='mr-4 btns'><i className="bi bi-chat-left-dots-fill"></i></div>
+                        <div className='btns'><i className="bi bi-three-dots-vertical"></i></div>
                     </div>
                     </div>
                 </div>
