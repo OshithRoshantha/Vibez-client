@@ -1,28 +1,64 @@
-import React from 'react'
+import { useState } from 'react';
 import './Styles/Column2.css'
 
 export default function Friends() {
+    const[friendRequests, setFriendRequests] = useState(true);
+    const[yourFriends, setYourFriends] = useState(false);
+    var friendCount = 56;
+
+    function handleFriendRequests() {
+        setFriendRequests(!friendRequests);
+        setYourFriends(false);
+    }
+
+    function handleYourFriends() {
+        setYourFriends(!yourFriends);
+        setFriendRequests(false);
+    }
+
   return (
     <div>
         <div className="border-r border-border p-4">
-                <h2 className="text-lg font-semibold column-header">Chats</h2>
+                <h2 className="text-lg font-semibold column-header">Friends</h2>
                 <input type="text" placeholder="Search" className="w-full p-2 border border-border rounded mb-4" />
                 <div className="flex space-x-2 mb-4">
-                    <button className="bg-accent text-accent-foreground px-4 py-2 rounded-full">All</button>
-                    <button className="bg-muted text-muted-foreground px-4 py-2 rounded-full hover:bg-muted/80">Unread</button>
-                    <button className="bg-muted text-muted-foreground px-4 py-2 rounded-full hover:bg-muted/80">Favorites</button>
-                    <button className="bg-muted text-muted-foreground px-4 py-2 rounded-full hover:bg-muted/80">Groups</button>
+                    <button onClick={handleYourFriends} className="bg-muted text-muted-foreground px-4 py-2 rounded-full hover:bg-muted/80">Your Friends</button>
+                    <button onClick={handleFriendRequests} className="bg-muted text-muted-foreground px-4 py-2 rounded-full hover:bg-muted/80">Friend Requests</button>
                 </div>
-                <div className="space-y-2" style={{cursor: 'pointer'}}>
-                    <div className="flex items-center p-2 hover:bg-muted rounded">
-                        <img src="https://placehold.co/40x40" alt="User" className="rounded-full mr-2" />
+                {friendRequests && <div>
+                <h3 className="text-md font-semibold mt-4">Friend requests</h3>
+                <div className="space-y-4">
+                    <div className="flex items-center justify-between border-b border-border py-2">
+                    <div className="flex items-center">
+                        <img src="https://placehold.co/40x40" className="rounded-full mr-2 w-25 h-25" />
                         <div>
-                            <div className="font-medium">GroupName</div>
-                            <div className="text-sm text-muted-foreground">User1: Lorem ipsum dolor sit amet.</div>
+                            <p className="font-medium">Oshith Roshantha Edirisuriya</p>
                         </div>
-                        <span className="ml-auto text-xs">13:14</span>
+                    </div>
+                    <div className='btn-container'>
+                        <button className="bg-primary text-primary-foreground px-3 py-1 mr-2 rounded">Confirm</button>
+                        <button className="btn px-3 py-1 btn-outline-danger rounded">Delete</button>
+                    </div>
                     </div>
                 </div>
+                </div>}
+                {yourFriends && <div>
+                <h3 className="text-md font-semibold mt-4">{friendCount} friends</h3>
+                <div className="space-y-4">
+                    <div className="flex items-center justify-between border-b border-border py-2">
+                    <div className="flex items-center">
+                        <img src="https://placehold.co/40x40" className="rounded-full mr-2 w-25 h-25" />
+                        <div>
+                            <p className="font-medium">Oshith Roshantha Edirisuriya</p>
+                        </div>
+                    </div>
+                    <div className='btn-container'>
+                        <button className="bg-primary text-primary-foreground px-3 py-1 mr-2 rounded">Confirm</button>
+                        <button className="btn px-3 py-1 btn-outline-danger rounded">Delete</button>
+                    </div>
+                    </div>
+                </div>
+                </div>}
             </div>
     </div>
   )
