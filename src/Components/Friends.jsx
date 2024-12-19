@@ -73,23 +73,19 @@ export default function Friends() {
                         <PopoverTrigger asChild>
                             <div className='btns'><i className="bi bi-three-dots-vertical"></i></div>
                         </PopoverTrigger>
-                        <PopoverContent style={{width: '250px', marginRight: '200px', height: '230px'}}>	
+                        <PopoverContent style={{width: '240px', marginRight: '200px', height: '180px'}}>	
                         <div className="bg-card text-card-foreground p-0 rounded-lg">
                             <div className="space-y-2 flex-grow friend-buttons">
-                                <button className="flex flex-grow items-center w-full p-2 text-left bg-secondary text-secondary-foreground rounded hover:bg-secondary/80">
-                                    <span className="material-icons"></span>
+                                <button className="flex flex-grow items-center w-full p-2 text-left rounded hover:bg-transparent bg-transparent text-black">
+                                    <span className="material-icons"><i className="bi bi-chat-left"></i></span>
                                     <span className="ml-2">Message {user}</span>
                                 </button>
-                                <button className="flex flex-grow items-center w-full p-2 text-left bg-muted text-muted-foreground rounded hover:bg-muted/80">
-                                    <span className="material-icons"></span>
-                                    <span className="ml-2">Unfollow {user}</span>
-                                </button>
-                                <button className="flex flex-grow items-center w-full p-2 text-left bg-destructive text-destructive-foreground rounded hover:bg-destructive/80">
-                                    <span className="material-icons"></span>
+                                <button className="flex flex-grow items-center w-full p-2 text-left rounded hover:bg-transparent bg-transparent text-black">
+                                    <span className="material-icons"><i className="bi bi-ban"></i></span>
                                     <span className="ml-2">Block {user}</span>
                                 </button>
-                                <button className="flex flex-grow items-center w-full p-2 text-left bg-destructive text-destructive-foreground rounded hover:bg-destructive/80">
-                                    <span className="material-icons"></span>
+                                <button className="flex flex-grow items-center w-full p-2 text-left rounded hover:bg-transparent bg-transparent text-black">
+                                    <span className="material-icons"><i className="bi bi-person-fill-x"></i></span>
                                     <span className="ml-2">Unfriend {user}</span>
                                 </button>
                             </div>
