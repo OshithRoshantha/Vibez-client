@@ -29,8 +29,8 @@ export default function Friends() {
                 <h2 className="text-lg font-semibold column-header">Friends</h2>
                 <input type="text" placeholder="Search" className="w-full p-2 border border-border rounded mb-4" />
                 <div className="flex space-x-2 mb-4">
-                    <button onClick={hideYourFriends} className="bg-muted text-muted-foreground px-4 py-2 rounded-full hover:bg-muted/80">Your Friends</button>
-                    <button onClick={hideFriendRequests} className="bg-muted text-muted-foreground px-4 py-2 rounded-full hover:bg-muted/80">Friend Requests</button>
+                    <button onClick={hideYourFriends} className="bg-muted text-muted-foreground px-4 py-2 rounded-full border-none hover:bg-gray-300">Your Friends</button>
+                    <button onClick={hideFriendRequests} className="bg-muted text-muted-foreground px-4 py-2 rounded-full border-none hover:bg-gray-300">Friend Requests</button>
                 </div>
                 {friendRequests && <div>
                 <h3 className="text-md font-semibold mt-4">Friend requests</h3>
