@@ -5,31 +5,23 @@ import {
     PopoverContent,
     PopoverTrigger,
   } from "@/components/ui/popover"
-import { Height } from '@mui/icons-material';
-import { width } from '@mui/system';
   
 
 export default function Friends() {
     const[friendRequests, setFriendRequests] = useState(true);
     const[yourFriends, setYourFriends] = useState(false);
-    const[enablePopup, setEnablePopup] = useState(false);
     var friendCount = 56;
     var user="testUser";
 
-    function handleFriendRequests() {
-        setFriendRequests(!friendRequests);
-        setYourFriends(false);
-    }
-
-    function handleYourFriends() {
-        setYourFriends(!yourFriends);
+    function hideFriendRequests() {
         setFriendRequests(false);
+        setYourFriends(true);
     }
 
-    function handlePopup() {
-        setEnablePopup(!enablePopup);
+    function hideYourFriends() {
+        setYourFriends(false);
+        setFriendRequests(true);
     }
-
 
   return (
     <div>
@@ -37,8 +29,8 @@ export default function Friends() {
                 <h2 className="text-lg font-semibold column-header">Friends</h2>
                 <input type="text" placeholder="Search" className="w-full p-2 border border-border rounded mb-4" />
                 <div className="flex space-x-2 mb-4">
-                    <button onClick={handleYourFriends} className="bg-muted text-muted-foreground px-4 py-2 rounded-full hover:bg-muted/80">Your Friends</button>
-                    <button onClick={handleFriendRequests} className="bg-muted text-muted-foreground px-4 py-2 rounded-full hover:bg-muted/80">Friend Requests</button>
+                    <button onClick={hideYourFriends} className="bg-muted text-muted-foreground px-4 py-2 rounded-full hover:bg-muted/80">Your Friends</button>
+                    <button onClick={hideFriendRequests} className="bg-muted text-muted-foreground px-4 py-2 rounded-full hover:bg-muted/80">Friend Requests</button>
                 </div>
                 {friendRequests && <div>
                 <h3 className="text-md font-semibold mt-4">Friend requests</h3>
@@ -68,23 +60,23 @@ export default function Friends() {
                         </div>
                     </div>
                     <div className='btn-container'>
-                        <div className='ml-mr-4 btns'><i className="bi bi-chat-left-dots-fill"></i></div>
+                        <div className='ml-mr-4 btns'><i className="bi bi-messenger text-primary"></i></div>
                         <Popover>
                         <PopoverTrigger asChild>
                             <div className='btns'><i className="bi bi-three-dots-vertical"></i></div>
                         </PopoverTrigger>
-                        <PopoverContent style={{width: '240px', marginRight: '200px', height: '180px'}}>	
+                        <PopoverContent style={{width: '230px', marginRight: '200px', height: '170px'}}>	
                         <div className="bg-card text-card-foreground p-0 rounded-lg">
                             <div className="space-y-2 flex-grow friend-buttons">
-                                <button className="flex flex-grow items-center w-full p-2 text-left rounded hover:bg-transparent bg-transparent text-black">
+                                <button className="flex flex-grow items-center w-full p-2 text-left rounded bg-transparent text-black hover:bg-transparent border-none focus:ring-0 hover:border-none">
                                     <span className="material-icons"><i className="bi bi-chat-left"></i></span>
                                     <span className="ml-2">Message {user}</span>
                                 </button>
-                                <button className="flex flex-grow items-center w-full p-2 text-left rounded hover:bg-transparent bg-transparent text-black">
+                                <button className="flex flex-grow items-center w-full p-2 text-left rounded bg-transparent text-black hover:bg-transparent border-none focus:ring-0 hover:border-none">
                                     <span className="material-icons"><i className="bi bi-ban"></i></span>
                                     <span className="ml-2">Block {user}</span>
                                 </button>
-                                <button className="flex flex-grow items-center w-full p-2 text-left rounded hover:bg-transparent bg-transparent text-black">
+                                <button className="flex flex-grow items-center w-full p-2 text-left rounded bg-transparent text-black hover:bg-transparent border-none focus:ring-0 hover:border-none">
                                     <span className="material-icons"><i className="bi bi-person-fill-x"></i></span>
                                     <span className="ml-2">Unfriend {user}</span>
                                 </button>
