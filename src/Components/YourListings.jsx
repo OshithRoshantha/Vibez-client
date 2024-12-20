@@ -2,7 +2,7 @@ import './Styles/Column2.css'
 import { useState} from 'react';
 
 export default function YourListings({showEditListingMenu}) {
-  const [deleteMenu, setDeleteMenu] = useState(true);
+  const [deleteMenu, setDeleteMenu] = useState(false);
 
   function showDeleteMenu() {
       setDeleteMenu(true);
