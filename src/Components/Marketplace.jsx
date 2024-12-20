@@ -110,7 +110,7 @@ export default function Marketplace() {
                         <i className="bi bi-chat text-xl"></i>&nbsp;&nbsp;<h3 className="text-xl">{chatToAnswerCount}</h3></div>
                         <p className="text-muted-foreground">Total replies</p>
                     </div>
-                    <div className="pl-5 pt-2 border border-border rounded-lg" style={{height:'120%', cursor:'pointer'}}>
+                    <div className="pl-5 pt-2 border border-border rounded-lg" style={{height:'120%', cursor:'pointer'}} onClick={showYourListningMenu}>
                     <div style={{display:'flex', fontWeight:'bold', alignItems:'center'}}>
                     <i className="bi bi-tags text-xl"></i>&nbsp;&nbsp;<h3 className="text-xl">{activeListingsCount}</h3></div>
                         <p className="text-muted-foreground">Active listings</p>

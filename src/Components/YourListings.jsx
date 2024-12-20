@@ -2,7 +2,7 @@ import './Styles/Column2.css'
 
 export default function YourListings() {
   return (  
-        <div className="w-full bg-card rounded-lg py-2" style={{display:'flex',columnGap:'2%',justifyContent:'center',alignItems:'center'}}>
+        <div className="w-full bg-card rounded-lg py-2" style={{display:'flex',columnGap:'5%',justifyContent:'center',alignItems:'center'}}>
         <img src="https://placehold.co/300x200" alt="9-cube shelf" className="your-listning-img" />
         <div>
             <h2 className="text-sm font-semibold mt-2">9-cube shelf</h2>
