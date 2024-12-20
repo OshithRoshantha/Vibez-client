@@ -67,13 +67,9 @@ export default function Friends() {
                         <PopoverTrigger asChild>
                             <div className='btns'><i className="bi bi-three-dots-vertical"></i></div>
                         </PopoverTrigger>
-                        <PopoverContent style={{width: '220px', marginRight: '200px', height: '150px'}}>	
+                        <PopoverContent style={{width: '220px', marginRight: '200px', height: '105px'}}>	
                         <div className="bg-card text-card-foreground p-0 rounded-lg">
                             <div className="flex-grow friend-buttons" style={{marginLeft:'-20px', marginTop:'-17px'}}>
-                                <button className="flex flex-grow items-center w-full p-2 text-left rounded bg-transparent text-black border-none focus:ring-0 hover:border-none">
-                                    <span className="material-icons" style={{display:'flex', justifyContent:'center',alignItems:'center',backgroundColor:'#d1d1d1', width:'29px', height:'29px', borderRadius:'50%'}}><i className="bi bi-messenger"></i></span>
-                                    <span className="ml-2">Message {user}</span>
-                                </button>
                                 <button className="flex flex-grow items-center w-full p-2 text-left rounded bg-transparent text-black border-none focus:ring-0 hover:border-none">
                                     <span className="material-icons" style={{display:'flex', justifyContent:'center',alignItems:'center',backgroundColor:'#d1d1d1', width:'29px', height:'29px', borderRadius:'50%'}}><i className="bi bi-person-fill-slash"></i></span>
                                     <span className="ml-2">Block {user}</span>
