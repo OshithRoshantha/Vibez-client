@@ -1,5 +1,6 @@
 import { useState,useRef } from 'react';
 import './Styles/Column2.css'
+import ProductInfo from './ProductInfo';
 
 export default function Marketplace() {
     const [forYouMenu, setForYouMenu] = useState(true);
@@ -8,6 +9,13 @@ export default function Marketplace() {
     const sellProductsRef = useRef(null);
     const fileInputRef = useRef(null);
     const [selectedImages, setSelectedImages] = useState([]);
+    var chatToAnswerCount = 15;
+    var activeListingsCount = 3;
+    const productName = "Wireless Headphones";
+    const productPrice = "$150";
+    const productDescription =
+        "High-quality wireless headphones with noise cancellation and up to 20 hours of battery life.";
+    const sellerName = "Tech Store";
 
     function addImages() {
         if (fileInputRef.current) {
@@ -73,31 +81,8 @@ export default function Marketplace() {
                     <div className="bg-card rounded-lg shadow-md overflow-hidden" style={{height:'87%', cursor:'pointer'}} onClick={showProductInfo}>
                         <img src="https://placehold.co/400x300?text=Se2" alt="Se2" className="w-full h-30 object-cover" style={{height:'65%'}}/>
                         <div className="pl-4 pr-4 pt-2 pb-2">
-                            <h2 className="text-lg font-semibold">LKR23,000</h2>
-                            <p className="text-muted-foreground">Se2</p>
-                        </div>
-                    </div>
-                    <div className="bg-card rounded-lg shadow-md overflow-hidden" style={{height:'87%'}}>
-                        <img src="https://placehold.co/400x300?text=Headphones" alt="Original High-Quality Headphones" className="w-full h-30 object-cover"  style={{height:'65%'}}/>
-                        <div className="pl-4 pr-4 pt-2 pb-2">
-                            <h2 className="text-lg font-semibold">LKR2,200</h2>
-                            <p className="text-muted-foreground">Original High-Quality Headphones</p>
-                        </div>
-                    </div>
-                    <div className="bg-card rounded-lg shadow-md overflow-hidden" style={{height:'87%'}}>
-                        <img src="https://placehold.co/400x300?text=Graphics+Cards" alt="Used Gaming Graphics Cards" className="w-full h-30 object-cover"  style={{height:'65%'}}/>
-                        <div className="pl-4 pr-4 pt-2 pb-2">
-                            <h2 className="text-lg font-semibold">LKR26,500</h2>
-                            <p className="text-muted-foreground">USED GAMING GRAPHICS CARDS</p>
-                        </div>
-                    </div>
-                    <div className="bg-card rounded-lg shadow-md overflow-hidden" style={{height:'87%'}}>
-                        <img src="https://placehold.co/400x300?text=Shoes" alt="Men's Shoes" className="w-full h-30 object-cover"  style={{height:'65%'}}/>
-                        <div className="pl-4 pr-4 pt-2 pb-2">
-                        <h2 className="text-lg font-semibold">
-                            LKR1,800 <span className="line-through text-muted-foreground">LKR2,100</span>
-                        </h2>
-                        <p className="text-muted-foreground">Men's Shoes</p>
+                            <h2 className="text-lg font-semibold">{productPrice}</h2>
+                            <p className="text-muted-foreground">{productName}</p>
                         </div>
                     </div>
                     </div>
@@ -108,13 +93,13 @@ export default function Marketplace() {
                 <h2 className="text-lg font-semibold mb-2">Overview</h2>
                 <div className="grid grid-cols-2 gap-x-4 gap-y-0 mb-6">
                     <div className="pl-5 pt-2 border border-border rounded-lg" style={{height:'120%'}}>
-                        <div style={{display:'flex', fontWeight:'bold', alignItems:'center', columnGap:'73%'}}>
-                        <h3 className="text-xl">0</h3><i className="bi bi-chat text-xl"></i></div>
+                        <div style={{display:'flex', fontWeight:'bold', alignItems:'center'}}>
+                        <i className="bi bi-chat text-xl"></i>&nbsp;&nbsp;<h3 className="text-xl">{chatToAnswerCount}</h3></div>
                         <p className="text-muted-foreground">Chats to answer</p>
                     </div>
                     <div className="pl-5 pt-2 border border-border rounded-lg" style={{height:'120%'}}>
-                    <div style={{display:'flex', fontWeight:'bold', alignItems:'center', columnGap:'73%'}}>
-                        <h3 className="text-xl">0</h3><i className="bi bi-tags text-xl"></i></div>
+                    <div style={{display:'flex', fontWeight:'bold', alignItems:'center'}}>
+                    <i className="bi bi-tags text-xl"></i>&nbsp;&nbsp;<h3 className="text-xl">{activeListingsCount}</h3></div>
                         <p className="text-muted-foreground">Active listings</p>
                     </div>
                 </div>
@@ -209,25 +194,7 @@ export default function Marketplace() {
                 </div>            
                 </div>}
                 {productInfo && <div>
-                    <div className="bg-card text-card-foreground w-full p-4 pt-2 mt-1 product-info">
-                    <div className="grid grid-cols-3 gap-1 mb-4">
-                        <img src="https://placehold.co/400x300" alt="Apple 11 Pro" className="rounded-lg mb-0"/>
-                    </div>
-                    <h2 className="text-lg font-bold">Apple 11 pro 64GB</h2>
-                    <p className="text-muted-foreground">LKR 57,500</p>
-                    <p className="text-sm">Send seller a message</p>
-                    <button className="bg-secondary text-secondary-foreground hover:bg-secondary/80 py-2 px-4 rounded-lg mt-2">Send Message</button>
-                    <div className="flex space-x-2 mt-4">
-                        <button className="bg-muted text-muted-foreground hover:bg-muted/80 py-1 px-3 rounded-lg">Share offer</button>
-                    </div>
-                    <h3 className="mt-4 font-semibold">Description</h3>
-                    <p className="text-sm text-muted-foreground">Apple 11 pro 64GB ... LKR 57500/ 0743620212.</p>
-
-                    <div className="mt-4">
-                        <h4 className="font-semibold">Seller information</h4>
-                        <p className="text-sm">Sadun Lakshan</p>
-                    </div>
-                    </div>      
+                    <ProductInfo productName={productName} productPrice={productPrice} productDescription={productDescription} sellerName={sellerName}/>      
                 </div>}
             </div>
     </div>
