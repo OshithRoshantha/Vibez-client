@@ -29,11 +29,13 @@ export default function Marketplace() {
     function showForYouMenu(){
         setForYouMenu(true);
         setSellMenu(false);
+        setProductInfo(false);
     }
 
     function showSellMenu(){
         setForYouMenu(false);
         setSellMenu(true);
+        setProductInfo(false);
     }
 
     function showProductInfo(){
