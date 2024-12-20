@@ -169,10 +169,29 @@ export default function Marketplace() {
                         <label className="block text-muted-foreground">Location</label>
                         <input type="text" className="border border-border rounded-lg p-2 w-full" placeholder="Location" />
                     </div>
+                    <h2 className="text-lg font-semibold text-foreground">Listing Options</h2>
+                    <div className="flex items-center justify-between p-4 border-b border-border">
+                        <div>
+                        <h3 className="font-medium text-foreground">Hide from friends</h3>
+                        <p className="text-muted-foreground">
+                            This listing is still public but will be hidden from your friends on Vibez.
+                        </p>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" className="sr-only peer" />
+                            <div className="w-11 h-6 bg-zinc-200 rounded-full peer peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:bg-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border after:border-zinc-300 after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                        </label>
+                    </div>
                     </div>
                 <div className="flex justify-between mb-4">
                     <button className="bg-primary text-primary-foreground px-4 py-2 rounded-lg w-full" onClick={handlePublishClick}>Publish</button>
                 </div>
+                    <p className="text-muted-foreground mt-4">
+                        Marketplace items are public and can be seen by anyone on or off Vibez. 
+                    </p>
+                    <p className="text-muted-foreground">
+                        Marketplace listings must not discriminate. 
+                    </p>
                 </div>            
                 </div>}
             </div>
