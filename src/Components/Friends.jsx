@@ -40,6 +40,7 @@ export default function Friends() {
                         <img src="https://placehold.co/40x40" className="rounded-full mr-2 w-55 h-55" />
                         <div>
                             <p className="font-medium">{user}</p>
+                            <p className="text-muted-foreground text-sm">About</p>
                         </div>
                     </div>
                     <div className='btn-container'>
@@ -57,6 +58,7 @@ export default function Friends() {
                         <img src="https://placehold.co/40x40" className="rounded-full mr-2" />
                         <div>
                             <p className="font-medium">{user}</p>
+                            <p className="text-muted-foreground text-sm">About</p>
                         </div>
                     </div>
                     <div className='btn-container'>
