@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState,useRef } from 'react';
 import './Styles/Column2.css'
 
 export default function Marketplace() {
     const [forYouMenu, setForYouMenu] = useState(true);
     const [sellMenu, setSellMenu] = useState(false);
+    const sellProductsRef = useRef(null);
 
     function showForYouMenu(){
         setForYouMenu(true);
@@ -14,6 +15,15 @@ export default function Marketplace() {
         setForYouMenu(false);
         setSellMenu(true);
     }
+
+    const handlePublishClick = () => {
+        if (sellProductsRef.current) {
+            sellProductsRef.current.scrollTo({
+                top: 0,
+                behavior: "smooth", 
+            });
+        }
+    };
 
   return (
     <div>
@@ -60,11 +70,8 @@ export default function Marketplace() {
                     </div>
                 </div>
             }
-            {sellMenu && <div className='sell-products'>
+            {sellMenu && <div className='sell-products' ref={sellProductsRef}>
                 <div className="p-6 pt-1 bg-card text-card-foreground">
-                <div className="flex justify-between mb-4">
-                    <button className="bg-primary text-primary-foreground px-4 py-2 rounded-lg w-full">+ Create listing</button>
-                </div>
                 <h2 className="text-lg font-semibold mb-2">Overview</h2>
                 <div className="grid grid-cols-2 gap-x-4 gap-y-0 mb-6">
                     <div className="pl-5 pt-2 border border-border rounded-lg" style={{height:'120%'}}>
@@ -77,6 +84,44 @@ export default function Marketplace() {
                         <h3 className="text-xl">0</h3><i className="bi bi-tags text-xl"></i></div>
                         <p className="text-muted-foreground">Active listings</p>
                     </div>
+                </div>
+                <h2 className="text-lg font-semibold mb-2 mt-5">New listing</h2>
+                    <div className="bg-background p-6 rounded-lg w-full">
+                    <div className="flex flex-col items-center mb-4">
+                        <button className="bg-primary text-primary-foreground rounded-full p-4">
+                        <img aria-hidden="true" alt="add-photo-icon" src="https://openui.fly.dev/openui/24x24.svg?text=➕" />
+                        </button>
+                        <h2 className="text-lg font-semibold mt-2">Add photos</h2>
+                        <p className="text-muted-foreground text-sm">Choose your listing's main photo.</p>
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-muted-foreground">Title</label>
+                        <input type="text" className="border border-border rounded-lg p-2 w-full" placeholder="Title" />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-muted-foreground">Price</label>
+                        <input type="text" className="border border-border rounded-lg p-2 w-full" placeholder="Price" />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-muted-foreground">Condition</label>
+                        <select className="border border-border rounded-lg p-2 w-full">
+                        <option>New</option>
+                        <option>Used - like new</option>
+                        <option>Used - good</option>
+                        <option>Used - fair</option>
+                        </select>
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-muted-foreground">Description</label>
+                        <textarea className="border border-border rounded-lg p-2 w-full" placeholder="Description" rows="4"></textarea>
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-muted-foreground">Location</label>
+                        <input type="text" className="border border-border rounded-lg p-2 w-full" placeholder="Location" />
+                    </div>
+                    </div>
+                <div className="flex justify-between mb-4">
+                    <button className="bg-primary text-primary-foreground px-4 py-2 rounded-lg w-full" onClick={handlePublishClick}>Publish</button>
                 </div>
                 </div>            
                 </div>}
