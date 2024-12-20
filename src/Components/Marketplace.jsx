@@ -1,11 +1,13 @@
 import { useState,useRef } from 'react';
 import './Styles/Column2.css'
 import ProductInfo from './ProductInfo';
+import YourListings from './YourListings';
 
 export default function Marketplace() {
     const [forYouMenu, setForYouMenu] = useState(true);
     const [sellMenu, setSellMenu] = useState(false);
     const [productInfo, setProductInfo] = useState(false);
+    const [yourListningMenu, setYourListningMenu] = useState(false);
     const sellProductsRef = useRef(null);
     const fileInputRef = useRef(null);
     const [selectedImages, setSelectedImages] = useState([]);
@@ -42,16 +44,26 @@ export default function Marketplace() {
         setForYouMenu(true);
         setSellMenu(false);
         setProductInfo(false);
+        setYourListningMenu(false);
     }
 
     function showSellMenu(){
         setForYouMenu(false);
         setSellMenu(true);
         setProductInfo(false);
+        setYourListningMenu(false);
     }
 
     function showProductInfo(){
         setProductInfo(true);
+        setSellMenu(false);
+        setForYouMenu(false);
+        setYourListningMenu(false);
+    }
+
+    function showYourListningMenu(){
+        setYourListningMenu(true);
+        setProductInfo(false);
         setSellMenu(false);
         setForYouMenu(false);
     }
@@ -70,9 +82,10 @@ export default function Marketplace() {
     <div>
         <div className="border-r border-border p-4 chats-column">
                 <h2 className="text-lg font-semibold column-header">Marketplace</h2>
-                <input type="text" placeholder="Search" className="w-full p-2 border border-border rounded mb-4" />
+                {<input type="text" placeholder="what do you want to buy?" className="w-full p-2 border border-border rounded mb-4" />}
                 <div className="flex space-x-2 mb-4">
                     <button onClick={showSellMenu} className="bg-muted text-muted-foreground px-4 py-2 rounded-full border-none hover:bg-gray-300">Sell</button>
+                    <button onClick={showYourListningMenu} className="bg-muted text-muted-foreground px-4 py-2 rounded-full border-none hover:bg-gray-300">Your listings</button>
                     <button onClick={showForYouMenu} className="bg-muted text-muted-foreground px-4 py-2 rounded-full border-none hover:bg-gray-300">For you</button>
                 </div>
                 {forYouMenu && 
@@ -193,6 +206,7 @@ export default function Marketplace() {
                     </p>
                 </div>            
                 </div>}
+                {yourListningMenu && <div className='product-list'><YourListings/></div>}
                 {productInfo && <div>
                     <ProductInfo productName={productName} productPrice={productPrice} productDescription={productDescription} sellerName={sellerName}/>      
                 </div>}
