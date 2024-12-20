@@ -4,6 +4,7 @@ import './Styles/Column2.css'
 export default function Marketplace() {
     const [forYouMenu, setForYouMenu] = useState(true);
     const [sellMenu, setSellMenu] = useState(false);
+    const [productInfo, setProductInfo] = useState(false);
     const sellProductsRef = useRef(null);
     const fileInputRef = useRef(null);
     const [selectedImages, setSelectedImages] = useState([]);
@@ -35,6 +36,12 @@ export default function Marketplace() {
         setSellMenu(true);
     }
 
+    function showProductInfo(){
+        setProductInfo(true);
+        setSellMenu(false);
+        setForYouMenu(false);
+    }
+
     const handlePublishClick = () => {
         if (sellProductsRef.current) {
             sellProductsRef.current.scrollTo({
@@ -56,7 +63,7 @@ export default function Marketplace() {
                 {forYouMenu && 
                 <div className='product-list'>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-0 p-0 w-full">
-                    <div className="bg-card rounded-lg shadow-md overflow-hidden" style={{height:'87%'}}>
+                    <div className="bg-card rounded-lg shadow-md overflow-hidden" style={{height:'87%', cursor:'pointer'}} onClick={showProductInfo}>
                         <img src="https://placehold.co/400x300?text=Se2" alt="Se2" className="w-full h-30 object-cover" style={{height:'65%'}}/>
                         <div className="pl-4 pr-4 pt-2 pb-2">
                             <h2 className="text-lg font-semibold">LKR23,000</h2>
@@ -193,6 +200,28 @@ export default function Marketplace() {
                         Marketplace listings must not discriminate. 
                     </p>
                 </div>            
+                </div>}
+                {productInfo && <div>
+                    <div className="bg-card text-card-foreground w-full p-4 pt-3 mt-1 product-info">
+                    <a href="#" className="text-black font-semibold back-btn"><i className="bi bi-arrow-left-circle"></i></a>
+                    <div className="grid grid-cols-3 gap-1 mb-4">
+                        <img src="https://placehold.co/400x300" alt="Apple 11 Pro" className="rounded-lg mb-0 h-32" />
+                    </div>
+                    <h2 className="text-lg font-bold">Apple 11 pro 64GB</h2>
+                    <p className="text-muted-foreground">LKR 57,500</p>
+                    <p className="text-sm">Send seller a message</p>
+                    <button className="bg-secondary text-secondary-foreground hover:bg-secondary/80 py-2 px-4 rounded-lg mt-2">Send Message</button>
+                    <div className="flex space-x-2 mt-4">
+                        <button className="bg-muted text-muted-foreground hover:bg-muted/80 py-1 px-3 rounded-lg">Share offer</button>
+                    </div>
+                    <h3 className="mt-4 font-semibold">Description</h3>
+                    <p className="text-sm text-muted-foreground">Apple 11 pro 64GB ... LKR 57500/ 0743620212.</p>
+
+                    <div className="mt-4">
+                        <h4 className="font-semibold">Seller information</h4>
+                        <p className="text-sm">Sadun Lakshan</p>
+                    </div>
+                    </div>      
                 </div>}
             </div>
     </div>
