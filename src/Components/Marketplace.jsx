@@ -2,7 +2,6 @@ import { useState,useRef } from 'react';
 import './Styles/Column2.css'
 import ProductInfo from './ProductInfo';
 import YourListings from './YourListings';
-import { set } from 'date-fns';
 import EditListing from './EditListing';
 
 export default function Marketplace() {
@@ -116,7 +115,8 @@ export default function Marketplace() {
                     </div>
                 </div>
             }
-            {sellMenu && <div className='sell-products' ref={sellProductsRef}>
+            {sellMenu && 
+            <div className='sell-products' ref={sellProductsRef}>
                 <div className="p-6 pt-1 bg-card text-card-foreground">
                 <h2 className="text-lg font-semibold mb-2">Overview</h2>
                 <div className="grid grid-cols-2 gap-x-4 gap-y-0 mb-6">
@@ -220,12 +220,12 @@ export default function Marketplace() {
                         Marketplace listings must not discriminate. 
                     </p>
                 </div>            
-                </div>}
-                {yourListningMenu && <div className='product-list'><YourListings showEditListingMenu={showEditListingMenu}/></div>}
-                {editListingMenu && <div className='product-list'><EditListing/></div>}
-                {productInfo && <div>
+            </div>}
+            {yourListningMenu && <div className='product-list'><YourListings showEditListingMenu={showEditListingMenu}/></div>}
+            {editListingMenu && <div className='sell-products' ref={sellProductsRef}><EditListing handlePublishClick={handlePublishClick}/></div>}
+            {productInfo && <div>
                     <ProductInfo productName={productName} productPrice={productPrice} productDescription={productDescription} sellerName={sellerName}/>      
-                </div>}
+            </div>}
             </div>
     </div>
   )
