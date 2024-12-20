@@ -1,9 +1,31 @@
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@radix-ui/react-accordion';
 import './Styles/Column2.css'
+import { useState} from 'react';
 
 export default function Settings() {
+    const [logoutMenu, setLogoutMenu] = useState(false);
+
+    function showLogoutMenu() {
+        setLogoutMenu(true);
+    }
+
+    function hideLogoutMenu() {
+        setLogoutMenu(false);
+    }
+
   return (
     <div>
+        {logoutMenu && <div>
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <div className="bg-card rounded-lg p-6 shadow-lg">
+                    <h2 className="text-lg font-semibold text-foreground">Log out of your account?</h2>
+                    <div>
+                        <button onClick={hideLogoutMenu} className="bg-primary text-primary-foreground px-4 py-1 rounded-lg w-full mt-3 mb-2">Cancel</button>
+                        <button onClick={hideLogoutMenu} className="bg-muted text-muted-foreground px-4 py-1 border-none hover:bg-gray-300 w-full">Log out</button>
+                    </div>
+                </div>
+            </div>    
+        </div>}
         <div className="border-r border-border p-4 chats-column">
             <h2 className="text-lg font-semibold column-header">Account Settings</h2>
             <ul className="space-y-2 mt-5">
@@ -58,7 +80,7 @@ export default function Settings() {
                     </Accordion>
             </ul>
             <div className="flex justify-between mb-4 mt-11">
-                <button className="bg-primary text-primary-foreground px-4 py-2 rounded-lg w-full" >Log out</button>
+                <button onClick={showLogoutMenu} className="bg-primary text-primary-foreground px-4 py-2 rounded-lg w-full" >Log out</button>
             </div>
         </div>
     </div>
