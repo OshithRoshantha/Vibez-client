@@ -1,6 +1,6 @@
 import './Styles/Column2.css'
 
-export default function EditListing({handlePublishClick}) {
+export default function EditListing({showYourListningMenu}) {
   return (
     <div className="p-6 pt-1 bg-card text-card-foreground">
         <h2 className="text-lg font-semibold mb-4">Edit listing</h2>
@@ -43,7 +43,7 @@ export default function EditListing({handlePublishClick}) {
             </div>
         </div>
         <div className="flex justify-between mb-4">
-                <button onClick={handlePublishClick} className="bg-primary text-primary-foreground px-4 py-2 rounded-lg w-full" >Update</button>
+                <button onClick={showYourListningMenu} className="bg-primary text-primary-foreground px-4 py-2 rounded-lg w-full" >Update</button>
         </div>
     </div>
   )

@@ -222,7 +222,7 @@ export default function Marketplace() {
                 </div>            
             </div>}
             {yourListningMenu && <div className='product-list'><YourListings showEditListingMenu={showEditListingMenu}/></div>}
-            {editListingMenu && <div className='sell-products' ref={sellProductsRef}><EditListing handlePublishClick={handlePublishClick}/></div>}
+            {editListingMenu && <div className='sell-products' ref={sellProductsRef}><EditListing showYourListningMenu={showYourListningMenu}/></div>}
             {productInfo && <div>
                     <ProductInfo productName={productName} productPrice={productPrice} productDescription={productDescription} sellerName={sellerName}/>      
             </div>}
