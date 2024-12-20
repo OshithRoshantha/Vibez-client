@@ -24,6 +24,9 @@ export default function Settings() {
                     <span>App language</span>
                 </li>
             </ul>
+            <div className="flex justify-between mb-4 mt-11">
+                <button className="bg-primary text-primary-foreground px-4 py-2 rounded-lg w-full" >Log out</button>
+            </div>
         </div>
     </div>
   )
