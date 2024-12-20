@@ -1,4 +1,3 @@
-import { useState,useRef } from 'react';
 import './Styles/Column2.css'
 
 export default function ProductInfo({productName, productPrice, productDescription, sellerName}) {
@@ -11,10 +10,8 @@ export default function ProductInfo({productName, productPrice, productDescripti
                 <h2 className="text-lg font-bold">{productName}</h2>
                 <p className="text-muted-foreground">{productPrice}</p>
                 <p className="text-sm">Send seller a message</p>
-                <button className="bg-secondary text-secondary-foreground hover:bg-secondary/80 py-2 px-4 rounded-lg mt-2">Send Message</button>
-                <div className="flex space-x-2 mt-4">
-                    <button className="bg-muted text-muted-foreground hover:bg-muted/80 py-1 px-3 rounded-lg">Share offer</button>
-                </div>
+                <button className="bg-secondary text-secondary-foreground hover:bg-secondary/80 py-2 px-4 rounded-lg mt-2 mr-5">Send Message</button>
+                <button className="bg-muted text-muted-foreground hover:bg-muted/80 py-2 px-4 rounded-lg">Share offer</button>
                 <h3 className="mt-4 font-semibold">Description</h3>
                 <p className="text-sm text-muted-foreground">{productDescription}</p>
                 <div className="mt-4">
