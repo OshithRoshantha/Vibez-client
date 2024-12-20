@@ -185,10 +185,10 @@ export default function Marketplace() {
                 <div className="flex justify-between mb-4">
                     <button className="bg-primary text-primary-foreground px-4 py-2 rounded-lg w-full" onClick={handlePublishClick}>Publish</button>
                 </div>
-                    <p className="text-muted-foreground mt-4">
+                    <p className="text-muted-foreground mt-4 text-sm">
                         Marketplace items are public and can be seen by anyone on or off Vibez. 
                     </p>
-                    <p className="text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                         Marketplace listings must not discriminate. 
                     </p>
                 </div>            
