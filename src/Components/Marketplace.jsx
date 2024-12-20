@@ -1,16 +1,30 @@
-import React from 'react'
+import { useState } from 'react';
 import './Styles/Column2.css'
 
 export default function Marketplace() {
+    const [forYouMenu, setForYouMenu] = useState(true);
+    const [sellMenu, setSellMenu] = useState(false);
+
+    function showForYouMenu(){
+        setForYouMenu(true);
+        setSellMenu(false);
+    }
+
+    function showSellMenu(){
+        setForYouMenu(false);
+        setSellMenu(true);
+    }
+
   return (
     <div>
         <div className="border-r border-border p-4 chats-column">
                 <h2 className="text-lg font-semibold column-header">Marketplace</h2>
                 <input type="text" placeholder="Search" className="w-full p-2 border border-border rounded mb-4" />
                 <div className="flex space-x-2 mb-4">
-                    <button className="bg-muted text-muted-foreground px-4 py-2 rounded-full border-none hover:bg-gray-300">Sell</button>
-                    <button className="bg-muted text-muted-foreground px-4 py-2 rounded-full border-none hover:bg-gray-300">For you</button>
+                    <button onClick={showSellMenu} className="bg-muted text-muted-foreground px-4 py-2 rounded-full border-none hover:bg-gray-300">Sell</button>
+                    <button onClick={showForYouMenu} className="bg-muted text-muted-foreground px-4 py-2 rounded-full border-none hover:bg-gray-300">For you</button>
                 </div>
+                {forYouMenu && 
                 <div className='product-list'>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-0 p-0 w-full">
                     <div className="bg-card rounded-lg shadow-md overflow-hidden" style={{height:'87%'}}>
@@ -45,6 +59,8 @@ export default function Marketplace() {
                     </div>
                     </div>
                 </div>
+            }
+            {sellMenu && <div className='sell-products'></div>}
             </div>
     </div>
   )
