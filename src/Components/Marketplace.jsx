@@ -9,23 +9,27 @@ export default function Marketplace() {
     const fileInputRef = useRef(null);
     const [selectedImages, setSelectedImages] = useState([]);
 
-    const addImages = () => {
+    function addImages() {
         if (fileInputRef.current) {
             fileInputRef.current.click(); 
         }
-    };
-
-    const handleFileChange = (event) => {
+    }
+    
+    function handleFileChange(event) {
         const files = Array.from(event.target.files); 
-        const imagePreviews = files.map(file => URL.createObjectURL(file)); 
+        const imagePreviews = files.map(function(file) {
+            return URL.createObjectURL(file);
+        }); 
         setSelectedImages(imagePreviews);
-    };
-
-    const handleRemoveImage = (index) => {
-        const updatedImages = selectedImages.filter((_, i) => i !== index); 
+    }
+    
+    function handleRemoveImage(index) {
+        const updatedImages = selectedImages.filter(function(_, i) {
+            return i !== index;
+        }); 
         setSelectedImages(updatedImages);
-    };
-
+    }
+    
     function showForYouMenu(){
         setForYouMenu(true);
         setSellMenu(false);
@@ -44,14 +48,15 @@ export default function Marketplace() {
         setForYouMenu(false);
     }
 
-    const handlePublishClick = () => {
+    function handlePublishClick() {
         if (sellProductsRef.current) {
             sellProductsRef.current.scrollTo({
                 top: 0,
                 behavior: "smooth", 
             });
         }
-    };
+    }
+    
 
   return (
     <div>
