@@ -2,12 +2,15 @@ import { useState,useRef } from 'react';
 import './Styles/Column2.css'
 import ProductInfo from './ProductInfo';
 import YourListings from './YourListings';
+import { set } from 'date-fns';
+import EditListing from './EditListing';
 
 export default function Marketplace() {
     const [forYouMenu, setForYouMenu] = useState(true);
     const [sellMenu, setSellMenu] = useState(false);
     const [productInfo, setProductInfo] = useState(false);
     const [yourListningMenu, setYourListningMenu] = useState(false);
+    const [editListingMenu, setEditListingMenu] = useState(false);
     const sellProductsRef = useRef(null);
     const fileInputRef = useRef(null);
     const [selectedImages, setSelectedImages] = useState([]);
@@ -45,6 +48,7 @@ export default function Marketplace() {
         setSellMenu(false);
         setProductInfo(false);
         setYourListningMenu(false);
+        setEditListingMenu(false);
     }
 
     function showSellMenu(){
@@ -52,6 +56,7 @@ export default function Marketplace() {
         setSellMenu(true);
         setProductInfo(false);
         setYourListningMenu(false);
+        setEditListingMenu(false);
     }
 
     function showProductInfo(){
@@ -59,6 +64,7 @@ export default function Marketplace() {
         setSellMenu(false);
         setForYouMenu(false);
         setYourListningMenu(false);
+        setEditListingMenu(false);  
     }
 
     function showYourListningMenu(){
@@ -66,6 +72,15 @@ export default function Marketplace() {
         setProductInfo(false);
         setSellMenu(false);
         setForYouMenu(false);
+        setEditListingMenu(false);
+    }
+
+    function showEditListingMenu(){
+        setEditListingMenu(true);
+        setProductInfo(false);
+        setSellMenu(false);
+        setForYouMenu(false);
+        setYourListningMenu(false);
     }
 
     function handlePublishClick() {
@@ -206,7 +221,8 @@ export default function Marketplace() {
                     </p>
                 </div>            
                 </div>}
-                {yourListningMenu && <div className='product-list'><YourListings/></div>}
+                {yourListningMenu && <div className='product-list'><YourListings showEditListingMenu={showEditListingMenu}/></div>}
+                {editListingMenu && <div className='product-list'><EditListing/></div>}
                 {productInfo && <div>
                     <ProductInfo productName={productName} productPrice={productPrice} productDescription={productDescription} sellerName={sellerName}/>      
                 </div>}
