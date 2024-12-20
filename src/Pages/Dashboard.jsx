@@ -2,18 +2,28 @@ import Chats from '@/Components/Chats';
 import './Styles/Dashboard.css'
 import { useState } from 'react';
 import Friends from '@/Components/Friends';
+import Marketplace from '@/Components/Marketplace';
 
 export default function Dashboard() {
     const [friendsMenu, setFriendsMenu] = useState(false);
     const [chatsMenu, setChatsMenu] = useState(true);
+    const [marketplaceMenu, setMarketplaceMenu] = useState(false);
 
-    function handleFriendsMenu() {
-        setFriendsMenu(!friendsMenu);
-        setChatsMenu(false);
+    function showChatsMenu(){
+        setFriendsMenu(false);
+        setChatsMenu(true);
+        setMarketplaceMenu(false);
     }
 
-    function handleChatsMenu() {
-        setChatsMenu(!chatsMenu);
+    function showFriendstMenu(){
+        setChatsMenu(false);
+        setFriendsMenu(true);
+        setMarketplaceMenu(false);
+    }
+
+    function showMarketplaceMenu(){
+        setMarketplaceMenu(true);
+        setChatsMenu(false);
         setFriendsMenu(false);
     }
 
@@ -21,7 +31,7 @@ return (
     <div className='dashboard-conatiner'>
         <div className="flex h-screen bg-background text-foreground">
             <div className="flex flex-col h-screen bg-background border-r border-border  button-column">
-                <div onClick={handleChatsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
+                <div onClick={showChatsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
                     <div className="relative">
                         <img src="https://placehold.co/40x40" alt="Inbox" className="w-8 h-8" />
                         <span className="absolute top-0 right-0 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">8</span>
@@ -30,10 +40,10 @@ return (
                 <div className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
                     <img src="https://placehold.co/40x40" alt="Search" className="w-8 h-8" />
                 </div>
-                <div onClick={handleFriendsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
+                <div onClick={showFriendstMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
                     <img src="https://placehold.co/40x40" alt="Messages" className="w-8 h-8" />
                 </div>
-                <div className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
+                <div onClick={showMarketplaceMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
                     <img src="https://placehold.co/40x40" alt="Users" className="w-8 h-8" />
                 </div>
                 <div className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
@@ -45,6 +55,7 @@ return (
             </div>
             {chatsMenu && <Chats/>}
             {friendsMenu && <Friends/>}
+            {marketplaceMenu && <Marketplace/>}
             <div className="flex-1 p-4 messages-column">
                 <div className="flex items-center mb-4">
                     <img src="https://placehold.co/40x40" alt="User" className="rounded-full mr-2" />
