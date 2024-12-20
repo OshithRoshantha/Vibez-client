@@ -202,10 +202,9 @@ export default function Marketplace() {
                 </div>            
                 </div>}
                 {productInfo && <div>
-                    <div className="bg-card text-card-foreground w-full p-4 pt-3 mt-1 product-info">
-                    <a href="#" className="text-black font-semibold back-btn"><i className="bi bi-arrow-left-circle"></i></a>
+                    <div className="bg-card text-card-foreground w-full p-4 pt-2 mt-1 product-info">
                     <div className="grid grid-cols-3 gap-1 mb-4">
-                        <img src="https://placehold.co/400x300" alt="Apple 11 Pro" className="rounded-lg mb-0 h-32" />
+                        <img src="https://placehold.co/400x300" alt="Apple 11 Pro" className="rounded-lg mb-0"/>
                     </div>
                     <h2 className="text-lg font-bold">Apple 11 pro 64GB</h2>
                     <p className="text-muted-foreground">LKR 57,500</p>
