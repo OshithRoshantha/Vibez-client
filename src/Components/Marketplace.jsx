@@ -68,11 +68,13 @@ export default function Marketplace() {
                 <h2 className="text-lg font-semibold mb-2">Overview</h2>
                 <div className="grid grid-cols-2 gap-x-4 gap-y-0 mb-6">
                     <div className="pl-5 pt-2 border border-border rounded-lg" style={{height:'120%'}}>
-                        <h3 className="text-xl">0</h3>
+                        <div style={{display:'flex', fontWeight:'bold', alignItems:'center', columnGap:'73%'}}>
+                        <h3 className="text-xl">0</h3><i className="bi bi-chat text-xl"></i></div>
                         <p className="text-muted-foreground">Chats to answer</p>
                     </div>
                     <div className="pl-5 pt-2 border border-border rounded-lg" style={{height:'120%'}}>
-                        <h3 className="text-xl">0</h3>
+                    <div style={{display:'flex', fontWeight:'bold', alignItems:'center', columnGap:'73%'}}>
+                        <h3 className="text-xl">0</h3><i className="bi bi-tags text-xl"></i></div>
                         <p className="text-muted-foreground">Active listings</p>
                     </div>
                 </div>
