@@ -33,7 +33,7 @@ export default function Friends() {
                     <button onClick={hideFriendRequests} className="bg-muted text-muted-foreground px-4 py-2 rounded-full border-none hover:bg-gray-300">Friend Requests</button>
                 </div>
                 {friendRequests && <div>
-                <h3 className="text-md font-semibold mt-4">Friend requests</h3>
+                <h2 className="text-lg font-semibold mb-2">Friend requests</h2>
                 <div className="space-y-4">
                     <div className="flex items-center justify-between border-b border-border py-2">
                     <div className="flex items-center">
@@ -50,7 +50,7 @@ export default function Friends() {
                 </div>
                 </div>}
                 {yourFriends && <div>
-                <h3 className="text-md font-semibold mt-4">{friendCount} friends</h3>
+                <h2 className="text-lg font-semibold mb-2">{friendCount} friends</h2>
                 <div className="space-y-4">
                     <div className="flex items-center justify-between border-b border-border py-2">
                     <div className="flex items-center">
