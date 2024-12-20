@@ -16,7 +16,12 @@ export default function ProductInfo({productName, productPrice, productDescripti
                 <p className="text-sm text-muted-foreground">{productDescription}</p>
                 <div className="mt-4">
                     <h4 className="font-semibold">Seller information</h4>
-                    <p className="text-sm">{sellerName}</p>
+                    <div className="flex items-center mt-2">
+                        <img src="https://placehold.co/40x40" className="rounded-full mr-2 w-55 h-55" />
+                        <div>
+                            <p className="text-sm">{sellerName}</p>
+                        </div>
+                    </div>
                 </div>
         </div>
     </div>
