@@ -5,6 +5,25 @@ export default function Marketplace() {
     const [forYouMenu, setForYouMenu] = useState(true);
     const [sellMenu, setSellMenu] = useState(false);
     const sellProductsRef = useRef(null);
+    const fileInputRef = useRef(null);
+    const [selectedImages, setSelectedImages] = useState([]);
+
+    const addImages = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click(); 
+        }
+    };
+
+    const handleFileChange = (event) => {
+        const files = Array.from(event.target.files); 
+        const imagePreviews = files.map(file => URL.createObjectURL(file)); 
+        setSelectedImages(imagePreviews);
+    };
+
+    const handleRemoveImage = (index) => {
+        const updatedImages = selectedImages.filter((_, i) => i !== index); 
+        setSelectedImages(updatedImages);
+    };
 
     function showForYouMenu(){
         setForYouMenu(true);
@@ -88,11 +107,42 @@ export default function Marketplace() {
                 <h2 className="text-lg font-semibold mb-2 mt-5">New listing</h2>
                     <div className="bg-background p-6 rounded-lg w-full">
                     <div className="flex flex-col items-center mb-4">
-                        <button className="bg-primary text-primary-foreground rounded-full p-4">
-                        <img aria-hidden="true" alt="add-photo-icon" src="https://openui.fly.dev/openui/24x24.svg?text=➕" />
+                <div style={{display:'flex',flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
+                    <div className="grid grid-cols-3 gap-1 mb-4">
+                            {selectedImages.map((image, index) => (
+                                <div key={index} className="relative">
+                                    <img
+                                        src={image}
+                                        alt={`Selected ${index + 1}`}
+                                        className="w-full h-29 object-cover rounded-lg"
+                                    />
+                                    <button 
+                                        style={{borderRadius:'50%', height:'40px', width:'40px'}}  
+                                        onClick={() => handleRemoveImage(index)}
+                                        className=" bg-red-400 text-white p-1 absolute top-0 right-0"
+                                        title="Remove"
+                                    >
+                                        <i className="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            ))}
+                    </div>
+                    <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
+                        <button onClick={addImages} className="bg-primary text-primary-foreground rounded-full p-3">
+                        <i className="bi bi-images text-xl"></i>
                         </button>
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                style={{ display: "none" }}
+                                multiple
+                                accept="image/*"
+                                onChange={handleFileChange}
+                            />
                         <h2 className="text-lg font-semibold mt-2">Add photos</h2>
-                        <p className="text-muted-foreground text-sm">Choose your listing's main photo.</p>
+                        <p className="text-muted-foreground text-sm">Choose your listing's photos.</p>
+                    </div>
+                </div>
                     </div>
                     <div className="mb-4">
                         <label className="block text-muted-foreground">Title</label>
