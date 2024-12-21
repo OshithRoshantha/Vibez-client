@@ -82,7 +82,7 @@ export default function Settings() {
                             <AccordionTrigger asChild>
                                 <li className="flex items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
                                     <i className="bi bi-gear-fill text-2xl"></i>&nbsp;&nbsp;
-                                    <span>Settings</span>
+                                    <span>Account</span>
                                 </li>
                             </AccordionTrigger>
                             <AccordionContent>
