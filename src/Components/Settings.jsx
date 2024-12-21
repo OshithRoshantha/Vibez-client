@@ -47,7 +47,13 @@ export default function Settings() {
                                 </li>
                             </AccordionTrigger>
                             <AccordionContent>
-                                Customize your application settings here.
+                                <div className="bg-background text-foreground p-4 rounded-lg">    
+                                <ul className="space-y-2">
+                                    <li className="p-2 py-1 rounded-lg hover:bg-gray-300 cursor-pointer">Delete all chats</li>
+                                    <li className="p-2 py-1 rounded-lg hover:bg-gray-300 cursor-pointer">Delete all group chats</li>
+                                    <li className="p-2 rounded-lg text-white bg-red-500 cursor-pointer">Delete my account</li>
+                                </ul>
+                                </div>
                             </AccordionContent>
                         </AccordionItem>
 
