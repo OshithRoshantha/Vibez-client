@@ -104,7 +104,29 @@ export default function Settings() {
                                 </li>
                             </AccordionTrigger>
                             <AccordionContent>
-                                Manage your privacy preferences and data settings.
+                                <div className="bg-background text-foreground p-4 rounded-lg">
+                                    <div className="flex justify-between items-center p-2 rounded">
+                                        <span>Profile photo</span>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild><span className="text-muted-foreground">My friends</span></DropdownMenuTrigger>
+                                            <DropdownMenuContent className="w-58 p-2 bg-white border border-gray-300 rounded-lg">
+                                                <DropdownMenuItem><span><i className="bi bi-people-fill"></i>&nbsp;&nbsp;My friends</span></DropdownMenuItem>
+                                                <DropdownMenuItem><span><i className="bi bi-lock-fill"></i>&nbsp;&nbsp;Only me</span></DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                        
+                                    </div>
+                                    <div className="flex justify-between items-center p-2 rounded">
+                                        <span>About</span>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild><span className="text-muted-foreground">My friends</span></DropdownMenuTrigger>
+                                            <DropdownMenuContent className="w-58 p-2 bg-white border border-gray-300 rounded-lg">
+                                                <DropdownMenuItem><span><i className="bi bi-people-fill"></i>&nbsp;&nbsp;My friends</span></DropdownMenuItem>
+                                                <DropdownMenuItem><span><i className="bi bi-lock-fill"></i>&nbsp;&nbsp;Only me</span></DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
+                                </div>
                             </AccordionContent>
                         </AccordionItem>
 
