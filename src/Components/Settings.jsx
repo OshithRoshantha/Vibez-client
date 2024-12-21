@@ -1,4 +1,13 @@
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@radix-ui/react-accordion';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+  } from "@/components/ui/dropdown-menu"
+  
 import './Styles/Column2.css'
 import { useState} from 'react';
 
@@ -62,7 +71,17 @@ export default function Settings() {
                                 </li>
                             </AccordionTrigger>
                             <AccordionContent>
-                                Enable or disable dark mode for the application.
+                                <div className="bg-background text-foreground p-4 rounded-lg">
+                                <div className="flex justify-between items-center mb-2">
+                                    <label htmlFor="on" className="cursor-pointer">On</label>
+                                    <input type="radio" id="on" name="dark-mode" className="mr-2" />
+                                </div>
+                                <div className="flex justify-between items-center mb-2">
+                                    <label htmlFor="off" className="cursor-pointer">Off</label>
+                                    <input type="radio" id="off" name="dark-mode" className="mr-2" />
+                                </div>
+                                <p className="text-muted-foreground text-sm">Optimize the theme for better readability and eye comfort.</p>
+                                </div>
                             </AccordionContent>
                         </AccordionItem>
 
@@ -74,7 +93,20 @@ export default function Settings() {
                                 </li>
                             </AccordionTrigger>
                             <AccordionContent>
-                                Select your preferred application language.
+                                <div className="bg-background text-foreground p-4 rounded-lg">
+                                <div className="flex justify-between items-center mb-2">
+                                <DropdownMenu>
+                                <DropdownMenuTrigger className="bg-primary">Select Language</DropdownMenuTrigger>
+                                <DropdownMenuContent className="w-58 p-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+                                    <DropdownMenuItem><span>English</span></DropdownMenuItem>
+                                    <DropdownMenuItem disabled><span>Español</span></DropdownMenuItem>
+                                    <DropdownMenuItem disabled><span>Français</span></DropdownMenuItem>
+                                    <DropdownMenuItem disabled><span>Deutsch</span></DropdownMenuItem>
+                                </DropdownMenuContent>
+                                </DropdownMenu>
+                                </div>
+                                <p className="text-muted-foreground mt-2">Please note that only English is currently available.</p>
+                                </div>
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>
