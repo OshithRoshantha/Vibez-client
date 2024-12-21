@@ -15,7 +15,7 @@
     margin-left: -50%;
 }
 
-.friends-column, .chats-column{
+.friends-column, .chats-column, .settings-column{
     width: 32vw;
 }
 .friend-buttons{
@@ -38,3 +38,6 @@
     height: 25%;
 }
 
+.settings-column{
+    height: 100vh;
+}
