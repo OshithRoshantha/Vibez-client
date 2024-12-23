@@ -16,7 +16,7 @@ export default function GroupChats() {
     const fileInputRef = useRef(null);
     const avatarEditorRef = useRef(null);    
 
-    const defaultImage = "https://www.pngitem.com/pimgs/m/22-223968_default-profile-picture-circle-hd-png-download.png";
+    const defaultImage = "./src/assets/groupDefault.jpg";
 
     function clearCropedImage() {
         setCropedImage(null);
