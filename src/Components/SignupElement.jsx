@@ -44,7 +44,7 @@ export default function SignupElement() {
   const [passwordUnmatchError, setPasswordUnmatchError] = useState(false);
   const [disableContinueBtn, setDisableContinueBtn] = useState(true);
 
-  const defaultImage = "https://www.pngitem.com/pimgs/m/22-223968_default-profile-picture-circle-hd-png-download.png";
+  const defaultImage = "./src/assets/userDefault.jpg";
 
   function validateFullName(name) {
     return /^[a-zA-Z\s]{3,}$/.test(name);
