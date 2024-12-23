@@ -12,7 +12,7 @@ export default function Profile() {
                 <div className="mt-4">
                     <label className="text-muted-foreground">Your name</label>
                     <h2 className="text-xl font-semibold">OshithRoshantha</h2>
-                    <span className="text-muted-foreground text-sm"> This is not your username or PIN. This name will be visible to your WhatsApp contacts. </span>
+                    <span className="text-muted-foreground text-sm"> This is not your username or PIN. This name will be visible to your Vibez contacts. </span>
                 </div>
                 <div className="mt-6">
                     <span className="text-muted-foreground">About</span>
