@@ -16,7 +16,7 @@ export default function YourListings({showEditListingMenu}) {
     <div>
         {deleteMenu && <div>
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-              <div className="bg-card rounded-lg p-6 w-80">
+              <div className="bg-card rounded-lg p-6 w-80 shadow-lg">
                 <div className='text-center'>
                     <h2 className="text-lg font-semibold text-foreground">Delete this listing?</h2>
                     <p className="text-muted-foreground mt-2">Are you sure that you want to delete this listing?</p>
