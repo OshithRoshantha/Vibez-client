@@ -37,12 +37,14 @@ export default function SignupElement() {
   const avatarEditorRef = useRef(null);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
+  const [contact, setContact] = useState('');
   const [fullNameError, setFullNameError] = useState(false);
   const [emailError, setEmailError] = useState(false);
-  const [validContact, setValidContact] = useState(true);
+  const [contactNumberError, setContactNumberError] = useState(false);
+  const [passwordUnmatchError, setPasswordUnmatchError] = useState(false);
   const [disableContinueBtn, setDisableContinueBtn] = useState(true);
 
-  const defaultImage = "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=";
+  const defaultImage = "./src/assets/userDefault.jpg";
 
   function validateFullName(name) {
     return /^[a-zA-Z\s]{3,}$/.test(name);
@@ -63,10 +65,18 @@ export default function SignupElement() {
   }
   
   useEffect(function() {
-    if (validateEmail(email) && validateFullName(fullName) && validContact) {
-      setDisableContinueBtn(false);
+    if (activeStep === 0) {
+      if (validateEmail(email) && validateFullName(fullName) && contactNumberError) {
+        setDisableContinueBtn(false);
+      }
     }
-  }, [fullName, email]);
+    if (activeStep === 1) {
+      setDisableContinueBtn(true);
+      if(!passwordUnmatchError && password !== '' && confirmPassword !== '') {
+        setDisableContinueBtn(false);
+      }
+    }
+  }, [fullName, email, contact, password, confirmPassword, activeStep]);
   
   function editPictureFormHandler() {
     setEditPictureForm(!editPictureForm);
@@ -118,10 +128,14 @@ export default function SignupElement() {
     else {
       setProgress(0);
     }
+    if(confirmPassword !== '') {
+      setPasswordUnmatchError(newPassword !== confirmPassword);
+    }
   }
   
   function handleConfirmPasswordChange(event) {
     setConfirmPassword(event.target.value);
+    setPasswordUnmatchError(password !== event.target.value);
   }
   
   function handleClickShowPassword() {
@@ -205,7 +219,7 @@ export default function SignupElement() {
               >
                 <TextField id="outlined-basic" label="Full Name" helperText={fullNameError ? 'Full name must be at least 3 characters long.' : ''} value={fullName} onChange={handleFullNameChange} error={fullNameError} variant="outlined" placeholder="John Doe" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} /><br />
                 <TextField id="outlined-email" label="Email Address" helperText={emailError ? 'Please enter a valid email address.' : ''} value={email} onChange={handleEmailChange} error={emailError} variant="outlined" placeholder="john@example.com" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} />
-                <ContactField/>
+                <ContactField setContactNumberError={setContactNumberError} setContact={setContact}/>
               </Box>
             </div>
           </div>
@@ -256,6 +270,9 @@ export default function SignupElement() {
                 </p>
                 <TextField
                   id="outlined-confirm-password"
+                  helperText={passwordUnmatchError ? 'Passwords do not matched.' : ''}
+                  value={confirmPassword}	
+                  error={passwordUnmatchError}
                   label="Confirm Password"
                   variant="outlined"
                   placeholder="Confirm Password"
