@@ -137,7 +137,7 @@ export default function Profile() {
                     <div style={{display:'flex', alignItems:'center',columnGap:'50%'}}>
                     {isEditingAbout ? (
                     <input
-                        className="mt-2 w-full py-0 mb-0 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
+                        className="w-full py-0 mb-0 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
                         value={about}
                         onChange={(e) => setAbout(e.target.value)}
                         autoFocus
