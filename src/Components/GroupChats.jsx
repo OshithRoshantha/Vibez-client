@@ -189,7 +189,7 @@ export default function GroupChats() {
                         className="border-b border-muted w-full text-lg py-2 mb-4 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
                     />
                     <button onClick={() => {hideFinishCreateGroup(); clearCropedImage();}} className="bg-primary text-white absolute" style={{cursor: 'pointer', borderRadius:'50%', height:'54px', width:'54px', marginTop:'340px'}} >
-                        <i className="bi bi-arrow-right"></i>
+                        <i className="bi bi-check2"></i>
                     </button>
                     </div>           
                 </div>}
