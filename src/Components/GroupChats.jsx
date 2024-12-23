@@ -44,6 +44,7 @@ export default function GroupChats() {
                 <div className='chat-list'>
                 {addMembersMenu && <div>
                     <h2 className="text-lg font-semibold mb-2">Add group members</h2>
+                    <div className='group-op'>
                     <div className="space-y-4">
                         <div className="flex items-center justify-between border-b border-border py-2">
                         <div className="flex items-center">
@@ -70,6 +71,12 @@ export default function GroupChats() {
                             </button>}
                         </div>
                         </div>
+                    </div>
+                    </div>
+                    <div className="flex items-center justify-center">
+                    <button className="bg-primary text-white absolute" style={{cursor: 'pointer', borderRadius:'50%', height:'54px', width:'54px', marginTop:'80px'}} >
+                        <i className="bi bi-arrow-right"></i>
+                    </button>
                     </div>
                 </div>}
                 {groupChats && <div>
