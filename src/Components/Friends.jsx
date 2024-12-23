@@ -36,7 +36,7 @@ export default function Friends() {
                 <h2 className="text-lg font-semibold mb-2">Friend requests</h2>
                 <div className='friends-list'>
                 <div className="space-y-4">
-                    <div className="flex items-center justify-between border-b border-border py-2">
+                    <div className="flex items-center justify-between border-border py-2">
                     <div className="flex items-center">
                         <img src="https://placehold.co/40x40" className="rounded-full mr-2 w-55 h-55" />
                         <div>
@@ -56,7 +56,7 @@ export default function Friends() {
                 <h2 className="text-lg font-semibold mb-2">{friendCount} friends</h2>
                 <div className='friends-list'>
                 <div className="space-y-4">
-                    <div className="flex items-center justify-between border-b border-border py-2">
+                    <div className="flex items-center justify-between border-border py-2">
                     <div className="flex items-center">
                         <img src="https://placehold.co/40x40" className="rounded-full mr-2" />
                         <div>
