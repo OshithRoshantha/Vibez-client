@@ -5,6 +5,7 @@ import Friends from '@/Components/Friends';
 import Marketplace from '@/Components/Marketplace';
 import Settings from '@/Components/Settings';
 import GroupChats from '@/Components/GroupChats';
+import Profile from '@/Components/Profile';
 
 export default function Dashboard() {
     const [friendsMenu, setFriendsMenu] = useState(false);
@@ -12,6 +13,7 @@ export default function Dashboard() {
     const [groupsMenu, setGroupsMenu] = useState(false);
     const [marketplaceMenu, setMarketplaceMenu] = useState(false);
     const [settingsMenu, setSettingsMenu] = useState(false);
+    const [profileMenu, setProfileMenu] = useState(false);
 
     function showChatsMenu(){
         setFriendsMenu(false);
@@ -19,6 +21,7 @@ export default function Dashboard() {
         setMarketplaceMenu(false);
         setSettingsMenu(false);
         setGroupsMenu(false);
+        setProfileMenu(false);
     }
 
     function showFriendstMenu(){
@@ -27,6 +30,7 @@ export default function Dashboard() {
         setMarketplaceMenu(false);
         setSettingsMenu(false);
         setGroupsMenu(false);
+        setProfileMenu(false);
     }
 
     function showMarketplaceMenu(){
@@ -35,6 +39,7 @@ export default function Dashboard() {
         setFriendsMenu(false);
         setSettingsMenu(false);
         setGroupsMenu(false);
+        setProfileMenu(false);
     }
 
     function showSettingsMenu(){
@@ -43,6 +48,7 @@ export default function Dashboard() {
         setFriendsMenu(false);
         setSettingsMenu(true);
         setGroupsMenu(false);
+        setProfileMenu(false);
     }
 
     function showGroupsMenu(){
@@ -51,6 +57,16 @@ export default function Dashboard() {
         setFriendsMenu(false);
         setSettingsMenu(false);
         setGroupsMenu(true);
+        setProfileMenu(false);
+    }
+
+    function showProfileMenu(){
+        setMarketplaceMenu(false);
+        setChatsMenu(false);
+        setFriendsMenu(false);
+        setSettingsMenu(false);
+        setGroupsMenu(false);
+        setProfileMenu(true);
     }
 
 return (
@@ -75,7 +91,7 @@ return (
                 <div onClick={showSettingsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
                     <img src="https://placehold.co/40x40" alt="Settings" className="w-8 h-8" />
                 </div>
-                <div className="flex items-center justify-center mt-auto mb-4" style={{cursor: 'pointer'}}>
+                <div onClick={showProfileMenu} className="flex items-center justify-center mt-auto mb-4" style={{cursor: 'pointer'}}>
                     <img src="https://placehold.co/50x50" alt="Profile" className="w-15 h-15 rounded-full" />
                 </div>
             </div>
@@ -84,6 +100,7 @@ return (
             {friendsMenu && <Friends/>}
             {marketplaceMenu && <Marketplace/>}
             {settingsMenu && <Settings/>}
+            {profileMenu && <Profile/>}
             <div className="flex-1 p-4 messages-column">
                 <div className="flex items-center mb-4">
                     <img src="https://placehold.co/40x40" alt="User" className="rounded-full mr-2" />
