@@ -7,7 +7,7 @@ export default function Profile() {
         <div className="border-r border-border p-4 chats-column">
                 <h2 className="text-lg font-semibold column-header">Profile</h2>
                 <div className="flex flex-col items-center p-6 bg-background text-foreground" style={{marginTop:'15%', paddingBottom:'31%'}}>
-                <img className="w-40 h-40 rounded-full border-4 border-primary" src="https://placehold.co/128x128" alt="Profile Picture" />
+                <img style={{cursor:'pointer'}} className="w-40 h-40 rounded-full border-4 border-primary" src="https://placehold.co/128x128" alt="Profile Picture" />
                 <div className="mt-4">
                 <div className="mt-4">
                     <label className="text-muted-foreground">Your name</label>
