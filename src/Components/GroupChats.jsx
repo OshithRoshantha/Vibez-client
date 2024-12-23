@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import './Styles/Column2.css'
+import { set } from 'date-fns';
 
 export default function GroupChats() {
     const [addMembersMenu, setAddMembersMenu] = useState(false);
+    const [finishCreateGroup, setFinishCreateGroup] = useState(false);
     const [groupChats, setGroupChats] = useState(true);
     const [isAdded, setIsAdded] = useState(false);
 
@@ -27,6 +29,18 @@ export default function GroupChats() {
     function showGroupChats(){
         setGroupChats(true);
         setAddMembersMenu(false);
+        setFinishCreateGroup(false);
+    }
+
+    function showFinishCreateGroup(){
+        setFinishCreateGroup(true);
+        setAddMembersMenu(false);
+        setGroupChats(false);
+    }
+
+    function hideFinishCreateGroup(){
+        setFinishCreateGroup(false);
+        setGroupChats(true);
     }
 
     var user = "testUser";
@@ -65,7 +79,9 @@ export default function GroupChats() {
                             {isAdded &&
                             <button
                                 className="px-3 py-1 rounded bg-muted text-muted-foreground border-none hover:bg-gray-300"
-                                onClick={handleRemoveClick}
+                                onClick={() => {
+                                    handleRemoveClick();
+                                  }}
                             >
                                 Remove
                             </button>}
@@ -74,11 +90,12 @@ export default function GroupChats() {
                     </div>
                     </div>
                     <div className="flex items-center justify-center">
-                    <button className="bg-primary text-white absolute" style={{cursor: 'pointer', borderRadius:'50%', height:'54px', width:'54px', marginTop:'80px'}} >
+                    <button onClick={showFinishCreateGroup} className="bg-primary text-white absolute" style={{cursor: 'pointer', borderRadius:'50%', height:'54px', width:'54px', marginTop:'80px'}} >
                         <i className="bi bi-arrow-right"></i>
                     </button>
                     </div>
                 </div>}
+                {finishCreateGroup && <div>Test</div>}
                 {groupChats && <div>
                 <div className="space-y-2" style={{cursor: 'pointer'}}>
                     <div className="flex items-center p-2 hover:bg-muted rounded">
