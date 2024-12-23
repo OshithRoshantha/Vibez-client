@@ -128,7 +128,7 @@ export default function Profile() {
                     </h2>
                     )}
                     {!isEditingName && <i onClick={handleNameClick} className="absolute bi bi-pencil-fill" style={{marginLeft:'24%', cursor:'pointer'}}></i>} 
-                    {isEditingName && <i onClick={handleNameBlur} className="absolute bi bi-check-lg" style={{marginLeft:'24%', cursor:'pointer'}}></i>}  
+                    {isEditingName && <i onClick={handleNameBlur} className="absolute bi bi-check2" style={{marginLeft:'24%', cursor:'pointer', fontSize:'125%'}}></i>}  
                     </div>
                     <span className="text-muted-foreground text-sm mt-2"> This is not your username or PIN. This name will be visible to your Vibez contacts. </span>
                 </div>
@@ -151,7 +151,7 @@ export default function Profile() {
                     </p>
                     )}
                     {!isEditingAbout && <i onClick={handleAboutClick} className="absolute bi bi-pencil-fill" style={{marginLeft:'24%', cursor:'pointer'}}></i>}
-                    {isEditingAbout && <i onClick={handleAboutBlur} className="absolute bi bi-check-lg" style={{marginLeft:'24%', cursor:'pointer'}}></i>}
+                    {isEditingAbout && <i onClick={handleAboutBlur} className="absolute bi bi-check2" style={{marginLeft:'24%', cursor:'pointer', fontSize:'125%'}}></i>}
                     </div>
                 </div>
                 </div>
