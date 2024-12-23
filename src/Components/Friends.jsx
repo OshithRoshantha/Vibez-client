@@ -34,6 +34,7 @@ export default function Friends() {
                 </div>
                 {friendRequests && <div>
                 <h2 className="text-lg font-semibold mb-2">Friend requests</h2>
+                <div className='friends-list'>
                 <div className="space-y-4">
                     <div className="flex items-center justify-between border-b border-border py-2">
                     <div className="flex items-center">
@@ -49,9 +50,11 @@ export default function Friends() {
                     </div>
                     </div>
                 </div>
+                </div>
                 </div>}
                 {yourFriends && <div>
                 <h2 className="text-lg font-semibold mb-2">{friendCount} friends</h2>
+                <div className='friends-list'>
                 <div className="space-y-4">
                     <div className="flex items-center justify-between border-b border-border py-2">
                     <div className="flex items-center">
@@ -83,7 +86,8 @@ export default function Friends() {
                         </PopoverContent>
                         </Popover>
                     </div>
-                </div>
+                    </div>
+                    </div>
                     </div>
                 </div>}
             </div>
