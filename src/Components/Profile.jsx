@@ -32,6 +32,7 @@ export default function Profile() {
                 <div className="mt-4">
                 <div className="mt-4">
                     <label className="text-muted-foreground">Your name</label>
+                    <div style={{display:'flex', alignItems:'center',columnGap:'50%'}}>
                     {isEditingName ? (
                     <input
                         className="w-full text-xl font-semibold py-0 mb-0 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
@@ -42,16 +43,19 @@ export default function Profile() {
                     />
                     ) : (
                     <h2
-                        className="text-xl font-semibold cursor-pointer"
-                        onClick={handleNameClick}
+                        className="text-xl font-semibold"
+                        
                     >
                         {name}
                     </h2>
                     )}
-                    <span className="text-muted-foreground text-sm"> This is not your username or PIN. This name will be visible to your Vibez contacts. </span>
+                    <i onClick={handleNameClick} className="absolute bi bi-pencil-fill" style={{marginLeft:'24%', cursor:'pointer'}}></i>
+                    </div>
+                    <span className="text-muted-foreground text-sm mt-2"> This is not your username or PIN. This name will be visible to your Vibez contacts. </span>
                 </div>
                 <div className="mt-6">
                     <span className="text-muted-foreground">About</span>
+                    <div style={{display:'flex', alignItems:'center',columnGap:'50%'}}>
                     {isEditingAbout ? (
                     <input
                         className="mt-2 w-full py-0 mb-0 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
@@ -62,12 +66,14 @@ export default function Profile() {
                     />
                     ) : (
                     <p
-                        className="cursor-pointer mt-2"
-                        onClick={handleAboutClick}
+                        className="mt-0"
+                        
                     >
                         {about}
                     </p>
                     )}
+                    <i onClick={handleAboutClick} className="absolute bi bi-pencil-fill" style={{marginLeft:'24%', cursor:'pointer'}}></i>
+                    </div>
                 </div>
                 </div>
                 </div>
