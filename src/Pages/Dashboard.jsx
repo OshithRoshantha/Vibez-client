@@ -5,6 +5,7 @@ import Friends from '@/Components/Friends';
 import Marketplace from '@/Components/Marketplace';
 import Settings from '@/Components/Settings';
 import GroupChats from '@/Components/GroupChats';
+import Profile from '@/Components/Profile';
 
 export default function Dashboard() {
     const [friendsMenu, setFriendsMenu] = useState(false);
@@ -99,7 +100,7 @@ return (
             {friendsMenu && <Friends/>}
             {marketplaceMenu && <Marketplace/>}
             {settingsMenu && <Settings/>}
-            {profileMenu &&}
+            {profileMenu && <Profile/>}
             <div className="flex-1 p-4 messages-column">
                 <div className="flex items-center mb-4">
                     <img src="https://placehold.co/40x40" alt="User" className="rounded-full mr-2" />
