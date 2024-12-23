@@ -1,4 +1,3 @@
-import React from 'react'
 import './Styles/Column2.css'
 
 export default function Chats() {
