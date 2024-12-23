@@ -1,24 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { TextField, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { PatternFormat } from 'react-number-format';
 import Flag from 'react-world-flags';
 
-function ContactField() {
+function ContactField({setContactNumberError, setContact}) {
   const [countryCode, setCountryCode] = useState('+94');
   const [contactNumber, setContactNumber] = useState('');
-  const [validContactNo, setValidContactNo] = useState(false);
 
-  const handleCountryCodeChange = (event) => {
+  function handleCountryCodeChange(event) {
     setCountryCode(event.target.value);
-  };
-
-  const handleContactNumberChange = (value) => {
+  }
+  
+  function handleContactNumberChange(value) {
     setContactNumber(value);
-  };
-
-  useEffect(() => {
-    const pattern = new RegExp(`^${countryCode.replace('+', '\\+')} \\d{2} \\d{3} \\d{4}$`);
-    setValidContactNo(pattern.test(contactNumber)); 
+  }
+  
+  useEffect(function() {
+    const pattern = /^\d{9}$/;
+    setContact(contactNumber);
+    setContactNumberError(pattern.test(contactNumber));
   }, [contactNumber, countryCode]);
 
   const countries = [
@@ -95,7 +96,6 @@ function ContactField() {
         customInput={TextField}
         label="Contact Number"
         variant="outlined"
-        placeholder={`${countryCode} 76 918 2392`}
         value={contactNumber}
         onValueChange={(values) => handleContactNumberChange(values.value)}
         InputProps={{
@@ -108,3 +108,7 @@ function ContactField() {
 
 export default ContactField;
 
+ContactField.propTypes = {
+  setContactNumberError: PropTypes.func.isRequired,
+  setContact: PropTypes.func.isRequired,
+}
