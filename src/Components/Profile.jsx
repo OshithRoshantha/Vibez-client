@@ -16,7 +16,7 @@ export default function Profile() {
                 </div>
                 <div className="mt-6">
                     <span className="text-muted-foreground">About</span>
-                    <p>Can't talk, Only Vibez.</p>
+                    <p>Can't talk, Vibez only.</p>
                 </div>
                 </div>
                 </div>
