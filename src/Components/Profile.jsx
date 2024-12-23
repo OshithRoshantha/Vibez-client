@@ -13,7 +13,7 @@ export default function Profile() {
     const [cropedImage, setCropedImage] = useState(null);
     const fileInputRef = useRef(null);
     const avatarEditorRef = useRef(null);  
-    const [name, setName] = useState("OshithRoshantha");
+    const [name, setName] = useState("TestUser");
     const [about, setAbout] = useState("Can't talk, Vibez only.");
 
     const defaultImage = "./src/assets/groupDefault.jpg"; //user current profile picture
@@ -117,7 +117,6 @@ export default function Profile() {
                         className="w-full text-xl font-semibold py-0 mb-0 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        onBlur={handleNameBlur}
                         autoFocus
                     />
                     ) : (
@@ -125,10 +124,11 @@ export default function Profile() {
                         className="text-xl font-semibold"
                         
                     >
-                        {name}
+                    {name}
                     </h2>
                     )}
-                    <i onClick={handleNameClick} className="absolute bi bi-pencil-fill" style={{marginLeft:'24%', cursor:'pointer'}}></i>
+                    {!isEditingName && <i onClick={handleNameClick} className="absolute bi bi-pencil-fill" style={{marginLeft:'24%', cursor:'pointer'}}></i>} 
+                    {isEditingName && <i onClick={handleNameBlur} className="absolute bi bi-check-lg" style={{marginLeft:'24%', cursor:'pointer'}}></i>}  
                     </div>
                     <span className="text-muted-foreground text-sm mt-2"> This is not your username or PIN. This name will be visible to your Vibez contacts. </span>
                 </div>
@@ -140,7 +140,6 @@ export default function Profile() {
                         className="mt-2 w-full py-0 mb-0 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
                         value={about}
                         onChange={(e) => setAbout(e.target.value)}
-                        onBlur={handleAboutBlur}
                         autoFocus
                     />
                     ) : (
@@ -148,10 +147,11 @@ export default function Profile() {
                         className="mt-0"
                         
                     >
-                        {about}
+                    {about}
                     </p>
                     )}
-                    <i onClick={handleAboutClick} className="absolute bi bi-pencil-fill" style={{marginLeft:'24%', cursor:'pointer'}}></i>
+                    {!isEditingAbout && <i onClick={handleAboutClick} className="absolute bi bi-pencil-fill" style={{marginLeft:'24%', cursor:'pointer'}}></i>}
+                    {isEditingAbout && <i onClick={handleAboutBlur} className="absolute bi bi-check-lg" style={{marginLeft:'24%', cursor:'pointer'}}></i>}
                     </div>
                 </div>
                 </div>
