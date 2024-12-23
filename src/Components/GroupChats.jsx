@@ -1,5 +1,5 @@
 import './Styles/Column2.css'
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState} from 'react';
 import './Styles/SignupElement.css'
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
