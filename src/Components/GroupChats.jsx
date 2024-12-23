@@ -1,24 +1,39 @@
-import { useState } from 'react';
 import './Styles/Column2.css'
-import { set } from 'date-fns';
+import React, { useRef, useState, useEffect } from 'react';
+import './Styles/SignupElement.css'
+import AvatarEditor from 'react-avatar-editor'
+import Slider from '@mui/material/Slider';
 
 export default function GroupChats() {
     const [addMembersMenu, setAddMembersMenu] = useState(false);
     const [finishCreateGroup, setFinishCreateGroup] = useState(false);
     const [groupChats, setGroupChats] = useState(true);
     const [isAdded, setIsAdded] = useState(false);
+    const [editPictureForm, setEditPictureForm] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [cropFactor, setCropFactor] = useState(1);
+    const [cropedImage, setCropedImage] = useState(null);
+    const fileInputRef = useRef(null);
+    const avatarEditorRef = useRef(null);    
 
-    const handleAddClick = () => {
-      setIsAdded(true);
-    };
+    const defaultImage = "https://www.pngitem.com/pimgs/m/22-223968_default-profile-picture-circle-hd-png-download.png";
 
-    const handleRemoveClick = () => {
+    function clearCropedImage() {
+        setCropedImage(null);
+    }
+
+    function handleAddClick() {
+        setIsAdded(true);
+      }
+      
+    function handleRemoveClick() {
         setIsAdded(false);
-      };
-
+    }
+      
     function showAddMembersMenu(){
         setAddMembersMenu(true);
         setGroupChats(false);
+        setFinishCreateGroup(false);
     }
 
     function hideAddMembersMenu(){
@@ -41,6 +56,38 @@ export default function GroupChats() {
     function hideFinishCreateGroup(){
         setFinishCreateGroup(false);
         setGroupChats(true);
+        setAddMembersMenu(false);
+    }
+
+    function editPictureFormHandler() {
+        setEditPictureForm(!editPictureForm);
+    }
+      
+    function handleSliderChange(event, newValue) {
+        setCropFactor(newValue);
+    }
+      
+    function uploadImg() {
+        fileInputRef.current.click();
+    }
+      
+    function handleFileChange(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const imageUrl = URL.createObjectURL(file);
+          setSelectedImage(imageUrl);
+          editPictureFormHandler();
+        }
+    }
+      
+    function handleCrop() {
+        if (avatarEditorRef.current) {
+          const canvas = avatarEditorRef.current.getImageScaledToCanvas();
+          const croppedImageUrl = canvas.toDataURL();
+          setSelectedImage(croppedImageUrl);
+          setCropedImage(croppedImageUrl);
+          editPictureFormHandler();
+        }
     }
 
     var user = "testUser";
@@ -95,7 +142,57 @@ export default function GroupChats() {
                     </button>
                     </div>
                 </div>}
-                {finishCreateGroup && <div>Test</div>}
+                {finishCreateGroup && <div>
+                    {editPictureForm && <div className='edit-picture-form2'>
+                            <AvatarEditor
+                                ref={avatarEditorRef}
+                                image={selectedImage}
+                                width={180}
+                                height={180}
+                                border={0}
+                                borderRadius={150}
+                                color={[0, 0, 0, 0.5]} 
+                                scale={cropFactor}
+                            />
+                            <Slider defaultValue={[1]} min={1} max={10} step={1} style={{ width: '70%'}} onChange={handleSliderChange} value={cropFactor}/>
+                            <div className='edit-picture-buttons'>
+                                <button onClick={editPictureFormHandler} style={{width:'20%',borderRadius: '20px'}}>Back</button>
+                                <button onClick={handleCrop} style={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</button>
+                            </div>
+                        </div>}
+                    <div className="flex flex-col items-center bg-card p-6">
+                    <div className="relative mb-4">
+                        <div className='profile-pic' onClick={uploadImg}  
+                        style={{
+                            backgroundImage: cropedImage ? `url(${cropedImage})` : `url(${defaultImage})`, 
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                        }}>
+                            <span className='camera-icon'><i className="bi bi-camera-fill"></i></span>ADD GROUP ICON
+                        </div>
+                        <input
+                            type='file'
+                            accept='image/*'
+                            ref={fileInputRef}
+                            style={{ display: 'none' }}
+                            onChange={handleFileChange}
+                        />
+                    </div>
+                    <input
+                        type="text"
+                        placeholder="Group subject"
+                        className="border-b border-muted w-full text-lg py-2 mb-4 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
+                    />              
+                    <input
+                        type="text"
+                        placeholder="Group description (optional)"
+                        className="border-b border-muted w-full text-lg py-2 mb-4 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
+                    />
+                    <button onClick={() => {hideFinishCreateGroup(); clearCropedImage();}} className="bg-primary text-white absolute" style={{cursor: 'pointer', borderRadius:'50%', height:'54px', width:'54px', marginTop:'340px'}} >
+                        <i className="bi bi-arrow-right"></i>
+                    </button>
+                    </div>           
+                </div>}
                 {groupChats && <div>
                 <div className="space-y-2" style={{cursor: 'pointer'}}>
                     <div className="flex items-center p-2 hover:bg-muted rounded">
