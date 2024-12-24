@@ -15,7 +15,7 @@ export default function YourListings({showEditListingMenu}) {
   return (  
     <div>
         {deleteMenu && <div>
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex:'100'}}>
               <div className="bg-card rounded-lg p-6 w-80 shadow-lg">
                 <div className='text-center'>
                     <h2 className="text-lg font-semibold text-foreground">Delete this listing?</h2>
@@ -26,8 +26,8 @@ export default function YourListings({showEditListingMenu}) {
                   <p className="text-muted-foreground">🛒 Phones</p>
                 </div>
                 <div>
-                  <button onClick={hideDeleteMenu} className="bg-primary text-primary-foreground px-4 py-1 rounded-lg w-full mt-3 mb-2">Delete</button>
-                  <button onClick={hideDeleteMenu} className="bg-muted text-muted-foreground px-4 py-1 border-none hover:bg-gray-300 w-full">Cancel</button>
+                  <button style={{cursor:'pointer'}} onClick={hideDeleteMenu} className="bg-primary text-primary-foreground px-4 py-1 rounded-lg w-full mt-3 mb-2">Delete</button>
+                  <button style={{cursor:'pointer'}} onClick={hideDeleteMenu} className="bg-muted text-muted-foreground px-4 py-1 border-none hover:bg-gray-300 w-full">Cancel</button>
                 </div>
               </div>
             </div>

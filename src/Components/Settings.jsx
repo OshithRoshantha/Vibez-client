@@ -32,16 +32,16 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
   return (
     <div>
         {logoutMenu && <div>
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100'}}>
+            <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">	
                 <h2 className="text-lg font-semibold">Confirm Logout</h2>
                 <p className="text-muted-foreground mt-0">Are you sure you want to log out?</p>
                 <div className="flex justify-between mt-4">
-                <button onClick={hideLogoutMenu} className="bg-muted text-muted-foreground hover:bg-gray-300 px-4 py-2 rounded">
-                    CANCEL
+                <button style={{cursor:'pointer'}} onClick={hideLogoutMenu} className="bg-muted border-none text-muted-foreground hover:bg-gray-300 px-4 py-2 rounded">
+                    Stay logged in
                 </button>
-                <button onClick={hideLogoutMenu} className="bg-primary text-primary-foreground hover:bg-primary/80 px-4 py-2 rounded">
-                    OK
+                <button style={{cursor:'pointer'}}  onClick={hideLogoutMenu} className="bg-primary text-primary-foreground hover:bg-primary/80 px-4 py-2 rounded">
+                    Log out
                 </button>
                 </div>
             </div>
@@ -86,7 +86,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                         <AccordionItem value="settings">
                             <AccordionTrigger asChild>
                                 <li className="flex bg-white mb-1 text-gray-700 items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
-                                    <img style={{display:'inline', height:'10%', width:'10%'}} src='./src/assets/Icons/icon1.png'/>&nbsp;
+                                    <img style={{display:'inline', height:'10%', width:'10%'}} src='./src/assets/Icons/icon1.png'/>
                                     <span>Account</span>
                                 </li>
                             </AccordionTrigger>
@@ -104,7 +104,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                         <AccordionItem value="privacy">
                             <AccordionTrigger asChild>
                                 <li className="flex bg-white mb-1  text-gray-700 items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
-                                <img style={{display:'inline', height:'10%', width:'10%'}} src='./src/assets/Icons/icon2.png'/>&nbsp;
+                                <img style={{display:'inline', height:'10%', width:'10%'}} src='./src/assets/Icons/icon2.png'/>
                                     <span>Privacy Centre</span>
                                 </li>
                             </AccordionTrigger>
@@ -138,7 +138,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                         <AccordionItem value="dark-mode">
                             <AccordionTrigger asChild>
                                 <li className="flex bg-white mb-1 text-gray-700 items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
-                                <img style={{display:'inline', height:'10%', width:'10%'}} src='./src/assets/Icons/icon3.png'/>&nbsp;
+                                <img style={{display:'inline', height:'10%', width:'10%'}} src='./src/assets/Icons/icon3.png'/>
                                     <span>Dark mode</span>
                                 </li>
                             </AccordionTrigger>
@@ -160,7 +160,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                         <AccordionItem value="language">
                             <AccordionTrigger asChild>
                                 <li className="flex bg-white mb-1 text-gray-700 items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
-                                <img style={{display:'inline', height:'10%', width:'10%'}} src='./src/assets/Icons/icon4.png'/>&nbsp;
+                                <img style={{display:'inline', height:'10%', width:'10%'}} src='./src/assets/Icons/icon4.png'/>
                                     <span>App language</span>
                                 </li>
                             </AccordionTrigger>

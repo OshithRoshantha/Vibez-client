@@ -8,9 +8,9 @@ export default function Chats({showDirectMessages}) {
                 <input type="text" placeholder="Search friends" className="placeholder:text-gray-500 bg-gray-200 text-gray-500 w-full px-4 py-2 mb-4 focus:outline-none focus:border-none" style={{borderRadius:'20px'}} />
                 <i className="bi text-gray-500 absolute text-2xl bi-search" style={{marginLeft:'-3%', marginTop:'0.2%'}}></i>
                 <div className="flex space-x-2 mb-4">
-                    <button className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-300">All</button>
-                    <button className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-300">Unread</button>
-                    <button className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-300">Favorites</button>
+                    <button className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-200">All</button>
+                    <button className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-200">Unread</button>
+                    <button className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-200">Favorites</button>
                 </div>
                 <div className='chat-list'>
                 <div onClick={showDirectMessages}  className="space-y-2" style={{cursor: 'pointer'}}>
