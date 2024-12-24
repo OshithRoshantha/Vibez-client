@@ -86,7 +86,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                         <AccordionItem value="settings">
                             <AccordionTrigger asChild>
                                 <li className="flex bg-white mb-1 text-gray-700 items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
-                                    <i className="bi bi-gear-fill text-2xl"></i>&nbsp;&nbsp;
+                                    <img style={{display:'inline', height:'10%', width:'10%'}} src='./src/assets/Icons/icon1.png'/>&nbsp;
                                     <span>Account</span>
                                 </li>
                             </AccordionTrigger>
@@ -104,7 +104,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                         <AccordionItem value="privacy">
                             <AccordionTrigger asChild>
                                 <li className="flex bg-white mb-1  text-gray-700 items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
-                                    <i className="bi bi-unlock-fill text-2xl"></i>&nbsp;&nbsp;
+                                <img style={{display:'inline', height:'10%', width:'10%'}} src='./src/assets/Icons/icon2.png'/>&nbsp;
                                     <span>Privacy Centre</span>
                                 </li>
                             </AccordionTrigger>
@@ -138,7 +138,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                         <AccordionItem value="dark-mode">
                             <AccordionTrigger asChild>
                                 <li className="flex bg-white mb-1 text-gray-700 items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
-                                    <i className="bi bi-moon-fill text-2xl"></i>&nbsp;&nbsp;
+                                <img style={{display:'inline', height:'10%', width:'10%'}} src='./src/assets/Icons/icon3.png'/>&nbsp;
                                     <span>Dark mode</span>
                                 </li>
                             </AccordionTrigger>
@@ -160,7 +160,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                         <AccordionItem value="language">
                             <AccordionTrigger asChild>
                                 <li className="flex bg-white mb-1 text-gray-700 items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
-                                    <i className="bi bi-globe2 text-2xl"></i>&nbsp;&nbsp;
+                                <img style={{display:'inline', height:'10%', width:'10%'}} src='./src/assets/Icons/icon4.png'/>&nbsp;
                                     <span>App language</span>
                                 </li>
                             </AccordionTrigger>
