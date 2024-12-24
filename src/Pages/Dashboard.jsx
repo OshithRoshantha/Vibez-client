@@ -8,6 +8,8 @@ import GroupChats from '@/Components/GroupChats';
 import Profile from '@/Components/Profile';
 import DirectChat from '@/Components/DirectChat';
 import GroupChat from '@/Components/GroupChat';
+import FriendInfo from '@/Components/FriendInfo';
+import GroupInfo from '@/Components/GroupInfo';
 
 export default function Dashboard() {
     const [friendsMenu, setFriendsMenu] = useState(false);
@@ -139,8 +141,8 @@ return (
             {marketplaceMenu && <Marketplace/>}
             {settingsMenu && <Settings/>}
             {profileMenu && <Profile/>}
-            {friendInfoMenu}
-            {groupInfoMenu}
+            {friendInfoMenu && <FriendInfo/>}
+            {groupInfoMenu && <GroupInfo/>}
             <div className="flex-1 p-0 messages-column" style={{backgroundColor:'red', height:'100vh'}}>
                 {directMessages && <DirectChat showFriendInfoMenu={showFriendInfoMenu}/>} 
                 {groupMessages && <GroupChat showGroupInfoMenu={showGroupInfoMenu}/>}  
