@@ -131,23 +131,22 @@ return (
     <div className='dashboard-conatiner'>
         <div className="flex h-screen bg-background text-foreground">
             <div className="flex flex-col h-screen bg-background border-r border-border  button-column">
-                <div onClick={showChatsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
+                <div onClick={showChatsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:chatsMenu ? '6px solid blue': 'none'}}>
                     <div className="relative">
-                        <img src="https://placehold.co/40x40" alt="Inbox" className="w-8 h-8" />
-                        <span className="absolute top-0 right-0 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">8</span>
+                        <i className={`bi bi-chat-dots-fill text-2xl ${chatsMenu ? 'text-primary' : 'text-black'}`}></i>
                     </div>
                 </div>
-                <div onClick={showGroupsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
-                    <img src="https://placehold.co/40x40" alt="Search" className="w-8 h-8" />
+                <div onClick={showGroupsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:groupsMenu ? '6px solid blue': 'none'}}>
+                    <i className={`bi bi-wechat text-2xl ${groupsMenu ? 'text-primary' : 'text-black'}`}></i>
                 </div>
-                <div onClick={showFriendstMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
-                    <img src="https://placehold.co/40x40" alt="Messages" className="w-8 h-8" />
+                <div onClick={showFriendstMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:friendsMenu ? '6px solid blue': 'none'}}>
+                    <i className={`bi bi-people text-2xl ${friendsMenu ? 'text-primary' : 'text-black'}`}></i>
                 </div>
-                <div onClick={showMarketplaceMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
-                    <img src="https://placehold.co/40x40" alt="Users" className="w-8 h-8" />
+                <div onClick={showMarketplaceMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:marketplaceMenu ? '6px solid blue': 'none'}}>
+                    <i className={`bi bi-shop-window text-2xl ${marketplaceMenu ? 'text-primary' : 'text-black'}`}></i>
                 </div>
-                <div onClick={showSettingsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
-                    <img src="https://placehold.co/40x40" alt="Settings" className="w-8 h-8" />
+                <div onClick={showSettingsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:settingsMenu ? '6px solid blue': 'none'}}>
+                    <i className={`bi bi-gear text-2xl ${settingsMenu ? 'text-primary' : 'text-black'}`}></i>
                 </div>
                 <div onClick={showProfileMenu} className="flex items-center justify-center mt-auto mb-4" style={{cursor: 'pointer'}}>
                     <img src="https://placehold.co/50x50" alt="Profile" className="w-15 h-15 rounded-full" />
