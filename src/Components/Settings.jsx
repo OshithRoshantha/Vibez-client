@@ -9,7 +9,7 @@ import {
 import './Styles/Column2.css'
 import { useState} from 'react';
 
-export default function Settings() {
+export default function Settings({darkModeOn, darkModeOff, darkMode}) {
     const [logoutMenu, setLogoutMenu] = useState(false);
     const [confirmAccountDeletion, setConfirmAccountDeletion] = useState(false);
 
@@ -146,11 +146,11 @@ export default function Settings() {
                                 <div className="bg-background text-foreground p-4 rounded-lg">
                                 <div className="flex justify-between items-center mb-2">
                                     <label htmlFor="on" className="cursor-pointer">On</label>
-                                    <input type="radio" id="on" name="dark-mode" className="mr-2" />
+                                    <input type="radio" id="on" name="dark-mode" onChange={darkModeOn} checked={darkMode} className="mr-2" />
                                 </div>
                                 <div className="flex justify-between items-center mb-2">
                                     <label htmlFor="off" className="cursor-pointer">Off</label>
-                                    <input type="radio" id="off" name="dark-mode" className="mr-2" />
+                                    <input type="radio" id="off" name="dark-mode" onChange={darkModeOff} checked={!darkMode} className="mr-2" />
                                 </div>
                                 <p className="text-muted-foreground text-sm">Optimize the theme for better readability and eye comfort.</p>
                                 </div>
