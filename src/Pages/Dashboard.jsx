@@ -15,6 +15,18 @@ export default function Dashboard() {
     const [marketplaceMenu, setMarketplaceMenu] = useState(false);
     const [settingsMenu, setSettingsMenu] = useState(false);
     const [profileMenu, setProfileMenu] = useState(false);
+    const [groupMessages, setGroupMessages] = useState(false);
+    const [directMessages, setDirectMessages] = useState(true);
+
+    function showDirectMessages(){
+        setDirectMessages(true);
+        setGroupMessages(false);
+    }
+
+    function showGroupMessages(){
+        setDirectMessages(false);
+        setGroupMessages(true);
+    }
 
     function showChatsMenu(){
         setFriendsMenu(false);
@@ -103,7 +115,7 @@ return (
             {settingsMenu && <Settings/>}
             {profileMenu && <Profile/>}
             <div className="flex-1 p-0 messages-column" style={{backgroundColor:'red', height:'100vh'}}>
-                <DirectChat/>
+                {showDirectMessages && <DirectChat/>}   
             </div>
         </div>
     </div>
