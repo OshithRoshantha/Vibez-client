@@ -102,7 +102,7 @@ return (
             {marketplaceMenu && <Marketplace/>}
             {settingsMenu && <Settings/>}
             {profileMenu && <Profile/>}
-            <div className="flex-1 p-4 messages-column" style={{backgroundColor:'red', height:'100vh'}}>
+            <div className="flex-1 p-0 messages-column" style={{backgroundColor:'red', height:'100vh'}}>
                 <DirectChat/>
             </div>
         </div>
