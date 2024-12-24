@@ -18,6 +18,30 @@ export default function Dashboard() {
     const [profileMenu, setProfileMenu] = useState(false);
     const [groupMessages, setGroupMessages] = useState(false);
     const [directMessages, setDirectMessages] = useState(false);
+    const [friendInfoMenu, setFriendInfoMenu] = useState(false);
+    const [groupInfoMenu, setGroupInfoMenu] = useState(false);
+
+    function showFriendInfoMenu(){
+        setFriendInfoMenu(true);
+        setGroupInfoMenu(false);
+        setFriendsMenu(false);
+        setChatsMenu(false);
+        setMarketplaceMenu(false);
+        setSettingsMenu(false);
+        setGroupsMenu(false);
+        setProfileMenu(false);
+    }
+
+    function showGroupInfoMenu(){
+        setGroupInfoMenu(true);
+        setFriendInfoMenu(false);
+        setFriendsMenu(false);
+        setChatsMenu(false);
+        setMarketplaceMenu(false);
+        setSettingsMenu(false);
+        setGroupsMenu(false);
+        setProfileMenu(false);
+    }
 
     function showDirectMessages(){
         setDirectMessages(true);
