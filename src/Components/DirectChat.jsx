@@ -9,7 +9,10 @@ export default function DirectChat() {
         <div style={{cursor:'pointer'}} className="flex items-center px-4 py-3 border-b border-border">
             <div className="flex items-center">
             <img src="https://placehold.co/40x40" alt="User Avatar" className="rounded-full mr-2" />
-            <span className="text-lg font-semibold text-black">TestUser</span>
+            <div>
+              <span className="text-lg font-semibold text-black">TestUser</span>
+              <p className="text-muted-foreground mt-0" style={{fontSize:'70%'}}>Click here for contact info</p>
+            </div>
             </div>
         </div>
         <div className="p-4" style={{height:'78vh', overflowY:'auto', scrollbarWidth:'none'}}>
