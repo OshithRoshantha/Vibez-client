@@ -23,6 +23,17 @@ export default function Dashboard() {
     const [friendInfoMenu, setFriendInfoMenu] = useState(false);
     const [groupInfoMenu, setGroupInfoMenu] = useState(false);
     const [welcomeVideo, setWelcomeVideo] = useState(true);
+    const [darkMode, setDarkMode] = useState(false);
+
+    function darkModeOn() {
+        setDarkMode(true);
+        console.log('dark mode on');
+    }
+
+    function darkModeOff() {
+        setDarkMode(false);
+        console.log('dark mode off');
+    }
 
     function hideWelcomeVideo(){
         setWelcomeVideo(false);
@@ -146,7 +157,7 @@ return (
             {groupsMenu && <GroupChats showGroupMessages={showGroupMessages}/>}
             {friendsMenu && <Friends/>}
             {marketplaceMenu && <Marketplace/>}
-            {settingsMenu && <Settings/>}
+            {settingsMenu && <Settings darkModeOn={darkModeOn} darkModeOff={darkModeOff} darkMode={darkMode}/>}
             {profileMenu && <Profile/>}
             {friendInfoMenu && <FriendInfo/>}
             {groupInfoMenu && <GroupInfo/>}
