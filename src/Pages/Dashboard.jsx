@@ -133,21 +133,20 @@ return (
             <div className="flex flex-col h-screen bg-background border-r border-border  button-column">
                 <div onClick={showChatsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
                     <div className="relative">
-                        <img src="https://placehold.co/40x40" alt="Inbox" className="w-8 h-8" />
-                        <span className="absolute top-0 right-0 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">8</span>
+                        <i className={`bi bi-chat-dots-fill text-3xl ${chatsMenu ? 'text-primary' : 'text-black'}`}></i>
                     </div>
                 </div>
                 <div onClick={showGroupsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
-                    <img src="https://placehold.co/40x40" alt="Search" className="w-8 h-8" />
+                    <i className={`bi bi-wechat text-3xl ${groupsMenu ? 'text-primary' : 'text-black'}`}></i>
                 </div>
                 <div onClick={showFriendstMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
-                    <img src="https://placehold.co/40x40" alt="Messages" className="w-8 h-8" />
+                    <i className={`bi bi-people text-3xl ${friendsMenu ? 'text-primary' : 'text-black'}`}></i>
                 </div>
                 <div onClick={showMarketplaceMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
-                    <img src="https://placehold.co/40x40" alt="Users" className="w-8 h-8" />
+                    <i className={`bi bi-shop-window text-3xl ${marketplaceMenu ? 'text-primary' : 'text-black'}`}></i>
                 </div>
                 <div onClick={showSettingsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
-                    <img src="https://placehold.co/40x40" alt="Settings" className="w-8 h-8" />
+                    <i className={`bi bi-gear text-3xl ${settingsMenu ? 'text-primary' : 'text-black'}`}></i>
                 </div>
                 <div onClick={showProfileMenu} className="flex items-center justify-center mt-auto mb-4" style={{cursor: 'pointer'}}>
                     <img src="https://placehold.co/50x50" alt="Profile" className="w-15 h-15 rounded-full" />
