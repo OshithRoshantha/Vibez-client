@@ -7,6 +7,7 @@ import Settings from '@/Components/Settings';
 import GroupChats from '@/Components/GroupChats';
 import Profile from '@/Components/Profile';
 import DirectChat from '@/Components/DirectChat';
+import GroupChat from '@/Components/GroupChat';
 
 export default function Dashboard() {
     const [friendsMenu, setFriendsMenu] = useState(false);
@@ -16,7 +17,7 @@ export default function Dashboard() {
     const [settingsMenu, setSettingsMenu] = useState(false);
     const [profileMenu, setProfileMenu] = useState(false);
     const [groupMessages, setGroupMessages] = useState(false);
-    const [directMessages, setDirectMessages] = useState(true);
+    const [directMessages, setDirectMessages] = useState(false);
 
     function showDirectMessages(){
         setDirectMessages(true);
@@ -108,14 +109,15 @@ return (
                     <img src="https://placehold.co/50x50" alt="Profile" className="w-15 h-15 rounded-full" />
                 </div>
             </div>
-            {chatsMenu && <Chats/>}
-            {groupsMenu && <GroupChats/>}
+            {chatsMenu && <Chats showDirectMessages={showDirectMessages}/>}
+            {groupsMenu && <GroupChats showGroupMessages={showGroupMessages}/>}
             {friendsMenu && <Friends/>}
             {marketplaceMenu && <Marketplace/>}
             {settingsMenu && <Settings/>}
             {profileMenu && <Profile/>}
             <div className="flex-1 p-0 messages-column" style={{backgroundColor:'red', height:'100vh'}}>
-                {showDirectMessages && <DirectChat/>}   
+                {directMessages && <DirectChat/>} 
+                {groupMessages && <GroupChat/>}  
             </div>
         </div>
     </div>

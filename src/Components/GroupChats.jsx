@@ -4,7 +4,7 @@ import './Styles/SignupElement.css'
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
 
-export default function GroupChats() {
+export default function GroupChats({showGroupMessages}) {
     const [addMembersMenu, setAddMembersMenu] = useState(false);
     const [finishCreateGroup, setFinishCreateGroup] = useState(false);
     const [groupChats, setGroupChats] = useState(true);
@@ -194,7 +194,7 @@ export default function GroupChats() {
                     </div>           
                 </div>}
                 {groupChats && <div>
-                <div className="space-y-2" style={{cursor: 'pointer'}}>
+                <div onClick={showGroupMessages} className="space-y-2" style={{cursor: 'pointer'}}>
                     <div className="flex items-center p-2 hover:bg-muted rounded">
                         <img src="https://placehold.co/40x40" alt="User" className="rounded-full mr-2 w-18 h-18" />
                         <div>
