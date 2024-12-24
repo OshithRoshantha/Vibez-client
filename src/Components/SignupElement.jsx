@@ -17,6 +17,7 @@ import Slider from '@mui/material/Slider';
 import { passwordStrength } from 'check-password-strength'
 import { Progress } from "@/components/ui/progress"
 import AvatarEditor from 'react-avatar-editor'
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function SignupElement() {
   const steps = ['Basic Information', 'Add Password', 'Personalize and Finalize'];
@@ -45,6 +46,10 @@ export default function SignupElement() {
   const [disableContinueBtn, setDisableContinueBtn] = useState(true);
 
   const defaultImage = "./src/assets/userDefault.jpg";
+
+  function notify() {
+    toast.success("Account create successfully!");
+}
 
   function validateFullName(name) {
     return /^[a-zA-Z\s]{3,}$/.test(name);
@@ -168,7 +173,10 @@ export default function SignupElement() {
   function handleNext() {
     let newSkipped = skipped;
     if (activeStep === 2) {
-      navigate('/');
+      notify();
+      setTimeout(() => {
+        navigate('/');
+      }, 1300);
     }
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -189,6 +197,18 @@ export default function SignupElement() {
 
   return (
     <div>
+      <ToastContainer
+        position="top-center"
+        autoClose={1200}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <Card className='stepper-body'>
         <Box sx={{ width: '100%', paddingX: '3%', paddingY: '2.5%' }}>
           <Stepper activeStep={activeStep}>

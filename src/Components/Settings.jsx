@@ -33,13 +33,18 @@ export default function Settings() {
     <div>
         {logoutMenu && <div>
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                <div className="bg-card rounded-lg p-6 shadow-lg">
-                    <h2 className="text-lg font-semibold text-foreground">Log out of your account?</h2>
-                    <div>
-                        <button onClick={hideLogoutMenu} className="bg-primary text-primary-foreground px-4 py-1 rounded-lg w-full mt-3 mb-2">Cancel</button>
-                        <button onClick={hideLogoutMenu} className="bg-muted text-muted-foreground px-4 py-1 border-none hover:bg-gray-300 w-full">Log out</button>
-                    </div>
+            <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
+                <h2 className="text-lg font-semibold">Confirm Logout</h2>
+                <p className="text-muted-foreground mt-0">Are you sure you want to log out?</p>
+                <div className="flex justify-between mt-4">
+                <button onClick={hideLogoutMenu} className="bg-muted text-muted-foreground hover:bg-gray-300 px-4 py-2 rounded">
+                    CANCEL
+                </button>
+                <button onClick={hideLogoutMenu} className="bg-primary text-primary-foreground hover:bg-primary/80 px-4 py-2 rounded">
+                    OK
+                </button>
                 </div>
+            </div>
             </div>    
         </div>}
         {confirmAccountDeletion && <div>

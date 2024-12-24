@@ -95,7 +95,7 @@ export default function Profile() {
                         </div>
                 </div>}
                 <h2 className="text-lg font-semibold column-header">Profile</h2>
-                <div className="flex flex-col items-center p-6 bg-background text-foreground" style={{marginTop:'12%', paddingBottom:'31%'}}>
+                <div className="flex flex-col items-center p-6 bg-background text-foreground" style={{marginTop:'17%', paddingBottom:'31%'}}>
                 <div onClick={uploadImg} onMouseEnter={showProfilePicHover} onMouseLeave={hideProfilePicHover} style={{cursor:'pointer', backgroundImage: cropedImage ? `url(${cropedImage})` : `url(${defaultImage})`, backgroundSize: 'cover', backgroundPosition: 'center'}} className="profile-pic w-40 h-40 rounded-full border-4 border-primary text-center">
                     {profilePicHover && <div>
                         <span className='camera-icon'><i className="bi bi-camera-fill"></i></span>CHANGE PROFILE PICTURE    
