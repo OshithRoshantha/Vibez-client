@@ -27,7 +27,8 @@ export default function Friends() {
     <div>
         <div className="border-r border-border p-4 friends-column">
                 <h2 className="text-lg font-semibold column-header">Friends</h2>
-                <input type="text" placeholder="Search" className="bg-gray-200 text-gray-500 w-full px-4 py-2 mb-4 focus:outline-none focus:border-none" style={{borderRadius:'20px'}} />
+                <input type="text" placeholder="Search" className="placeholder:text-gray-500 bg-gray-200 text-gray-500 w-full px-4 py-2 mb-4 focus:outline-none focus:border-none" style={{borderRadius:'20px'}} />
+                <i className="bi text-gray-500 absolute text-2xl bi-search" style={{marginLeft:'-3%', marginTop:'0.2%'}}></i>
                 <div className="flex space-x-2 mb-4">
                     <button onClick={hideYourFriends} className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-300">Your Friends</button>
                     <button onClick={hideFriendRequests} className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-300">Friend Requests</button>
