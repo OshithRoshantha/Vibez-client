@@ -99,9 +99,9 @@ export default function Marketplace() {
             <input type="text" placeholder="What do you want to buy?" className="placeholder:text-gray-500 bg-gray-200 text-gray-500 w-full px-4 py-2 mb-4 focus:outline-none focus:border-none" style={{borderRadius:'20px'}} />
             <i className="bi text-gray-500 absolute text-2xl bi-search" style={{marginLeft:'-3%', marginTop:'0.2%'}}></i>
                 <div className="flex space-x-2 mb-4">
-                    <button onClick={showSellMenu} className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-300">Sell</button>
-                    <button onClick={showYourListningMenu} className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-300">Your listings</button>
-                    <button onClick={showForYouMenu} className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-300">For you</button>
+                    <button onClick={showSellMenu} className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-200">Sell</button>
+                    <button onClick={showYourListningMenu} className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-200">Your listings</button>
+                    <button onClick={showForYouMenu} className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-200">For you</button>
                 </div>
             {forYouMenu && 
                 <div className='product-list'>
