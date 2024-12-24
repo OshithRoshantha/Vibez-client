@@ -139,9 +139,11 @@ return (
             {marketplaceMenu && <Marketplace/>}
             {settingsMenu && <Settings/>}
             {profileMenu && <Profile/>}
+            {friendInfoMenu}
+            {groupInfoMenu}
             <div className="flex-1 p-0 messages-column" style={{backgroundColor:'red', height:'100vh'}}>
-                {directMessages && <DirectChat/>} 
-                {groupMessages && <GroupChat/>}  
+                {directMessages && <DirectChat showFriendInfoMenu={showFriendInfoMenu}/>} 
+                {groupMessages && <GroupChat showGroupInfoMenu={showGroupInfoMenu}/>}  
             </div>
         </div>
     </div>

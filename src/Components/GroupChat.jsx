@@ -2,11 +2,11 @@ import GroupReceiveMessage from "./GroupReceiveMessage";
 import GroupSendMessage from "./GroupSendMessage";
 
 
-export default function GroupChat() {
+export default function GroupChat({showGroupInfoMenu}) {
   return (
     <div>
         <div className="bg-background min-h-screen flex flex-col">
-        <div style={{cursor:'pointer'}} className="flex items-center px-4 py-3 border-b border-border">
+        <div onClick={showGroupInfoMenu} style={{cursor:'pointer'}} className="flex items-center px-4 py-3 border-b border-border">
             <div className="flex items-center">
             <img src="https://placehold.co/40x40" alt="User Avatar" className="rounded-full mr-2" />
             <div>
