@@ -48,7 +48,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
             </div>    
         </div>}
         {confirmAccountDeletion && <div>
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100'}}>
             <div className="bg-card text-card-foreground rounded-lg shadow-lg p-6 w-96">
                 <div className="flex justify-between items-center">
                     <h2 className="text-lg font-semibold">Delete my account</h2>
@@ -67,14 +67,14 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                 <div className="mt-4">
                 <label className="block text-sm">Enter your email address:</label>
                 <div className="flex items-center border border-border rounded mt-1">
-                    <input type="email" className="w-full p-2 rounded-lg" />
+                <input type="text" className="placeholder:text-gray-500 py-2 border rounded-lg p-2 w-full bg-white text-black" style={{ outline: '1px solid #c1c3c7'}} placeholder="Your email" />
                 </div>
                 </div>
                 <div className="mt-4">
-                <button onClick={hideConfirmAccountDeletion} className="bg-destructive text-destructive-foreground hover:bg-destructive/80 w-full p-2 rounded">Delete my account</button>
+                <button onClick={hideConfirmAccountDeletion} className="bg-destructive border-none text-destructive-foreground hover:bg-destructive/80 w-full p-2 rounded">Delete my account</button>
                 </div>
                 <div className="mt-2">
-                <button onClick={hideConfirmAccountDeletion}  className="bg-muted text-muted-foreground w-full p-2 rounded hover:bg-gray-300">Log out instead</button>
+                <button onClick={hideConfirmAccountDeletion}  className="bg-muted border-none text-muted-foreground w-full p-2 rounded hover:bg-gray-300">Log out instead</button>
                 </div>
             </div>
             </div>
