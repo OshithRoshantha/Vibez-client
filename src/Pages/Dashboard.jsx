@@ -131,22 +131,22 @@ return (
     <div className='dashboard-conatiner'>
         <div className="flex h-screen bg-background text-foreground">
             <div className="flex flex-col h-screen bg-background border-r border-border  button-column">
-                <div onClick={showChatsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
+                <div onClick={showChatsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:chatsMenu ? '6px solid blue': 'none'}}>
                     <div className="relative">
-                        <i className={`bi bi-chat-dots-fill text-3xl ${chatsMenu ? 'text-primary' : 'text-black'}`}></i>
+                        <i className={`bi bi-chat-dots-fill text-2xl ${chatsMenu ? 'text-primary' : 'text-black'}`}></i>
                     </div>
                 </div>
-                <div onClick={showGroupsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
-                    <i className={`bi bi-wechat text-3xl ${groupsMenu ? 'text-primary' : 'text-black'}`}></i>
+                <div onClick={showGroupsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:groupsMenu ? '6px solid blue': 'none'}}>
+                    <i className={`bi bi-wechat text-2xl ${groupsMenu ? 'text-primary' : 'text-black'}`}></i>
                 </div>
-                <div onClick={showFriendstMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
-                    <i className={`bi bi-people text-3xl ${friendsMenu ? 'text-primary' : 'text-black'}`}></i>
+                <div onClick={showFriendstMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:friendsMenu ? '6px solid blue': 'none'}}>
+                    <i className={`bi bi-people text-2xl ${friendsMenu ? 'text-primary' : 'text-black'}`}></i>
                 </div>
-                <div onClick={showMarketplaceMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
-                    <i className={`bi bi-shop-window text-3xl ${marketplaceMenu ? 'text-primary' : 'text-black'}`}></i>
+                <div onClick={showMarketplaceMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:marketplaceMenu ? '6px solid blue': 'none'}}>
+                    <i className={`bi bi-shop-window text-2xl ${marketplaceMenu ? 'text-primary' : 'text-black'}`}></i>
                 </div>
-                <div onClick={showSettingsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer'}}>
-                    <i className={`bi bi-gear text-3xl ${settingsMenu ? 'text-primary' : 'text-black'}`}></i>
+                <div onClick={showSettingsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:settingsMenu ? '6px solid blue': 'none'}}>
+                    <i className={`bi bi-gear text-2xl ${settingsMenu ? 'text-primary' : 'text-black'}`}></i>
                 </div>
                 <div onClick={showProfileMenu} className="flex items-center justify-center mt-auto mb-4" style={{cursor: 'pointer'}}>
                     <img src="https://placehold.co/50x50" alt="Profile" className="w-15 h-15 rounded-full" />
