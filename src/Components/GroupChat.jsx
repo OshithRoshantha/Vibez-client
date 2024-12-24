@@ -1,3 +1,5 @@
+import GroupReceiveMessage from "./GroupReceiveMessage";
+import GroupSendMessage from "./GroupSendMessage";
 
 
 export default function GroupChat() {
@@ -14,7 +16,11 @@ export default function GroupChat() {
             </div>
         </div>
         <div className="p-4" style={{height:'78vh', overflowY:'auto', scrollbarWidth:'none'}}>
-           
+            <GroupReceiveMessage senderName={'sendUser'} time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'}/>
+            <GroupReceiveMessage senderName={'sendUser'} time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAA'}/>
+            <GroupReceiveMessage senderName={'sendUser'} time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'}/>
+            <GroupSendMessage time={'00:26'} message={'send message'}/>
+            <GroupReceiveMessage senderName={'sendUser'} time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'}/>
         </div>
         <div className=" px-4 py-3  border-t border-border bg-card" style={{display:'flex', alignItems:'center',columnGap:'1rem'}}>
             <input type="text" placeholder="Type a message" className="w-full p-2 rounded-lg bg-input text-black" />
