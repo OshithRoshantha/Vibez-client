@@ -6,6 +6,7 @@ import Marketplace from '@/Components/Marketplace';
 import Settings from '@/Components/Settings';
 import GroupChats from '@/Components/GroupChats';
 import Profile from '@/Components/Profile';
+import DirectChat from '@/Components/DirectChat';
 
 export default function Dashboard() {
     const [friendsMenu, setFriendsMenu] = useState(false);
@@ -101,18 +102,8 @@ return (
             {marketplaceMenu && <Marketplace/>}
             {settingsMenu && <Settings/>}
             {profileMenu && <Profile/>}
-            <div className="flex-1 p-4 messages-column">
-                <div className="flex items-center mb-4">
-                    <img src="https://placehold.co/40x40" alt="User" className="rounded-full mr-2" />
-                    <div>
-                        <div className="font-medium">User2</div>
-                        <div className="text-sm text-muted-foreground">last seen yesterday at 18:12</div>
-                    </div>
-                </div>
-                <div className="bg-card p-4 rounded-lg space-y-2"></div>
-                <div className="mt-4">
-                    <input type="text" placeholder="Type a message" className="w-full p-2 border border-border rounded" />
-                </div>
+            <div className="flex-1 p-4 messages-column" style={{backgroundColor:'red', height:'100vh'}}>
+                <DirectChat/>
             </div>
         </div>
     </div>
