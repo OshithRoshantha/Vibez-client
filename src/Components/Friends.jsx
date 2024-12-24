@@ -27,10 +27,10 @@ export default function Friends() {
     <div>
         <div className="border-r border-border p-4 friends-column">
                 <h2 className="text-lg font-semibold column-header">Friends</h2>
-                <input type="text" placeholder="Search" className="w-full p-2 border border-border rounded mb-4" />
+                <input type="text" placeholder="Search" className="bg-gray-200 text-gray-500 w-full px-4 py-2 mb-4 focus:outline-none focus:border-none" style={{borderRadius:'20px'}} />
                 <div className="flex space-x-2 mb-4">
-                    <button onClick={hideYourFriends} className="bg-muted text-muted-foreground px-4 py-2 rounded-full border-none hover:bg-gray-300">Your Friends</button>
-                    <button onClick={hideFriendRequests} className="bg-muted text-muted-foreground px-4 py-2 rounded-full border-none hover:bg-gray-300">Friend Requests</button>
+                    <button onClick={hideYourFriends} className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-300">Your Friends</button>
+                    <button onClick={hideFriendRequests} className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-300">Friend Requests</button>
                 </div>
                 {friendRequests && <div>
                 <h2 className="text-lg font-semibold mb-2">Friend requests</h2>
