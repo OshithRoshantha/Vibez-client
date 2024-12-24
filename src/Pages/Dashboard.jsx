@@ -6,6 +6,10 @@ import Marketplace from '@/Components/Marketplace';
 import Settings from '@/Components/Settings';
 import GroupChats from '@/Components/GroupChats';
 import Profile from '@/Components/Profile';
+import DirectChat from '@/Components/DirectChat';
+import GroupChat from '@/Components/GroupChat';
+import FriendInfo from '@/Components/FriendInfo';
+import GroupInfo from '@/Components/GroupInfo';
 
 export default function Dashboard() {
     const [friendsMenu, setFriendsMenu] = useState(false);
@@ -14,6 +18,49 @@ export default function Dashboard() {
     const [marketplaceMenu, setMarketplaceMenu] = useState(false);
     const [settingsMenu, setSettingsMenu] = useState(false);
     const [profileMenu, setProfileMenu] = useState(false);
+    const [groupMessages, setGroupMessages] = useState(false);
+    const [directMessages, setDirectMessages] = useState(false);
+    const [friendInfoMenu, setFriendInfoMenu] = useState(false);
+    const [groupInfoMenu, setGroupInfoMenu] = useState(false);
+    const [welcomeVideo, setWelcomeVideo] = useState(true);
+
+    function hideWelcomeVideo(){
+        setWelcomeVideo(false);
+    }
+
+    function showFriendInfoMenu(){
+        setFriendInfoMenu(true);
+        setGroupInfoMenu(false);
+        setFriendsMenu(false);
+        setChatsMenu(false);
+        setMarketplaceMenu(false);
+        setSettingsMenu(false);
+        setGroupsMenu(false);
+        setProfileMenu(false);
+    }
+
+    function showGroupInfoMenu(){
+        setGroupInfoMenu(true);
+        setFriendInfoMenu(false);
+        setFriendsMenu(false);
+        setChatsMenu(false);
+        setMarketplaceMenu(false);
+        setSettingsMenu(false);
+        setGroupsMenu(false);
+        setProfileMenu(false);
+    }
+
+    function showDirectMessages(){
+        setDirectMessages(true);
+        setGroupMessages(false);
+        hideWelcomeVideo();
+    }
+
+    function showGroupMessages(){
+        setDirectMessages(false);
+        setGroupMessages(true);
+        hideWelcomeVideo();
+    }
 
     function showChatsMenu(){
         setFriendsMenu(false);
@@ -95,24 +142,28 @@ return (
                     <img src="https://placehold.co/50x50" alt="Profile" className="w-15 h-15 rounded-full" />
                 </div>
             </div>
-            {chatsMenu && <Chats/>}
-            {groupsMenu && <GroupChats/>}
+            {chatsMenu && <Chats showDirectMessages={showDirectMessages}/>}
+            {groupsMenu && <GroupChats showGroupMessages={showGroupMessages}/>}
             {friendsMenu && <Friends/>}
             {marketplaceMenu && <Marketplace/>}
             {settingsMenu && <Settings/>}
             {profileMenu && <Profile/>}
-            <div className="flex-1 p-4 messages-column">
-                <div className="flex items-center mb-4">
-                    <img src="https://placehold.co/40x40" alt="User" className="rounded-full mr-2" />
-                    <div>
-                        <div className="font-medium">User2</div>
-                        <div className="text-sm text-muted-foreground">last seen yesterday at 18:12</div>
-                    </div>
-                </div>
-                <div className="bg-card p-4 rounded-lg space-y-2"></div>
-                <div className="mt-4">
-                    <input type="text" placeholder="Type a message" className="w-full p-2 border border-border rounded" />
-                </div>
+            {friendInfoMenu && <FriendInfo/>}
+            {groupInfoMenu && <GroupInfo/>}
+            <div className="flex-1 p-0 messages-column" style={{height:'100vh'}}>
+                {welcomeVideo &&
+                <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    style={{ width: '100%', height: '100%', objectFit: 'cover'}}
+                >
+                <source src="./src/assets/Videos/welcomeChat.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video>}
+                {directMessages && <DirectChat showFriendInfoMenu={showFriendInfoMenu}/>} 
+                {groupMessages && <GroupChat showGroupInfoMenu={showGroupInfoMenu}/>}  
             </div>
         </div>
     </div>
