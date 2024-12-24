@@ -79,19 +79,19 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
             </div>
             </div>
         </div>}
-        <div className="border-r border-border p-4 settings-column">
-            <h2 className="text-lg font-semibold column-header">Account Settings</h2>
+        <div className="border-r border-border p-4 settings-column" style={{backgroundColor:'#f2f3f7'}}>
+            <h2 className="text-lg font-semibold column-header">Settings & Privacy</h2>
             <ul className="space-y-2 mt-5">
             <Accordion type="single" collapsible>
                         <AccordionItem value="settings">
                             <AccordionTrigger asChild>
-                                <li className="flex items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
+                                <li className="flex bg-white mb-1 text-gray-700 items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
                                     <i className="bi bi-gear-fill text-2xl"></i>&nbsp;&nbsp;
                                     <span>Account</span>
                                 </li>
                             </AccordionTrigger>
                             <AccordionContent>
-                                <div className="bg-background text-foreground p-4 rounded-lg">    
+                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor:'#f2f3f7'}}>    
                                 <ul className="space-y-2">
                                     <li className="p-2 rounded-lg hover:bg-gray-300 cursor-pointer">Delete all chats</li>
                                     <li className="p-2 rounded-lg hover:bg-gray-300 cursor-pointer">Delete all group chats</li>
@@ -103,13 +103,13 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
 
                         <AccordionItem value="privacy">
                             <AccordionTrigger asChild>
-                                <li className="flex items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
+                                <li className="flex bg-white mb-1  text-gray-700 items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
                                     <i className="bi bi-unlock-fill text-2xl"></i>&nbsp;&nbsp;
                                     <span>Privacy Centre</span>
                                 </li>
                             </AccordionTrigger>
                             <AccordionContent>
-                                <div className="bg-background text-foreground p-4 rounded-lg">
+                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor:'#f2f3f7'}}>
                                     <div className="flex justify-between items-center p-2 rounded">
                                         <span>Profile photo</span>
                                         <DropdownMenu>
@@ -137,13 +137,13 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
 
                         <AccordionItem value="dark-mode">
                             <AccordionTrigger asChild>
-                                <li className="flex items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
+                                <li className="flex bg-white mb-1 text-gray-700 items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
                                     <i className="bi bi-moon-fill text-2xl"></i>&nbsp;&nbsp;
                                     <span>Dark mode</span>
                                 </li>
                             </AccordionTrigger>
                             <AccordionContent>
-                                <div className="bg-background text-foreground p-4 rounded-lg">
+                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor:'#f2f3f7'}}>
                                 <div className="flex justify-between items-center mb-2">
                                     <label htmlFor="on" className="cursor-pointer">On</label>
                                     <input type="radio" id="on" name="dark-mode" onChange={darkModeOn} checked={darkMode} className="mr-2" />
@@ -159,13 +159,13 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
 
                         <AccordionItem value="language">
                             <AccordionTrigger asChild>
-                                <li className="flex items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
+                                <li className="flex bg-white mb-1 text-gray-700 items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
                                     <i className="bi bi-globe2 text-2xl"></i>&nbsp;&nbsp;
                                     <span>App language</span>
                                 </li>
                             </AccordionTrigger>
                             <AccordionContent>
-                                <div className="bg-background text-foreground p-4 rounded-lg">
+                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor:'#f2f3f7'}}>
                                 <div className="flex justify-between items-center mb-2">
                                 <DropdownMenu>
                                 <DropdownMenuTrigger className="bg-primary">Select Language</DropdownMenuTrigger>
@@ -184,7 +184,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                     </Accordion>
             </ul>
             <div className="flex justify-between mb-12 absolute bottom-0" style={{width: '29%'}}>
-                <button onClick={showLogoutMenu} className="bg-primary text-primary-foreground px-4 py-2 rounded-lg w-full" >Log out</button>
+                <button onClick={showLogoutMenu} className="bg-gray-300 border-none px-4 py-2 rounded-lg w-full" >Log out</button>
             </div>
         </div>
     </div>
