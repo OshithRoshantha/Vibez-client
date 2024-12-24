@@ -22,6 +22,11 @@ export default function Dashboard() {
     const [directMessages, setDirectMessages] = useState(false);
     const [friendInfoMenu, setFriendInfoMenu] = useState(false);
     const [groupInfoMenu, setGroupInfoMenu] = useState(false);
+    const [welcomeVideo, setWelcomeVideo] = useState(true);
+
+    function hideWelcomeVideo(){
+        setWelcomeVideo(false);
+    }
 
     function showFriendInfoMenu(){
         setFriendInfoMenu(true);
@@ -48,11 +53,13 @@ export default function Dashboard() {
     function showDirectMessages(){
         setDirectMessages(true);
         setGroupMessages(false);
+        hideWelcomeVideo();
     }
 
     function showGroupMessages(){
         setDirectMessages(false);
         setGroupMessages(true);
+        hideWelcomeVideo();
     }
 
     function showChatsMenu(){
@@ -143,7 +150,18 @@ return (
             {profileMenu && <Profile/>}
             {friendInfoMenu && <FriendInfo/>}
             {groupInfoMenu && <GroupInfo/>}
-            <div className="flex-1 p-0 messages-column" style={{backgroundColor:'red', height:'100vh'}}>
+            <div className="flex-1 p-0 messages-column" style={{height:'100vh'}}>
+                {welcomeVideo &&
+                <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                >
+                <source src="./src/assets/Videos/welcomeChat.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video>}
                 {directMessages && <DirectChat showFriendInfoMenu={showFriendInfoMenu}/>} 
                 {groupMessages && <GroupChat showGroupInfoMenu={showGroupInfoMenu}/>}  
             </div>
