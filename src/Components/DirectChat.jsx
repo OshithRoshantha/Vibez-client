@@ -1,3 +1,5 @@
+import ReceiveMessage from "./ReceiveMessage";
+import SendMessage from "./SendMessage";
 
 
 export default function DirectChat() {
@@ -10,31 +12,13 @@ export default function DirectChat() {
             <span className="text-lg font-semibold text-black">TestUser</span>
             </div>
         </div>
-        <div className="p-4" style={{backgroundColor:'red', height:'78vh', overflowY:'auto', scrollbarWidth:'none'}}>
-            <div className="w-full" style={{display:'flex', justifyContent:'left'}}>
-                <div className="flex items-start mb-2">
-                <div className="bg-zinc-800 text-white p-2 rounded-lg max-w-xs break-words">
-                    <p>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
-                    <span className="text-xs text-muted-foreground">00:26</span>
-                </div>
-                </div>
-            </div>
-            <div className="w-full" style={{display:'flex', justifyContent:'right'}}>
-                <div className="flex items-start mb-2">
-                <div className="bg-zinc-800 text-white p-2 rounded-lg max-w-xs break-words">
-                    <p>Send by Me</p>
-                    <span className="text-xs text-muted-foreground">00:26</span>
-                </div>
-                </div>
-            </div>
-            <div className="w-full" style={{display:'flex', justifyContent:'right'}}>
-                <div className="flex items-start mb-2">
-                <div className="bg-zinc-800 text-white p-2 rounded-lg max-w-xs break-words">
-                    <p>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
-                    <span className="text-xs text-muted-foreground">00:26</span>
-                </div>
-                </div>
-            </div>
+        <div className="p-4" style={{height:'78vh', overflowY:'auto', scrollbarWidth:'none'}}>
+            <ReceiveMessage time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'}/>
+            <ReceiveMessage time={'00:26'} message={'receive message'}/>
+            <SendMessage time={'00:26'} message={'send message'}/>
+            <SendMessage time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'}/>
+            <SendMessage time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'}/>
+            <SendMessage time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'}/>
         </div>
         <div className=" px-4 py-3  border-t border-border bg-card" style={{display:'flex', alignItems:'center',columnGap:'1rem'}}>
             <input type="text" placeholder="Type a message" className="w-full p-2 rounded-lg bg-input text-black" />
