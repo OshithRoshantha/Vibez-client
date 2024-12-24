@@ -175,29 +175,25 @@ export default function Marketplace() {
                 </div>
                 </div>
                 <div className="mb-4">
-                    <label className="block text-muted-foreground">Title</label>
-                    <input type="text" className="border border-border rounded-lg p-2 w-full" placeholder="Title" />
+                    <input type="text" className="placeholder:text-gray-500 py-2 border rounded-lg p-2 w-full bg-white text-black" style={{ outline: '1px solid #c1c3c7'}} placeholder="Title" />
                 </div>
                 <div className="mb-4">
-                    <label className="block text-muted-foreground">Price</label>
-                    <input type="text" className="border border-border rounded-lg p-2 w-full" placeholder="Price" />
+                    <input type="text" className="placeholder:text-gray-500 py-2 border rounded-lg p-2 w-full bg-white text-black" style={{ outline: '1px solid #c1c3c7'}} placeholder="Price" />
                 </div>
                 <div className="mb-4">
-                    <label className="block text-muted-foreground">Condition</label>
-                    <select className="border border-border rounded-lg p-2 w-full">
-                        <option>New</option>
-                        <option>Used - like new</option>
-                        <option>Used - good</option>
-                        <option>Used - fair</option>
+                    <select className=" bg-white border rounded-lg p-2 w-full text-gray-500" style={{ outline: '1px solid #c1c3c7'}}>
+                        <option value="" disabled selected>Category</option>
+                        <option className='text-black'>New</option>
+                        <option className='text-black'>Used - like new</option>
+                        <option className='text-black'>Used - good</option>
+                        <option className='text-black'>Used - fair</option>
                     </select>
                 </div>
                 <div className="mb-4">
-                    <label className="block text-muted-foreground">Description</label>
-                    <textarea className="border border-border rounded-lg p-2 w-full" placeholder="Description" rows="4"></textarea>
+                    <textarea className="placeholder:text-gray-500 py-2  border rounded-lg p-2 w-full bg-white text-black" style={{ outline: '1px solid #c1c3c7'}}  placeholder="Description" rows="4"></textarea>
                 </div>
                 <div className="mb-4">
-                    <label className="block text-muted-foreground">Location</label>
-                    <input type="text" className="border border-border rounded-lg p-2 w-full" placeholder="Location" />
+                    <input type="text" className="placeholder:text-gray-500 py-2 border rounded-lg p-2 w-full bg-white text-black" style={{ outline: '1px solid #c1c3c7'}}  placeholder="Location" />
                 </div>
                     <h2 className="text-lg font-semibold text-foreground">Listing Options</h2>
                     <div className="flex items-center justify-between p-4 border-b border-border">
