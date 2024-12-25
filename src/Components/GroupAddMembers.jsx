@@ -12,6 +12,7 @@ export default function GroupAddMembers({showAddMemberMenu}) {
             </div>
             <div className="p-4">
                 <h3 className="text-sm font-medium text-muted">FRIENDS</h3>
+                <div className='w-full' style={{maxHeight:'40vh', overflowY:'auto', scrollbarWidth:'none'}}>
                 <div className="mt-2">
                     <label className="flex items-center mb-2">
                     <input type="checkbox" className="mr-2" style={{cursor: 'pointer'}} />
@@ -23,6 +24,7 @@ export default function GroupAddMembers({showAddMemberMenu}) {
                         </p>
                     </div>
                     </label>
+                </div>
                 </div>
             </div>
             <div className="px-4 py-3 border-t border-border">
