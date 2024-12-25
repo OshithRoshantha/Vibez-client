@@ -30,7 +30,8 @@ export default function FriendInfo() {
               
             </div>
             <h2 className="text-xl font-semibold text-foreground">{user}</h2>
-            <p className="text-muted-foreground">+94 75 956 3850</p>
+            <p className="text-muted-foreground">email</p>
+            <p className="text-muted-foreground text-sm">about</p>
           </div>
             <ul className="space-y-2" style={{marginTop:'10%'}} >
               <li className="flex items-center py-2 px-3 text-black rounded-lg hover:bg-gray-200 " onClick={toggleFavorite} style={{cursor:'pointer'}}>
