@@ -1,15 +1,22 @@
 import {useState} from 'react'
 import GroupMemberList from './GroupMemberList';
 import GroupMemberList2 from './GroupMemberList2';
+import GroupAddMembers from './GroupAddMembers';
 
 export default function GroupInfo() {
   var groupName = 'friends'
   var groupDescp = 'This is a group of friends'
   var memberCount = 5
   const [isAmAdmin, setIsAmAdmin] = useState(true);
+  const [addMemberMenu, setAddMemberMenu] = useState(false);
+
+  function showAddMemberMenu() {
+    setAddMemberMenu(!addMemberMenu)
+  }
 
   return (
 <div>
+      {addMemberMenu && <GroupAddMembers showAddMemberMenu={showAddMemberMenu}/>}
       <div className="border-r border-border p-4 info-column" style={{backgroundColor:'#f2f3f7'}}>
       <h2 className="text-lg font-semibold mb-4">Group info</h2>
         <div className="bg-card p-6 w-full" style={{backgroundColor:'#f2f3f7'}} >
@@ -31,7 +38,7 @@ export default function GroupInfo() {
           <h2 className="text-lg font-semibold mb-4" style={{marginTop:'-5%'}}>{memberCount} members</h2>
           {isAmAdmin && <div>
             <div className="flex items-center mb-1">
-              <button className="bg-gray-300 text-gray-600 hover:bg-gray-200 mr-2" style={{borderRadius:'50%', width:'38px', height:'38px', display:'flex', justifyContent:'center', alignItems:'center', border:'none'}}>
+              <button onClick={showAddMemberMenu} className="bg-gray-300 text-gray-600 hover:bg-gray-200 mr-2" style={{borderRadius:'50%', width:'38px', height:'38px', display:'flex', justifyContent:'center', alignItems:'center', border:'none'}}>
                 <i className="bi bi-person-fill-add"></i>
               </button>
               <span className="text-base">Add member</span>
