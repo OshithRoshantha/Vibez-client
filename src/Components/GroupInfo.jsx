@@ -24,6 +24,7 @@ export default function GroupInfo() {
             <p className="text-muted-foreground">{groupDescp}</p>
           </div>
           <h2 className="text-lg font-semibold mb-4" style={{marginTop:'-5%'}}>{memberCount} members</h2>
+          {isAmAdmin && <div>
             <div className="flex items-center mb-1">
               <button className="bg-primary text-primary-foreground p-1 rounded-full mr-2">
                 <span className="material-icons">add</span>
@@ -31,7 +32,8 @@ export default function GroupInfo() {
               <span className="text-base">Add member</span>
             </div>
             <div className="border-b border-border my-4"></div>
-          <div className='w-full' style={{height:'25vh', overflowY:'auto', scrollbarWidth:'none'}}>
+            </div>}
+          <div className={`w-full  ${isAmAdmin ? 'h-[25vh]' : 'h-[38vh]'}`} style={{overflowY:'auto', scrollbarWidth:'none'}}>
           <div className="mt-0">
               <div className="flex items-center mb-2">
                 <div className="w-8 h-8 rounded-full bg-green-500 mr-2"></div>
