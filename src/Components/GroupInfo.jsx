@@ -68,7 +68,7 @@ export default function GroupInfo() {
 <div>
       {addMemberMenu && <GroupAddMembers showAddMemberMenu={showAddMemberMenu}/>}
       <div className="border-r border-border p-4 info-column" style={{backgroundColor:'#f2f3f7'}}>
-        {editPictureForm && <div className='edit-picture-form2' style={{marginTop:'8%'}}>
+        {editPictureForm && <div className='edit-picture-form2 shadow-lg bg-white' style={{marginTop:'8%'}}>
                                 <AvatarEditor
                                     ref={avatarEditorRef}
                                     image={selectedImage}
@@ -81,15 +81,15 @@ export default function GroupInfo() {
                                 />
                                 <Slider defaultValue={[1]} min={1} max={10} step={1} style={{ width: '70%'}} onChange={handleSliderChange} value={cropFactor}/>
                                 <div className='edit-picture-buttons'>
-                                    <button onClick={editPictureFormHandler} style={{width:'20%',borderRadius: '20px'}}>Back</button>
-                                    <button onClick={handleCrop} style={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</button>
+                                    <button onClick={editPictureFormHandler} className='border-none  bg-gray-300 text-gray-600 hover:bg-gray-200' style={{width:'20%',borderRadius: '20px'}}>Back</button>
+                                    <button onClick={handleCrop} className='border-none' style={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</button>
                                 </div>
         </div>}
       <h2 className="text-lg font-semibold mb-4">Group info</h2>
         <div className="bg-card p-6 w-full" style={{backgroundColor:'#f2f3f7'}} >
           <div className="flex flex-col items-center mb-5" style={{marginTop:'-5%'}}>
             {isAmAdmin && 
-              <div onClick={uploadImg} onMouseEnter={showProfilePicHover} onMouseLeave={hideProfilePicHover} className=" rounded-full flex items-center justify-center mb-1 text-xs" style={{width:'150px', height:'150px', cursor:'pointer', marginTop:'-5%',backgroundImage: cropedImage ? `url(${cropedImage})` : `url(${defaultImage})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
+              <div onClick={uploadImg} onMouseEnter={showProfilePicHover} onMouseLeave={hideProfilePicHover} className=" rounded-full flex items-center justify-center mb-1 text-xs" style={{border: '1px solid rgb(104, 104, 104)', width:'150px', height:'150px', cursor:'pointer', marginTop:'-5%',backgroundImage: cropedImage ? `url(${cropedImage})` : `url(${defaultImage})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
                 {profilePicHover && <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'}} >
                         <span className='camera-icon'><i className="bi bi-camera-fill"></i></span>CHANGE GROUP ICON
                 </div>}
@@ -103,7 +103,7 @@ export default function GroupInfo() {
                 onChange={handleFileChange}
             />            
             {!isAmAdmin &&
-              <img src={defaultImage} className=" rounded-full flex items-center justify-center mb-1" style={{width:'150px', height:'150px', marginTop:'-5%'}}/>  
+              <img src={defaultImage} className=" rounded-full flex items-center justify-center mb-1" style={{width:'150px', height:'150px', marginTop:'-5%', border: '1px solid rgb(104, 104, 104)'}}/>  
             } 
             <h2 className="text-xl font-semibold text-foreground mt-4">{groupName}</h2>
             <div style={{display:'flex', justifyContent:'center', alignItems:'center', columnGap:'3px'}}>
