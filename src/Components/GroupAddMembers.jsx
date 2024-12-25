@@ -6,8 +6,9 @@ export default function GroupAddMembers({showAddMemberMenu}) {
   return (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
         <div className="bg-card rounded-lg shadow-lg w-full max-w-md">
-            <div className="px-4 py-3 border-b border-border">
+            <div className="px-4 flex py-3 border-b border-border justify-between items-center">
                 <h2 className="text-lg font-semibold">Add members</h2>
+                <i onClick={showAddMemberMenu} className="bi bi-arrow-left-circle-fill text-2xl" style={{cursor:'pointer'}}></i>
             </div>
             <div className="p-4">
                 <h3 className="text-sm font-medium text-muted">FRIENDS</h3>
