@@ -2,6 +2,10 @@ import React from 'react'
 
 export default function FriendInfo() {
   return (
-    <div>FriendInfo</div>
+    <div>
+      <div className="border-r border-border p-4 info-column">
+
+      </div>
+    </div>
   )
 }
