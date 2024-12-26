@@ -18,6 +18,11 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
     const [selectProfilePrivacy, setSelectProfilePrivacy] = useState('My friends');
     const [selectAboutPrivacy, setSelectAboutPrivacy] = useState('My friends');
 
+    const icon1 = darkMode ? './src/assets/Icons/icon1dark.png' : './src/assets/Icons/icon1.png';
+    const icon2 = darkMode ? './src/assets/Icons/icon2dark.png' : './src/assets/Icons/icon2.png';
+    const icon3 = darkMode ? './src/assets/Icons/icon3dark.png' : './src/assets/Icons/icon3.png';
+    const icon4 = darkMode ? './src/assets/Icons/icon4dark.png' : './src/assets/Icons/icon4.png';
+
     function handleProfilePrivacy(value) {
         setSelectProfilePrivacy(value);
     }
@@ -102,19 +107,19 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
             </div>
             </div>
         </div>}
-        <div className={`${darkMode ? 'border-gray-600 border-r border-border':''}  p-4 settings-column`} style={{backgroundColor: darkMode ? '#262729' : '#f2f3f7', height:'100vh'}}>
+        <div className={`${darkMode ? 'border-gray-600 border-r border-border':''}  p-4 settings-column`} style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7', height:'100vh'}}>
             <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Settings & Privacy</h2>
             <ul className="space-y-2 mt-5">
             <Accordion type="single" collapsible>
                         <AccordionItem value="settings">
                             <AccordionTrigger asChild>
-                                <li className="flex bg-white mb-1 text-gray-700 items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
-                                    <img style={{display:'inline', height:'10%', width:'10%'}} src='./src/assets/Icons/icon1.png'/>
+                                <li className={`${darkMode ? 'bg-[#333333] text-white' : 'bg-white text-gray-700'} items-center p-2 rounded-lg flex mb-1 transition`} style={{ cursor: 'pointer' }}>
+                                    <img style={{display:'inline', height:'10%', width:'10%'}} src={icon1}/>
                                     <span>Account</span>
                                 </li>
                             </AccordionTrigger>
                             <AccordionContent>
-                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor: darkMode ? '#262729' : '#f2f3f7'}}>    
+                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7'}}>    
                                 <ul className="space-y-2">
                                     <li onClick={toggleDeleteAllChatsPopup} className={`${darkMode ? 'text-white hover:bg-gray-700':'hover:bg-gray-300'} p-2 rounded-lg cursor-pointer`}>Delete all chats</li>
                                     <li onClick={toggleDeleteAllGroupChatsPopup}  className={`${darkMode ? 'text-white hover:bg-gray-700':'hover:bg-gray-300'} p-2 rounded-lg cursor-pointer`}>Delete all group chats</li>
@@ -126,13 +131,13 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
 
                         <AccordionItem value="privacy">
                             <AccordionTrigger asChild>
-                                <li className="flex bg-white mb-1  text-gray-700 items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
-                                <img style={{display:'inline', height:'10%', width:'10%'}} src='./src/assets/Icons/icon2.png'/>
+                                <li className={`${darkMode ? 'bg-[#333333] text-white' : 'bg-white text-gray-700'} items-center p-2 rounded-lg flex mb-1 transition`} style={{ cursor: 'pointer' }}>
+                                <img style={{display:'inline', height:'10%', width:'10%'}} src={icon2}/>
                                     <span>Privacy Centre</span>
                                 </li>
                             </AccordionTrigger>
                             <AccordionContent>
-                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor: darkMode ? '#262729' : '#f2f3f7'}}>
+                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7'}}>
                                     <div className={`${darkMode ? 'text-white':''} flex justify-between items-center p-2 rounded`}>
                                         <span>Profile photo</span>
                                         <DropdownMenu>
@@ -160,20 +165,20 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
 
                         <AccordionItem value="dark-mode">
                             <AccordionTrigger asChild>
-                                <li className="flex bg-white mb-1 text-gray-700 items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
-                                <img style={{display:'inline', height:'10%', width:'10%'}} src='./src/assets/Icons/icon3.png'/>
+                                <li className={`${darkMode ? 'bg-[#333333] text-white' : 'bg-white text-gray-700'} items-center p-2 rounded-lg flex mb-1 transition`} style={{ cursor: 'pointer' }}>
+                                <img style={{display:'inline', height:'10%', width:'10%'}} src={icon3}/>
                                     <span>Dark mode</span>
                                 </li>
                             </AccordionTrigger>
                             <AccordionContent>
-                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor: darkMode ? '#262729' : '#f2f3f7'}}>
+                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7'}}>
                                 <div className="flex justify-between items-center mb-2">
                                     <label htmlFor="on" className={`${darkMode ? 'text-white' : ''} cursor-pointer`}>On</label>
-                                    <input type="radio" id="on" name="dark-mode" onChange={darkModeOn} checked={darkMode} className="mr-2" />
+                                    <input type="radio" id="on" name="dark-mode" onChange={darkModeOn} checked={darkMode} className="mr-2 cursor-pointer" />
                                 </div>
                                 <div className="flex justify-between items-center mb-2">
                                     <label htmlFor="off" className={`${darkMode ? 'text-white' : ''} cursor-pointer`}>Off</label>
-                                    <input type="radio" id="off" name="dark-mode" onChange={darkModeOff} checked={!darkMode} className="mr-2" />
+                                    <input type="radio" id="off" name="dark-mode" onChange={darkModeOff} checked={!darkMode} className="mr-2 cursor-pointer" />
                                 </div>
                                 <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} text-sm `}>Optimize the theme for better readability and eye comfort.</p>
                                 </div>
@@ -182,13 +187,13 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
 
                         <AccordionItem value="language">
                             <AccordionTrigger asChild>
-                                <li className="flex bg-white mb-1 text-gray-700 items-center p-2 rounded-lg hover:bg-muted transition" style={{ cursor: 'pointer' }}>
-                                <img style={{display:'inline', height:'10%', width:'10%'}} src='./src/assets/Icons/icon4.png'/>
+                                <li className={`${darkMode ? 'bg-[#333333] text-white' : 'bg-white text-gray-700'} items-center p-2 rounded-lg flex mb-1 transition`} style={{ cursor: 'pointer' }}>
+                                <img style={{display:'inline', height:'10%', width:'10%'}} src={icon4}/>
                                     <span>App language</span>
                                 </li>
                             </AccordionTrigger>
                             <AccordionContent>
-                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor: darkMode ? '#262729' : '#f2f3f7'}}>
+                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7'}}>
                                 <div className="flex justify-between items-center mb-2">
                                 <DropdownMenu>
                                 <DropdownMenuTrigger className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]' : 'bg-gray-300 hover:bg-gray-400'} border-none`}>Select Language</DropdownMenuTrigger>
