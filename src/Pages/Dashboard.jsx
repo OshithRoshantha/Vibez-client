@@ -142,7 +142,7 @@ export default function Dashboard() {
 return (
     <div className='dashboard-conatiner'>
         <div className="flex h-screen bg-background text-foreground">
-            <div className="flex flex-col h-screen bg-background border-r border-border  button-column" style={{backgroundColor: darkMode ? '#262729' : ''}}>
+            <div className={`${darkMode ? 'border-gray-600 border-r border-border':''}  flex flex-col h-screen bg-background border-r border-border  button-column`}  style={{backgroundColor: darkMode ? '#262729' : ''}}>
                 <div onClick={showChatsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:chatsMenu ? '6px solid blue': 'none'}}>
                     <div className="relative">
                         <i className={`bi bi-chat-dots-fill text-2xl ${chatsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
@@ -164,7 +164,7 @@ return (
                     <img src="https://placehold.co/50x50" alt="Profile" className={`${profileMenu ? 'border border-primary border-3' : ''} w-15 h-15 rounded-full`} />
                 </div>
             </div>
-            {chatsMenu && <Chats showDirectMessages={showDirectMessages}/>}
+            {chatsMenu && <Chats darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
             {groupsMenu && <GroupChats showGroupMessages={showGroupMessages}/>}
             {friendsMenu && <Friends/>}
             {marketplaceMenu && <Marketplace/>}
