@@ -4,7 +4,7 @@ import ProductInfo from './ProductInfo';
 import YourListings from './YourListings';
 import EditListing from './EditListing';
 
-export default function Marketplace() {
+export default function Marketplace({darkMode}) {
     const [forYouMenu, setForYouMenu] = useState(true);
     const [sellMenu, setSellMenu] = useState(false);
     const [productInfo, setProductInfo] = useState(false);
@@ -94,14 +94,14 @@ export default function Marketplace() {
 
   return (
     <div>
-        <div className="border-r border-border p-4 chats-column" >
-            <h2 className="text-lg font-semibold column-header">Marketplace</h2>
-            <input type="text" placeholder="What do you want to buy?" className="placeholder:text-gray-500 bg-gray-200 text-gray-500 w-full px-4 py-2 mb-4 focus:outline-none focus:border-none" style={{borderRadius:'20px'}} />
-            <i className="bi text-gray-500 absolute text-2xl bi-search" style={{marginLeft:'-3%', marginTop:'0.2%'}}></i>
+        <div className={`${darkMode ? 'border-gray-600 border-r border-border':''}  p-4 chats-column`} style={{backgroundColor: darkMode ? '#262729' : '', height:'100vh'}}>
+            <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Marketplace</h2>
+            <input type="text" placeholder="What do you want to buy?" className={`${darkMode ? 'bg-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'bg-gray-200'} w-full px-4 py-2 mb-4 focus:outline-none focus:border-none placeholder:text-gray-500  text-gray-500 `} style={{borderRadius:'20px'}} />
+            <i className={`${darkMode ? 'text-[#abacae]':'text-gray-500'} bi absolute text-2xl bi-search`} style={{marginLeft:'-3%', marginTop:'0.2%'}}></i>
                 <div className="flex space-x-2 mb-4">
-                    <button onClick={showSellMenu} className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-200">Sell</button>
-                    <button onClick={showYourListningMenu} className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-200">Your listings</button>
-                    <button onClick={showForYouMenu} className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-200">For you</button>
+                    <button onClick={showSellMenu} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}>Sell</button>
+                    <button onClick={showYourListningMenu} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}>Your listings</button>
+                    <button onClick={showForYouMenu} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}>For you</button>
                 </div>
             {forYouMenu && 
                 <div className='product-list'>
