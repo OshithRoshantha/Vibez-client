@@ -182,12 +182,12 @@ export default function GroupChats({showGroupMessages}) {
                     <input
                         type="text"
                         placeholder="Group subject"
-                        className="border-b border-muted w-full text-lg py-2 mb-4 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
+                        className="border-b border-muted w-full py-2 mb-4 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
                     />              
                     <input
                         type="text"
                         placeholder="Group description (optional)"
-                        className="border-b border-muted w-full text-lg py-2 mb-4 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
+                        className="border-b border-muted w-full py-2 mb-4 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
                     />
                     <button onClick={() => {hideFinishCreateGroup(); clearCropedImage();}} className="bg-primary text-white absolute" style={{cursor: 'pointer', borderRadius:'50%', height:'54px', width:'54px', marginTop:'340px'}} >
                         <i className="bi bi-check2"></i>
