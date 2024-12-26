@@ -6,10 +6,8 @@ import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
 
 export default function GroupInfo() {
-  var groupName = 'friends'
-  var groupDescp = 'This is a group of friends'
   var memberCount = 5
-  const [isAmAdmin, setIsAmAdmin] = useState(true);
+  const [isAmAdmin, setIsAmAdmin] = useState(false);
   const [addMemberMenu, setAddMemberMenu] = useState(false);
   const [profilePicHover, setProfilePicHover] = useState(false);
   const [editPictureForm, setEditPictureForm] = useState(false);
@@ -18,8 +16,28 @@ export default function GroupInfo() {
   const [cropedImage, setCropedImage] = useState(null);
   const fileInputRef = useRef(null);
   const avatarEditorRef = useRef(null);
+  const [isEditingDescp, setIsEditingDescp] = useState(false);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [name, setName] = useState('friends');
+  const [descp, setDescp] = useState('This is a group of friends');
 
   const defaultImage = "./src/assets/groupDefault.jpg"; //user current group picture
+
+  function handleNameClick() {
+      setIsEditingName(true);
+  }
+    
+  function handleDescpClick() {
+      setIsEditingDescp(true);
+  }
+    
+  function handleNameBlur() {
+      setIsEditingName(false);
+  }
+    
+  function handleDescpBlur() {
+      setIsEditingDescp(false);
+  }
 
   function showAddMemberMenu() {
     setAddMemberMenu(!addMemberMenu)
@@ -104,14 +122,42 @@ export default function GroupInfo() {
             />            
             {!isAmAdmin &&
               <img src={defaultImage} className=" rounded-full flex items-center justify-center mb-1" style={{width:'150px', height:'150px', marginTop:'-5%', border: '1px solid rgb(104, 104, 104)'}}/>  
-            } 
-            <h2 className="text-xl font-semibold text-foreground mt-4">{groupName}</h2>
+            }
+            {isAmAdmin && (
+              <>
+            {isEditingName ? (
+                <input
+                    className="text-xl text-center font-semibold text-foreground mt-4 bg-transparent focus:outline-none"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    autoFocus
+                />
+            ) : (<h2 className="text-xl font-semibold text-foreground mt-4">{name}</h2>)}
+            {!isEditingName && <i onClick={handleNameClick} className="absolute bi bi-pencil-fill" style={{cursor:'pointer', marginTop:'10.3%', marginLeft:'25%'}}></i>} 
+            {isEditingName && <i onClick={handleNameBlur} className="absolute bi bi-check2" style={{cursor:'pointer', fontSize:'125%', marginTop:'10.3%', marginLeft:'25%'}}></i>}
+            </>
+            )}
+            {!isAmAdmin && <h2 className="text-xl font-semibold text-foreground mt-4">{name}</h2>}
             <div style={{display:'flex', justifyContent:'center', alignItems:'center', columnGap:'3px'}}>
               <p className="text-muted-foreground text-sm">Group</p>
               <i className="bi bi-dot"></i>
               <p className="text-muted-foreground">{memberCount} members</p>
             </div>
-            <p className="text-muted-foreground">{groupDescp}</p>
+            {!isAmAdmin && <p className="text-muted-foreground">{descp}</p>}
+            {isAmAdmin && (
+              <>
+            {isEditingDescp ? (
+                <input
+                    className="text-muted-foreground text-center bg-transparent focus:outline-none"
+                    value={descp}
+                    onChange={(e) => setDescp(e.target.value)}
+                    autoFocus
+                />
+            ) : (<p className="text-muted-foreground">{descp}</p>)}
+            {!isEditingDescp && <i onClick={handleDescpClick} className="absolute bi bi-pencil-fill" style={{cursor:'pointer', marginTop:'13.7%', marginLeft:'25%'}}></i>} 
+            {isEditingDescp && <i onClick={handleDescpBlur} className="absolute bi bi-check2" style={{cursor:'pointer', fontSize:'125%', marginTop:'13.7%', marginLeft:'25%'}}></i>}
+              </>
+            )}
           </div>
           <h2 className="text-lg font-semibold mb-4" style={{marginTop:'-5%'}}>{memberCount} members</h2>
           {isAmAdmin && <div>
