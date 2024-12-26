@@ -105,12 +105,12 @@ export default function Marketplace({darkMode}) {
                 </div>
             {forYouMenu && 
                 <div className='product-list'>
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-0 p-0 w-full">
-                    <div className="bg-card rounded-lg shadow-md overflow-hidden" style={{height:'87%', cursor:'pointer'}} onClick={showProductInfo}>
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-0 p-0 w-full"> 
+                    <div className="bg-card rounded-lg shadow-md overflow-hidden" style={{height:'87%', cursor:'pointer',backgroundColor: darkMode ? '#56585a':''}} onClick={showProductInfo}>
                         <img src="https://placehold.co/400x300?text=Se2" alt="Se2" className="w-full h-30 object-cover" style={{height:'65%'}}/>
                             <div className="pl-4 pr-4 pt-2 pb-2">
-                                <h2 className="text-lg font-semibold">{productPrice}</h2>
-                                <p className="text-muted-foreground">{productName}</p>
+                                <h2 className={`${darkMode ? 'text-white':''} text-lg font-semibold`}>{productPrice}</h2>
+                                <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'}`}>{productName}</p>
                             </div>
                     </div>
                     </div>
