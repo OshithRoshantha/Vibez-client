@@ -77,26 +77,26 @@ export default function Profile() {
   return (
     <div>
         <div className="border-r border-border p-4 chats-column">
-                {editPictureForm && <div className='edit-picture-form2' style={{marginTop:'8%'}}>
-                        <AvatarEditor
-                            ref={avatarEditorRef}
-                            image={selectedImage}
-                            width={180}
-                            height={180}
-                            border={0}
-                            borderRadius={150}
-                            color={[0, 0, 0, 0.5]} 
-                            scale={cropFactor}
-                        />
-                        <Slider defaultValue={[1]} min={1} max={10} step={1} style={{ width: '70%'}} onChange={handleSliderChange} value={cropFactor}/>
-                        <div className='edit-picture-buttons'>
-                            <button onClick={editPictureFormHandler} style={{width:'20%',borderRadius: '20px'}}>Back</button>
-                            <button onClick={handleCrop} style={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</button>
-                        </div>
+                {editPictureForm && <div className='edit-picture-form2 shadow-lg bg-white' style={{marginTop:'8%'}}>
+                                <AvatarEditor
+                                    ref={avatarEditorRef}
+                                    image={selectedImage}
+                                    width={180}
+                                    height={180}
+                                    border={0}
+                                    borderRadius={150}
+                                    color={[0, 0, 0, 0.5]} 
+                                    scale={cropFactor}
+                                />
+                                <Slider defaultValue={[1]} min={1} max={10} step={1} style={{ width: '70%'}} onChange={handleSliderChange} value={cropFactor}/>
+                                <div className='edit-picture-buttons'>
+                                    <button onClick={editPictureFormHandler} className='border-none  bg-gray-300 text-gray-600 hover:bg-gray-200' style={{width:'20%',borderRadius: '20px'}}>Back</button>
+                                    <button onClick={handleCrop} className='border-none' style={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</button>
+                                </div>
                 </div>}
                 <h2 className="text-lg font-semibold column-header">Profile</h2>
                 <div className="flex flex-col items-center p-6 bg-background text-foreground" style={{marginTop:'17%', paddingBottom:'31%'}}>
-                <div onClick={uploadImg} onMouseEnter={showProfilePicHover} onMouseLeave={hideProfilePicHover} style={{cursor:'pointer', backgroundImage: cropedImage ? `url(${cropedImage})` : `url(${defaultImage})`, backgroundSize: 'cover', backgroundPosition: 'center'}} className="profile-pic w-40 h-40 rounded-full border-4 border-primary text-center">
+                <div onClick={uploadImg} onMouseEnter={showProfilePicHover} onMouseLeave={hideProfilePicHover} style={{cursor:'pointer', backgroundImage: cropedImage ? `url(${cropedImage})` : `url(${defaultImage})`, backgroundSize: 'cover', backgroundPosition: 'center', border: '1px solid rgb(104, 104, 104)',}} className="profile-pic w-40 h-40 rounded-full  text-center">
                     {profilePicHover && <div>
                         <span className='camera-icon'><i className="bi bi-camera-fill"></i></span>CHANGE PROFILE PICTURE    
                     </div>}
