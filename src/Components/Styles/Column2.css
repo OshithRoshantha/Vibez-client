@@ -15,7 +15,7 @@
     margin-left: -50%;
 }
 
-.friends-column, .chats-column, .settings-column{
+.friends-column, .chats-column, .settings-column, .info-column{
     width: 32vw;
 }
 .friend-buttons{
@@ -58,7 +58,6 @@
 .edit-picture-form2{
     position: absolute;
     z-index: 9999;
-    background-color: rgb(48, 48, 48);
     border-radius: 20px;
     width: 28%;
     height: 47%;
@@ -67,4 +66,8 @@
     justify-content: center;
     align-items: center;
     row-gap: 4.5%;
+}
+
+.info-column{
+    height: 100vh;
 }

@@ -144,23 +144,23 @@ export default function GroupChats({showGroupMessages}) {
                     </div>
                 </div>}
                 {finishCreateGroup && <div>
-                    {editPictureForm && <div className='edit-picture-form2'>
-                            <AvatarEditor
-                                ref={avatarEditorRef}
-                                image={selectedImage}
-                                width={180}
-                                height={180}
-                                border={0}
-                                borderRadius={150}
-                                color={[0, 0, 0, 0.5]} 
-                                scale={cropFactor}
-                            />
-                            <Slider defaultValue={[1]} min={1} max={10} step={1} style={{ width: '70%'}} onChange={handleSliderChange} value={cropFactor}/>
-                            <div className='edit-picture-buttons'>
-                                <button onClick={editPictureFormHandler} style={{width:'20%',borderRadius: '20px'}}>Back</button>
-                                <button onClick={handleCrop} style={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</button>
-                            </div>
-                        </div>}
+                    {editPictureForm && <div className='edit-picture-form2 shadow-lg bg-white'>
+                                <AvatarEditor
+                                    ref={avatarEditorRef}
+                                    image={selectedImage}
+                                    width={180}
+                                    height={180}
+                                    border={0}
+                                    borderRadius={150}
+                                    color={[0, 0, 0, 0.5]} 
+                                    scale={cropFactor}
+                                />
+                                <Slider defaultValue={[1]} min={1} max={10} step={1} style={{ width: '70%'}} onChange={handleSliderChange} value={cropFactor}/>
+                                <div className='edit-picture-buttons'>
+                                    <button onClick={editPictureFormHandler} className='border-none  bg-gray-300 text-gray-600 hover:bg-gray-200' style={{width:'20%',borderRadius: '20px'}}>Back</button>
+                                    <button onClick={handleCrop} className='border-none' style={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</button>
+                                </div>
+                    </div>}
                     <div className="flex flex-col items-center bg-card p-6">
                     <div className="relative mb-4">
                         <div className='profile-pic' onClick={uploadImg}  

@@ -80,6 +80,8 @@ export default function Dashboard() {
         setSettingsMenu(false);
         setGroupsMenu(false);
         setProfileMenu(false);
+        setGroupInfoMenu(false);
+        setFriendInfoMenu(false);
     }
 
     function showFriendstMenu(){
@@ -89,6 +91,8 @@ export default function Dashboard() {
         setSettingsMenu(false);
         setGroupsMenu(false);
         setProfileMenu(false);
+        setGroupInfoMenu(false);
+        setFriendInfoMenu(false);
     }
 
     function showMarketplaceMenu(){
@@ -98,6 +102,8 @@ export default function Dashboard() {
         setSettingsMenu(false);
         setGroupsMenu(false);
         setProfileMenu(false);
+        setGroupInfoMenu(false);
+        setFriendInfoMenu(false);
     }
 
     function showSettingsMenu(){
@@ -107,6 +113,8 @@ export default function Dashboard() {
         setSettingsMenu(true);
         setGroupsMenu(false);
         setProfileMenu(false);
+        setGroupInfoMenu(false);
+        setFriendInfoMenu(false);
     }
 
     function showGroupsMenu(){
@@ -116,6 +124,8 @@ export default function Dashboard() {
         setSettingsMenu(false);
         setGroupsMenu(true);
         setProfileMenu(false);
+        setGroupInfoMenu(false);
+        setFriendInfoMenu(false);
     }
 
     function showProfileMenu(){
@@ -125,6 +135,8 @@ export default function Dashboard() {
         setSettingsMenu(false);
         setGroupsMenu(false);
         setProfileMenu(true);
+        setGroupInfoMenu(false);
+        setFriendInfoMenu(false);
     }
 
 return (
