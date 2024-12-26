@@ -15,6 +15,16 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
     const [confirmAccountDeletion, setConfirmAccountDeletion] = useState(false);
     const [deleteAllChatsPopup, setDeleteAllChatsPopup] = useState(false);
     const [deleteAllGroupChatsPopup, setDeleteAllGroupChatsPopup] = useState(false);
+    const [selectProfilePrivacy, setSelectProfilePrivacy] = useState('My friends');
+    const [selectAboutPrivacy, setSelectAboutPrivacy] = useState('My friends');
+
+    function handleProfilePrivacy(value) {
+        setSelectProfilePrivacy(value);
+    }
+
+    function handleAboutPrivacy(value) {
+        setSelectAboutPrivacy(value);
+    }
 
     function showLogoutMenu() {
         setLogoutMenu(true);
@@ -92,8 +102,8 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
             </div>
             </div>
         </div>}
-        <div className="border-r border-border p-4 settings-column" style={{backgroundColor:'#f2f3f7'}}>
-            <h2 className="text-lg font-semibold column-header">Settings & Privacy</h2>
+        <div className={`${darkMode ? 'border-gray-600 border-r border-border':''}  p-4 settings-column`} style={{backgroundColor: darkMode ? '#262729' : '#f2f3f7', height:'100vh'}}>
+            <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Settings & Privacy</h2>
             <ul className="space-y-2 mt-5">
             <Accordion type="single" collapsible>
                         <AccordionItem value="settings">
@@ -104,11 +114,11 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                                 </li>
                             </AccordionTrigger>
                             <AccordionContent>
-                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor:'#f2f3f7'}}>    
+                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor: darkMode ? '#262729' : '#f2f3f7'}}>    
                                 <ul className="space-y-2">
-                                    <li onClick={toggleDeleteAllChatsPopup} className="p-2 rounded-lg hover:bg-gray-300 cursor-pointer">Delete all chats</li>
-                                    <li onClick={toggleDeleteAllGroupChatsPopup} className="p-2 rounded-lg hover:bg-gray-300 cursor-pointer">Delete all group chats</li>
-                                    <li onClick={showConfirmAccountDeletion} className="p-2 rounded-lg text-white bg-red-300 cursor-pointer">Delete my account</li>
+                                    <li onClick={toggleDeleteAllChatsPopup} className={`${darkMode ? 'text-white hover:bg-gray-700':'hover:bg-gray-300'} p-2 rounded-lg cursor-pointer`}>Delete all chats</li>
+                                    <li onClick={toggleDeleteAllGroupChatsPopup}  className={`${darkMode ? 'text-white hover:bg-gray-700':'hover:bg-gray-300'} p-2 rounded-lg cursor-pointer`}>Delete all group chats</li>
+                                    <li onClick={showConfirmAccountDeletion} className={`${darkMode ? '':''} bg-red-300 hover:bg-red-400 text-black p-2 rounded-lg cursor-pointer`}>Delete my account</li>
                                 </ul>
                                 </div>
                             </AccordionContent>
@@ -122,25 +132,25 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                                 </li>
                             </AccordionTrigger>
                             <AccordionContent>
-                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor:'#f2f3f7'}}>
-                                    <div className="flex justify-between items-center p-2 rounded">
+                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor: darkMode ? '#262729' : '#f2f3f7'}}>
+                                    <div className={`${darkMode ? 'text-white':''} flex justify-between items-center p-2 rounded`}>
                                         <span>Profile photo</span>
                                         <DropdownMenu>
-                                            <DropdownMenuTrigger asChild><span className="text-muted-foreground">My friends</span></DropdownMenuTrigger>
-                                            <DropdownMenuContent className="w-58 p-2 bg-white border border-gray-300 rounded-lg">
-                                                <DropdownMenuItem><span><i className="bi bi-people-fill"></i>&nbsp;&nbsp;My friends</span></DropdownMenuItem>
-                                                <DropdownMenuItem><span><i className="bi bi-lock-fill"></i>&nbsp;&nbsp;Only me</span></DropdownMenuItem>
+                                            <DropdownMenuTrigger asChild><span className={`${darkMode ? 'text-gray-400':'text-muted-foreground'}`}>{selectProfilePrivacy}</span></DropdownMenuTrigger>
+                                            <DropdownMenuContent className={`${darkMode ? 'bg-[#262729]':'bg-white'} border border-gray-300 rounded-lg`}>	
+                                                <DropdownMenuItem  onClick={() => handleProfilePrivacy('My friends')} className={`${darkMode ? 'text-gray-200':''} cursor-pointer`}><span><i className="bi bi-people-fill"></i>&nbsp;&nbsp;My friends</span></DropdownMenuItem>
+                                                <DropdownMenuItem  onClick={() => handleProfilePrivacy('Only me')}  className={`${darkMode ? 'text-gray-200':''} cursor-pointer`}><span><i className="bi bi-lock-fill"></i>&nbsp;&nbsp;Only me</span></DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                         
                                     </div>
-                                    <div className="flex justify-between items-center p-2 rounded">
+                                    <div className={`${darkMode ? 'text-white':''} flex justify-between items-center p-2 rounded`}>
                                         <span>About</span>
                                         <DropdownMenu>
-                                            <DropdownMenuTrigger asChild><span className="text-muted-foreground">My friends</span></DropdownMenuTrigger>
-                                            <DropdownMenuContent className="w-58 p-2 bg-white border border-gray-300 rounded-lg">
-                                                <DropdownMenuItem><span><i className="bi bi-people-fill"></i>&nbsp;&nbsp;My friends</span></DropdownMenuItem>
-                                                <DropdownMenuItem><span><i className="bi bi-lock-fill"></i>&nbsp;&nbsp;Only me</span></DropdownMenuItem>
+                                            <DropdownMenuTrigger asChild><span  className={`${darkMode ? 'text-gray-400':'text-muted-foreground'}`}>{selectAboutPrivacy}</span></DropdownMenuTrigger>
+                                            <DropdownMenuContent className={`${darkMode ? 'bg-[#262729]':'bg-white'} border border-gray-300 rounded-lg`}>
+                                                <DropdownMenuItem onClick={() => handleAboutPrivacy('My friends')} className={`${darkMode ? 'text-gray-200':''} cursor-pointer`}><span><i className="bi bi-people-fill"></i>&nbsp;&nbsp;My friends</span></DropdownMenuItem>
+                                                <DropdownMenuItem onClick={() => handleAboutPrivacy('Only me')} className={`${darkMode ? 'text-gray-200':''} cursor-pointer`}><span><i className="bi bi-lock-fill"></i>&nbsp;&nbsp;Only me</span></DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </div>
@@ -156,16 +166,16 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                                 </li>
                             </AccordionTrigger>
                             <AccordionContent>
-                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor:'#f2f3f7'}}>
+                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor: darkMode ? '#262729' : '#f2f3f7'}}>
                                 <div className="flex justify-between items-center mb-2">
-                                    <label htmlFor="on" className="cursor-pointer">On</label>
+                                    <label htmlFor="on" className={`${darkMode ? 'text-white' : ''} cursor-pointer`}>On</label>
                                     <input type="radio" id="on" name="dark-mode" onChange={darkModeOn} checked={darkMode} className="mr-2" />
                                 </div>
                                 <div className="flex justify-between items-center mb-2">
-                                    <label htmlFor="off" className="cursor-pointer">Off</label>
+                                    <label htmlFor="off" className={`${darkMode ? 'text-white' : ''} cursor-pointer`}>Off</label>
                                     <input type="radio" id="off" name="dark-mode" onChange={darkModeOff} checked={!darkMode} className="mr-2" />
                                 </div>
-                                <p className="text-muted-foreground text-sm">Optimize the theme for better readability and eye comfort.</p>
+                                <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} text-sm `}>Optimize the theme for better readability and eye comfort.</p>
                                 </div>
                             </AccordionContent>
                         </AccordionItem>
@@ -178,26 +188,26 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                                 </li>
                             </AccordionTrigger>
                             <AccordionContent>
-                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor:'#f2f3f7'}}>
+                                <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor: darkMode ? '#262729' : '#f2f3f7'}}>
                                 <div className="flex justify-between items-center mb-2">
                                 <DropdownMenu>
-                                <DropdownMenuTrigger className="bg-primary">Select Language</DropdownMenuTrigger>
-                                <DropdownMenuContent className="w-58 p-2 bg-white border border-gray-300 rounded-lg shadow-lg">
-                                    <DropdownMenuItem><span>English</span></DropdownMenuItem>
-                                    <DropdownMenuItem disabled><span>Español</span></DropdownMenuItem>
-                                    <DropdownMenuItem disabled><span>Français</span></DropdownMenuItem>
-                                    <DropdownMenuItem disabled><span>Deutsch</span></DropdownMenuItem>
+                                <DropdownMenuTrigger className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]' : 'bg-gray-300 hover:bg-gray-400'} border-none`}>Select Language</DropdownMenuTrigger>
+                                <DropdownMenuContent className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} w-58 p-2 border-gray-300 rounded-lg shadow-lg`}>
+                                    <DropdownMenuItem className={`${darkMode ? 'text-gray-200':''} cursor-pointer`}><span>English</span></DropdownMenuItem>
+                                    <DropdownMenuItem className={`${darkMode ? 'text-gray-200':''} cursor-pointer`} disabled><span>Español</span></DropdownMenuItem>
+                                    <DropdownMenuItem className={`${darkMode ? 'text-gray-200':''} cursor-pointer`} disabled><span>Français</span></DropdownMenuItem>
+                                    <DropdownMenuItem className={`${darkMode ? 'text-gray-200':''} cursor-pointer`} disabled><span>Deutsch</span></DropdownMenuItem>
                                 </DropdownMenuContent>
                                 </DropdownMenu>
                                 </div>
-                                <p className="text-muted-foreground mt-2">Please note that only English is currently available.</p>
+                                <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} mt-2 `}>Please note that only English is currently available.</p>
                                 </div>
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>
             </ul>
             <div className="flex justify-between mb-12 absolute bottom-0" style={{width: '29%'}}>
-                <button onClick={showLogoutMenu} className="bg-gray-300 border-none px-4 py-2 rounded-lg w-full" >Log out</button>
+                <button onClick={showLogoutMenu} className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-gray-300 hover:bg-gray-400'} border-none px-4 py-2 rounded-lg w-full`}>Log out</button>
             </div>
         </div>
     </div>
