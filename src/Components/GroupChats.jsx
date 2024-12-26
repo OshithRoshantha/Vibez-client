@@ -4,7 +4,7 @@ import './Styles/SignupElement.css'
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
 
-export default function GroupChats({showGroupMessages}) {
+export default function GroupChats({showGroupMessages, darkMode}) {
     const [addMembersMenu, setAddMembersMenu] = useState(false);
     const [finishCreateGroup, setFinishCreateGroup] = useState(false);
     const [groupChats, setGroupChats] = useState(true);
@@ -95,25 +95,25 @@ export default function GroupChats({showGroupMessages}) {
   return (
     <div>
     <div>
-        <div className="border-r border-border p-4 chats-column">
-                <h2 className="text-lg font-semibold column-header">Groups</h2>
-                <input type="text" placeholder="Search groups" className="placeholder:text-gray-500 bg-gray-200 text-gray-500 w-full px-4 py-2 mb-4 focus:outline-none focus:border-none" style={{borderRadius:'20px'}} />
-                <i className="bi text-gray-500 absolute text-2xl bi-search" style={{marginLeft:'-3%', marginTop:'0.2%'}}></i>
+        <div className={`${darkMode ? 'border-gray-600 border-r border-border':''}  p-4 chats-column`} style={{backgroundColor: darkMode ? '#262729' : '', height:'100vh'}}>
+                <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Groups</h2>
+                <input type="text" placeholder="Search groups" className={`${darkMode ? 'bg-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'bg-gray-200'} w-full px-4 py-2 mb-4 focus:outline-none focus:border-none placeholder:text-gray-500  text-gray-500 `} style={{borderRadius:'20px'}} />
+                <i className={`${darkMode ? 'text-[#abacae]':'text-gray-500'} bi absolute text-2xl bi-search`} style={{marginLeft:'-3%', marginTop:'0.2%'}}></i>
                 <div className="flex space-x-2 mb-4">
-                    <button onClick={showGroupChats} className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-200">Your groups</button>
-                    <button onClick={showAddMembersMenu} className="bg-gray-300 text-gray-600 px-4 py-2 rounded-full border-none hover:bg-gray-200"><i className="bi bi-plus-lg"></i></button>
+                    <button onClick={showGroupChats} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}>Your groups</button>
+                    <button onClick={showAddMembersMenu} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}><i className="bi bi-plus-lg"></i></button>
                 </div>
                 <div className='chat-list'>
                 {addMembersMenu && <div>
-                    <h2 className="text-lg font-semibold mb-2">Add group members</h2>
+                    <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>Add group members</h2>
                     <div className='group-op'>
                     <div className="space-y-4">
                         <div className="flex items-center justify-between border-border py-2">
                         <div className="flex items-center">
                             <img src="https://placehold.co/40x40" className="rounded-full mr-2 w-55 h-55" />
                             <div>
-                                <p className="font-medium">{user}</p>
-                                <p className="text-muted-foreground text-sm">About</p>
+                                <p className={`${darkMode ? 'text-white':''} font-medium`}>{user}</p>
+                                <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} text-sm `}>About</p>
                             </div>
                         </div>
                         <div className='btn-container'>
@@ -126,7 +126,7 @@ export default function GroupChats({showGroupMessages}) {
                             </button>
                             {isAdded &&
                             <button
-                                className="px-3 py-1 rounded bg-muted text-muted-foreground border-none hover:bg-gray-300"
+                                className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} border-none px-3 py-1 rounded`}
                                 onClick={() => {
                                     handleRemoveClick();
                                   }}
@@ -143,8 +143,8 @@ export default function GroupChats({showGroupMessages}) {
                     </button>
                     </div>
                 </div>}
-                {finishCreateGroup && <div>
-                    {editPictureForm && <div className='edit-picture-form2 shadow-lg bg-white'>
+                {finishCreateGroup && <div>	
+                    {editPictureForm && <div className={`bg-white edit-picture-form2 shadow-lg`}>
                                 <AvatarEditor
                                     ref={avatarEditorRef}
                                     image={selectedImage}
@@ -161,7 +161,7 @@ export default function GroupChats({showGroupMessages}) {
                                     <button onClick={handleCrop} className='border-none' style={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</button>
                                 </div>
                     </div>}
-                    <div className="flex flex-col items-center bg-card p-6">
+                    <div className={`${darkMode ? 'bg-[#262729]':''} flex flex-col items-center bg-card p-6`}>
                     <div className="relative mb-4">
                         <div className='profile-pic' onClick={uploadImg}  
                         style={{
@@ -182,12 +182,12 @@ export default function GroupChats({showGroupMessages}) {
                     <input
                         type="text"
                         placeholder="Group subject"
-                        className="border-b border-muted w-full py-2 mb-4 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
+                        className={`${darkMode ? 'border-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'border-muted text-foreground placeholder:text-muted-foreground'} border-b  w-full py-2 mb-4 bg-transparent  focus:outline-none`}
                     />              
                     <input
                         type="text"
                         placeholder="Group description (optional)"
-                        className="border-b border-muted w-full py-2 mb-4 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
+                        className={`${darkMode ? 'border-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'border-muted text-foreground placeholder:text-muted-foreground'} border-b  w-full py-2 mb-4 bg-transparent  focus:outline-none`}
                     />
                     <button onClick={() => {hideFinishCreateGroup(); clearCropedImage();}} className="bg-primary text-white absolute" style={{cursor: 'pointer', borderRadius:'50%', height:'54px', width:'54px', marginTop:'340px'}} >
                         <i className="bi bi-check2"></i>
@@ -196,13 +196,13 @@ export default function GroupChats({showGroupMessages}) {
                 </div>}
                 {groupChats && <div>
                 <div onClick={showGroupMessages} className="space-y-2" style={{cursor: 'pointer'}}>
-                    <div className="flex items-center p-2 hover:bg-muted rounded">
+                    <div className={`${darkMode ? 'hover:bg-[#2d3243]' : 'hover:bg-muted'} flex items-center p-2 rounded`}>
                         <img src="https://placehold.co/40x40" alt="User" className="rounded-full mr-2 w-18 h-18" />
                         <div>
-                            <div className="font-medium">GroupName</div>
-                            <div className="text-sm text-muted-foreground">User1: Lorem ipsum dolor sit amet.</div>
+                            <div className={`${darkMode ? 'text-white':''} font-medium`}>GroupName</div>
+                            <div className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} text-sm `}>User1: Lorem ipsum dolor sit amet.</div>
                         </div>
-                        <span className="ml-auto text-xs">13:14</span>
+                        <span className={`${darkMode ? 'text-gray-400':''} ml-auto text-xs`}>13:14</span>
                     </div>
                 </div>
                 </div>}

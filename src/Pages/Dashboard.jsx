@@ -165,13 +165,13 @@ return (
                 </div>
             </div>
             {chatsMenu && <Chats darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
-            {groupsMenu && <GroupChats showGroupMessages={showGroupMessages}/>}
-            {friendsMenu && <Friends/>}
-            {marketplaceMenu && <Marketplace/>}
+            {groupsMenu && <GroupChats darkMode={darkMode} showGroupMessages={showGroupMessages}/>}
+            {friendsMenu && <Friends  darkMode={darkMode}/>}
+            {marketplaceMenu && <Marketplace  darkMode={darkMode}/>}
             {settingsMenu && <Settings darkModeOn={darkModeOn} darkModeOff={darkModeOff} darkMode={darkMode}/>}
-            {profileMenu && <Profile/>}
-            {friendInfoMenu && <FriendInfo/>}
-            {groupInfoMenu && <GroupInfo/>}
+            {profileMenu && <Profile  darkMode={darkMode}/>}
+            {friendInfoMenu && <FriendInfo  darkMode={darkMode}/>}
+            {groupInfoMenu && <GroupInfo  darkMode={darkMode}/>}
             <div className="flex-1 p-0 messages-column" style={{height:'100vh'}}>
                 {welcomeVideo &&
                 <video
