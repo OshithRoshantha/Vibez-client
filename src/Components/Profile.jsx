@@ -3,7 +3,7 @@ import './Styles/Column2.css'
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
 
-export default function Profile() {
+export default function Profile({darkMode}) {
     const [isEditingName, setIsEditingName] = useState(false);
     const [isEditingAbout, setIsEditingAbout] = useState(false);
     const [profilePicHover, setProfilePicHover] = useState(false);
@@ -76,7 +76,7 @@ export default function Profile() {
       
   return (
     <div>
-        <div className="border-r border-border p-4 chats-column">
+        <div className={`${darkMode ? 'border-gray-600 border-r border-border':''}  p-4 chats-column`} style={{backgroundColor: darkMode ? '#262729' : '', height:'100vh'}}>
                 {editPictureForm && <div className='edit-picture-form2 shadow-lg bg-white' style={{marginTop:'8%'}}>
                                 <AvatarEditor
                                     ref={avatarEditorRef}
@@ -94,8 +94,8 @@ export default function Profile() {
                                     <button onClick={handleCrop} className='border-none' style={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</button>
                                 </div>
                 </div>}
-                <h2 className="text-lg font-semibold column-header">Profile</h2>
-                <div className="flex flex-col items-center p-6 bg-background text-foreground" style={{marginTop:'17%', paddingBottom:'31%'}}>
+                <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Profile</h2>
+                <div className="flex flex-col items-center p-6 bg-background text-foreground" style={{marginTop:'17%', paddingBottom:'31%', backgroundColor: darkMode ? '#262729' : ''}}>
                 <div onClick={uploadImg} onMouseEnter={showProfilePicHover} onMouseLeave={hideProfilePicHover} style={{cursor:'pointer', backgroundImage: cropedImage ? `url(${cropedImage})` : `url(${defaultImage})`, backgroundSize: 'cover', backgroundPosition: 'center', border: '1px solid rgb(104, 104, 104)',}} className="profile-pic w-40 h-40 rounded-full  text-center">
                     {profilePicHover && <div>
                         <span className='camera-icon'><i className="bi bi-camera-fill"></i></span>CHANGE PROFILE PICTURE    
@@ -110,48 +110,48 @@ export default function Profile() {
                 />
                 <div className="mt-4">
                 <div className="mt-4">
-                    <label className="text-muted-foreground">Your name</label>
+                    <label className={`${darkMode ? 'text-gray-200':'text-muted-foreground'}`}>Your name</label>
                     <div style={{display:'flex', alignItems:'center',columnGap:'50%'}}>
                     {isEditingName ? (
                     <input
-                        className="w-full text-xl font-semibold py-0 mb-0 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
+                        className={`${darkMode ? 'text-white':'text-foreground placeholder:text-muted-foreground'} w-full text-xl font-semibold py-0 mb-0 bg-transparent focus:outline-none`}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         autoFocus
                     />
                     ) : (
                     <h2
-                        className="text-xl font-semibold"
+                        className={`${darkMode ? 'text-gray-100':''} text-xl font-semibold`}
                         
                     >
                     {name}
                     </h2>
                     )}
-                    {!isEditingName && <i onClick={handleNameClick} className="absolute bi bi-pencil-fill" style={{marginLeft:'24%', cursor:'pointer'}}></i>} 
-                    {isEditingName && <i onClick={handleNameBlur} className="absolute bi bi-check2" style={{marginLeft:'24%', cursor:'pointer', fontSize:'125%'}}></i>}  
+                    {!isEditingName && <i onClick={handleNameClick} className={`${darkMode ? 'text-white':''} absolute bi bi-pencil-fill`} style={{marginLeft:'24%', cursor:'pointer'}}></i>} 
+                    {isEditingName && <i onClick={handleNameBlur} className={`${darkMode ? 'text-white':''} absolute bi bi-check2`} style={{marginLeft:'24%', cursor:'pointer', fontSize:'125%'}}></i>}  
                     </div>
-                    <span className="text-muted-foreground text-sm mt-2"> This is not your username or PIN. This name will be visible to your Vibez contacts. </span>
+                    <span className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} text-sm mt-2`} > This is not your username or PIN. This name will be visible to your Vibez contacts. </span>
                 </div>
                 <div className="mt-6">
-                    <span className="text-muted-foreground">About</span>
+                    <span className={`${darkMode ? 'text-gray-200':'text-muted-foreground'}`}>About</span>
                     <div style={{display:'flex', alignItems:'center',columnGap:'50%'}}>
                     {isEditingAbout ? (
                     <input
-                        className="w-full py-0 mb-0 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
+                        className={`${darkMode ? 'text-white':'text-foreground placeholder:text-muted-foreground'} w-full py-0 mb-0 bg-transparent focus:outline-none`}
                         value={about}
                         onChange={(e) => setAbout(e.target.value)}
                         autoFocus
                     />
                     ) : (
                     <p
-                        className="mt-0"
+                    className={`${darkMode ? 'text-gray-100':''} mt-0`}
                         
                     >
                     {about}
                     </p>
                     )}
-                    {!isEditingAbout && <i onClick={handleAboutClick} className="absolute bi bi-pencil-fill" style={{marginLeft:'24%', cursor:'pointer'}}></i>}
-                    {isEditingAbout && <i onClick={handleAboutBlur} className="absolute bi bi-check2" style={{marginLeft:'24%', cursor:'pointer', fontSize:'125%'}}></i>}
+                    {!isEditingAbout && <i onClick={handleAboutClick} className={`${darkMode ? 'text-white':''} absolute bi bi-pencil-fill`} style={{marginLeft:'24%', cursor:'pointer'}}></i>}
+                    {isEditingAbout && <i onClick={handleAboutBlur} className={`${darkMode ? 'text-white':''} absolute bi bi-check2`} style={{marginLeft:'24%', cursor:'pointer', fontSize:'125%'}}></i>}
                     </div>
                 </div>
                 </div>
