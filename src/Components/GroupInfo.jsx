@@ -7,7 +7,7 @@ import Slider from '@mui/material/Slider';
 
 export default function GroupInfo() {
   var memberCount = 5
-  const [isAmAdmin, setIsAmAdmin] = useState(false);
+  const [isAmAdmin, setIsAmAdmin] = useState(true);
   const [addMemberMenu, setAddMemberMenu] = useState(false);
   const [profilePicHover, setProfilePicHover] = useState(false);
   const [editPictureForm, setEditPictureForm] = useState(false);

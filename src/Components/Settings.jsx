@@ -8,10 +8,13 @@ import {
   
 import './Styles/Column2.css'
 import { useState} from 'react';
+import GlobalAlert from './GlobalAlert';
 
 export default function Settings({darkModeOn, darkModeOff, darkMode}) {
     const [logoutMenu, setLogoutMenu] = useState(false);
     const [confirmAccountDeletion, setConfirmAccountDeletion] = useState(false);
+    const [deleteAllChatsPopup, setDeleteAllChatsPopup] = useState(false);
+    const [deleteAllGroupChatsPopup, setDeleteAllGroupChatsPopup] = useState(false);
 
     function showLogoutMenu() {
         setLogoutMenu(true);
@@ -29,8 +32,18 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
         setConfirmAccountDeletion(false);
     }
 
+    function toggleDeleteAllChatsPopup() {
+        setDeleteAllChatsPopup(!deleteAllChatsPopup);
+    }
+
+    function toggleDeleteAllGroupChatsPopup() {
+        setDeleteAllGroupChatsPopup(!deleteAllGroupChatsPopup);
+    }
+
   return (
     <div>
+        {deleteAllChatsPopup && <GlobalAlert text={`Delete All Chats?`} textOP={'This action will permanently delete all your chats.'} button1={'Cancel'} button2={'Delete all'} btn1Function={toggleDeleteAllChatsPopup} btn2Function={toggleDeleteAllChatsPopup}/>}
+        {deleteAllGroupChatsPopup && <GlobalAlert text={`Delete All Group Chats?`} textOP={'This action will permanently delete all your group chats.'} button1={'Cancel'} button2={'Delete all'} btn1Function={toggleDeleteAllGroupChatsPopup} btn2Function={toggleDeleteAllGroupChatsPopup}/>}
         {logoutMenu && <div>
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100'}}>
             <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">	
@@ -93,8 +106,8 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                             <AccordionContent>
                                 <div className="bg-background text-foreground p-4 rounded-lg" style={{backgroundColor:'#f2f3f7'}}>    
                                 <ul className="space-y-2">
-                                    <li className="p-2 rounded-lg hover:bg-gray-300 cursor-pointer">Delete all chats</li>
-                                    <li className="p-2 rounded-lg hover:bg-gray-300 cursor-pointer">Delete all group chats</li>
+                                    <li onClick={toggleDeleteAllChatsPopup} className="p-2 rounded-lg hover:bg-gray-300 cursor-pointer">Delete all chats</li>
+                                    <li onClick={toggleDeleteAllGroupChatsPopup} className="p-2 rounded-lg hover:bg-gray-300 cursor-pointer">Delete all group chats</li>
                                     <li onClick={showConfirmAccountDeletion} className="p-2 rounded-lg text-white bg-red-300 cursor-pointer">Delete my account</li>
                                 </ul>
                                 </div>
