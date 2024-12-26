@@ -118,7 +118,7 @@ export default function Marketplace({darkMode}) {
             }
             {sellMenu && 
             <div className='sell-products' ref={sellProductsRef}>
-                <div className="p-6 pt-1 bg-card text-card-foreground"  style={{backgroundColor: darkMode ? '#262729' : ''}}>
+                <div className="p-6 pt-1 bg-card text-card-foreground" style={{backgroundColor: darkMode ? '#262729' : ''}}>
                 <h2 className={`${darkMode ? 'text-white':''} text-lg font-semibold mb-2`}>Overview</h2>
                 <div className="grid grid-cols-2 gap-x-4 gap-y-0 mb-6">
                     <div className="pl-5 pt-2 border border-border rounded-lg" style={{height:'120%'}}>
@@ -219,7 +219,7 @@ export default function Marketplace({darkMode}) {
                 </div>            
             </div>}
             {yourListningMenu && <div className='product-list'><YourListings  darkMode={darkMode} showEditListingMenu={showEditListingMenu}/></div>}
-            {editListingMenu && <div className='sell-products' ref={sellProductsRef}><EditListing showYourListningMenu={showYourListningMenu}/></div>}
+            {editListingMenu && <div className='sell-products' ref={sellProductsRef}><EditListing darkMode={darkMode} showYourListningMenu={showYourListningMenu}/></div>}
             {productInfo && <div>
                     <ProductInfo darkMode={darkMode} productName={productName} productPrice={productPrice} productDescription={productDescription} sellerName={sellerName}/>      
             </div>}
