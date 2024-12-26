@@ -23,7 +23,7 @@ export default function Dashboard() {
     const [friendInfoMenu, setFriendInfoMenu] = useState(false);
     const [groupInfoMenu, setGroupInfoMenu] = useState(false);
     const [welcomeVideo, setWelcomeVideo] = useState(true);
-    const [darkMode, setDarkMode] = useState(true);
+    const [darkMode, setDarkMode] = useState(false);
 
     function darkModeOn() {
         setDarkMode(true);
