@@ -1,36 +1,36 @@
 import './Styles/Column2.css'
 
-export default function EditListing({showYourListningMenu}) {
+export default function EditListing({showYourListningMenu, darkMode}) {
   return (
-    <div className="p-6 pt-1 bg-card text-card-foreground">
-        <h2 className="text-lg font-semibold mb-4">Edit listing</h2>
-        <div className="bg-background px-4 py-0 rounded-lg w-full">
+    <div className="p-6 pt-1 bg-card text-card-foreground" style={{backgroundColor: darkMode ? '#262729' : ''}}>
+        <h2 className={`${darkMode ? 'text-white':''} text-lg font-semibold mb-4`}>Edit listing</h2>
+        <div className="bg-background px-4 py-0 rounded-lg w-full" style={{backgroundColor: darkMode ? '#262729' : ''}}>
                 <div className="mb-4">
-                    <input type="text" className="placeholder:text-gray-500 py-2 border rounded-lg p-2 w-full bg-white text-black" style={{ outline: '1px solid #c1c3c7'}} placeholder="Title" />
+                    <input type="text" className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-400 ' : ' bg-white text-black placeholder:text-gray-500'} py-2 border rounded-lg p-2 w-full`} style={{ outline: '1px solid #c1c3c7'}} placeholder="Title" />
                 </div>
                 <div className="mb-4">
-                    <input type="text" className="placeholder:text-gray-500 py-2 border rounded-lg p-2 w-full bg-white text-black" style={{ outline: '1px solid #c1c3c7'}} placeholder="Price" />
+                    <input type="text" className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-400 ' : ' bg-white text-black placeholder:text-gray-500'} py-2 border rounded-lg p-2 w-full`} style={{ outline: '1px solid #c1c3c7'}} placeholder="Price" />
                 </div>
                 <div className="mb-4">
-                    <select className=" bg-white border rounded-lg p-2 w-full text-gray-500" style={{ outline: '1px solid #c1c3c7'}}>
+                    <select className={`${darkMode ? 'bg-[#262729] text-gray-400' : 'bg-white text-gray-500'} border rounded-lg p-2 w-full`}  style={{ outline: '1px solid #c1c3c7'}}>
                         <option value="" disabled selected>Category</option>
-                        <option className='text-black'>New</option>
-                        <option className='text-black'>Used - like new</option>
-                        <option className='text-black'>Used - good</option>
-                        <option className='text-black'>Used - fair</option>
+                        <option className={`${darkMode ? 'text-white' : 'text-black'}`}>New</option>
+                        <option className={`${darkMode ? 'text-white' : 'text-black'}`}>Used - like new</option>
+                        <option className={`${darkMode ? 'text-white' : 'text-black'}`}>Used - good</option>
+                        <option className={`${darkMode ? 'text-white' : 'text-black'}`}>Used - fair</option>
                     </select>
                 </div>
                 <div className="mb-4">
-                    <textarea className="placeholder:text-gray-500 py-2 border rounded-lg p-2 w-full bg-white text-black" style={{ outline: '1px solid #c1c3c7'}}  placeholder="Description" rows="4"></textarea>
+                    <textarea className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-400 ' : ' bg-white text-black placeholder:text-gray-500'} py-2 border rounded-lg p-2 w-full`} style={{ outline: '1px solid #c1c3c7'}}  placeholder="Description" rows="4"></textarea>
                 </div>
                 <div className="mb-4">
-                    <input type="text" className="placeholder:text-gray-500 py-2 border rounded-lg p-2 w-full bg-white text-black" style={{ outline: '1px solid #c1c3c7'}}  placeholder="Location" />
+                    <input type="text" className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-400 ' : ' bg-white text-black placeholder:text-gray-500'} py-2 border rounded-lg p-2 w-full`} style={{ outline: '1px solid #c1c3c7'}}  placeholder="Location" />
                 </div>
-            <h2 className="text-lg font-semibold text-foreground">Listing Options</h2>
+            <h2 className={`${darkMode ? 'text-white':'text-foreground'} text-lg font-semibold`}>Listing Options</h2>
             <div className="flex items-center justify-between p-4 border-b border-border">
                 <div>
-                    <h3 className="font-medium text-foreground">Hide from friends</h3>
-                    <p className="text-muted-foreground">This listing is still public but will be hidden from your friends on Vibez.</p>
+                    <h3 className={`${darkMode ? 'text-white':'text-foreground'} font-medium`}>Hide from friends</h3>
+                    <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'}`}>This listing is still public but will be hidden from your friends on Vibez.</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" className="sr-only peer" />
@@ -38,7 +38,7 @@ export default function EditListing({showYourListningMenu}) {
                 </label>
             </div>
         </div>
-        <div className="flex justify-between mb-4">
+        <div className="flex justify-between mb-4 mt-4">
                 <button onClick={showYourListningMenu} className="bg-primary text-primary-foreground px-4 py-2 rounded-lg w-full" >Update</button>
         </div>
     </div>
