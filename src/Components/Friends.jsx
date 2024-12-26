@@ -4,12 +4,15 @@ import {
     Popover,
     PopoverContent,
     PopoverTrigger,
-  } from "@/components/ui/popover"
+} from "@/components/ui/popover"
+import GlobalAlert from './GlobalAlert';
   
 
 export default function Friends() {
     const[friendRequests, setFriendRequests] = useState(true);
     const[yourFriends, setYourFriends] = useState(false);
+    const [blockPopup, setBlockPopup] = useState(false);
+    const [unfriendPopup, setUnfriendPopup] = useState(false);
     var friendCount = 56;
     var user="testUser";
 
@@ -23,8 +26,18 @@ export default function Friends() {
         setFriendRequests(false);
     }
 
+    function toggleBlockPopup(){
+        setBlockPopup(!blockPopup);
+    }
+    
+    function toggleUnfriendPopup(){
+        setUnfriendPopup(!unfriendPopup);
+    }
+
   return (
     <div>
+        {blockPopup && <GlobalAlert text={`Block ${user}?`} textOP={'Blocked contacts will no longer be able to send you messages.'} button1={'Cancel'} button2={'Block'} btn1Function={toggleBlockPopup} btn2Function={toggleBlockPopup}/>}
+        {unfriendPopup && <GlobalAlert text={`Remove ${user}?`} textOP={'Removing this contact will remove them from your friends list.'} button1={'Cancel'} button2={'Remove'} btn1Function={toggleUnfriendPopup} btn2Function={toggleUnfriendPopup} />}
         <div className="border-r border-border p-4 friends-column">
                 <h2 className="text-lg font-semibold column-header">Friends</h2>
                 <input type="text" placeholder="Search people" className="placeholder:text-gray-500 bg-gray-200 text-gray-500 w-full px-4 py-2 mb-4 focus:outline-none focus:border-none" style={{borderRadius:'20px'}} />
@@ -74,11 +87,11 @@ export default function Friends() {
                         <PopoverContent style={{width: '220px', marginRight: '200px', height: '105px'}}>	
                         <div className="bg-card text-card-foreground p-0 rounded-lg">
                             <div className="flex-grow friend-buttons" style={{marginLeft:'-20px', marginTop:'-17px'}}>
-                                <button className="flex flex-grow items-center w-full p-2 text-left rounded bg-transparent text-black border-none focus:ring-0 hover:border-none">
+                                <button onClick={toggleBlockPopup} className="flex flex-grow items-center w-full p-2 text-left rounded bg-transparent text-black border-none focus:ring-0 hover:border-none">
                                     <span className="material-icons" style={{display:'flex', justifyContent:'center',alignItems:'center',backgroundColor:'#d1d1d1', width:'29px', height:'29px', borderRadius:'50%'}}><i className="bi bi-person-fill-slash"></i></span>
                                     <span className="ml-2">Block {user}</span>
                                 </button>
-                                <button className="flex flex-grow items-center w-full p-2 text-left rounded bg-transparent text-black border-none focus:ring-0 hover:border-none">
+                                <button onClick={toggleUnfriendPopup} className="flex flex-grow items-center w-full p-2 text-left rounded bg-transparent text-black border-none focus:ring-0 hover:border-none">
                                     <span className="material-icons" style={{display:'flex', justifyContent:'center',alignItems:'center',backgroundColor:'#d1d1d1', width:'29px', height:'29px', borderRadius:'50%'}}><i className="bi bi-person-fill-x"></i></span>
                                     <span className="ml-2">Unfriend {user}</span>
                                 </button>
