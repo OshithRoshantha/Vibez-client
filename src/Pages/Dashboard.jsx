@@ -161,7 +161,7 @@ return (
                     <i className={`bi bi-gear text-2xl ${settingsMenu ? 'text-primary' : 'text-black'}`}></i>
                 </div>
                 <div onClick={showProfileMenu} className="flex items-center justify-center mt-auto mb-4" style={{cursor: 'pointer'}}>
-                    <img src="https://placehold.co/50x50" alt="Profile" className="w-15 h-15 rounded-full" />
+                    <img src="https://placehold.co/50x50" alt="Profile" className={`${profileMenu ? 'border border-primary border-3' : ''} w-15 h-15 rounded-full`} />
                 </div>
             </div>
             {chatsMenu && <Chats showDirectMessages={showDirectMessages}/>}
