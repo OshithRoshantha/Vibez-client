@@ -142,36 +142,36 @@ export default function Dashboard() {
 return (
     <div className='dashboard-conatiner'>
         <div className="flex h-screen bg-background text-foreground">
-            <div className="flex flex-col h-screen bg-background border-r border-border  button-column">
+            <div className={`${darkMode ? 'border-gray-600 border-r border-border':''}  flex flex-col h-screen bg-background border-r border-border  button-column`}  style={{backgroundColor: darkMode ? '#262729' : ''}}>
                 <div onClick={showChatsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:chatsMenu ? '6px solid blue': 'none'}}>
                     <div className="relative">
-                        <i className={`bi bi-chat-dots-fill text-2xl ${chatsMenu ? 'text-primary' : 'text-black'}`}></i>
+                        <i className={`bi bi-chat-dots-fill text-2xl ${chatsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
                     </div>
                 </div>
                 <div onClick={showGroupsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:groupsMenu ? '6px solid blue': 'none'}}>
-                    <i className={`bi bi-wechat text-2xl ${groupsMenu ? 'text-primary' : 'text-black'}`}></i>
+                    <i className={`bi bi-wechat text-2xl ${groupsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
                 </div>
                 <div onClick={showFriendstMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:friendsMenu ? '6px solid blue': 'none'}}>
-                    <i className={`bi bi-people text-2xl ${friendsMenu ? 'text-primary' : 'text-black'}`}></i>
+                    <i className={`bi bi-people text-2xl ${friendsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
                 </div>
                 <div onClick={showMarketplaceMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:marketplaceMenu ? '6px solid blue': 'none'}}>
-                    <i className={`bi bi-shop-window text-2xl ${marketplaceMenu ? 'text-primary' : 'text-black'}`}></i>
+                    <i className={`bi bi-shop-window text-2xl ${marketplaceMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
                 </div>
                 <div onClick={showSettingsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:settingsMenu ? '6px solid blue': 'none'}}>
-                    <i className={`bi bi-gear text-2xl ${settingsMenu ? 'text-primary' : 'text-black'}`}></i>
+                    <i className={`bi bi-gear text-2xl ${settingsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
                 </div>
                 <div onClick={showProfileMenu} className="flex items-center justify-center mt-auto mb-4" style={{cursor: 'pointer'}}>
                     <img src="https://placehold.co/50x50" alt="Profile" className={`${profileMenu ? 'border border-primary border-3' : ''} w-15 h-15 rounded-full`} />
                 </div>
             </div>
-            {chatsMenu && <Chats showDirectMessages={showDirectMessages}/>}
-            {groupsMenu && <GroupChats showGroupMessages={showGroupMessages}/>}
-            {friendsMenu && <Friends/>}
-            {marketplaceMenu && <Marketplace/>}
+            {chatsMenu && <Chats darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
+            {groupsMenu && <GroupChats darkMode={darkMode} showGroupMessages={showGroupMessages}/>}
+            {friendsMenu && <Friends  darkMode={darkMode}/>}
+            {marketplaceMenu && <Marketplace  darkMode={darkMode}/>}
             {settingsMenu && <Settings darkModeOn={darkModeOn} darkModeOff={darkModeOff} darkMode={darkMode}/>}
-            {profileMenu && <Profile/>}
-            {friendInfoMenu && <FriendInfo/>}
-            {groupInfoMenu && <GroupInfo/>}
+            {profileMenu && <Profile  darkMode={darkMode}/>}
+            {friendInfoMenu && <FriendInfo  darkMode={darkMode}/>}
+            {groupInfoMenu && <GroupInfo  darkMode={darkMode}/>}
             <div className="flex-1 p-0 messages-column" style={{height:'100vh'}}>
                 {welcomeVideo &&
                 <video
