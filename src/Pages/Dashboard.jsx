@@ -184,7 +184,7 @@ return (
                 <source src="./src/assets/Videos/welcomeChat.mp4" type="video/mp4"/>
                     Your browser does not support the video tag.
                 </video>}
-                {directMessages && <DirectChat showFriendInfoMenu={showFriendInfoMenu}/>} 
+                {directMessages && <DirectChat darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
                 {groupMessages && <GroupChat showGroupInfoMenu={showGroupInfoMenu}/>}  
             </div>
         </div>
