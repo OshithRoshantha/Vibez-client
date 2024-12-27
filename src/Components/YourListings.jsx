@@ -16,18 +16,18 @@ export default function YourListings({showEditListingMenu, darkMode}) {
     <div>
         {deleteMenu && <div>
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex:'100'}}>
-              <div className="bg-card rounded-lg p-6 w-80 shadow-lg">
+              <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white bg-card '} rounded-lg p-6 w-80 shadow-lg`}>
                 <div className='text-center'>
-                    <h2 className="text-lg font-semibold text-foreground">Delete this listing?</h2>
-                    <p className="text-muted-foreground mt-2">Are you sure that you want to delete this listing?</p>
+                    <h2 className={`${darkMode ? 'text-white':'text-foreground'} text-lg font-semibold`} >Delete this listing?</h2>
+                    <p className={`${darkMode ? 'text-gray-300' : 'text-muted-foreground'} mt-2`}>Are you sure that you want to delete this listing?</p>
                 </div>
                 <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-                  <p className="text-muted-foreground mt-2">LKR57,500</p>
-                  <p className="text-muted-foreground">🛒 Phones</p>
+                  <p className={`${darkMode ? 'text-gray-200' : 'text-muted-foreground'} mt-2`}>LKR57,500</p>
+                  <p className={`${darkMode ? 'text-gray-200' : 'text-muted-foreground'}`}>🛒 Phones</p>
                 </div>
                 <div>
                   <button style={{cursor:'pointer'}} onClick={hideDeleteMenu} className="bg-primary text-primary-foreground px-4 py-1 rounded-lg w-full mt-3 mb-2">Delete</button>
-                  <button style={{cursor:'pointer'}} onClick={hideDeleteMenu} className="bg-muted text-muted-foreground px-4 py-1 border-none hover:bg-gray-300 w-full">Cancel</button>
+                  <button style={{cursor:'pointer'}} onClick={hideDeleteMenu} className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} px-4 py-1 border-none w-full`}>Cancel</button>
                 </div>
               </div>
             </div>
