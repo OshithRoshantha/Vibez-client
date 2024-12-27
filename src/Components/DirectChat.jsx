@@ -25,7 +25,7 @@ export default function DirectChat({showFriendInfoMenu}) {
         </div>
         <div className=" px-4 py-3  border-t border-border bg-card" style={{display:'flex', alignItems:'center',columnGap:'1rem'}}>
             <input type="text" placeholder="Type a message" className="w-full p-2 rounded-lg bg-input text-black" />
-            <span><i style={{cursor:'pointer'}} className="bi bi-send-fill text-2xl"></i></span>
+            <span><i style={{cursor:'pointer'}} className="bi bi-send-fill text-2xl text-primary"></i></span>
         </div>
         </div>
     </div>
