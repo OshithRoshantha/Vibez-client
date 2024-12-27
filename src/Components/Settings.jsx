@@ -57,8 +57,8 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
 
   return (
     <div>
-        {deleteAllChatsPopup && <GlobalAlert text={`Delete All Chats?`} textOP={'This action will permanently delete all your chats.'} button1={'Cancel'} button2={'Delete all'} btn1Function={toggleDeleteAllChatsPopup} btn2Function={toggleDeleteAllChatsPopup}/>}
-        {deleteAllGroupChatsPopup && <GlobalAlert text={`Delete All Group Chats?`} textOP={'This action will permanently delete all your group chats.'} button1={'Cancel'} button2={'Delete all'} btn1Function={toggleDeleteAllGroupChatsPopup} btn2Function={toggleDeleteAllGroupChatsPopup}/>}
+        {deleteAllChatsPopup && <GlobalAlert darkMode={darkMode} text={`Delete All Chats?`} textOP={'This action will permanently delete all your chats.'} button1={'Cancel'} button2={'Delete all'} btn1Function={toggleDeleteAllChatsPopup} btn2Function={toggleDeleteAllChatsPopup}/>}
+        {deleteAllGroupChatsPopup && <GlobalAlert darkMode={darkMode} text={`Delete All Group Chats?`} textOP={'This action will permanently delete all your group chats.'} button1={'Cancel'} button2={'Delete all'} btn1Function={toggleDeleteAllGroupChatsPopup} btn2Function={toggleDeleteAllGroupChatsPopup}/>}
         {logoutMenu && <div>
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100'}}>
             <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">	

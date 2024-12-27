@@ -143,7 +143,7 @@ export default function GroupChats({showGroupMessages, darkMode}) {
                     </button>
                     </div>
                 </div>}
-                {finishCreateGroup && <div>	
+                {finishCreateGroup && <div style={{backgroundColor: darkMode ? '#262729' : ''}}>	
                     {editPictureForm && <div className={`bg-white edit-picture-form2 shadow-lg`}>
                                 <AvatarEditor
                                     ref={avatarEditorRef}
@@ -161,7 +161,7 @@ export default function GroupChats({showGroupMessages, darkMode}) {
                                     <button onClick={handleCrop} className='border-none' style={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</button>
                                 </div>
                     </div>}
-                    <div className={`${darkMode ? 'bg-[#262729]':''} flex flex-col items-center bg-card p-6`}>
+                    <div className={`${darkMode ? 'bg-[#262729]':'bg-card'} flex flex-col items-center  p-6`}>
                     <div className="relative mb-4">
                         <div className='profile-pic' onClick={uploadImg}  
                         style={{
