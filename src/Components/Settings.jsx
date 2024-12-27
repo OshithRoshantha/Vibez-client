@@ -107,7 +107,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
             </div>
             </div>
         </div>}
-        <div className={`${darkMode ? 'border-gray-600 border-r border-border':''}  p-4 settings-column`} style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7', height:'100vh'}}>
+        <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 settings-column`} style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7', height:'100vh'}}>
             <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Settings & Privacy</h2>
             <ul className="space-y-2 mt-5">
             <Accordion type="single" collapsible>
