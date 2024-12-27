@@ -61,11 +61,11 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
         {deleteAllGroupChatsPopup && <GlobalAlert darkMode={darkMode} text={`Delete All Group Chats?`} textOP={'This action will permanently delete all your group chats.'} button1={'Cancel'} button2={'Delete all'} btn1Function={toggleDeleteAllGroupChatsPopup} btn2Function={toggleDeleteAllGroupChatsPopup}/>}
         {logoutMenu && <div>
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100'}}>
-            <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">	
-                <h2 className="text-lg font-semibold">Confirm Logout</h2>
-                <p className="text-muted-foreground mt-0">Are you sure you want to log out?</p>
+            <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'}  rounded-lg shadow-lg p-6 max-w-sm w-full`}>	
+                <h2 className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold`}>Confirm Logout</h2>
+                <p className={`${darkMode ? 'text-gray-300' : 'text-muted-foreground'} mt-0`}>Are you sure you want to log out?</p>
                 <div className="flex justify-between mt-4">
-                <button style={{cursor:'pointer'}} onClick={hideLogoutMenu} className="bg-muted border-none text-muted-foreground hover:bg-gray-300 px-4 py-2 rounded">
+                <button style={{cursor:'pointer'}} onClick={hideLogoutMenu} className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} border-none px-4 py-2 rounded`}>
                     Stay logged in
                 </button>
                 <button style={{cursor:'pointer'}}  onClick={hideLogoutMenu} className="bg-primary text-primary-foreground hover:bg-primary/80 px-4 py-2 rounded">
@@ -77,8 +77,8 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
         </div>}
         {confirmAccountDeletion && <div>
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100'}}>
-            <div className="bg-card text-card-foreground rounded-lg shadow-lg p-6 w-96">
-                <div className="flex justify-between items-center">
+            <div className={`${darkMode ? 'bg-[#262729]' : 'bg-card text-card-foreground'} rounded-lg shadow-lg p-6 w-96`}>
+                <div className={`${darkMode ? 'text-white':''} flex justify-between items-center`}>
                     <h2 className="text-lg font-semibold">Delete my account</h2>
                     <i onClick={hideConfirmAccountDeletion} className="bi bi-arrow-left-circle-fill text-2xl" style={{cursor:'pointer'}}></i>
                 </div>
@@ -87,22 +87,22 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                     <span className="mr-2"><i className="bi bi-exclamation-circle-fill"></i></span>
                     <span>Deleting your account will:</span>
                 </div>
-                <ul className="list-disc list-inside text-muted-foreground mt-2">
+                <ul className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground' } list-disc list-inside mt-2`}>
                     <li>Delete your Vibez account and informations</li>
                     <li>Delete you from all Vibez groups</li>
                 </ul>
                 </div>
                 <div className="mt-4">
-                <label className="block text-sm">Enter your email address:</label>
+                <label className={`${darkMode ? 'text-white' : ''} block text-sm`}>Enter your email address:</label>
                 <div className="flex items-center border border-border rounded mt-1">
-                <input type="text" className="placeholder:text-gray-500 py-2 border rounded-lg p-2 w-full bg-white text-black" style={{ outline: '1px solid #c1c3c7'}} placeholder="Your email" />
+                <input type="text" className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-300' : 'placeholder:text-gray-500 bg-white text-black'}  py-2 border rounded-lg p-2 w-full`}  style={{ outline: '1px solid #c1c3c7'}} placeholder="Your email" />
                 </div>
                 </div>
                 <div className="mt-4">
                 <button onClick={hideConfirmAccountDeletion} className="bg-destructive border-none text-destructive-foreground hover:bg-destructive/80 w-full p-2 rounded">Delete my account</button>
                 </div>
                 <div className="mt-2">
-                <button onClick={hideConfirmAccountDeletion}  className="bg-muted border-none text-muted-foreground w-full p-2 rounded hover:bg-gray-300">Log out instead</button>
+                <button onClick={hideConfirmAccountDeletion} className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} w-full p-2 rounded border-none`}>Log out instead</button>
                 </div>
             </div>
             </div>
