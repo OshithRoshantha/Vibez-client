@@ -56,7 +56,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode}) {
             </div>
         </div>
         <div className="p-4" ref={chatRef} style={{height:'78vh', overflowY:'auto', scrollbarWidth:'none', backgroundImage: chatWallpaper, backgroundSize: 'cover' }}>
-        {showScrollButton && <i onClick={scrollToBottom} className={`cursor-pointer absolute bi bi-arrow-down-circle-fill text-4xl`} style={{left: '67%'}}></i>}
+        {showScrollButton && <i onClick={scrollToBottom} className={`cursor-pointer absolute bi bi-arrow-down-circle-fill text-4xl text-primary`} style={{left: '67%'}}></i>}
             <ReceiveMessage time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'}/>
             <ReceiveMessage time={'00:26'} message={'receive message'}/>
             <SendMessage time={'00:26'} message={'send message'}/>
