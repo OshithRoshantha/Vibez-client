@@ -5,9 +5,9 @@ import GroupAddMembers from './GroupAddMembers';
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
 
-export default function GroupInfo() {
+export default function GroupInfo({darkMode}) {
   var memberCount = 5
-  const [isAmAdmin, setIsAmAdmin] = useState(true);
+  const [isAmAdmin, setIsAmAdmin] = useState(false);
   const [addMemberMenu, setAddMemberMenu] = useState(false);
   const [profilePicHover, setProfilePicHover] = useState(false);
   const [editPictureForm, setEditPictureForm] = useState(false);
@@ -84,8 +84,8 @@ export default function GroupInfo() {
 
   return (
 <div>
-      {addMemberMenu && <GroupAddMembers showAddMemberMenu={showAddMemberMenu}/>}
-      <div className="border-r border-border p-4 info-column" style={{backgroundColor:'#f2f3f7'}}>
+      {addMemberMenu && <GroupAddMembers darkMode={darkMode} showAddMemberMenu={showAddMemberMenu}/>}
+      <div className="border-r border-border p-4 info-column" style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7'}}>
         {editPictureForm && <div className='edit-picture-form2 shadow-lg bg-white' style={{marginTop:'8%'}}>
                                 <AvatarEditor
                                     ref={avatarEditorRef}
@@ -103,8 +103,8 @@ export default function GroupInfo() {
                                     <button onClick={handleCrop} className='border-none' style={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</button>
                                 </div>
         </div>}
-      <h2 className="text-lg font-semibold mb-4">Group info</h2>
-        <div className="bg-card p-6 w-full" style={{backgroundColor:'#f2f3f7'}} >
+      <h2 className={`${darkMode ? 'text-white' : '' } text-lg font-semibold mb-4`}>Group info</h2>
+        <div className="bg-card p-6 w-full" style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7'}} >
           <div className="flex flex-col items-center mb-5" style={{marginTop:'-5%'}}>
             {isAmAdmin && 
               <div onClick={uploadImg} onMouseEnter={showProfilePicHover} onMouseLeave={hideProfilePicHover} className=" rounded-full flex items-center justify-center mb-1 text-xs" style={{border: '1px solid rgb(104, 104, 104)', width:'150px', height:'150px', cursor:'pointer', marginTop:'-5%',backgroundImage: cropedImage ? `url(${cropedImage})` : `url(${defaultImage})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
@@ -127,50 +127,50 @@ export default function GroupInfo() {
               <>
             {isEditingName ? (
                 <input
-                    className="text-xl text-center font-semibold text-foreground mt-4 bg-transparent focus:outline-none"
+                    className={`${darkMode ? 'text-white' : 'text-foreground'} text-xl text-center font-semibold mt-4 bg-transparent focus:outline-none`}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     autoFocus
                 />
-            ) : (<h2 className="text-xl font-semibold text-foreground mt-4">{name}</h2>)}
-            {!isEditingName && <i onClick={handleNameClick} className="absolute bi bi-pencil-fill" style={{cursor:'pointer', marginTop:'10.3%', marginLeft:'25%'}}></i>} 
-            {isEditingName && <i onClick={handleNameBlur} className="absolute bi bi-check2" style={{cursor:'pointer', fontSize:'125%', marginTop:'10.3%', marginLeft:'25%'}}></i>}
+            ) : (<h2 className={`${darkMode ? 'text-white' : 'text-foreground'} text-xl font-semibold mt-4`}>{name}</h2>)}
+            {!isEditingName && <i onClick={handleNameClick} className={`${darkMode ? 'text-white' : ''} absolute bi bi-pencil-fill`} style={{cursor:'pointer', marginTop:'10.3%', marginLeft:'25%'}}></i>} 
+            {isEditingName && <i onClick={handleNameBlur} className={`${darkMode ? 'text-white' : ''} absolute bi bi-check2`} style={{cursor:'pointer', fontSize:'125%', marginTop:'10.3%', marginLeft:'25%'}}></i>}
             </>
             )}
-            {!isAmAdmin && <h2 className="text-xl font-semibold text-foreground mt-4">{name}</h2>}
-            <div style={{display:'flex', justifyContent:'center', alignItems:'center', columnGap:'3px'}}>
-              <p className="text-muted-foreground text-sm">Group</p>
+            {!isAmAdmin && <h2 className={`${darkMode ? 'text-white' : 'text-foreground'} text-xl font-semibold mt-4`}>{name}</h2>}
+            <div className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground '}`} style={{display:'flex', justifyContent:'center', alignItems:'center', columnGap:'3px'}}>
+              <p className="text-sm">Group</p>
               <i className="bi bi-dot"></i>
-              <p className="text-muted-foreground">{memberCount} members</p>
+              <p>{memberCount} members</p>
             </div>
-            {!isAmAdmin && <p className="text-muted-foreground">{descp}</p>}
+            {!isAmAdmin && <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'}`}>{descp}</p>}
             {isAmAdmin && (
               <>
             {isEditingDescp ? (
                 <input
-                    className="text-muted-foreground text-center bg-transparent focus:outline-none"
+                    className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} text-center bg-transparent focus:outline-none`}	
                     value={descp}
                     onChange={(e) => setDescp(e.target.value)}
                     autoFocus
                 />
-            ) : (<p className="text-muted-foreground">{descp}</p>)}
-            {!isEditingDescp && <i onClick={handleDescpClick} className="absolute bi bi-pencil-fill" style={{cursor:'pointer', marginTop:'13.7%', marginLeft:'25%'}}></i>} 
-            {isEditingDescp && <i onClick={handleDescpBlur} className="absolute bi bi-check2" style={{cursor:'pointer', fontSize:'125%', marginTop:'13.7%', marginLeft:'25%'}}></i>}
+            ) : (<p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'}`}>{descp}</p>)}
+            {!isEditingDescp && <i onClick={handleDescpClick} className={`${darkMode ? 'text-white' : ''} absolute bi bi-pencil-fill`} style={{cursor:'pointer', marginTop:'13.7%', marginLeft:'25%'}}></i>} 
+            {isEditingDescp && <i onClick={handleDescpBlur} className={`${darkMode ? 'text-white' : ''} absolute bi bi-check2`}  style={{cursor:'pointer', fontSize:'125%', marginTop:'13.7%', marginLeft:'25%'}}></i>}
               </>
             )}
           </div>
-          <h2 className="text-lg font-semibold mb-4" style={{marginTop:'-5%'}}>{memberCount} members</h2>
+          <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-4`} style={{marginTop:'-5%'}}>{memberCount} members</h2>
           {isAmAdmin && <div>
             <div className="flex items-center mb-1">
-              <button onClick={showAddMemberMenu} className="bg-gray-300 text-gray-600 hover:bg-gray-200 mr-2" style={{borderRadius:'50%', width:'38px', height:'38px', display:'flex', justifyContent:'center', alignItems:'center', border:'none'}}>
-                <i className="bi bi-person-fill-add"></i>
+              <button onClick={showAddMemberMenu} className={`${darkMode ? 'bg-[#3b3c3e]' : 'bg-gray-300 text-gray-600 hover:bg-gray-200'} mr-2`} style={{borderRadius:'50%', width:'38px', height:'38px', display:'flex', justifyContent:'center', alignItems:'center', border:'none'}}>
+                <i className={`${darkMode ? 'text-white':''} bi bi-person-fill-add`}></i>
               </button>
-              <span className="text-base">Add member</span>
+              <span className={`${darkMode ? 'text-white' : 'text-base'}`}>Add member</span>
             </div>
-            <div className="border-b border-border my-4"></div>
+            <div className={`${darkMode ? 'border-gray-700' : 'border-border'} border-b  my-4`}></div>
             </div>}
           <div className={`w-full  ${isAmAdmin ? 'h-[25vh]' : 'h-[38vh]'}`} style={{overflowY:'auto', scrollbarWidth:'none'}}>
-            {isAmAdmin ? <GroupMemberList/> : <GroupMemberList2/>}
+            {isAmAdmin ? <GroupMemberList darkMode={darkMode}/> : <GroupMemberList2 darkMode={darkMode}/>}
           </div>
         </div>
       </div>
