@@ -185,7 +185,7 @@ return (
                     Your browser does not support the video tag.
                 </video>}
                 {directMessages && <DirectChat darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
-                {groupMessages && <GroupChat showGroupInfoMenu={showGroupInfoMenu}/>}  
+                {groupMessages && <GroupChat darkMode={darkMode} showGroupInfoMenu={showGroupInfoMenu}/>}  
             </div>
         </div>
     </div>

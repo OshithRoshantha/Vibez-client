@@ -7,7 +7,7 @@ import Slider from '@mui/material/Slider';
 
 export default function GroupInfo({darkMode}) {
   var memberCount = 5
-  const [isAmAdmin, setIsAmAdmin] = useState(false);
+  const [isAmAdmin, setIsAmAdmin] = useState(true);
   const [addMemberMenu, setAddMemberMenu] = useState(false);
   const [profilePicHover, setProfilePicHover] = useState(false);
   const [editPictureForm, setEditPictureForm] = useState(false);
@@ -85,7 +85,7 @@ export default function GroupInfo({darkMode}) {
   return (
 <div>
       {addMemberMenu && <GroupAddMembers darkMode={darkMode} showAddMemberMenu={showAddMemberMenu}/>}
-      <div className="border-r border-border p-4 info-column" style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7'}}>
+      <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}   p-4 info-column`} style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7'}}>
         {editPictureForm && <div className='edit-picture-form2 shadow-lg bg-white' style={{marginTop:'8%'}}>
                                 <AvatarEditor
                                     ref={avatarEditorRef}
