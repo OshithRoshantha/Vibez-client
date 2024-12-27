@@ -8,39 +8,38 @@ export default function DirectChat({showFriendInfoMenu, darkMode}) {
   const [showScrollButton, setShowScrollButton] = useState(false);
   const chatWallpaper = darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)';
 
-  const handleScroll = () => {
-    const chatContainer = chatRef.current;
-    if (chatContainer) {
-      const isAtBottom =
-        chatContainer.scrollHeight - chatContainer.scrollTop ===
-        chatContainer.clientHeight;
-      setShowScrollButton(!isAtBottom);
-    }
-  };
-
-  const scrollToBottom = () => {
-    const chatContainer = chatRef.current;
-    if (chatContainer) {
-      chatContainer.scrollTo({
-        top: chatContainer.scrollHeight,
-        behavior: "smooth",
-      });
-    }
-  };
-  
-
-  useEffect(() => {
-    const chatContainer = chatRef.current;
-    if (chatContainer) {
-      chatContainer.addEventListener("scroll", handleScroll);
-      scrollToBottom();
-    }
-    return () => {
+    function handleScroll() {
+      const chatContainer = chatRef.current;
       if (chatContainer) {
-        chatContainer.removeEventListener("scroll", handleScroll);
+        const isAtBottom =
+          chatContainer.scrollHeight - chatContainer.scrollTop === chatContainer.clientHeight;
+        setShowScrollButton(!isAtBottom);
       }
-    };
-  }, []);
+    }
+    
+    function scrollToBottom() {
+      const chatContainer = chatRef.current;
+      if (chatContainer) {
+        chatContainer.scrollTo({
+          top: chatContainer.scrollHeight,
+          behavior: "smooth",
+        });
+      }
+    }
+    
+    useEffect(() => {
+      const chatContainer = chatRef.current;
+      if (chatContainer) {
+        chatContainer.addEventListener("scroll", handleScroll);
+        scrollToBottom();
+      }
+      return () => {
+        if (chatContainer) {
+          chatContainer.removeEventListener("scroll", handleScroll);
+        }
+      };
+    }, []);
+  
   
 
   return (
@@ -56,7 +55,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode}) {
             </div>
         </div>
         <div className="p-4" ref={chatRef} style={{height:'78vh', overflowY:'auto', scrollbarWidth:'none', backgroundImage: chatWallpaper, backgroundSize: 'cover' }}>
-        {showScrollButton && <i onClick={scrollToBottom} className={`cursor-pointer absolute bi bi-arrow-down-circle-fill text-4xl text-primary bg-[#262729]`} style={{left: '67%'}}></i>}
+        {showScrollButton && <i onClick={scrollToBottom} className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} cursor-pointer absolute bi bi-arrow-down-circle-fill text-4xl text-primary`} style={{left: '67%'}}></i>}
             <ReceiveMessage time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'}/>
             <ReceiveMessage time={'00:26'} message={'receive message'}/>
             <SendMessage time={'00:26'} message={'send message'}/>
