@@ -7,7 +7,7 @@ import Slider from '@mui/material/Slider';
 
 export default function GroupInfo({darkMode}) {
   var memberCount = 5
-  const [isAmAdmin, setIsAmAdmin] = useState(true);
+  const [isAmAdmin, setIsAmAdmin] = useState(false);
   const [addMemberMenu, setAddMemberMenu] = useState(false);
   const [profilePicHover, setProfilePicHover] = useState(false);
   const [editPictureForm, setEditPictureForm] = useState(false);
@@ -137,13 +137,13 @@ export default function GroupInfo({darkMode}) {
             {isEditingName && <i onClick={handleNameBlur} className={`${darkMode ? 'text-white' : ''} absolute bi bi-check2`} style={{cursor:'pointer', fontSize:'125%', marginTop:'10.3%', marginLeft:'25%'}}></i>}
             </>
             )}
-            {!isAmAdmin && <h2 className="text-xl font-semibold text-foreground mt-4">{name}</h2>}
+            {!isAmAdmin && <h2 className={`${darkMode ? 'text-white' : 'text-foreground'} text-xl font-semibold mt-4`}>{name}</h2>}
             <div className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground '}`} style={{display:'flex', justifyContent:'center', alignItems:'center', columnGap:'3px'}}>
               <p className="text-sm">Group</p>
               <i className="bi bi-dot"></i>
               <p>{memberCount} members</p>
             </div>
-            {!isAmAdmin && <p className="text-muted-foreground">{descp}</p>}
+            {!isAmAdmin && <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'}`}>{descp}</p>}
             {isAmAdmin && (
               <>
             {isEditingDescp ? (
@@ -170,7 +170,7 @@ export default function GroupInfo({darkMode}) {
             <div className={`${darkMode ? 'border-gray-700' : 'border-border'} border-b  my-4`}></div>
             </div>}
           <div className={`w-full  ${isAmAdmin ? 'h-[25vh]' : 'h-[38vh]'}`} style={{overflowY:'auto', scrollbarWidth:'none'}}>
-            {isAmAdmin ? <GroupMemberList darkMode={darkMode}/> : <GroupMemberList2/>}
+            {isAmAdmin ? <GroupMemberList darkMode={darkMode}/> : <GroupMemberList2 darkMode={darkMode}/>}
           </div>
         </div>
       </div>
