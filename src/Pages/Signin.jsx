@@ -19,7 +19,7 @@ import { jwtDecode } from "jwt-decode";
 
 
 export default function Signin() {
-
+  const [loginEmail, setLoginEmail] = useState('');
   const [isEmailMatch, setIsEmailMatch] = useState(true);
   const navigate = useNavigate();
   const [swiped, setSwiped] = useState(false);
@@ -90,7 +90,7 @@ export default function Signin() {
                                 <div className='divider-line'></div>
                             </div>
                             <Label htmlFor="email">Enter your email address</Label>
-                            <Input className='rounded-custom-md input-group' type="email" id="email" placeholder="Jhon@example.com" />
+                            <Input value={email} onChange={handleEmailChange} className='rounded-custom-md input-group' type="email" id="email" placeholder="Jhon@example.com" />
                             <Label htmlFor="email">Enter your password</Label>
                             <Input className='rounded-custom-md input-group' type="password" id="email" placeholder="Password" />
                             <Button className='sign-in-btn-main rounded-custom-md' onClick={() => { handleSwipe(); navDashboard();}}>Sign In</Button>
