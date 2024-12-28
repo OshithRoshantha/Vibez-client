@@ -19,6 +19,8 @@ import { jwtDecode } from "jwt-decode";
 
 
 export default function Signin() {
+
+  const [isEmailMatch, setIsEmailMatch] = useState(true);
   const navigate = useNavigate();
   const [swiped, setSwiped] = useState(false);
   
