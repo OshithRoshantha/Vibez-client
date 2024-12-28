@@ -16,6 +16,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import LandingAnimation from '@/Components/LandingAnimation';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
+import TextField from '@mui/material/TextField';
 
 
 export default function Signin() {
@@ -89,10 +90,8 @@ export default function Signin() {
                                 &nbsp;&nbsp;Or&nbsp;&nbsp;
                                 <div className='divider-line'></div>
                             </div>
-                            <Label htmlFor="email">Enter your email address</Label>
-                            <Input value={email} onChange={handleEmailChange} className='rounded-custom-md input-group' type="email" id="email" placeholder="Jhon@example.com" />
-                            <Label htmlFor="email">Enter your password</Label>
-                            <Input className='rounded-custom-md input-group' type="password" id="email" placeholder="Password" />
+                            <TextField id="outlined-basic" label="Email address" className='w-full mb-3' type="email"  placeholder="Jhon@example.com" InputProps={{ sx: { borderRadius: '20px'} }}/>
+                            <TextField id="outlined-basic" label="Password" className='w-full' type="email"  placeholder="Jhon@example.com" InputProps={{ sx: { borderRadius: '20px' } }}/>
                             <Button className='sign-in-btn-main rounded-custom-md' onClick={() => { handleSwipe(); navDashboard();}}>Sign In</Button>
                         </>
                     )}
@@ -102,7 +101,6 @@ export default function Signin() {
                 </CardFooter>
             </Card>
         </div>
-
     </div>
   )
 }
