@@ -17,14 +17,23 @@ import LandingAnimation from '@/Components/LandingAnimation';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 
 export default function Signin() {
+  const [showPassword, setShowPassword] = useState(false);
   const [loginEmail, setLoginEmail] = useState('');
   const [isEmailMatch, setIsEmailMatch] = useState(true);
   const navigate = useNavigate();
   const [swiped, setSwiped] = useState(false);
   
+  function handleClickShowPassword() {
+    setShowPassword(!showPassword);
+  }
+
   function handleSwipe() {
     setSwiped(!swiped);
   }
@@ -91,7 +100,28 @@ export default function Signin() {
                                 <div className='divider-line'></div>
                             </div>
                             <TextField id="outlined-basic" label="Email address" className='w-full mb-3' type="email"  placeholder="Jhon@example.com" InputProps={{ sx: { borderRadius: '20px'} }}/>
-                            <TextField id="outlined-basic" label="Password" className='w-full' type="email"  placeholder="Jhon@example.com" InputProps={{ sx: { borderRadius: '20px' } }}/>
+                            <TextField
+                            id="outlined-password"
+                            className='w-full'
+                            label="Password"
+                            variant="outlined"
+                            placeholder="Password"
+                            InputProps={{
+                                sx: { borderRadius: '20px'},
+                                endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={(e) => e.preventDefault()}
+                                    edge="end"
+                                    >
+                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                                ),
+                            }}
+                            type={showPassword ? "text" : "password"}
+                            />
                             <Button className='sign-in-btn-main rounded-custom-md' onClick={() => { handleSwipe(); navDashboard();}}>Sign In</Button>
                         </>
                     )}
