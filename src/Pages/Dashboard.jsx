@@ -174,16 +174,8 @@ return (
             {groupInfoMenu && <GroupInfo  darkMode={darkMode}/>}
             <div className="flex-1 p-0 messages-column" style={{height:'100vh'}}>
                 {welcomeVideo &&
-                <video
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    style={{ width: '100%', height: '100%', objectFit: 'cover'}}
-                >
-                <source src="./src/assets/Videos/welcomeChat.mp4" type="video/mp4"/>
-                    Your browser does not support the video tag.
-                </video>}
+                <div className='w-full' style={{backgroundColor: 'red', height:'100vh'}}></div>
+                }
                 {directMessages && <DirectChat darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
                 {groupMessages && <GroupChat darkMode={darkMode} showGroupInfoMenu={showGroupInfoMenu}/>}  
             </div>

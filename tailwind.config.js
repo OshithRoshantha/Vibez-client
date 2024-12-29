@@ -60,7 +60,8 @@ export default {
   			marquee: 'marquee var(--duration) infinite linear',
   			'marquee-vertical': 'marquee-vertical var(--duration) linear infinite',
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+  			gradient: 'gradient 8s linear infinite'
   		},
   		keyframes: {
   			orbit: {
@@ -101,6 +102,11 @@ export default {
   				},
   				to: {
   					height: '0'
+  				}
+  			},
+  			gradient: {
+  				to: {
+  					backgroundPosition: 'var(--bg-size) 0'
   				}
   			}
   		}

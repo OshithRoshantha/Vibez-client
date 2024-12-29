@@ -1,12 +1,16 @@
 import ReceiveMessage from "./ReceiveMessage";
 import SendMessage from "./SendMessage";
 import { useState, useEffect, useRef } from "react";
+import { ChevronRight } from "lucide-react";
+import { cn } from "@/lib/utils";
+import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 
 export default function DirectChat({showFriendInfoMenu, darkMode}) {
 
   const chatRef = useRef(null);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const chatWallpaper = darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)';
+  const [magicReplyButton, setMagicReplyButton] = useState(false);
 
     function handleScroll() {
       const chatContainer = chatRef.current;
@@ -15,6 +19,14 @@ export default function DirectChat({showFriendInfoMenu, darkMode}) {
           chatContainer.scrollHeight - chatContainer.scrollTop === chatContainer.clientHeight;
         setShowScrollButton(!isAtBottom);
       }
+    }
+
+    function showMagicReplyButton(){
+      setMagicReplyButton(true);
+    }
+
+    function hideMagicReplyButton(){
+      setMagicReplyButton(false);
     }
     
     function scrollToBottom() {
@@ -62,6 +74,18 @@ export default function DirectChat({showFriendInfoMenu, darkMode}) {
             <SendMessage time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'}/>
             <SendMessage time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'}/>
             <SendMessage time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'}/>
+        {magicReplyButton && <div style={{left: '64%', bottom: '13%'}} className="absolute cursor-pointer bg-white rounded-full">
+          <AnimatedGradientText>
+            <span
+              className={cn(
+                `inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent`,
+              )}
+            >
+              Magic Reply
+            </span>
+            <ChevronRight className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
+          </AnimatedGradientText>          
+        </div>}
         </div>
         <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3  border-t`} style={{display:'flex', alignItems:'center',columnGap:'1rem'}}>
             <input type="text" placeholder="Type a message" className={`${darkMode ? ' text-white' : 'bg-input text-black'} focus:border-none focus:outline-none w-full p-2 rounded-lg`}/>
