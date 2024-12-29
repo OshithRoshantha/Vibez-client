@@ -11,6 +11,7 @@ import GroupChat from '@/Components/GroupChat';
 import FriendInfo from '@/Components/FriendInfo';
 import GroupInfo from '@/Components/GroupInfo';
 
+
 export default function Dashboard() {
     const [friendsMenu, setFriendsMenu] = useState(false);
     const [chatsMenu, setChatsMenu] = useState(true);
@@ -24,6 +25,12 @@ export default function Dashboard() {
     const [groupInfoMenu, setGroupInfoMenu] = useState(false);
     const [welcomeVideo, setWelcomeVideo] = useState(true);
     const [darkMode, setDarkMode] = useState(false);
+    const texts = [
+        "Stay connected with your circles",
+        "One-on-one, anytime",
+        "Build and grow your network",
+        "Chat and shop in harmony"
+      ];
 
     function darkModeOn() {
         setDarkMode(true);
@@ -174,7 +181,9 @@ return (
             {groupInfoMenu && <GroupInfo  darkMode={darkMode}/>}
             <div className="flex-1 p-0 messages-column" style={{height:'100vh'}}>
                 {welcomeVideo &&
-                <div className='w-full' style={{backgroundColor: 'red', height:'100vh'}}></div>
+                <div className="w-full flex flex-column text-primary" style={{height:'100vh', backgroundImage: darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)', backgroundSize: 'cover'}}>
+
+                </div>
                 }
                 {directMessages && <DirectChat darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
                 {groupMessages && <GroupChat darkMode={darkMode} showGroupInfoMenu={showGroupInfoMenu}/>}  
