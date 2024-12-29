@@ -25,8 +25,8 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 export default function Signin() {
   const [showPassword, setShowPassword] = useState(false);
-  const [loginEmail, setLoginEmail] = useState('');
-  const [isEmailMatch, setIsEmailMatch] = useState(true);
+  const [emailNotFound, setEmailNotFound] = useState(false);
+  const [incorrectPassword, setIncorrectPassword] = useState(false);
   const navigate = useNavigate();
   const [swiped, setSwiped] = useState(false);
   
@@ -99,11 +99,13 @@ export default function Signin() {
                                 &nbsp;&nbsp;Or&nbsp;&nbsp;
                                 <div className='divider-line'></div>
                             </div>
-                            <TextField id="outlined-basic" label="Email address" className='w-full mb-3' type="email"  placeholder="Jhon@example.com" InputProps={{ sx: { borderRadius: '20px'} }}/>
+                            <TextField id="outlined-basic" label="Email address" className='w-full mb-3' type="email" helperText={emailNotFound ? "The email address you entered isn't connected to an account." : ''} error={emailNotFound}  placeholder="Jhon@example.com" InputProps={{ sx: { borderRadius: '20px'} }}/>
                             <TextField
                             id="outlined-password"
                             className='w-full'
                             label="Password"
+                            error={incorrectPassword}
+                            helperText={incorrectPassword ? "The password that you've entered is incorrect." : ''}
                             variant="outlined"
                             placeholder="Password"
                             InputProps={{
