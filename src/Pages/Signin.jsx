@@ -22,7 +22,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { ThreeDots} from 'react-loader-spinner';
-import { checkAccount, directLoginAuth } from '../Api/AuthService';
+import { checkAccount, directLoginAuth, googleLoginAuth } from '../Api/AuthService';
 
 export default function Signin() {
   const [loading, setLoading] = useState(false);
@@ -66,7 +66,7 @@ export default function Signin() {
     setEmailNotFound(!response);
     if (response) {
         try {
-            const token = await directLoginAuth(email, password);
+            const jwtToken = await directLoginAuth(email, password);
             setIncorrectPassword(false);
             setLoading(false);
             navDashboard();
@@ -83,12 +83,12 @@ export default function Signin() {
   }
 
    const googleLogin = async (credentialResponse) => {
-    const token = credentialResponse.credential; 
-    const decoded = jwtDecode(token);
-    const { name, picture, email, sub } = decoded;
-
-    handleSwipe();
-    navDashboard();
+        const googleToken = credentialResponse.credential; 
+        const decoded = jwtDecode(googleToken);
+        const { name, picture, email, sub } = decoded;
+        const jwtToken = await googleLoginAuth(sub, name, email, picture);
+        handleSwipe();
+        navDashboard();
    }
 
   return (
