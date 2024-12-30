@@ -86,7 +86,7 @@ export default function Signin() {
         const googleToken = credentialResponse.credential; 
         const decoded = jwtDecode(googleToken);
         const { name, picture, email, sub } = decoded;
-        const jwtToken = await googleLoginAuth(sub, name, email, picture);
+        const jwtToken = await googleLoginAuth(email, name, picture, sub);
         handleSwipe();
         navDashboard();
    }

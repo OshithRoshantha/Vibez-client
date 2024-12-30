@@ -16,8 +16,8 @@ export const directLoginAuth = async (email: string, password: string) => {
 export const googleLoginAuth = async (email: string, name: string, picture: string, password: string) => {
     const response = await axios.post('http://localhost:8080/vibez/GoogleAuth', {
       email: email,
-      name: name,
-      picture: picture,
+      userName: name,
+      profilePicture: picture,
       password: password
     });
     return response.data; 
