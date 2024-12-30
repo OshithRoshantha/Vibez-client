@@ -71,6 +71,7 @@ export default function Signin() {
     if (response) {
         try {
             const jwtToken = await directLoginAuth(email, password);
+            localStorage.setItem('token', jwtToken);
             setIncorrectPassword(false);
             setLoading(false);
             navDashboard();
@@ -86,11 +87,12 @@ export default function Signin() {
     }
   }
 
-   const googleLogin = async (credentialResponse) => {
+   const handleGoogleLogin = async (credentialResponse) => {
         const googleToken = credentialResponse.credential; 
         const decoded = jwtDecode(googleToken);
         const { name, picture, email, sub } = decoded;
         const jwtToken = await googleLoginAuth(email, name, picture, sub);
+        localStorage.setItem('token', jwtToken);
         handleSwipe();
         navDashboard();
    }
@@ -130,7 +132,7 @@ export default function Signin() {
                                     theme="outline"
                                     width={282}
                                     onSuccess={credentialResponse => {
-                                        googleLogin(credentialResponse);
+                                        handleGoogleLogin(credentialResponse);
                                     }}
                                     onError={() => {
                                         console.log('Login Failed');
