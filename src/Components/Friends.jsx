@@ -79,7 +79,7 @@ export default function Friends({darkMode}) {
                         </div>
                     </div>
                     <div className='btn-container'>
-                        <div className='ml-mr-4 btns'><i className="bi bi-messenger text-primary"></i></div>
+                        <div className='ml-mr-4 btns'><i className="bi bi-chat-fill text-primary"></i></div>
                         <Popover>
                         <PopoverTrigger asChild>
                             <div className='btns'><i className={`${darkMode ? 'text-white':''} bi bi-three-dots-vertical`}></i></div>
