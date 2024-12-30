@@ -10,6 +10,8 @@ import DirectChat from '@/Components/DirectChat';
 import GroupChat from '@/Components/GroupChat';
 import FriendInfo from '@/Components/FriendInfo';
 import GroupInfo from '@/Components/GroupInfo';
+import MorphingText from "@/components/ui/morphing-text";
+import mainLogo from '../assets/Icons/main-logo3.png'
 
 
 export default function Dashboard() {
@@ -181,8 +183,12 @@ return (
             {groupInfoMenu && <GroupInfo  darkMode={darkMode}/>}
             <div className="flex-1 p-0 messages-column" style={{height:'100vh'}}>
                 {welcomeVideo &&
-                <div className="w-full flex flex-column text-primary" style={{height:'100vh', backgroundImage: darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)', backgroundSize: 'cover'}}>
-
+                <div className="w-full flex flexflex-column items-center justify-center" style={{height:'100vh', backgroundImage: darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)', backgroundSize: 'cover'}}>
+                    <img src={mainLogo} className='absolute mt-[-35%] right-[4%]'  style={{width:'10%'}}/>
+                    <MorphingText  texts={texts} className="text-primary dark:text-white right-[7%] absolute mt-[-8%] text-left"/>
+                    <div className='text-primary mt-[60%]'>
+                        <i className="bi bi-lock-fill"></i>&nbsp;<p className='inline'>Your personal messages are end-to-end encrypted</p>
+                    </div>  
                 </div>
                 }
                 {directMessages && <DirectChat darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
