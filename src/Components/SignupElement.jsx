@@ -18,6 +18,7 @@ import { passwordStrength } from 'check-password-strength'
 import { Progress } from "@/components/ui/progress"
 import AvatarEditor from 'react-avatar-editor'
 import { ToastContainer, toast } from 'react-toastify';
+import { createAccount} from '../Api/ProfileService';
 
 export default function SignupElement() {
   const steps = ['Basic Information', 'Add Password', 'Personalize and Finalize'];
