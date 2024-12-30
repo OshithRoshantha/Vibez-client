@@ -61,6 +61,10 @@ export default function Signin() {
   }
 
   const handleDirectLogin = async () => {
+    if (email === ''){
+        setEmailNotFound(true);
+        return;
+    }
     setLoading(true);
     const response = await checkAccount(email);
     setEmailNotFound(!response);
