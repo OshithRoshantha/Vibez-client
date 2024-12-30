@@ -82,6 +82,15 @@ export default function Signin() {
     }
   }
 
+   const googleLogin = async (credentialResponse) => {
+    const token = credentialResponse.credential; 
+    const decoded = jwtDecode(token);
+    const { name, picture, email, sub } = decoded;
+
+    handleSwipe();
+    navDashboard();
+   }
+
   return (
     <div className={`main-container ${swiped ? 'swiped' : ''}`}>
         <div className='left-side'>
@@ -117,10 +126,7 @@ export default function Signin() {
                                     theme="outline"
                                     width={282}
                                     onSuccess={credentialResponse => {
-                                        handleSwipe();
-                                        navDashboard();
-                                        const decoded = jwtDecode(credentialResponse.credential);
-                                        console.log(decoded);
+                                        googleLogin(credentialResponse);
                                     }}
                                     onError={() => {
                                         console.log('Login Failed');
