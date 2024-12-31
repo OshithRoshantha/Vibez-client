@@ -197,7 +197,7 @@ export default function SignupElement() {
   }
   
   const handleSignUp = async () => {
-      await createAccount(email, fullName, confirmPassword);
+      await createAccount(email, fullName, password);
   }
 
   return (
