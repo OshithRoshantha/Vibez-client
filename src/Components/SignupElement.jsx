@@ -215,7 +215,7 @@ export default function SignupElement() {
     });
   }
   
-  const handleSignUp = async () => {
+  const handleSignUp = async () => { //need to fix
       const response = await createAccount(email, fullName, confirmPassword, cropedImage , about);
       console.log(email, fullName, confirmPassword, cropedImage , about);
   }
