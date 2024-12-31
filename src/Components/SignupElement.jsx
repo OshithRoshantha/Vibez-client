@@ -20,7 +20,6 @@ import AvatarEditor from 'react-avatar-editor'
 import { ToastContainer, toast } from 'react-toastify';
 import { createAccount} from '../Api/ProfileService';
 import {checkAccount} from '../Api/AuthService';
-import { set } from 'date-fns';
 
 export default function SignupElement() {
   const steps = ['Basic Information', 'Add Password', 'Personalize and Finalize'];
@@ -218,9 +217,7 @@ export default function SignupElement() {
   
   const handleSignUp = async () => {
       const response = await createAccount(email, fullName, confirmPassword, cropedImage , about);
-      if (!response){
-        //already registerd by that email
-      }
+      console.log(email, fullName, confirmPassword, cropedImage , about);
   }
 
   return (
