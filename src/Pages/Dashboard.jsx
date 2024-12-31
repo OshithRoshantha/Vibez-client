@@ -26,7 +26,7 @@ export default function Dashboard() {
     const [friendInfoMenu, setFriendInfoMenu] = useState(false);
     const [groupInfoMenu, setGroupInfoMenu] = useState(false);
     const [welcomeVideo, setWelcomeVideo] = useState(true);
-    const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') == 'true' ? true : false);
+    const [darkMode, setDarkMode] = useState(getDarkMode());
     const texts = [
         "Stay connected with your circles",
         "One-on-one, anytime",
@@ -40,6 +40,10 @@ export default function Dashboard() {
         }
         DarkModePreference();
     }, [darkMode]);
+
+    function getDarkMode() {
+        return JSON.parse(localStorage.getItem('darkMode'));
+    }
 
     function darkModeOn() {
         setDarkMode(true);
