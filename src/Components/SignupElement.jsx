@@ -19,6 +19,7 @@ import { Progress } from "@/components/ui/progress"
 import AvatarEditor from 'react-avatar-editor'
 import { ToastContainer, toast } from 'react-toastify';
 import { createAccount} from '../Api/ProfileService';
+import {checkAccount} from '../Api/AuthService';
 
 export default function SignupElement() {
   const steps = ['Basic Information', 'Add Password', 'Personalize and Finalize'];
@@ -42,6 +43,7 @@ export default function SignupElement() {
   const [contact, setContact] = useState('');
   const [fullNameError, setFullNameError] = useState(false);
   const [emailError, setEmailError] = useState(false);
+  const [emailExistError, setEmailExistError] = useState(false);
   const [contactNumberError, setContactNumberError] = useState(false);
   const [passwordUnmatchError, setPasswordUnmatchError] = useState(false);
   const [disableContinueBtn, setDisableContinueBtn] = useState(true);
@@ -68,6 +70,10 @@ export default function SignupElement() {
   function handleEmailChange(event) {
     setEmail(event.target.value);
     setEmailError(!validateEmail(event.target.value));
+    const response = checkAccount(email);
+    if (response){
+      setEmailExistError(true);
+    }
   }
   
   useEffect(function() {
@@ -246,7 +252,7 @@ export default function SignupElement() {
                 autoComplete="off"
               >
                 <TextField id="outlined-basic" label="Full Name" helperText={fullNameError ? 'Full name must be at least 3 characters long.' : ''} value={fullName} onChange={handleFullNameChange} error={fullNameError} variant="outlined" placeholder="John Doe" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} /><br />
-                <TextField id="outlined-email" label="Email Address" helperText={emailError ? 'Please enter a valid email address.' : ''} value={email} onChange={handleEmailChange} error={emailError} variant="outlined" placeholder="john@example.com" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} />
+                <TextField id="outlined-email" label="Email Address" helperText={emailError ? 'Please enter a valid email address.' : (emailExistError ? 'Account with this email already exists.' : '')} value={email} onChange={handleEmailChange} error={emailError} variant="outlined" placeholder="john@example.com" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} />
                 <ContactField setContactNumberError={setContactNumberError} setContact={setContact}/>
               </Box>
             </div>
@@ -376,7 +382,7 @@ export default function SignupElement() {
             Back
           </Button>
           <Box />
-          <Button onClick={() => { handleNext(); handleSignUp(); }} disabled={fullNameError || emailError || disableContinueBtn}
+          <Button onClick={() => { handleNext(); handleSignUp(); }} disabled={fullNameError || emailError || disableContinueBtn || emailExistError}
             sx={{ color: 'white', fontSize: '700', backgroundColor: '#0d6efd', paddingX: '25px', paddingY: '7px', borderRadius: '20px' }}>
             {activeStep === steps.length - 1 ? 'Create' : 'Continue'}
           </Button>
