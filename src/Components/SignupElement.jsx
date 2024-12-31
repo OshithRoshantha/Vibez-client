@@ -252,7 +252,7 @@ export default function SignupElement() {
                 autoComplete="off"
               >
                 <TextField id="outlined-basic" label="Full Name" helperText={fullNameError ? 'Full name must be at least 3 characters long.' : ''} value={fullName} onChange={handleFullNameChange} error={fullNameError} variant="outlined" placeholder="John Doe" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} /><br />
-                <TextField id="outlined-email" label="Email Address" helperText={emailError ? 'Please enter a valid email address.' : (emailExistError ? 'Account with this email already exists. Please try to login.' : '')} value={email} onChange={handleEmailChange} error={emailError || emailExistError} variant="outlined" placeholder="john@example.com" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} />
+                <TextField id="outlined-email" label="Email Address" helperText={emailError ? 'Please enter a valid email address.' : (emailExistError ? 'Account with this email already exists. Please try to sign in.' : '')} value={email} onChange={handleEmailChange} error={emailError || emailExistError} variant="outlined" placeholder="john@example.com" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} />
                 <ContactField setContactNumberError={setContactNumberError} setContact={setContact}/>
               </Box>
             </div>
