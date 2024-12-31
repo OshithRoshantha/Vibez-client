@@ -9,6 +9,7 @@ import {
 import './Styles/Column2.css'
 import { useState} from 'react';
 import GlobalAlert from './GlobalAlert';
+import { useNavigate } from 'react-router-dom';
 
 export default function Settings({darkModeOn, darkModeOff, darkMode}) {
     const [logoutMenu, setLogoutMenu] = useState(false);
@@ -17,6 +18,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
     const [deleteAllGroupChatsPopup, setDeleteAllGroupChatsPopup] = useState(false);
     const [selectProfilePrivacy, setSelectProfilePrivacy] = useState('My friends');
     const [selectAboutPrivacy, setSelectAboutPrivacy] = useState('My friends');
+    const navigate = useNavigate();
 
     const icon1 = darkMode ? './src/assets/Icons/icon1dark.png' : './src/assets/Icons/icon1.png';
     const icon2 = darkMode ? './src/assets/Icons/icon2dark.png' : './src/assets/Icons/icon2.png';
@@ -55,6 +57,11 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
         setDeleteAllGroupChatsPopup(!deleteAllGroupChatsPopup);
     }
 
+    const handleLogOut = () => {
+        localStorage.removeItem('token');
+        navigate('/');
+    }
+
   return (
     <div>
         {deleteAllChatsPopup && <GlobalAlert darkMode={darkMode} text={`Delete All Chats?`} textOP={'This action will permanently delete all your chats.'} button1={'Cancel'} button2={'Delete all'} btn1Function={toggleDeleteAllChatsPopup} btn2Function={toggleDeleteAllChatsPopup}/>}
@@ -68,7 +75,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                 <button style={{cursor:'pointer'}} onClick={hideLogoutMenu} className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} border-none px-4 py-2 rounded`}>
                     Stay logged in
                 </button>
-                <button style={{cursor:'pointer'}}  onClick={hideLogoutMenu} className="bg-primary text-primary-foreground hover:bg-primary/80 px-4 py-2 rounded">
+                <button style={{cursor:'pointer'}} onClick={() => { hideLogoutMenu(); handleLogOut(); }} className="bg-primary text-primary-foreground hover:bg-primary/80 px-4 py-2 rounded">
                     Log out
                 </button>
                 </div>
