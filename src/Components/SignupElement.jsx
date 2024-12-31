@@ -173,12 +173,6 @@ export default function SignupElement() {
   
   function handleNext() {
     let newSkipped = skipped;
-    if (activeStep === 2) {
-      notify();
-      setTimeout(() => {
-        navigate('/');
-      }, 1300);
-    }
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
@@ -195,6 +189,20 @@ export default function SignupElement() {
     });
   }
   
+  const handleSignUp = async () => {
+    if (activeStep === 2){
+      const data = {
+        userName: fullName,
+        email: email,
+        password: confirmPassword,
+      }
+      await createAccount(data);
+      notify();
+      setTimeout(() => {
+        navigate('/');
+      }, 1300);
+    }
+  }
 
   return (
     <div>
@@ -369,7 +377,7 @@ export default function SignupElement() {
             Back
           </Button>
           <Box />
-          <Button onClick={handleNext} disabled={fullNameError || emailError || disableContinueBtn}
+          <Button onClick={() => { handleNext(); handleSignUp(); }} disabled={fullNameError || emailError || disableContinueBtn}
             sx={{ color: 'white', fontSize: '700', backgroundColor: '#0d6efd', paddingX: '25px', paddingY: '7px', borderRadius: '20px' }}>
             {activeStep === steps.length - 1 ? 'Create' : 'Continue'}
           </Button>
