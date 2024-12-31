@@ -70,19 +70,20 @@ export default function SignupElement() {
   }
   
   function handleEmailChange(event) {
-    setEmailExistError(false);
     setEmail(event.target.value);
     setEmailError(!validateEmail(event.target.value));
-    isEmailExists();
+    if (!emailError){
+      isEmailExists(event);
+    }
+
   }
 
-  const isEmailExists = async () => {
-    const response = await checkAccount(email);
+  const isEmailExists = async (event) => {
+    setEmailExistError(false);
+    const response = await checkAccount(event.target.value);
     if (response){
       setEmailExistError(true);
-    } else{
-      setEmailExistError(false);
-    }
+    } 
   }
 
   function handleAboutChange(event) {
