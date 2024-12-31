@@ -74,7 +74,6 @@ export default function SignupElement() {
     if (!emailError){
       isEmailExists(event);
     }
-
   }
 
   const isEmailExists = async (event) => {
