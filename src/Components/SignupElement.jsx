@@ -20,6 +20,7 @@ import AvatarEditor from 'react-avatar-editor'
 import { ToastContainer, toast } from 'react-toastify';
 import { createAccount} from '../Api/ProfileService';
 import {checkAccount} from '../Api/AuthService';
+import { set } from 'date-fns';
 
 export default function SignupElement() {
   const steps = ['Basic Information', 'Add Password', 'Personalize and Finalize'];
@@ -36,6 +37,7 @@ export default function SignupElement() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [cropFactor, setCropFactor] = useState(1);
   const [cropedImage, setCropedImage] = useState(null);
+  const [about, setAbout] = useState('');
   const fileInputRef = useRef(null);
   const avatarEditorRef = useRef(null);
   const [fullName, setFullName] = useState('');
@@ -68,12 +70,23 @@ export default function SignupElement() {
   }
   
   function handleEmailChange(event) {
+    setEmailExistError(false);
     setEmail(event.target.value);
     setEmailError(!validateEmail(event.target.value));
-    const response = checkAccount(email);
+    isEmailExists();
+  }
+
+  const isEmailExists = async () => {
+    const response = await checkAccount(email);
     if (response){
       setEmailExistError(true);
+    } else{
+      setEmailExistError(false);
     }
+  }
+
+  function handleAboutChange(event) {
+    setAbout(event.target.value);
   }
   
   useEffect(function() {
@@ -203,7 +216,7 @@ export default function SignupElement() {
   }
   
   const handleSignUp = async () => {
-      const response = await createAccount(email, fullName, );
+      const response = await createAccount(email, fullName, confirmPassword, cropedImage , about);
       if (!response){
         //already registerd by that email
       }
@@ -366,7 +379,7 @@ export default function SignupElement() {
                   </div>
                 </div>}
               <div className='about-input'>
-                <TextField id="outlined-basic" label="About" variant="outlined" placeholder="Can't talk, Vibez only." InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' ,width:'180%'} }} />
+                <TextField id="outlined-basic" value={about} onChange={handleAboutChange} label="About" variant="outlined" placeholder="Can't talk, Vibez only." InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' ,width:'180%'} }} />
               </div>
             </div>
           </div>}
