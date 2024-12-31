@@ -26,7 +26,7 @@ export default function Dashboard() {
     const [friendInfoMenu, setFriendInfoMenu] = useState(false);
     const [groupInfoMenu, setGroupInfoMenu] = useState(false);
     const [welcomeVideo, setWelcomeVideo] = useState(true);
-    const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') === 'true' ? true : false);
+    const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode') == 'true' ? true : false);
     const texts = [
         "Stay connected with your circles",
         "One-on-one, anytime",
