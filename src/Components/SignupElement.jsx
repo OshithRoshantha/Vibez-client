@@ -197,7 +197,7 @@ export default function SignupElement() {
   }
   
   const handleSignUp = async () => {
-      const response = await createAccount(email, fullName, password.toString());
+      const response = await createAccount(email, fullName, );
       if (!response){
         //already registerd by that email
       }
