@@ -13,9 +13,10 @@ import GroupInfo from '@/Components/GroupInfo';
 import MorphingText from "@/components/ui/morphing-text";
 import mainLogo from '../assets/Icons/main-logo3.png'
 import { updateDarkMode } from '../Api/ProfileService';
-
+import { useLocation } from 'react-router-dom';
 
 export default function Dashboard() {
+    const location = useLocation();
     const [friendsMenu, setFriendsMenu] = useState(false);
     const [chatsMenu, setChatsMenu] = useState(true);
     const [groupsMenu, setGroupsMenu] = useState(false);
@@ -27,14 +28,14 @@ export default function Dashboard() {
     const [friendInfoMenu, setFriendInfoMenu] = useState(false);
     const [groupInfoMenu, setGroupInfoMenu] = useState(false);
     const [welcomeVideo, setWelcomeVideo] = useState(true);
-    const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode'));
+    const [darkMode, setDarkMode] = useState(location.state?.darkMode ?? false);
     const texts = [
         "Stay connected with your circles",
         "One-on-one, anytime",
         "Build and grow your network",
         "Chat and shop in harmony"
       ];
-
+    
     useEffect(() => {
         async function DarkModePreference() {
             await updateDarkMode(darkMode);

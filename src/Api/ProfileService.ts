@@ -21,7 +21,7 @@ export const fetchUserProfile = async (token: string) => {
 }
 
 export const updateDarkMode = async (darkMode: boolean) => {
-    await axios.post(
+    await axios.put(
         `http://localhost:8080/vibez/profile/darkmode/${localStorage.getItem('userId')}/${darkMode}`,
         {},
         {
