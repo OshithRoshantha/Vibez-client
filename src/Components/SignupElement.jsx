@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import './Styles/SignupElement.css'
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -18,12 +18,14 @@ import { passwordStrength } from 'check-password-strength'
 import { Progress } from "@/components/ui/progress"
 import AvatarEditor from 'react-avatar-editor'
 import { ToastContainer, toast } from 'react-toastify';
+import { createAccount} from '../Api/ProfileService';
+import {checkAccount} from '../Api/AuthService';
 
 export default function SignupElement() {
   const steps = ['Basic Information', 'Add Password', 'Personalize and Finalize'];
   const navigate = useNavigate();
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [skipped, setSkipped] = React.useState(new Set());
+  const [activeStep, setActiveStep] = useState(0);
+  const [skipped, setSkipped] = useState(new Set());
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [progress, setProgress] = useState(25);
@@ -34,6 +36,7 @@ export default function SignupElement() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [cropFactor, setCropFactor] = useState(1);
   const [cropedImage, setCropedImage] = useState(null);
+  const [about, setAbout] = useState('');
   const fileInputRef = useRef(null);
   const avatarEditorRef = useRef(null);
   const [fullName, setFullName] = useState('');
@@ -41,6 +44,7 @@ export default function SignupElement() {
   const [contact, setContact] = useState('');
   const [fullNameError, setFullNameError] = useState(false);
   const [emailError, setEmailError] = useState(false);
+  const [emailExistError, setEmailExistError] = useState(false);
   const [contactNumberError, setContactNumberError] = useState(false);
   const [passwordUnmatchError, setPasswordUnmatchError] = useState(false);
   const [disableContinueBtn, setDisableContinueBtn] = useState(true);
@@ -67,6 +71,21 @@ export default function SignupElement() {
   function handleEmailChange(event) {
     setEmail(event.target.value);
     setEmailError(!validateEmail(event.target.value));
+    if (!emailError){
+      isEmailExists(event);
+    }
+  }
+
+  const isEmailExists = async (event) => {
+    setEmailExistError(false);
+    const response = await checkAccount(event.target.value);
+    if (response){
+      setEmailExistError(true);
+    } 
+  }
+
+  function handleAboutChange(event) {
+    setAbout(event.target.value);
   }
   
   useEffect(function() {
@@ -173,6 +192,7 @@ export default function SignupElement() {
   function handleNext() {
     let newSkipped = skipped;
     if (activeStep === 2) {
+      handleSignUp();
       notify();
       setTimeout(() => {
         navigate('/');
@@ -194,6 +214,10 @@ export default function SignupElement() {
     });
   }
   
+  const handleSignUp = async () => { 
+      if (activeStep !== 2) return;
+      await createAccount(email, fullName, confirmPassword, cropedImage , about);
+  }
 
   return (
     <div>
@@ -238,7 +262,7 @@ export default function SignupElement() {
                 autoComplete="off"
               >
                 <TextField id="outlined-basic" label="Full Name" helperText={fullNameError ? 'Full name must be at least 3 characters long.' : ''} value={fullName} onChange={handleFullNameChange} error={fullNameError} variant="outlined" placeholder="John Doe" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} /><br />
-                <TextField id="outlined-email" label="Email Address" helperText={emailError ? 'Please enter a valid email address.' : ''} value={email} onChange={handleEmailChange} error={emailError} variant="outlined" placeholder="john@example.com" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} />
+                <TextField id="outlined-email" label="Email Address" helperText={emailError ? 'Please enter a valid email address.' : (emailExistError ? 'Account with this email already exists. Please try to sign in.' : '')} value={email} onChange={handleEmailChange} error={emailError || emailExistError} variant="outlined" placeholder="john@example.com" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} />
                 <ContactField setContactNumberError={setContactNumberError} setContact={setContact}/>
               </Box>
             </div>
@@ -352,7 +376,7 @@ export default function SignupElement() {
                   </div>
                 </div>}
               <div className='about-input'>
-                <TextField id="outlined-basic" label="About" variant="outlined" placeholder="Can't talk, Vibez only." InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' ,width:'180%'} }} />
+                <TextField id="outlined-basic userAbout" value={about} onChange={handleAboutChange} label="About" variant="outlined" placeholder="Can't talk, Vibez only." InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' ,width:'180%'} }} />
               </div>
             </div>
           </div>}
@@ -368,9 +392,9 @@ export default function SignupElement() {
             Back
           </Button>
           <Box />
-          <Button onClick={handleNext} disabled={fullNameError || emailError || disableContinueBtn}
+          <Button onClick={() => { handleNext(); handleSignUp(); }} disabled={fullNameError || emailError || disableContinueBtn || emailExistError}
             sx={{ color: 'white', fontSize: '700', backgroundColor: '#0d6efd', paddingX: '25px', paddingY: '7px', borderRadius: '20px' }}>
-            {activeStep === steps.length - 1 ? 'Create' : 'Continue'}
+            {activeStep === 2 ? 'Create' : 'Continue'}
           </Button>
         </Box>
       </div>
