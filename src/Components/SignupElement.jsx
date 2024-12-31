@@ -173,6 +173,13 @@ export default function SignupElement() {
   
   function handleNext() {
     let newSkipped = skipped;
+    if (activeStep === 2) {
+      handleSignUp();
+      notify();
+      setTimeout(() => {
+        navigate('/');
+      }, 1300);
+    }
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
@@ -190,18 +197,12 @@ export default function SignupElement() {
   }
   
   const handleSignUp = async () => {
-    if (activeStep === 2){
       const data = {
         userName: fullName,
         email: email,
         password: confirmPassword,
       }
       await createAccount(data);
-      notify();
-      setTimeout(() => {
-        navigate('/');
-      }, 1300);
-    }
   }
 
   return (
