@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import './Styles/SignupElement.css'
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -214,9 +214,9 @@ export default function SignupElement() {
     });
   }
   
-  const handleSignUp = async () => { //need to fix
-      const response = await createAccount(email, fullName, confirmPassword, cropedImage , about);
-      console.log(email, fullName, confirmPassword, cropedImage , about);
+  const handleSignUp = async () => { 
+      if (activeStep !== 2) return;
+      await createAccount(email, fullName, confirmPassword, cropedImage , about);
   }
 
   return (
@@ -394,7 +394,7 @@ export default function SignupElement() {
           <Box />
           <Button onClick={() => { handleNext(); handleSignUp(); }} disabled={fullNameError || emailError || disableContinueBtn || emailExistError}
             sx={{ color: 'white', fontSize: '700', backgroundColor: '#0d6efd', paddingX: '25px', paddingY: '7px', borderRadius: '20px' }}>
-            {activeStep === steps.length - 1 ? 'Create' : 'Continue'}
+            {activeStep === 2 ? 'Create' : 'Continue'}
           </Button>
         </Box>
       </div>
