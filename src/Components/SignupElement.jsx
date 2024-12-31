@@ -198,8 +198,8 @@ export default function SignupElement() {
   
   const handleSignUp = async () => {
       const data = {
-        userName: fullName,
         email: email,
+        userName: fullName,
         password: confirmPassword,
       }
       await createAccount(data);
