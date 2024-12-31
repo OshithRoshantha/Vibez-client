@@ -24,8 +24,8 @@ import {checkAccount} from '../Api/AuthService';
 export default function SignupElement() {
   const steps = ['Basic Information', 'Add Password', 'Personalize and Finalize'];
   const navigate = useNavigate();
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [skipped, setSkipped] = React.useState(new Set());
+  const [activeStep, setActiveStep] = useState(0);
+  const [skipped, setSkipped] = useState(new Set());
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [progress, setProgress] = useState(25);
@@ -377,7 +377,7 @@ export default function SignupElement() {
                   </div>
                 </div>}
               <div className='about-input'>
-                <TextField id="outlined-basic" value={about} onChange={handleAboutChange} label="About" variant="outlined" placeholder="Can't talk, Vibez only." InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' ,width:'180%'} }} />
+                <TextField id="outlined-basic userAbout" value={about} onChange={handleAboutChange} label="About" variant="outlined" placeholder="Can't talk, Vibez only." InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' ,width:'180%'} }} />
               </div>
             </div>
           </div>}
