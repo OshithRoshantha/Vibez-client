@@ -27,6 +27,7 @@ import { fetchUserProfile } from '../Api/ProfileService';
 
 export default function Signin() {
   const [loading, setLoading] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [emailNotFound, setEmailNotFound] = useState(false);
   const [incorrectPassword, setIncorrectPassword] = useState(false);
@@ -50,7 +51,7 @@ export default function Signin() {
   }
 
   function navDashboard() {
-      navigate('/Dashboard');
+      navigate('/Dashboard' , { state: { darkMode: darkMode } });
   }
 
   const handleEmail = (e) => {
@@ -103,7 +104,7 @@ export default function Signin() {
    const fetchProfile = async () => {
         const response = await fetchUserProfile(localStorage.getItem('token'));
         localStorage.setItem('userId', response.userId);
-        localStorage.setItem('darkMode', response.darkMode);
+        setDarkMode(response.darkMode);
    }
 
   return (
