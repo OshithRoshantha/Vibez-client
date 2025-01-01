@@ -14,9 +14,9 @@ export default function Profile({darkMode}) {
     const [cropedImage, setCropedImage] = useState(null);
     const fileInputRef = useRef(null);
     const avatarEditorRef = useRef(null);  
-    const [name, setName] = useState('Test1');
-    const [about, setAbout] = useState('test2');
-    const [profilePicture, setProfilePicture] = useState('');
+    const [name, setName] = useState('');
+    const [about, setAbout] = useState('');
+    const [profilePicture, setProfilePicture] = useState('url');
 
     useEffect(() => {
         const fetchUser = async () => {
