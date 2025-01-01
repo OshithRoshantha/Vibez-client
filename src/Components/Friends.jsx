@@ -87,7 +87,7 @@ export default function Friends({darkMode}) {
                 {showResults && <div>
                 <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>People</h2>
                 <div className='friends-list'>
-                <div className="space-y-4 pt-2">
+                <div className="space-y-4">
                     <div className="flex items-center justify-between border-border py-2">
                     <div className="flex items-center">
                         <img className="w-12 h-12 rounded-full mr-4" src="https://placehold.co/48x48" alt="User Profile Picture" />
