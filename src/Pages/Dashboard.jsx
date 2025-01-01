@@ -41,6 +41,11 @@ export default function Dashboard() {
         DarkModePreference();
     }, [darkMode]);
 
+    useEffect(() => {
+        const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+        setDarkMode(savedDarkMode);
+    }, []);
+      
     function darkModeOn() {
         setDarkMode(true);
     }

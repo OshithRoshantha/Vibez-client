@@ -103,8 +103,7 @@ export default function Signin() {
    const fetchProfile = async () => {
         const response = await fetchUserProfile(localStorage.getItem('token'));
         localStorage.setItem('userId', response.userId);
-        localStorage.setItem('darkMode', JSON.stringify(response.darkMode));
-        console.log(response.darkMode);
+        localStorage.setItem('darkMode', response.darkMode);
    }
 
   return (
