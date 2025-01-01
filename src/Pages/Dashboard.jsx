@@ -41,10 +41,6 @@ export default function Dashboard() {
         DarkModePreference();
     }, [darkMode]);
 
-    function getDarkMode() {
-        return JSON.parse(localStorage.getItem('darkMode'));
-    }
-
     function darkModeOn() {
         setDarkMode(true);
     }
