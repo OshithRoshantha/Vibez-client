@@ -13,6 +13,7 @@ import GroupInfo from '@/Components/GroupInfo';
 import MorphingText from "@/components/ui/morphing-text";
 import mainLogo from '../assets/Icons/main-logo3.png'
 import { updateDarkMode, getdarkModePreference} from '../Api/ProfileService';
+import { fetchUserMetaData } from '../Api/ProfileService';
 
 export default function Dashboard() {
     const [darkMode, setDarkMode] = useState(false);
@@ -27,6 +28,7 @@ export default function Dashboard() {
     const [friendInfoMenu, setFriendInfoMenu] = useState(false);
     const [groupInfoMenu, setGroupInfoMenu] = useState(false);
     const [welcomeVideo, setWelcomeVideo] = useState(true);
+    const [profilePicture, setProfilePicture] = useState('url');
     
     const texts = [
         "Stay connected with your circles",
@@ -47,7 +49,12 @@ export default function Dashboard() {
             const preference = await getdarkModePreference();
             setDarkMode(preference); 
         };
+        const fetchUser = async () => {
+            const response = await fetchUserMetaData();
+            setProfilePicture(response.profilePicture);
+        };
         fetchDarkModePreference();
+        fetchUser();
     }, []);
 
     function hideWelcomeVideo(){
@@ -184,7 +191,7 @@ return (
                     <i className={`bi bi-gear text-2xl ${settingsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
                 </div>
                 <div onClick={showProfileMenu} className="flex items-center justify-center mt-auto mb-4" style={{cursor: 'pointer'}}>
-                    <img src="https://placehold.co/50x50" alt="Profile" className={`${profileMenu ? 'border border-primary border-3' : ''} w-15 h-15 rounded-full`} />
+                    <img src={profilePicture} alt="Profile" className={`${profileMenu ? 'border border-primary border-3' : ''} rounded-full`} style={{width:'60px', height:'60px'}}/>
                 </div>
             </div>
             {chatsMenu && <Chats darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
