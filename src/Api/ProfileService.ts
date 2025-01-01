@@ -10,3 +10,44 @@ export const createAccount = async (email: string, name: string, password: strin
     });
     return response.data;
 }
+
+export const fetchUserId = async () => {
+    const response = await axios.get('http://localhost:8080/vibez/profile', {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+    });
+    return response.data.userId;
+}
+
+export const fetchUserMetaData = async () => {
+    const response = await axios.get('http://localhost:8080/vibez/profile', {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+}
+
+export const updateDarkMode = async (darkMode: boolean) => {
+    await axios.put(
+        `http://localhost:8080/vibez/profile/darkmode/${localStorage.getItem('userId')}/${darkMode}`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        }
+    );
+}
+
+export const getdarkModePreference = async () => {
+    const response = await axios.get('http://localhost:8080/vibez/profile', {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+    });
+    return response.data.darkMode;   
+}
+
+

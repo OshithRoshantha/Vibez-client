@@ -58,7 +58,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
     }
 
     const handleLogOut = () => {
-        localStorage.removeItem('token');
+        localStorage.clear();
         navigate('/');
     }
 
