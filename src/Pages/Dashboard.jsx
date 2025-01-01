@@ -16,7 +16,6 @@ import { updateDarkMode, getdarkModePreference} from '../Api/ProfileService';
 
 export default function Dashboard() {
     const [darkMode, setDarkMode] = useState(false);
-
     const [friendsMenu, setFriendsMenu] = useState(false);
     const [chatsMenu, setChatsMenu] = useState(true);
     const [groupsMenu, setGroupsMenu] = useState(false);
