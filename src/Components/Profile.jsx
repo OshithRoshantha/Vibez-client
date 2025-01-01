@@ -17,15 +17,14 @@ export default function Profile({darkMode}) {
     const [name, setName] = useState('');
     const [about, setAbout] = useState('');
 
-    useEffect(() => {
-        const fetchProfile = async () => {
-            const response = await fetchUserMetaData();
-            setName(response.userName);
-            setAbout(response.about);
-            setCropedImage(response.profilePicture);
-        };
-        fetchProfile();
-    }, []);    
+
+    const fetchProfile = async () => {
+        const response = await fetchUserMetaData();
+        setName(response.userName);
+        setAbout(response.about);
+        setCropedImage(response.profilePicture);
+    };
+ 
   
     function handleNameClick() {
         setIsEditingName(true);
