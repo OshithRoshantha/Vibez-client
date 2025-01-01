@@ -4,7 +4,7 @@ import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
 import { fetchUserMetaData } from '../Api/ProfileService';
 
-export default function Profile({darkMode}) {
+export default function Profile({darkMode, setUserPicture}) {
     const [isEditingName, setIsEditingName] = useState(false);
     const [isEditingAbout, setIsEditingAbout] = useState(false);
     const [profilePicHover, setProfilePicHover] = useState(false);
@@ -79,6 +79,7 @@ export default function Profile({darkMode}) {
           const croppedImageUrl = canvas.toDataURL();
           setSelectedImage(croppedImageUrl);
           setCropedImage(croppedImageUrl);
+          setUserPicture(croppedImageUrl);
           editPictureFormHandler();
         }
     }
