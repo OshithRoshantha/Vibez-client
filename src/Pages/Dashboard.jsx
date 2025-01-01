@@ -28,7 +28,7 @@ export default function Dashboard() {
     const [friendInfoMenu, setFriendInfoMenu] = useState(false);
     const [groupInfoMenu, setGroupInfoMenu] = useState(false);
     const [welcomeVideo, setWelcomeVideo] = useState(true);
-    const [profilePicture, setProfilePicture] = useState('url');
+    const [userPicture, setUserPicture] = useState('url');
     
     const texts = [
         "Stay connected with your circles",
@@ -51,7 +51,8 @@ export default function Dashboard() {
         };
         const fetchUser = async () => {
             const response = await fetchUserMetaData();
-            setProfilePicture(response.profilePicture);
+            if (userPicture === 'url')
+                setUserPicture(response.profilePicture);
         };
         fetchDarkModePreference();
         fetchUser();
@@ -191,7 +192,7 @@ return (
                     <i className={`bi bi-gear text-2xl ${settingsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
                 </div>
                 <div onClick={showProfileMenu} className="flex items-center justify-center mt-auto mb-4" style={{cursor: 'pointer'}}>
-                    <img src={profilePicture} alt="Profile" className={`${profileMenu ? 'border border-primary border-3' : ''} rounded-full`} style={{width:'60px', height:'60px'}}/>
+                    <img src={userPicture} alt="Profile" className={`${profileMenu ? 'border border-primary border-3' : ''} rounded-full`} style={{width:'60px', height:'60px'}}/>
                 </div>
             </div>
             {chatsMenu && <Chats darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
@@ -199,7 +200,7 @@ return (
             {friendsMenu && <Friends  darkMode={darkMode}/>}
             {marketplaceMenu && <Marketplace  darkMode={darkMode}/>}
             {settingsMenu && <Settings darkModeOn={darkModeOn} darkModeOff={darkModeOff} darkMode={darkMode}/>}
-            {profileMenu && <Profile  darkMode={darkMode}/>}
+            {profileMenu && <Profile  darkMode={darkMode} setUserPicture={setUserPicture}/>}
             {friendInfoMenu && <FriendInfo  darkMode={darkMode}/>}
             {groupInfoMenu && <GroupInfo  darkMode={darkMode}/>}
             <div className="flex-1 p-0 messages-column" style={{height:'100vh'}}>
