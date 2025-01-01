@@ -1,7 +1,8 @@
-import { useRef, useState} from 'react';
+import { useRef, useState, useEffect} from 'react';
 import './Styles/Column2.css'
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
+import { fetchUserProfile } from '../Api/ProfileService';
 
 export default function Profile({darkMode}) {
     const [isEditingName, setIsEditingName] = useState(false);
@@ -13,10 +14,8 @@ export default function Profile({darkMode}) {
     const [cropedImage, setCropedImage] = useState(null);
     const fileInputRef = useRef(null);
     const avatarEditorRef = useRef(null);  
-    const [name, setName] = useState("TestUser");
-    const [about, setAbout] = useState("Can't talk, Vibez only.");
-
-    const defaultImage = "./src/assets/groupDefault.jpg"; //user current profile picture
+    const [name, setName] = useState('');
+    const [about, setAbout] = useState('');
   
     function handleNameClick() {
         setIsEditingName(true);
@@ -72,6 +71,17 @@ export default function Profile({darkMode}) {
           editPictureFormHandler();
         }
     }
+
+    const fetchProfile = async () => {
+        const response = await fetchUserProfile(localStorage.getItem('token'));
+        setName(response.userName);
+        setAbout(response.about);
+        setCropedImage(response.profilePicture);
+    }
+
+    useEffect(() => {
+        fetchProfile();
+    }, []);    
 
       
   return (

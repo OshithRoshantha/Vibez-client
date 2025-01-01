@@ -50,8 +50,8 @@ export default function Signin() {
   }
 
   function navDashboard() {
-      navigate('/Dashboard');
-  }
+    navigate('/Dashboard');
+  }  
 
   const handleEmail = (e) => {
     setEmail(e.target.value);

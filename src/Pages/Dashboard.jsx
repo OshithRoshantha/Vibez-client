@@ -1,6 +1,6 @@
 import Chats from '@/Components/Chats';
 import './Styles/Dashboard.css'
-import { useEffect, useState } from 'react';
+import { useEffect, useState} from 'react';
 import Friends from '@/Components/Friends';
 import Marketplace from '@/Components/Marketplace';
 import Settings from '@/Components/Settings';
@@ -12,9 +12,11 @@ import FriendInfo from '@/Components/FriendInfo';
 import GroupInfo from '@/Components/GroupInfo';
 import MorphingText from "@/components/ui/morphing-text";
 import mainLogo from '../assets/Icons/main-logo3.png'
-import { updateDarkMode } from '../Api/ProfileService';
+import { updateDarkMode, getdarkModePreference} from '../Api/ProfileService';
 
 export default function Dashboard() {
+    const [darkMode, setDarkMode] = useState(false);
+
     const [friendsMenu, setFriendsMenu] = useState(false);
     const [chatsMenu, setChatsMenu] = useState(true);
     const [groupsMenu, setGroupsMenu] = useState(false);
@@ -26,7 +28,7 @@ export default function Dashboard() {
     const [friendInfoMenu, setFriendInfoMenu] = useState(false);
     const [groupInfoMenu, setGroupInfoMenu] = useState(false);
     const [welcomeVideo, setWelcomeVideo] = useState(true);
-    const [darkMode, setDarkMode] = useState(false);
+    
     const texts = [
         "Stay connected with your circles",
         "One-on-one, anytime",
@@ -42,20 +44,23 @@ export default function Dashboard() {
     }, [darkMode]);
 
     useEffect(() => {
-        const savedDarkMode = localStorage.getItem('darkMode') === 'true';
-        setDarkMode(savedDarkMode);
+        const fetchDarkModePreference = async () => {
+            const preference = await getdarkModePreference();
+            setDarkMode(preference); 
+        };
+        fetchDarkModePreference();
     }, []);
-      
+
+    function hideWelcomeVideo(){
+        setWelcomeVideo(false);
+    }
+
     function darkModeOn() {
         setDarkMode(true);
     }
 
     function darkModeOff() {
         setDarkMode(false);
-    }
-
-    function hideWelcomeVideo(){
-        setWelcomeVideo(false);
     }
 
     function showFriendInfoMenu(){
