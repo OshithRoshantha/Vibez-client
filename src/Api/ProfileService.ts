@@ -11,7 +11,16 @@ export const createAccount = async (email: string, name: string, password: strin
     return response.data;
 }
 
-export const fetchUserProfile = async () => {
+export const fetchUserId = async () => {
+    const response = await axios.get('http://localhost:8080/vibez/profile', {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+    });
+    return response.data.userId;
+}
+
+export const fetchUserMetaData = async () => {
     const response = await axios.get('http://localhost:8080/vibez/profile', {
         headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -40,3 +49,5 @@ export const getdarkModePreference = async () => {
     });
     return response.data.darkMode;   
 }
+
+

@@ -2,7 +2,7 @@ import { useRef, useState, useEffect} from 'react';
 import './Styles/Column2.css'
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
-import { fetchUserProfile } from '../Api/ProfileService';
+import { fetchUserMetaData } from '../Api/ProfileService';
 
 export default function Profile({darkMode}) {
     const [isEditingName, setIsEditingName] = useState(false);
@@ -16,6 +16,16 @@ export default function Profile({darkMode}) {
     const avatarEditorRef = useRef(null);  
     const [name, setName] = useState('');
     const [about, setAbout] = useState('');
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            const response = await fetchUserMetaData();
+            setName(response.userName);
+            setAbout(response.about);
+            setCropedImage(response.profilePicture);
+        };
+        fetchProfile();
+    }, []);    
   
     function handleNameClick() {
         setIsEditingName(true);
@@ -71,18 +81,6 @@ export default function Profile({darkMode}) {
           editPictureFormHandler();
         }
     }
-
-    const fetchProfile = async () => {
-        const response = await fetchUserProfile(localStorage.getItem('token'));
-        setName(response.userName);
-        setAbout(response.about);
-        setCropedImage(response.profilePicture);
-    }
-
-    useEffect(() => {
-        fetchProfile();
-    }, []);    
-
       
   return (
     <div>
