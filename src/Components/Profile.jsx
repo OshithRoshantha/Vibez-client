@@ -1,7 +1,8 @@
-import { useRef, useState} from 'react';
+import { useRef, useState, useEffect} from 'react';
 import './Styles/Column2.css'
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
+import { fetchUserMetaData } from '../Api/ProfileService';
 
 export default function Profile({darkMode}) {
     const [isEditingName, setIsEditingName] = useState(false);
@@ -13,11 +14,20 @@ export default function Profile({darkMode}) {
     const [cropedImage, setCropedImage] = useState(null);
     const fileInputRef = useRef(null);
     const avatarEditorRef = useRef(null);  
-    const [name, setName] = useState("TestUser");
-    const [about, setAbout] = useState("Can't talk, Vibez only.");
+    const [name, setName] = useState('');
+    const [about, setAbout] = useState('');
+    const [profilePicture, setProfilePicture] = useState('url');
 
-    const defaultImage = "./src/assets/groupDefault.jpg"; //user current profile picture
-  
+    useEffect(() => {
+        const fetchUser = async () => {
+            const response = await fetchUserMetaData();
+            setName(response.userName);
+            setAbout(response.about);
+            setProfilePicture(response.profilePicture);
+        };
+        fetchUser();
+    }, []);    
+
     function handleNameClick() {
         setIsEditingName(true);
     }
@@ -72,7 +82,6 @@ export default function Profile({darkMode}) {
           editPictureFormHandler();
         }
     }
-
       
   return (
     <div>
@@ -96,7 +105,7 @@ export default function Profile({darkMode}) {
                 </div>}
                 <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Profile</h2>
                 <div className="flex flex-col items-center p-6 bg-background text-foreground" style={{marginTop:'17%', paddingBottom:'31%', backgroundColor: darkMode ? '#262729' : ''}}>
-                <div onClick={uploadImg} onMouseEnter={showProfilePicHover} onMouseLeave={hideProfilePicHover} style={{cursor:'pointer', backgroundImage: cropedImage ? `url(${cropedImage})` : `url(${defaultImage})`, backgroundSize: 'cover', backgroundPosition: 'center', border: '1px solid rgb(104, 104, 104)',}} className="profile-pic w-40 h-40 rounded-full  text-center">
+                <div onClick={uploadImg} onMouseEnter={showProfilePicHover} onMouseLeave={hideProfilePicHover} style={{cursor:'pointer', backgroundImage: cropedImage ? `url(${cropedImage})` : `url(${profilePicture})`, backgroundSize: 'cover', backgroundPosition: 'center', border: '1px solid rgb(104, 104, 104)',}} className="profile-pic w-40 h-40 rounded-full  text-center">
                     {profilePicHover && <div>
                         <span className='camera-icon'><i className="bi bi-camera-fill"></i></span>CHANGE PROFILE PICTURE    
                     </div>}

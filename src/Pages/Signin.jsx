@@ -22,7 +22,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { ThreeDots} from 'react-loader-spinner';
-import { checkAccount, directLoginAuth, googleLoginAuth } from '../Api/AuthService';
+import { checkAccount, directLoginAuth, googleLoginAuth} from '../Api/AuthService';
+import { fetchUserId } from '../Api/ProfileService';
 
 export default function Signin() {
   const [loading, setLoading] = useState(false);
@@ -49,8 +50,8 @@ export default function Signin() {
   }
 
   function navDashboard() {
-      navigate('/Dashboard');
-  }
+    navigate('/Dashboard');
+  }  
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
@@ -72,6 +73,7 @@ export default function Signin() {
         try {
             const jwtToken = await directLoginAuth(email, password);
             localStorage.setItem('token', jwtToken);
+            fetchProfileId();
             setIncorrectPassword(false);
             setLoading(false);
             navDashboard();
@@ -93,8 +95,14 @@ export default function Signin() {
         const { name, picture, email, sub } = decoded;
         const jwtToken = await googleLoginAuth(email, name, picture, sub);
         localStorage.setItem('token', jwtToken);
+        fetchProfileId();
         handleSwipe();
         navDashboard();
+   }
+
+   const fetchProfileId = async () => {
+        const response = await fetchUserId(localStorage.getItem('token'));
+        localStorage.setItem('userId', response);
    }
 
   return (
