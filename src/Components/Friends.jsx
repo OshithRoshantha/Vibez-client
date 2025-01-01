@@ -6,6 +6,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import GlobalAlert from './GlobalAlert';
+import { set } from 'date-fns';
   
 
 export default function Friends({darkMode}) {
@@ -13,17 +14,22 @@ export default function Friends({darkMode}) {
     const[yourFriends, setYourFriends] = useState(false);
     const [blockPopup, setBlockPopup] = useState(false);
     const [unfriendPopup, setUnfriendPopup] = useState(false);
+    const [showResults, setShowResults] = useState(false);
+    const [searchKeyword, setSearchKeyword] = useState('');
     var friendCount = 56;
     var user="testUser";
+    var about = "this is test about" 
 
     function hideFriendRequests() {
         setFriendRequests(true);
         setYourFriends(false);
+        setShowResults(false);
     }
 
     function hideYourFriends() {
         setYourFriends(true);
         setFriendRequests(false);
+        setShowResults(false);
     }
 
     function toggleBlockPopup(){
@@ -34,13 +40,24 @@ export default function Friends({darkMode}) {
         setUnfriendPopup(!unfriendPopup);
     }
 
+    const handleSearchChange = (e) => {
+        setSearchKeyword(e.target.value);
+        setShowResults(false);
+        setFriendRequests(true);
+        if (e.target.value.length > 0){
+            setShowResults(true);
+            setFriendRequests(false);
+            setYourFriends(false);
+        }
+    }
+
   return (
     <div>
         {blockPopup && <GlobalAlert darkMode={darkMode} text={`Block ${user}?`} textOP={'Blocked contacts will no longer be able to send you messages.'} button1={'Cancel'} button2={'Block'} btn1Function={toggleBlockPopup} btn2Function={toggleBlockPopup}/>}
         {unfriendPopup && <GlobalAlert darkMode={darkMode} text={`Remove ${user}?`} textOP={'Removing this contact will remove them from your friends list.'} button1={'Cancel'} button2={'Remove'} btn1Function={toggleUnfriendPopup} btn2Function={toggleUnfriendPopup} />}
         <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 friends-column`} style={{backgroundColor: darkMode ? '#262729' : '', height:'100vh'}}>
                 <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Friends</h2>
-                <input type="text" placeholder="Search people by name or email" className={`${darkMode ? 'bg-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'bg-gray-200'} w-full px-4 py-2 mb-4 focus:outline-none focus:border-none placeholder:text-gray-500  text-gray-500 `} style={{borderRadius:'20px'}} />
+                <input type="text" placeholder="Search people by name or email" value={searchKeyword} onChange={handleSearchChange} className={`${darkMode ? 'bg-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'bg-gray-200'} w-full px-4 py-2 mb-4 focus:outline-none focus:border-none placeholder:text-gray-500  text-gray-500 `} style={{borderRadius:'20px'}} />
                 <i className={`${darkMode ? 'text-[#abacae]':'text-gray-500'} bi absolute text-2xl bi-search`} style={{marginLeft:'-3%', marginTop:'0.2%'}}></i>
                 <div className="flex space-x-2 mb-4">
                     <button onClick={hideYourFriends} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}>Your Friends</button>
@@ -66,6 +83,27 @@ export default function Friends({darkMode}) {
                 </div>
                 </div>
                 </div>}
+
+                {showResults && <div>
+                <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>People</h2>
+                <div className='friends-list'>
+                <div className="space-y-4 pt-2">
+                    <div className="flex items-center justify-between border-border py-2">
+                    <div className="flex items-center">
+                        <img className="w-12 h-12 rounded-full mr-4" src="https://placehold.co/48x48" alt="User Profile Picture" />
+                        <div>
+                            <h2 className={`${darkMode ? 'text-white':''}`}>{user}</h2>
+                            <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'}`}>{about}</p>
+                        </div>
+                    </div>
+                    <div className='btn-container'>
+                        <button className="border-none hover:border-none bg-primary text-white p-2 px-3 rounded">Add friend</button>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                </div>}
+
                 {yourFriends && <div>
                 <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{friendCount} friends</h2>
                 <div className='friends-list'>
