@@ -215,7 +215,9 @@ export default function SignupElement() {
   }
   
   const handleSignUp = async () => { 
-      if (activeStep !== 2) return;
+      if (activeStep !== 2) {
+        return;
+      }
       await createAccount(email, fullName, confirmPassword, cropedImage , about);
   }
 
