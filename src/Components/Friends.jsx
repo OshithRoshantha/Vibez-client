@@ -18,7 +18,7 @@ export default function Friends({darkMode}) {
     const [showResults, setShowResults] = useState(false);
     const [searchKeyword, setSearchKeyword] = useState('');
     const [results, setResults] = useState();
-    const [isResultsEmpty, setIsResultsEmpty] = useState(true);
+    const [isResultsEmpty, setIsResultsEmpty] = useState(false);
     var friendCount = 56;
     var user="testUser";
     var about = "this is test about" 
@@ -48,7 +48,7 @@ export default function Friends({darkMode}) {
         setShowResults(false);
         setYourFriends(false);
         setFriendRequests(true);
-        if (e.target.value.length > 0){
+        if (searchKeyword.length > 0) {
             setShowResults(true);
             setFriendRequests(false);
             setYourFriends(false);
@@ -59,16 +59,17 @@ export default function Friends({darkMode}) {
     const getSearchedResults = async () => {
         const loggedInUserId = localStorage.getItem('userId');
         const response = await searchPeople(searchKeyword); 
+        console.log(response);
         if(response.length > 0){
             setIsResultsEmpty(false);
+            const filteredResponse = response.filter((userId) => userId !== loggedInUserId);
+            const metadataPromises = filteredResponse.map((userId) => fetchPeopleMetaData(userId));
+            const metadataResults = await Promise.all(metadataPromises); 
+            setResults(metadataResults); 
         }
         else {
             setIsResultsEmpty(true);
         }
-        const filteredResponse = response.filter((userId) => userId !== loggedInUserId);
-        const metadataPromises = filteredResponse.map((userId) => fetchPeopleMetaData(userId));
-        const metadataResults = await Promise.all(metadataPromises); 
-        setResults(metadataResults); 
     };
 
   return (
