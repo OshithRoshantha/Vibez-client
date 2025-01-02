@@ -1,0 +1,212 @@
+import { useRef, useState } from 'react';
+import './Styles/Column2.css';
+import AvatarEditor from 'react-avatar-editor';
+import Slider from '@mui/material/Slider';
+
+export default function Profile({ darkMode }) {
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [isEditingAbout, setIsEditingAbout] = useState(false);
+  const [profilePicHover, setProfilePicHover] = useState(false);
+  const [editPictureForm, setEditPictureForm] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [cropFactor, setCropFactor] = useState(1);
+  const [croppedImage, setCroppedImage] = useState(null);
+  const fileInputRef = useRef(null);
+  const avatarEditorRef = useRef(null);
+  const [name, setName] = useState("TestUser");
+  const [about, setAbout] = useState("Can't talk, Vibez only.");
+
+  const defaultImage = './src/assets/groupDefault.jpg'; // Current profile picture placeholder
+
+  const handleNameClick = () => setIsEditingName(true);
+  const handleAboutClick = () => setIsEditingAbout(true);
+
+  const handleNameBlur = () => setIsEditingName(false);
+  const handleAboutBlur = () => setIsEditingAbout(false);
+
+  const showProfilePicHover = () => setProfilePicHover(true);
+  const hideProfilePicHover = () => setProfilePicHover(false);
+
+  const editPictureFormHandler = () => setEditPictureForm(!editPictureForm);
+
+  const handleSliderChange = (event, newValue) => setCropFactor(newValue);
+
+  const uploadImg = () => fileInputRef.current.click();
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setSelectedImage(imageUrl);
+      editPictureFormHandler();
+    }
+  };
+
+  const handleCrop = () => {
+    if (avatarEditorRef.current) {
+      const canvas = avatarEditorRef.current.getImageScaledToCanvas();
+      const croppedImageUrl = canvas.toDataURL();
+      setSelectedImage(croppedImageUrl);
+      setCroppedImage(croppedImageUrl);
+      editPictureFormHandler();
+    }
+  };
+
+  return (
+    <div>
+      <div
+        className={`${darkMode ? 'border-gray-600 border-r' : 'border-r'} p-4 chats-column`}
+        style={{ backgroundColor: darkMode ? '#262729' : '', height: '100vh' }}
+      >
+        {editPictureForm && (
+          <div className="edit-picture-form2 shadow-lg bg-white" style={{ marginTop: '8%' }}>
+            <AvatarEditor
+              ref={avatarEditorRef}
+              image={selectedImage}
+              width={180}
+              height={180}
+              border={0}
+              borderRadius={150}
+              color={[0, 0, 0, 0.5]}
+              scale={cropFactor}
+            />
+            <Slider
+              defaultValue={1}
+              min={1}
+              max={10}
+              step={1}
+              style={{ width: '70%' }}
+              onChange={handleSliderChange}
+              value={cropFactor}
+            />
+            <div className="edit-picture-buttons">
+              <button
+                onClick={editPictureFormHandler}
+                className="border-none bg-gray-300 text-gray-600 hover:bg-gray-200"
+                style={{ width: '20%', borderRadius: '20px' }}
+              >
+                Back
+              </button>
+              <button
+                onClick={handleCrop}
+                className="border-none"
+                style={{
+                  width: '20%',
+                  borderRadius: '20px',
+                  backgroundColor: '#0d6efd',
+                  color: 'white',
+                }}
+              >
+                Crop
+              </button>
+            </div>
+          </div>
+        )}
+        <h2 className={`${darkMode ? 'text-white' : 'text-black'} text-lg font-semibold column-header`}>
+          Profile
+        </h2>
+        <div
+          className="flex flex-col items-center p-6 bg-background text-foreground"
+          style={{
+            marginTop: '17%',
+            paddingBottom: '31%',
+            backgroundColor: darkMode ? '#262729' : '',
+          }}
+        >
+          <div
+            onClick={uploadImg}
+            onMouseEnter={showProfilePicHover}
+            onMouseLeave={hideProfilePicHover}
+            style={{
+              cursor: 'pointer',
+              backgroundImage: croppedImage ? `url(${croppedImage})` : `url(${defaultImage})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              border: '1px solid rgb(104, 104, 104)',
+            }}
+            className="profile-pic w-40 h-40 rounded-full text-center"
+          >
+            {profilePicHover && (
+              <div>
+                <span className="camera-icon">
+                  <i className="bi bi-camera-fill"></i>
+                </span>
+                CHANGE PROFILE PICTURE
+              </div>
+            )}
+          </div>
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            style={{ display: 'none' }}
+            onChange={handleFileChange}
+          />
+          <div className="mt-4">
+            <div className="mt-4">
+              <label className={`${darkMode ? 'text-gray-200' : 'text-muted-foreground'}`}>Your name</label>
+              <div style={{ display: 'flex', alignItems: 'center', columnGap: '50%' }}>
+                {isEditingName ? (
+                  <input
+                    className={`${darkMode ? 'text-white' : 'text-foreground'} w-full text-xl font-semibold py-0 mb-0 bg-transparent focus:outline-none`}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    autoFocus
+                  />
+                ) : (
+                  <h2 className={`${darkMode ? 'text-gray-100' : ''} text-xl font-semibold`}>{name}</h2>
+                )}
+                {!isEditingName && (
+                  <i
+                    onClick={handleNameClick}
+                    className={`${darkMode ? 'text-white' : ''} absolute bi bi-pencil-fill`}
+                    style={{ marginLeft: '24%', cursor: 'pointer' }}
+                  ></i>
+                )}
+                {isEditingName && (
+                  <i
+                    onClick={handleNameBlur}
+                    className={`${darkMode ? 'text-white' : ''} absolute bi bi-check2`}
+                    style={{ marginLeft: '24%', cursor: 'pointer', fontSize: '125%' }}
+                  ></i>
+                )}
+              </div>
+              <span className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} text-sm mt-2`}>
+                This is not your username or PIN. This name will be visible to your Vibez contacts.
+              </span>
+            </div>
+            <div className="mt-6">
+              <span className={`${darkMode ? 'text-gray-200' : 'text-muted-foreground'}`}>About</span>
+              <div style={{ display: 'flex', alignItems: 'center', columnGap: '50%' }}>
+                {isEditingAbout ? (
+                  <input
+                    className={`${darkMode ? 'text-white' : 'text-foreground'} w-full py-0 mb-0 bg-transparent focus:outline-none`}
+                    value={about}
+                    onChange={(e) => setAbout(e.target.value)}
+                    autoFocus
+                  />
+                ) : (
+                  <p className={`${darkMode ? 'text-gray-100' : ''} mt-0`}>{about}</p>
+                )}
+                {!isEditingAbout && (
+                  <i
+                    onClick={handleAboutClick}
+                    className={`${darkMode ? 'text-white' : ''} absolute bi bi-pencil-fill`}
+                    style={{ marginLeft: '24%', cursor: 'pointer' }}
+                  ></i>
+                )}
+                {isEditingAbout && (
+                  <i
+                    onClick={handleAboutBlur}
+                    className={`${darkMode ? 'text-white' : ''} absolute bi bi-check2`}
+                    style={{ marginLeft: '24%', cursor: 'pointer', fontSize: '125%' }}
+                  ></i>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
