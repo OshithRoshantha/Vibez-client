@@ -16,7 +16,7 @@ export default function Profile({darkMode, setUserPicture}) {
     const avatarEditorRef = useRef(null);  
     const [name, setName] = useState('');
     const [about, setAbout] = useState('');
-    const [profilePicture, setProfilePicture] = useState('url');
+    const [profilePicture, setProfilePicture] = useState('');
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -24,6 +24,7 @@ export default function Profile({darkMode, setUserPicture}) {
             setName(response.userName);
             setAbout(response.about);
             setProfilePicture(response.profilePicture);
+            console.log('imageURL', profilePicture);
         };
         fetchUser();
     }, []);    
