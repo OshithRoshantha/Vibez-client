@@ -121,11 +121,12 @@ export default function Friends({darkMode}) {
                         ))
                     }
                     {isResultsEmpty && 
-                        <div className="flex flex-col items-center justify-center" style={{marginTop:'23%'}}>
+                        <div className="flex flex-col items-center justify-center" style={{marginTop:'20%'}}>
                         <img
                             aria-hidden="true"
                             alt="document-icon"
-                            src="https://openui.fly.dev/openui/100x100.svg?text=📄"
+                            src='./src/assets/Icons/errorIcon1.png'
+                            style={{height:'125px', width:'125px'}}
                         />
                         <h2 className={`${darkMode ? 'text-white' : ''} mt-4 text-lg font-semibold`}>
                             We couldn't find anything to show for
