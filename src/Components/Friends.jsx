@@ -68,6 +68,9 @@ export default function Friends({ darkMode }) {
             const metadataPromises = filteredResponse.map((userId) => fetchPeopleMetaData(userId));
             const metadataResults = await Promise.all(metadataPromises);
             setResults(metadataResults);
+            if(metadataResults.length === 0) {
+                setIsResultsEmpty(true);
+            }
         } else {
             setIsResultsEmpty(true);
         }
