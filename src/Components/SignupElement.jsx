@@ -19,7 +19,7 @@ import { Progress } from "@/components/ui/progress"
 import AvatarEditor from 'react-avatar-editor'
 import { ToastContainer, toast } from 'react-toastify';
 import { createAccount} from '../Api/ProfileService';
-import {checkAccount} from '../Api/AuthService';
+import { checkAccount } from '../Api/AuthService';
 
 export default function SignupElement() {
   const steps = ['Basic Information', 'Add Password', 'Personalize and Finalize'];
@@ -48,6 +48,7 @@ export default function SignupElement() {
   const [contactNumberError, setContactNumberError] = useState(false);
   const [passwordUnmatchError, setPasswordUnmatchError] = useState(false);
   const [disableContinueBtn, setDisableContinueBtn] = useState(true);
+  const [isCreated, setIsCreated] = useState(false);
 
   const defaultImage = "./src/assets/userDefault.jpg";
 
@@ -215,10 +216,9 @@ export default function SignupElement() {
   }
   
   const handleSignUp = async () => { 
-      if (activeStep !== 2) {
-        return;
-      }
-      await createAccount(email, fullName, confirmPassword, cropedImage , about);
+    if (isCreated || activeStep !== 2) return;
+    setIsCreated(true);
+    const response = await createAccount(email, fullName, confirmPassword, cropedImage , about);
   }
 
   return (
