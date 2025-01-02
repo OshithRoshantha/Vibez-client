@@ -56,14 +56,9 @@ export const updateUserMetaData = async (userName: string, about: string, profil
         const token = localStorage.getItem('token');
         const userId = localStorage.getItem('userId');
 
-        const socket = new WebSocket('ws://localhost:8080/vibez-websocket');
+        const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
 
         socket.onopen = () => {
-            socket.send(
-                JSON.stringify({
-                    headers: { AUTHORIZATION: `Bearer ${token}` },
-                })
-            );
             const message = {
                 action: 'profileService',
                 body: {
