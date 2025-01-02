@@ -22,10 +22,12 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { ThreeDots} from 'react-loader-spinner';
-import { checkAccount, directLoginAuth, googleLoginAuth} from '../Api/AuthService';
-import { fetchUserId } from '../Api/ProfileService';
+import { checkAccount, directLoginAuth, googleLoginAuth} from '../Services/AuthService';
+import { fetchUserId } from '../Services/ProfileService';
 
 export default function Signin() {
+  const [linkedProfiles, setLinkedProfiles] = useState(['6776864e41fe8a0206781d9b']); // This is a placeholder for the friends and pending requests
+
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [emailNotFound, setEmailNotFound] = useState(false);
@@ -34,7 +36,7 @@ export default function Signin() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const [swiped, setSwiped] = useState(false);
-  
+
   function handleClickShowPassword() {
     setShowPassword(!showPassword);
   }
@@ -77,6 +79,7 @@ export default function Signin() {
             setIncorrectPassword(false);
             setLoading(false);
             navDashboard();
+            connectToSocket();
         } catch (error) {
             if (error.response.status === 401) {
                 setIncorrectPassword(true);
@@ -89,6 +92,38 @@ export default function Signin() {
     }
   }
 
+
+  const connectToSocket = () => {
+    const token = localStorage.getItem('token');  
+    const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
+    
+    socket.onopen = () => {
+      console.log('Connected to WebSocket');
+      socket.send(JSON.stringify({ action: 'subscribe', topic: 'profileService' }));
+    };
+  
+    socket.onerror = (error) => {
+      console.error("WebSocket Error: ", error);
+    };
+  
+    socket.onmessage = (event) => {
+      const incomingMessage = JSON.parse(event.data);
+
+      switch(incomingMessage.action){
+        case 'profileService':
+            if(linkedProfiles.includes(incomingMessage.body)){
+              console.log('need to refresh!'); // need to refresh fetching the linked profiles
+            }
+            break;
+
+        default:
+          console.log('Unknown Action');
+      }
+    };
+  };
+  
+  
+
    const handleGoogleLogin = async (credentialResponse) => {
         const googleToken = credentialResponse.credential; 
         const decoded = jwtDecode(googleToken);
@@ -98,6 +133,7 @@ export default function Signin() {
         fetchProfileId();
         handleSwipe();
         navDashboard();
+        connectToSocket();
    }
 
    const fetchProfileId = async () => {
