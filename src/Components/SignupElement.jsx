@@ -216,9 +216,7 @@ export default function SignupElement() {
   }
   
   const handleSignUp = async () => { 
-    if (isCreated || activeStep !== 2) return;
-    setIsCreated(true);
-    const response = await createAccount(email, fullName, confirmPassword, cropedImage , about);
+    await createAccount(email, fullName, confirmPassword, cropedImage , about);
   }
 
   return (
@@ -394,7 +392,7 @@ export default function SignupElement() {
             Back
           </Button>
           <Box />
-          <Button onClick={() => { handleNext(); handleSignUp(); }} disabled={fullNameError || emailError || disableContinueBtn || emailExistError}
+          <Button onClick={() => { handleNext();}} disabled={fullNameError || emailError || disableContinueBtn || emailExistError}
             sx={{ color: 'white', fontSize: '700', backgroundColor: '#0d6efd', paddingX: '25px', paddingY: '7px', borderRadius: '20px' }}>
             {activeStep === 2 ? 'Create' : 'Continue'}
           </Button>
