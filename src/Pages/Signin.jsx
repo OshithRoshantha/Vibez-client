@@ -112,7 +112,7 @@ export default function Signin() {
       switch(incomingMessage.action){
         case 'profileService':
             if(linkedProfiles.includes(incomingMessage.body)){
-              console.log('need to refresh!');
+              console.log('need to refresh!'); // need to refresh fetching the linked profiles
             }
             break;
 
