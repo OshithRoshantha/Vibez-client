@@ -44,7 +44,6 @@ export default function Friends({darkMode}) {
     }
 
     const handleSearchChange =  (e) => {
-        setResults([]);
         setSearchKeyword(e.target.value);
         setShowResults(false);
         setFriendRequests(true);
@@ -53,14 +52,17 @@ export default function Friends({darkMode}) {
             setFriendRequests(false);
             setYourFriends(false);
             getSearchedResults();
-            if(results.length > 0){
-                setIsResultsEmpty(false);
-            }
         }
     }
 
     const getSearchedResults = async () => {
         const response = await searchPeople(searchKeyword); 
+        if (response.length === 0) {
+            setIsResultsEmpty(true);
+            return;
+        } else {
+            setIsResultsEmpty(false);
+        }
         const metadataPromises = response.map((userId) => fetchPeopleMetaData(userId));
         const metadataResults = await Promise.all(metadataPromises); 
         setResults(metadataResults); 
@@ -114,6 +116,19 @@ export default function Friends({darkMode}) {
                                 profileId={result.userId}
                             />
                         ))
+                    }
+                    {isResultsEmpty && 
+                        <div className="flex flex-col items-center justify-center bg-background text-foreground" style={{marginTop:'23%'}}>
+                        <img
+                            aria-hidden="true"
+                            alt="document-icon"
+                            src="https://openui.fly.dev/openui/100x100.svg?text=📄"
+                        />
+                        <h2 className="mt-4 text-lg font-semibold">
+                            We couldn't find anything to show for
+                        </h2>
+                        <p className="mt-2 text-muted-foreground font-bold">{searchKeyword}</p>
+                        </div>
                     }
                 </div>
                 </div>
