@@ -2,7 +2,7 @@ import { useRef, useState, useEffect} from 'react';
 import './Styles/Column2.css'
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
-import { fetchUserMetaData } from '../Api/ProfileService';
+import { fetchUserMetaData, updateUserMetaData } from '../Services/ProfileService';
 
 export default function Profile({darkMode, setUserPicture}) {
     const [isEditingName, setIsEditingName] = useState(false);
@@ -16,7 +16,7 @@ export default function Profile({darkMode, setUserPicture}) {
     const avatarEditorRef = useRef(null);  
     const [name, setName] = useState('');
     const [about, setAbout] = useState('');
-    const [profilePicture, setProfilePicture] = useState('url');
+    const [profilePicture, setProfilePicture] = useState('');
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -27,6 +27,10 @@ export default function Profile({darkMode, setUserPicture}) {
         };
         fetchUser();
     }, []);    
+
+    const updateUser = async () => {
+        await updateUserMetaData(name, about, cropedImage);
+    }
 
     function handleNameClick() {
         setIsEditingName(true);
@@ -101,7 +105,7 @@ export default function Profile({darkMode, setUserPicture}) {
                                 <Slider defaultValue={[1]} min={1} max={10} step={1} style={{ width: '70%'}} onChange={handleSliderChange} value={cropFactor}/>
                                 <div className='edit-picture-buttons'>
                                     <button onClick={editPictureFormHandler} className='border-none  bg-gray-300 text-gray-600 hover:bg-gray-200' style={{width:'20%',borderRadius: '20px'}}>Back</button>
-                                    <button onClick={handleCrop} className='border-none' style={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</button>
+                                    <button onClick={() => { handleCrop(); updateUser();}} className='border-none' style={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</button>
                                 </div>
                 </div>}
                 <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Profile</h2>
@@ -138,7 +142,7 @@ export default function Profile({darkMode, setUserPicture}) {
                     </h2>
                     )}
                     {!isEditingName && <i onClick={handleNameClick} className={`${darkMode ? 'text-white':''} absolute bi bi-pencil-fill`} style={{marginLeft:'24%', cursor:'pointer'}}></i>} 
-                    {isEditingName && <i onClick={handleNameBlur} className={`${darkMode ? 'text-white':''} absolute bi bi-check2`} style={{marginLeft:'24%', cursor:'pointer', fontSize:'125%'}}></i>}  
+                    {isEditingName && <i onClick={() => { handleNameBlur(); updateUser();}} className={`${darkMode ? 'text-white':''} absolute bi bi-check2`} style={{marginLeft:'24%', cursor:'pointer', fontSize:'125%'}}></i>}  
                     </div>
                     <span className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} text-sm mt-2`} > This is not your username or PIN. This name will be visible to your Vibez contacts. </span>
                 </div>
@@ -161,7 +165,7 @@ export default function Profile({darkMode, setUserPicture}) {
                     </p>
                     )}
                     {!isEditingAbout && <i onClick={handleAboutClick} className={`${darkMode ? 'text-white':''} absolute bi bi-pencil-fill`} style={{marginLeft:'24%', cursor:'pointer'}}></i>}
-                    {isEditingAbout && <i onClick={handleAboutBlur} className={`${darkMode ? 'text-white':''} absolute bi bi-check2`} style={{marginLeft:'24%', cursor:'pointer', fontSize:'125%'}}></i>}
+                    {isEditingAbout && <i onClick={() => { handleAboutBlur(); updateUser();}} className={`${darkMode ? 'text-white':''} absolute bi bi-check2`} style={{marginLeft:'24%', cursor:'pointer', fontSize:'125%'}}></i>}
                     </div>
                 </div>
                 </div>
