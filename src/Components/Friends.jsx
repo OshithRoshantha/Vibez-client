@@ -56,6 +56,7 @@ export default function Friends({darkMode}) {
     }
 
     const getSearchedResults = async () => {
+        const loggedInUserId = localStorage.getItem('userId');
         const response = await searchPeople(searchKeyword); 
         if (response.length === 0) {
             setIsResultsEmpty(true);
@@ -63,7 +64,8 @@ export default function Friends({darkMode}) {
         } else {
             setIsResultsEmpty(false);
         }
-        const metadataPromises = response.map((userId) => fetchPeopleMetaData(userId));
+        const filteredResponse = response.filter((userId) => userId !== loggedInUserId);
+        const metadataPromises = filteredResponse.map((userId) => fetchPeopleMetaData(userId));
         const metadataResults = await Promise.all(metadataPromises); 
         setResults(metadataResults); 
     };
