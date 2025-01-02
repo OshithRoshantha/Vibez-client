@@ -26,7 +26,7 @@ import { checkAccount, directLoginAuth, googleLoginAuth} from '../Services/AuthS
 import { fetchUserId } from '../Services/ProfileService';
 
 export default function Signin() {
-  const [linkedProfiles, setLinkedProfiles] = useState(['']); // This is a placeholder for the friends and pending requests
+  const [linkedProfiles, setLinkedProfiles] = useState(['6776864e41fe8a0206781d9b']); // This is a placeholder for the friends and pending requests
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
