@@ -51,3 +51,31 @@ export const getdarkModePreference = async () => {
 }
 
 
+export const updateUserMetaData = async (userName: string, about: string, profilePicture: string): Promise<void> => {
+    return new Promise((resolve) => {
+        const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('userId');
+
+        const socket = new WebSocket('ws://localhost:8080/vibez-websocket');
+
+        socket.onopen = () => {
+            socket.send(
+                JSON.stringify({
+                    headers: { AUTHORIZATION: `Bearer ${token}` },
+                })
+            );
+            const message = {
+                action: 'profileService',
+                body: {
+                    userId,
+                    userName,
+                    about,
+                    profilePicture,
+                },
+            };
+            socket.send(JSON.stringify(message));
+            resolve(); 
+        };
+    });
+};
+

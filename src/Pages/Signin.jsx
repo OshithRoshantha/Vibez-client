@@ -34,6 +34,7 @@ export default function Signin() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const [swiped, setSwiped] = useState(false);
+  let messages = [];
   
   function handleClickShowPassword() {
     setShowPassword(!showPassword);
@@ -77,6 +78,7 @@ export default function Signin() {
             setIncorrectPassword(false);
             setLoading(false);
             navDashboard();
+            connectToSocket();
         } catch (error) {
             if (error.response.status === 401) {
                 setIncorrectPassword(true);
@@ -89,6 +91,28 @@ export default function Signin() {
     }
   }
 
+
+  const connectToSocket = () => {
+    const token = localStorage.getItem('token');  
+    const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
+    
+    socket.onopen = () => {
+      console.log('Connected to WebSocket');
+      socket.send(JSON.stringify({ action: 'subscribe', topic: 'profileService' }));
+    };
+  
+    socket.onerror = (error) => {
+      console.error("WebSocket Error: ", error);
+    };
+  
+    socket.onmessage = (event) => {
+      const incomingMessage = JSON.parse(event.data);
+      console.log("Message received:", incomingMessage);
+    };
+  };
+  
+  
+
    const handleGoogleLogin = async (credentialResponse) => {
         const googleToken = credentialResponse.credential; 
         const decoded = jwtDecode(googleToken);
@@ -98,6 +122,7 @@ export default function Signin() {
         fetchProfileId();
         handleSwipe();
         navDashboard();
+        connectToSocket();
    }
 
    const fetchProfileId = async () => {
