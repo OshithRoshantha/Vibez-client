@@ -74,3 +74,12 @@ export const updateUserMetaData = async (userName: string, about: string, profil
     });
 };
 
+export const fetchPeopleMetaData = async (userId: string) => {
+    const response = await axios.get(`http://localhost:8080/vibez/profile/${userId}`, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+}
+

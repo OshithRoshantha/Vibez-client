@@ -6,8 +6,9 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import GlobalAlert from './GlobalAlert';
-import { set } from 'date-fns';
-  
+import { searchPeople } from '../Services/FriendshipService'
+import { fetchPeopleMetaData } from '../Services/ProfileService'
+import SearchResult from './SearchResult';
 
 export default function Friends({darkMode}) {
     const[friendRequests, setFriendRequests] = useState(true);
@@ -16,6 +17,8 @@ export default function Friends({darkMode}) {
     const [unfriendPopup, setUnfriendPopup] = useState(false);
     const [showResults, setShowResults] = useState(false);
     const [searchKeyword, setSearchKeyword] = useState('');
+    const [results, setResults] = useState();
+    const [isResultsEmpty, setIsResultsEmpty] = useState(true);
     var friendCount = 56;
     var user="testUser";
     var about = "this is test about" 
@@ -40,7 +43,8 @@ export default function Friends({darkMode}) {
         setUnfriendPopup(!unfriendPopup);
     }
 
-    const handleSearchChange = (e) => {
+    const handleSearchChange =  (e) => {
+        setResults([]);
         setSearchKeyword(e.target.value);
         setShowResults(false);
         setFriendRequests(true);
@@ -48,8 +52,19 @@ export default function Friends({darkMode}) {
             setShowResults(true);
             setFriendRequests(false);
             setYourFriends(false);
+            getSearchedResults();
+            if(results.length > 0){
+                setIsResultsEmpty(false);
+            }
         }
     }
+
+    const getSearchedResults = async () => {
+        const response = await searchPeople(searchKeyword); 
+        const metadataPromises = response.map((userId) => fetchPeopleMetaData(userId));
+        const metadataResults = await Promise.all(metadataPromises); 
+        setResults(metadataResults); 
+    };
 
   return (
     <div>
@@ -88,18 +103,18 @@ export default function Friends({darkMode}) {
                 <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>People</h2>
                 <div className='friends-list'>
                 <div className="space-y-4">
-                    <div className="flex items-center justify-between border-border py-2">
-                    <div className="flex items-center">
-                        <img className="w-12 h-12 rounded-full mr-4" src="https://placehold.co/48x48" alt="User Profile Picture" />
-                        <div>
-                            <h2 className={`${darkMode ? 'text-white':''}`}>{user}</h2>
-                            <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'}`}>{about}</p>
-                        </div>
-                    </div>
-                    <div className='btn-container'>
-                        <button className="border-none hover:border-none bg-primary text-white p-2 px-3 rounded">Add friend</button>
-                    </div>
-                    </div>
+                    {!isResultsEmpty && 
+                        results.map((result) => (
+                            <SearchResult
+                                darkMode={darkMode}
+                                key={result.userId} 
+                                profileName={result.userName}
+                                profileAbout={result.about}
+                                profileImage={result.profilePicture}
+                                profileId={result.userId}
+                            />
+                        ))
+                    }
                 </div>
                 </div>
                 </div>}
