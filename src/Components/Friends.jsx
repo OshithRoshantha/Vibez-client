@@ -118,16 +118,16 @@ export default function Friends({darkMode}) {
                         ))
                     }
                     {isResultsEmpty && 
-                        <div className="flex flex-col items-center justify-center bg-background text-foreground" style={{marginTop:'23%'}}>
+                        <div className="flex flex-col items-center justify-center" style={{marginTop:'23%'}}>
                         <img
                             aria-hidden="true"
                             alt="document-icon"
                             src="https://openui.fly.dev/openui/100x100.svg?text=📄"
                         />
-                        <h2 className="mt-4 text-lg font-semibold">
+                        <h2 className={`${darkMode ? 'text-white' : ''} mt-4 text-lg font-semibold`}>
                             We couldn't find anything to show for
                         </h2>
-                        <p className="mt-2 text-muted-foreground font-bold">{searchKeyword}</p>
+                        <p className={`${darkMode ? 'text-gray-300' : 'text-muted-foreground'} mt-2 font-bold`} >{searchKeyword}</p>
                         </div>
                     }
                 </div>
