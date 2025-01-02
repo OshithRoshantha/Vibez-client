@@ -2,7 +2,7 @@ import { useRef, useState, useEffect} from 'react';
 import './Styles/Column2.css'
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
-import { fetchUserMetaData, updateUserMetaData } from '../Api/ProfileService';
+import { fetchUserMetaData, updateUserMetaData } from '../Services/ProfileService';
 
 export default function Profile({darkMode, setUserPicture}) {
     const [isEditingName, setIsEditingName] = useState(false);

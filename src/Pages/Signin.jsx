@@ -22,8 +22,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { ThreeDots} from 'react-loader-spinner';
-import { checkAccount, directLoginAuth, googleLoginAuth} from '../Api/AuthService';
-import { fetchUserId } from '../Api/ProfileService';
+import { checkAccount, directLoginAuth, googleLoginAuth} from '../Services/AuthService';
+import { fetchUserId } from '../Services/ProfileService';
 
 export default function Signin() {
   const [linkedProfiles, setLinkedProfiles] = useState(['']); // This is a placeholder for the friends and pending requests

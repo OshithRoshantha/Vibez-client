@@ -12,8 +12,7 @@ import FriendInfo from '@/Components/FriendInfo';
 import GroupInfo from '@/Components/GroupInfo';
 import MorphingText from "@/components/ui/morphing-text";
 import mainLogo from '../assets/Icons/main-logo3.png'
-import { updateDarkMode, getdarkModePreference} from '../Api/ProfileService';
-import { fetchUserMetaData } from '../Api/ProfileService';
+import { updateDarkMode, getdarkModePreference, fetchUserMetaData} from '../Services/ProfileService';
 
 export default function Dashboard() {
     const [darkMode, setDarkMode] = useState(false);
