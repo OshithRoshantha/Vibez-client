@@ -24,7 +24,6 @@ export default function Profile({darkMode, setUserPicture}) {
             setName(response.userName);
             setAbout(response.about);
             setProfilePicture(response.profilePicture);
-            console.log('imageURL', profilePicture);
         };
         fetchUser();
     }, []);    
