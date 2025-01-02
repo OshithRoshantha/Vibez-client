@@ -26,6 +26,8 @@ import { checkAccount, directLoginAuth, googleLoginAuth} from '../Api/AuthServic
 import { fetchUserId } from '../Api/ProfileService';
 
 export default function Signin() {
+  const [linkedProfiles, setLinkedProfiles] = useState(['']); // This is a placeholder for the friends and pending requests
+
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [emailNotFound, setEmailNotFound] = useState(false);
@@ -34,8 +36,7 @@ export default function Signin() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const [swiped, setSwiped] = useState(false);
-  let messages = [];
-  
+
   function handleClickShowPassword() {
     setShowPassword(!showPassword);
   }
@@ -107,7 +108,17 @@ export default function Signin() {
   
     socket.onmessage = (event) => {
       const incomingMessage = JSON.parse(event.data);
-      console.log("Message received:", incomingMessage);
+
+      switch(incomingMessage.action){
+        case 'profileService':
+            if(linkedProfiles.includes(incomingMessage.body)){
+              console.log('need to refresh!');
+            }
+            break;
+
+        default:
+          console.log('Unknown Action');
+      }
     };
   };
   
