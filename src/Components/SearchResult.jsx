@@ -7,13 +7,13 @@ export default function SearchResult({darkMode, profileName, profileAbout, profi
   const [friendshipId, setFriendshipId] = useState('');
   
   const newFriendRequest = async () => {
-    await sendFriendRequest(profileId);
     setFriendshipStatus('REQUESTED');
+    await sendFriendRequest(profileId);
   }
 
   const approveFriendRequest = async () => {
-    await acceptFriendRequest(friendshipId);
     setFriendshipStatus('ACCEPTED');
+    await acceptFriendRequest(friendshipId);
   }
 
   const sendMessage = () => {
