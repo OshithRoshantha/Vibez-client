@@ -1,6 +1,6 @@
 import './Styles/Signin.css'
 import mainLogo from '../assets/Icons/main-logo.png'
-import { useState } from 'react';
+import { useState,  useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -24,10 +24,10 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { ThreeDots} from 'react-loader-spinner';
 import { checkAccount, directLoginAuth, googleLoginAuth} from '../Services/AuthService';
 import { fetchUserId } from '../Services/ProfileService';
+import { isConnectedProfile } from '../Services/FriendshipService';
 
 export default function Signin() {
   const [linkedProfiles, setLinkedProfiles] = useState(['']); // This is a placeholder for the friends and pending requests
-
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [emailNotFound, setEmailNotFound] = useState(false);
@@ -117,7 +117,8 @@ export default function Signin() {
             }
             break;
         case 'friendshipService':
-            console.log(incomingMessage.body); //updated friendshipId
+          handleProfileConnection(incomingMessage.body);
+          console.log('Linked Profiles:', linkedProfiles);
           break;
         default:
           console.log('Unknown Action');
@@ -125,6 +126,17 @@ export default function Signin() {
     };
   };
   
+  const handleProfileConnection = async (friendshipId) => {
+    const response = await isConnectedProfile(friendshipId);
+    if (response) {
+      setLinkedProfiles((prev) => {
+        if (!prev.includes(friendshipId)) {
+          return [...prev, friendshipId];
+        }
+        return prev;
+      });
+    }
+  };
   
 
    const handleGoogleLogin = async (credentialResponse) => {
