@@ -39,7 +39,8 @@ export const getFriendshipStatus = async (friendshipId: string) => {
     } else if (response.data.status === 'PENDING') {
         if (response.data.userId === userId) {
             return 'REQUESTED';
-        } else {
+        } 
+        else if (response.data.friendId === userId) {
             return 'CONFIRM';
         }
     }
@@ -52,6 +53,5 @@ export const getFriendshipId = async (friendId: string) => {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
     });
-
-    return response.data.friendshipId;
+    return response.data;
 }
