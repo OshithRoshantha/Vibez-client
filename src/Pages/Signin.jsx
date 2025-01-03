@@ -119,12 +119,9 @@ export default function Signin() {
         case 'friendshipService':{
           const response = await isConnectedProfile(incomingMessage.body);
             if (response) {
-              setLinkedProfiles((prev) => { 
-                if (!prev.includes(incomingMessage.body)) { 
-                  return [...prev, incomingMessage.body]; 
-                }
-                return prev; 
-              });
+              console.log('related');
+            } else{
+              console.log('not related');
             }
           }
           break;
@@ -133,6 +130,10 @@ export default function Signin() {
       }
     };
   };
+
+  useEffect(() => {
+    console.log(linkedProfiles);
+  }, [linkedProfiles]);
   
   const handleGoogleLogin = async (credentialResponse) => {
         const googleToken = credentialResponse.credential; 
