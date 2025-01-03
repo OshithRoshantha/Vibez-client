@@ -27,7 +27,7 @@ import { fetchUserId } from '../Services/ProfileService';
 import { isConnectedProfile } from '../Services/FriendshipService';
 
 export default function Signin() {
-  const [linkedProfiles, setLinkedProfiles] = useState(['']); // This is a placeholder for the friends and pending requests
+  const [linkedProfiles, setLinkedProfiles] = useState(['test1', 'test2']); 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [emailNotFound, setEmailNotFound] = useState(false);
@@ -113,7 +113,7 @@ export default function Signin() {
       switch(incomingMessage.action){
         case 'profileService':
             if(linkedProfiles.includes(incomingMessage.body)){
-              console.log('need to refresh!'); // need to refresh fetching the linked profiles
+              console.log('need to refresh!'); 
             }
             break;
         case 'friendshipService':
@@ -135,9 +135,8 @@ export default function Signin() {
         return prev;
       });
     }
-  };
+   };
   
-
    const handleGoogleLogin = async (credentialResponse) => {
         const googleToken = credentialResponse.credential; 
         const decoded = jwtDecode(googleToken);
