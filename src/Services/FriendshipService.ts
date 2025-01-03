@@ -7,8 +7,8 @@ export const searchPeople = async (keyword: string) => {
 
 export const sendFriendRequest = async (friendId: string): Promise<void> => {
     return new Promise((resolve) => {
-        const token = localStorage.getItem('token');
-        const userId = localStorage.getItem('userId');
+        const token = sessionStorage.getItem('token');
+        const userId = sessionStorage.getItem('userId');
 
         const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
 
@@ -27,10 +27,10 @@ export const sendFriendRequest = async (friendId: string): Promise<void> => {
 };
 
 export const getFriendshipStatus = async (friendshipId: string) => {
-    const userId = localStorage.getItem('userId');
+    const userId = sessionStorage.getItem('userId');
     const response = await axios.get(`http://localhost:8080/vibez/friends/friendshipInfo/${friendshipId}`, {
         headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
     });
 
@@ -46,10 +46,10 @@ export const getFriendshipStatus = async (friendshipId: string) => {
 };
 
 export const getFriendshipId = async (friendId: string) => {
-    const userId = localStorage.getItem('userId');
+    const userId = sessionStorage.getItem('userId');
     const response = await axios.get(`http://localhost:8080/vibez/friends/${userId}/${friendId}`, {
         headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
     });
 

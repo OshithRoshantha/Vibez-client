@@ -60,7 +60,7 @@ export default function Friends({ darkMode }) {
     };
 
     const getSearchedResults = async (keyword) => {
-        const loggedInUserId = localStorage.getItem('userId');
+        const loggedInUserId = sessionStorage.getItem('userId');
         const response = await searchPeople(keyword);
         if (response.length > 0) {
             setIsResultsEmpty(false);

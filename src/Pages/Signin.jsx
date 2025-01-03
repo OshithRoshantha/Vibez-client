@@ -74,7 +74,7 @@ export default function Signin() {
     if (response) {
         try {
             const jwtToken = await directLoginAuth(email, password);
-            localStorage.setItem('token', jwtToken);
+            sessionStorage.setItem('token', jwtToken);
             fetchProfileId();
             setIncorrectPassword(false);
             setLoading(false);
@@ -94,7 +94,7 @@ export default function Signin() {
 
 
   const connectToSocket = () => {
-    const token = localStorage.getItem('token');  
+    const token = sessionStorage.getItem('token');  
     const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
     
     socket.onopen = () => {
@@ -132,7 +132,7 @@ export default function Signin() {
         const decoded = jwtDecode(googleToken);
         const { name, picture, email, sub } = decoded;
         const jwtToken = await googleLoginAuth(email, name, picture, sub);
-        localStorage.setItem('token', jwtToken);
+        sessionStorage.setItem('token', jwtToken);
         fetchProfileId();
         handleSwipe();
         navDashboard();
@@ -140,8 +140,8 @@ export default function Signin() {
    }
 
    const fetchProfileId = async () => {
-        const response = await fetchUserId(localStorage.getItem('token'));
-        localStorage.setItem('userId', response);
+        const response = await fetchUserId(sessionStorage.getItem('token'));
+        sessionStorage.setItem('userId', response);
    }
 
   return (
