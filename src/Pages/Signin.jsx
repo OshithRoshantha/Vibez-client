@@ -117,9 +117,8 @@ export default function Signin() {
             }
             break;
         case 'friendshipService':
-          handleProfileConnection(incomingMessage.body);
-          console.log('Linked Profiles:', linkedProfiles);
-          break;
+            handleProfileConnection(incomingMessage.body);
+            break;
         default:
           console.log('Unknown Action');
       }
