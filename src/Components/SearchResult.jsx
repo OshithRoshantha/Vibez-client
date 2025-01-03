@@ -36,36 +36,13 @@ export default function SearchResult({darkMode, profileName, profileAbout, profi
         </div>
     </div>
     <div className='btn-container'>
-        {friendshipStatus === '' && (
           <button
             onClick={addFriend}
             className="border-none hover:border-none bg-primary text-white p-2 px-3 rounded"
           >
             Add Friend
           </button>
-        )}
-        {friendshipStatus === 'ACCEPTED' && (
-          <button
-            className="border-none hover:border-none bg-primary text-white p-2 px-3 rounded"
-          >
-            Message
-          </button>
-        )}
-        {friendshipStatus === 'REQUESTED' && (
-          <button
-            disabled
-            className="border-none bg-blue-400 text-white p-2 px-3 rounded cursor-not-allowed"
-          >
-            Requested
-          </button>
-        )}
-        {friendshipStatus === 'CONFIRM' && (
-          <button
-            className="border-none hover:border-none bg-primary text-white p-2 px-3 rounded"
-          >
-            Confirm
-          </button>
-        )}    
+          
     </div>
     </div>
   )
