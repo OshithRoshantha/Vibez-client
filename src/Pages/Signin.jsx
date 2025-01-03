@@ -119,7 +119,12 @@ export default function Signin() {
         case 'friendshipService':{
           const response = await isConnectedProfile(incomingMessage.body);
             if (response) {
-              //add to linkedProfiles
+              setLinkedProfiles((prev) => { 
+                if (!prev.includes(incomingMessage.body)) { 
+                  return [...prev, incomingMessage.body]; 
+                }
+                return prev; 
+              });
             }
           }
           break;
