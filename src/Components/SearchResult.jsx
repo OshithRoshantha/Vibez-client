@@ -1,31 +1,49 @@
 import { useState, useEffect } from 'react'
 import { sendFriendRequest, getFriendshipStatus, getFriendshipId } from '../Services/FriendshipService'
+import { set } from 'date-fns';
 
 export default function SearchResult({darkMode, profileName, profileAbout, profileImage, profileId}) {
 
   const [friendshipStatus, setFriendshipStatus] = useState('');
   const [friendshipId, setFriendshipId] = useState('');
   
-  const addFriend = async () => {
+  const newFriendRequest = async () => {
     await sendFriendRequest(profileId);
-    retriveFriendshipId();
-    friendshipInfo(friendshipId);
+    setFriendshipStatus('REQUESTED');
   }
 
-  const friendshipInfo = async () => {
-    const status = await getFriendshipStatus(profileId);
-    setFriendshipStatus(status);
+  const acceptFriendRequest = () => {
+    setFriendshipStatus('ACCEPTED');
   }
 
-  const retriveFriendshipId = async () => {
-    const id = await getFriendshipId(profileId);
-    setFriendshipId(id);
+  const sendMessage = () => {
+    console.log('Message sent');
   }
 
   useEffect(() => {
-    friendshipInfo();
-  }, []);
+    const fetchFriendshipId = async () => {
+      const response = await getFriendshipId(profileId);
+      if (response === 'NOT_FRIENDS') {
+        setFriendshipStatus('NOT_FRIENDS');
+        setFriendshipId('0');
+      } else {
+        setFriendshipId(response);
+      }
+    };
+    fetchFriendshipId();
+  }, []); 
 
+  useEffect(() => {
+    const fetchFriendshipStatus = async () => {
+      if(friendshipId !== '0') {
+        const status = await getFriendshipStatus(friendshipId);
+        console.log(status);
+        setFriendshipStatus(status);
+      }
+    };
+    fetchFriendshipStatus();
+  }, [friendshipId]); 
+  
   return (
     <div className="flex items-center justify-between border-border ">
     <div className="flex items-center">
@@ -36,13 +54,39 @@ export default function SearchResult({darkMode, profileName, profileAbout, profi
         </div>
     </div>
     <div className='btn-container'>
+        {friendshipStatus === 'NOT_FRIENDS' && (
           <button
-            onClick={addFriend}
+            onClick={newFriendRequest}
             className="border-none hover:border-none bg-primary text-white p-2 px-3 rounded"
           >
             Add Friend
           </button>
-          
+        )}
+        {friendshipStatus === 'ACCEPTED' && (
+          <button
+            onClick={sendMessage}
+            className="border-none hover:border-none bg-primary text-white p-2 px-3 rounded"
+          >
+            Message
+          </button>
+        )}
+        {friendshipStatus === 'REQUESTED' && (
+          <button
+            disabled
+            className="border-none bg-blue-400 text-white p-2 px-3 rounded cursor-not-allowed"
+          >
+            Requested
+          </button>
+        )}
+        {friendshipStatus === 'CONFIRM' && (
+          <button
+            onClick={acceptFriendRequest}
+            className="border-none hover:border-none bg-primary text-white p-2 px-3 rounded"
+          >
+            Confirm
+          </button>
+        )} 
+    
     </div>
     </div>
   )
