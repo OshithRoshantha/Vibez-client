@@ -8,8 +8,8 @@ export default function SearchResult({darkMode, profileName, profileAbout, profi
   
   const addFriend = async () => {
     await sendFriendRequest(profileId);
-    friendshipInfo();
     retriveFriendshipId();
+    friendshipInfo(friendshipId);
   }
 
   const friendshipInfo = async () => {
