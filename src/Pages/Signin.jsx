@@ -26,6 +26,7 @@ import { checkAccount, directLoginAuth, googleLoginAuth} from '../Services/AuthS
 import { fetchUserId } from '../Services/ProfileService';
 import { isConnectedProfile } from '../Services/FriendshipService';
 
+
 export default function Signin() {
   const [linkedProfiles, setLinkedProfiles] = useState(['test1', 'test2']); 
   const [loading, setLoading] = useState(false);
@@ -92,11 +93,10 @@ export default function Signin() {
     }
   }
 
-
   const connectToSocket = () => {
-    const token = sessionStorage.getItem('token');  
+    const token = sessionStorage.getItem('token');
     const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
-    
+  
     socket.onopen = () => {
       console.log('Connected to WebSocket');
       socket.send(JSON.stringify({ action: 'subscribe', topic: 'profileService' }));
@@ -107,37 +107,29 @@ export default function Signin() {
       console.error("WebSocket Error: ", error);
     };
   
-    socket.onmessage = (event) => {
+    socket.onmessage = async (event) => { 
       const incomingMessage = JSON.parse(event.data);
-
+  
       switch(incomingMessage.action){
         case 'profileService':
-            if(linkedProfiles.includes(incomingMessage.body)){
-              console.log('need to refresh!'); 
+          if(linkedProfiles.includes(incomingMessage.body)){
+            console.log('need to refresh!');
+          }
+          break;
+        case 'friendshipService':{
+          const response = await isConnectedProfile(incomingMessage.body);
+            if (response) {
+              //add to linkedProfiles
             }
-            break;
-        case 'friendshipService':
-            handleProfileConnection(incomingMessage.body);
-            break;
+          }
+          break;
         default:
           console.log('Unknown Action');
       }
     };
   };
   
-  const handleProfileConnection = async (friendshipId) => {
-    const response = await isConnectedProfile(friendshipId);
-    if (response) {
-      setLinkedProfiles((prev) => {
-        if (!prev.includes(friendshipId)) {
-          return [...prev, friendshipId];
-        }
-        return prev;
-      });
-    }
-   };
-  
-   const handleGoogleLogin = async (credentialResponse) => {
+  const handleGoogleLogin = async (credentialResponse) => {
         const googleToken = credentialResponse.credential; 
         const decoded = jwtDecode(googleToken);
         const { name, picture, email, sub } = decoded;
