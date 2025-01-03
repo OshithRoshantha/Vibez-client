@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
-import { sendFriendRequest, getFriendshipStatus, getFriendshipId } from '../Services/FriendshipService'
-import { set } from 'date-fns';
+import { sendFriendRequest, getFriendshipStatus, getFriendshipId, acceptFriendRequest } from '../Services/FriendshipService'
 
 export default function SearchResult({darkMode, profileName, profileAbout, profileImage, profileId}) {
 
@@ -12,7 +11,8 @@ export default function SearchResult({darkMode, profileName, profileAbout, profi
     setFriendshipStatus('REQUESTED');
   }
 
-  const acceptFriendRequest = () => {
+  const approveFriendRequest = async () => {
+    await acceptFriendRequest(friendshipId);
     setFriendshipStatus('ACCEPTED');
   }
 
@@ -37,7 +37,6 @@ export default function SearchResult({darkMode, profileName, profileAbout, profi
     const fetchFriendshipStatus = async () => {
       if(friendshipId !== '0') {
         const status = await getFriendshipStatus(friendshipId);
-        console.log(status);
         setFriendshipStatus(status);
       }
     };
@@ -62,7 +61,7 @@ export default function SearchResult({darkMode, profileName, profileAbout, profi
             Add Friend
           </button>
         )}
-        {friendshipStatus === 'ACCEPTED' && (
+        {friendshipStatus === 'FRIENDS' && (
           <button
             onClick={sendMessage}
             className="border-none hover:border-none bg-primary text-white p-2 px-3 rounded"
@@ -80,7 +79,7 @@ export default function SearchResult({darkMode, profileName, profileAbout, profi
         )}
         {friendshipStatus === 'CONFIRM' && (
           <button
-            onClick={acceptFriendRequest}
+            onClick={approveFriendRequest}
             className="border-none hover:border-none bg-primary text-white p-2 px-3 rounded"
           >
             Confirm
