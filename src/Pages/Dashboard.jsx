@@ -21,7 +21,7 @@ export default function Dashboard() {
 
     const { messages } = useWebSocket();
     const audioRef = useRef(null);
-    const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState();
     const [friendsMenu, setFriendsMenu] = useState(false);
     const [chatsMenu, setChatsMenu] = useState(true);
     const [groupsMenu, setGroupsMenu] = useState(false);
