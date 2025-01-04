@@ -32,7 +32,7 @@ export default function Friends({ darkMode }) {
             setPendingProfiles([]);
             setAcceptedProfiles([]);
             let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
-            console.log(linkedProfiles);
+            if (linkedProfiles.length === 0) {setLoading(false);}
             if (linkedProfiles && linkedProfiles.length !== 0) {
                 for (let friendshipId of linkedProfiles){
                     const profileInfo = await getConnectedProfileInfo(friendshipId);
