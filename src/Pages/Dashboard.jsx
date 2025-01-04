@@ -196,7 +196,7 @@ return (
             </div>
             {chatsMenu && <Chats darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
             {groupsMenu && <GroupChats darkMode={darkMode} showGroupMessages={showGroupMessages}/>}
-            {friendsMenu && <Friends  darkMode={darkMode}/>}
+            {friendsMenu && <Friends darkMode={darkMode}/>}
             {marketplaceMenu && <Marketplace  darkMode={darkMode}/>}
             {settingsMenu && <Settings darkModeOn={darkModeOn} darkModeOff={darkModeOff} darkMode={darkMode}/>}
             {profileMenu && <Profile  darkMode={darkMode} setUserPicture={setUserPicture}/>}
