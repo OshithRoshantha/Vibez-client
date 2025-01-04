@@ -1,24 +1,106 @@
-import { useState } from 'react';
-import './Styles/Column2.css'
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
+import { useState, useRef, useEffect } from 'react';
+import './Styles/Column2.css';
 import GlobalAlert from './GlobalAlert';
-import { set } from 'date-fns';
-  
+import { searchPeople, getConnectedProfileInfo, filterPendingRequests } from '../Services/FriendshipService';
+import { fetchPeopleMetaData } from '../Services/ProfileService';
+import SearchResult from './SearchResult';
+import PreviewPendingRequests from './PreviewPendingRequests';
+import PreiviewAcceptedRequests from './PreiviewAcceptedRequests';
+import { Skeleton } from "@/components/ui/skeleton";
+import { useWebSocket } from '../Context/WebSocketContext';
+import { isConnectedProfile } from '../Services/FriendshipService';
 
-export default function Friends({darkMode}) {
-    const[friendRequests, setFriendRequests] = useState(true);
-    const[yourFriends, setYourFriends] = useState(false);
+export default function Friends({ darkMode}) {
+
+    const { messages } = useWebSocket();
+    const [loading, setLoading] = useState(true);
+    const [friendRequests, setFriendRequests] = useState(true);
+    const [yourFriends, setYourFriends] = useState(false);
     const [blockPopup, setBlockPopup] = useState(false);
     const [unfriendPopup, setUnfriendPopup] = useState(false);
+    const inputRef = useRef(null);
     const [showResults, setShowResults] = useState(false);
     const [searchKeyword, setSearchKeyword] = useState('');
-    var friendCount = 56;
-    var user="testUser";
-    var about = "this is test about" 
+    const [results, setResults] = useState([]);
+    const [isResultsEmpty, setIsResultsEmpty] = useState(false);
+    const [pendingProfiles, setPendingProfiles] = useState([]);
+    const [acceptedProfiles, setAcceptedProfiles] = useState([]);
+    var user = "testUser";
+
+    const fetchFrienships = async () => {
+        setLoading(true);
+        setPendingProfiles([]);
+        setAcceptedProfiles([]);
+        let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
+        if (linkedProfiles.length === 0) {setLoading(false);}
+        else if (linkedProfiles.length > 0) {
+            for (let friendshipId of linkedProfiles){
+                console.log(friendshipId);
+                const profileInfo = await getConnectedProfileInfo(friendshipId);
+                const response = await filterPendingRequests(friendshipId);
+                setLoading(false);
+                if (response && profileInfo.status === "PENDING") {
+                    setPendingProfiles((prevProfiles) => {
+                        const isDuplicate = prevProfiles.some(profile => profile.profileId === profileInfo.profileId);
+                        if (!isDuplicate) {
+                            return [...prevProfiles, profileInfo];
+                        } else {
+                            return prevProfiles;
+                        }
+                    });
+                }
+                if (profileInfo.status === "ACCEPTED") {
+                    setAcceptedProfiles((prevProfiles) => {
+                        const isDuplicate = prevProfiles.some(profile => profile.profileId === profileInfo.profileId);
+                        if (!isDuplicate) {
+                            return [...prevProfiles, profileInfo];
+                        } else {
+                            return prevProfiles;
+                        }
+                    });
+                }
+            }
+        }
+    };
+
+    useEffect(() => {
+        fetchFrienships();
+    }, []);
+
+    useEffect(() => {
+        const handleMessages = async () => {
+            if (messages.length > 0) {
+                const lastMessage = messages[messages.length - 1];
+                switch (lastMessage.action) {
+                    case 'friendshipService':{
+                        const response = await isConnectedProfile(lastMessage.body);
+                        if (response) {
+                            let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
+                            if (!linkedProfiles.includes(lastMessage.body)) {
+                                linkedProfiles.push(lastMessage.body);
+                                sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+                            }
+                            fetchFrienships();
+                        }
+                        break;
+                    }
+                    case 'profileService':{
+                        let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
+                        for (const friendshipId of linkedProfiles){
+                            const isFriend = await isConnectedProfile(friendshipId);
+                            if(isFriend){
+                                fetchFrienships();
+                            }
+                        }
+                      }
+                        break;
+                    }
+            }
+        };
+    
+        handleMessages();
+    }, [messages]);
+    
 
     function hideFriendRequests() {
         setFriendRequests(true);
@@ -32,117 +114,241 @@ export default function Friends({darkMode}) {
         setShowResults(false);
     }
 
-    function toggleBlockPopup(){
+    function toggleBlockPopup() {
         setBlockPopup(!blockPopup);
     }
-    
-    function toggleUnfriendPopup(){
+
+    function toggleUnfriendPopup() {
         setUnfriendPopup(!unfriendPopup);
     }
 
-    const handleSearchChange = (e) => {
-        setSearchKeyword(e.target.value);
-        setShowResults(false);
-        setFriendRequests(true);
-        if (e.target.value.length > 0){
+    const handleSearchChange = async (e) => {
+        const value = e.target.value;
+        setSearchKeyword(value); 
+        if (value.length > 0) {
             setShowResults(true);
             setFriendRequests(false);
             setYourFriends(false);
+            getSearchedResults(value);
+        } else {
+            setShowResults(false);
+            setYourFriends(false);
+            setFriendRequests(true);
         }
-    }
+    };
 
-  return (
-    <div>
-        {blockPopup && <GlobalAlert darkMode={darkMode} text={`Block ${user}?`} textOP={'Blocked contacts will no longer be able to send you messages.'} button1={'Cancel'} button2={'Block'} btn1Function={toggleBlockPopup} btn2Function={toggleBlockPopup}/>}
-        {unfriendPopup && <GlobalAlert darkMode={darkMode} text={`Remove ${user}?`} textOP={'Removing this contact will remove them from your friends list.'} button1={'Cancel'} button2={'Remove'} btn1Function={toggleUnfriendPopup} btn2Function={toggleUnfriendPopup} />}
-        <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 friends-column`} style={{backgroundColor: darkMode ? '#262729' : '', height:'100vh'}}>
-                <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Friends</h2>
-                <input type="text" placeholder="Search people by name or email" value={searchKeyword} onChange={handleSearchChange} className={`${darkMode ? 'bg-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'bg-gray-200'} w-full px-4 py-2 mb-4 focus:outline-none focus:border-none placeholder:text-gray-500  text-gray-500 `} style={{borderRadius:'20px'}} />
-                <i className={`${darkMode ? 'text-[#abacae]':'text-gray-500'} bi absolute text-2xl bi-search`} style={{marginLeft:'-3%', marginTop:'0.2%'}}></i>
+    const getSearchedResults = async (keyword) => {
+        const loggedInUserId = sessionStorage.getItem('userId');
+        const response = await searchPeople(keyword);
+        if (response.length > 0) {
+            setIsResultsEmpty(false);
+            const filteredResponse = response.filter((userId) => userId !== loggedInUserId);
+            const metadataPromises = filteredResponse.map((userId) => fetchPeopleMetaData(userId));
+            const metadataResults = await Promise.all(metadataPromises);
+            setResults(metadataResults);
+            if(metadataResults.length === 0) {
+                setIsResultsEmpty(true);
+            }
+        } else {
+            setIsResultsEmpty(true);
+        }
+    };
+
+    return (
+        <div>
+            {blockPopup && (
+                <GlobalAlert
+                    darkMode={darkMode}
+                    text={`Block ${user}?`}
+                    textOP={'Blocked contacts will no longer be able to send you messages.'}
+                    button1={'Cancel'}
+                    button2={'Block'}
+                    btn1Function={toggleBlockPopup}
+                    btn2Function={toggleBlockPopup}
+                />
+            )}
+            {unfriendPopup && (
+                <GlobalAlert
+                    darkMode={darkMode}
+                    text={`Remove ${user}?`}
+                    textOP={'Removing this contact will remove them from your friends list.'}
+                    button1={'Cancel'}
+                    button2={'Remove'}
+                    btn1Function={toggleUnfriendPopup}
+                    btn2Function={toggleUnfriendPopup}
+                />
+            )}
+            <div
+                className={`${darkMode ? 'border-gray-600 border-r border-border' : 'border-r border-border'}  p-4 friends-column`}
+                style={{ backgroundColor: darkMode ? '#262729' : '', height: '100vh' }}
+            >
+                <h2 className={`${darkMode ? 'text-white' : 'text-black'} text-lg font-semibold column-header`}>Friends</h2>
+                <input
+                    ref={inputRef}
+                    type="text"
+                    placeholder="Search people by name or email"
+                    value={searchKeyword}
+                    onChange={handleSearchChange}
+                    className={`${darkMode ? 'bg-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'bg-gray-200'} w-full px-4 py-2 mb-4 focus:outline-none focus:border-none placeholder:text-gray-500  text-gray-500 `}
+                    style={{ borderRadius: '20px' }}
+                />
+                <i
+                    className={`${darkMode ? 'text-[#abacae]' : 'text-gray-500'} bi absolute text-2xl bi-search`}
+                    style={{ marginLeft: '-3%', marginTop: '0.2%' }}
+                ></i>
                 <div className="flex space-x-2 mb-4">
-                    <button onClick={hideYourFriends} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}>Your Friends</button>
-                    <button onClick={hideFriendRequests} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}>Friend Requests</button>
+                    <button
+                        onClick={hideYourFriends}
+                        className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]' : 'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}
+                    >
+                        Your Friends
+                    </button>
+                    <button
+                        onClick={hideFriendRequests}
+                        className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]' : 'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}
+                    >
+                        Friend Requests
+                    </button>
                 </div>
-                {friendRequests && <div>
-                <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>Friend requests</h2>
-                <div className='friends-list'>
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between border-border py-2">
-                    <div className="flex items-center">
-                        <img src="https://placehold.co/40x40" className="rounded-full mr-2 w-55 h-55" />
-                        <div>
-                            <p className={`${darkMode ? 'text-white':''} font-medium`}>{user}</p>
-                            <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} text-sm `}>About</p>
-                        </div>
+                {friendRequests && loading && ( 
+                    <div>
+                    <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{pendingProfiles.length} Pending requests</h2>
+                    <div className="friends-list skeleton-container">
+                        <div className='mb-3' style={{display:'flex', alignItems:'center', columnGap:'10px'}}>
+                            <Skeleton className="h-12 w-12 rounded-full" />
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-[250px] " />
+                                <Skeleton className="h-4 w-[200px]" />
+                            </div>  
+                        </div> 
+                        <div className='mb-3' style={{display:'flex', alignItems:'center', columnGap:'10px'}}>
+                            <Skeleton className="h-12 w-12 rounded-full" />
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-[250px]" />
+                                <Skeleton className="h-4 w-[200px]" />
+                            </div>  
+                        </div> 
+                        <div className='mb-3' style={{display:'flex', alignItems:'center', columnGap:'10px'}}>
+                            <Skeleton className="h-12 w-12 rounded-full" />
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-[250px]" />
+                                <Skeleton className="h-4 w-[200px]" />
+                            </div>  
+                        </div>                     
                     </div>
-                    <div className='btn-container'>
-                        <button className="bg-primary text-primary-foreground px-3 py-1 mr-2 rounded">Confirm</button>
-                        <button className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} border-none px-3 py-1 rounded`}>Delete</button>
-                    </div>
-                    </div>
-                </div>
-                </div>
-                </div>}
-
-                {showResults && <div>
-                <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>People</h2>
-                <div className='friends-list'>
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between border-border py-2">
-                    <div className="flex items-center">
-                        <img className="w-12 h-12 rounded-full mr-4" src="https://placehold.co/48x48" alt="User Profile Picture" />
-                        <div>
-                            <h2 className={`${darkMode ? 'text-white':''}`}>{user}</h2>
-                            <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'}`}>{about}</p>
-                        </div>
-                    </div>
-                    <div className='btn-container'>
-                        <button className="border-none hover:border-none bg-primary text-white p-2 px-3 rounded">Add friend</button>
-                    </div>
-                    </div>
-                </div>
-                </div>
-                </div>}
-
-                {yourFriends && <div>
-                <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{friendCount} friends</h2>
-                <div className='friends-list'>
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between border-border py-2">
-                    <div className="flex items-center">
-                        <img src="https://placehold.co/40x40" className="rounded-full mr-2" />
-                        <div>
-                            <p className={`${darkMode ? 'text-white':''} font-medium`}>{user}</p>
-                            <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} text-sm `}>About</p>
-                        </div>
-                    </div>
-                    <div className='btn-container'>
-                        <div className='ml-mr-4 btns'><i className="bi bi-chat-fill text-primary"></i></div>
-                        <Popover>
-                        <PopoverTrigger asChild>
-                            <div className='btns'><i className={`${darkMode ? 'text-white':''} bi bi-three-dots-vertical`}></i></div>
-                        </PopoverTrigger>
-                        <PopoverContent style={{width: '220px', marginRight: '200px', height: '105px' ,backgroundColor: darkMode ? '#262729' : ''}}>	
-                        <div className="bg-card text-card-foreground p-0 rounded-lg ">
-                            <div className="flex-grow friend-buttons" style={{marginLeft:'-20px', marginTop:'-17px',backgroundColor: darkMode ? '#262729' : ''}}>
-                                <button onClick={toggleBlockPopup} className="flex flex-grow items-center w-full p-2 text-left rounded bg-transparent text-black border-none focus:ring-0 hover:border-none">
-                                    <span className="material-icons" style={{display:'flex', justifyContent:'center',alignItems:'center',backgroundColor: darkMode ? '#3b3c3e':'#d1d1d1', width:'29px', height:'29px', borderRadius:'50%'}}><i className={`${darkMode ? 'text-white':''} bi bi-person-fill-slash`} ></i></span>
-                                    <span className={`${darkMode ? 'text-white':''} ml-2`}>Block {user}</span>
-                                </button>
-                                <button onClick={toggleUnfriendPopup} className="flex flex-grow items-center w-full p-2 text-left rounded bg-transparent text-black border-none focus:ring-0 hover:border-none">
-                                    <span className="material-icons" style={{display:'flex', justifyContent:'center',alignItems:'center',backgroundColor: darkMode ? '#3b3c3e':'#d1d1d1', width:'29px', height:'29px', borderRadius:'50%'}}><i className={`${darkMode ? 'text-white':''} bi bi-person-fill-x`} ></i></span>
-                                    <span className={`${darkMode ? 'text-white':''} ml-2`}>Unfriend {user}</span>
-                                </button>
+                    </div>                    
+                )}
+                {friendRequests && !loading && (
+                    <div>
+                        <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{pendingProfiles.length} Pending requests</h2>
+                        <div className="friends-list">
+                            <div className="space-y-4">
+                                {
+                                pendingProfiles.map(profile => (
+                                    <PreviewPendingRequests
+                                    key={profile.friendshipId} 
+                                    darkMode={darkMode}
+                                    friendshipId={profile.friendshipId}
+                                    profileId={profile.profileId}
+                                    profileName={profile.profileName}
+                                    profilePicture={profile.profilePicture}
+                                    status={profile.status}
+                                    profileAbout={profile.profileAbout}
+                                    />
+                                ))
+                                }
                             </div>
                         </div>
-                        </PopoverContent>
-                        </Popover>
                     </div>
+                )}
+
+                {showResults && (
+                    <div>
+                        <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>People</h2>
+                        <div className="friends-list">
+                            <div className="space-y-4">
+                                {isResultsEmpty && (
+                                    <div className="flex flex-col items-center justify-center" style={{ marginTop: '20%' }}>
+                                        <img
+                                            aria-hidden="true"
+                                            alt="document-icon"
+                                            src="./src/assets/Icons/errorIcon1.png"
+                                            style={{ height: '125px', width: '125px' }}
+                                        />
+                                        <h2 className={`${darkMode ? 'text-white' : ''} mt-4 text-lg font-semibold`}>
+                                            We couldn't find anything to show for
+                                        </h2>
+                                        <p className={`${darkMode ? 'text-gray-300' : 'text-muted-foreground'} mt-2 font-bold`}>{searchKeyword}</p>
+                                    </div>
+                                )}
+                                {!isResultsEmpty && (
+                                    results.map((result) => (
+                                        <SearchResult
+                                        darkMode={darkMode}
+                                        key={result.userId} 
+                                        profileName={result.userName}
+                                        profileAbout={result.about}
+                                        profileImage={result.profilePicture}
+                                        profileId={result.userId}
+                                        />
+                                    ))
+                                )}
+                            </div>
+                        </div>
                     </div>
+                )}
+                {yourFriends && loading && ( 
+                    <div>
+                    <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{acceptedProfiles.length} friends</h2>
+                    <div className="friends-list skeleton-container">
+                        <div className='mb-3' style={{display:'flex', alignItems:'center', columnGap:'10px'}}>
+                            <Skeleton className="h-12 w-12 rounded-full" />
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-[250px] " />
+                                <Skeleton className="h-4 w-[200px]" />
+                            </div>  
+                        </div> 
+                        <div className='mb-3' style={{display:'flex', alignItems:'center', columnGap:'10px'}}>
+                            <Skeleton className="h-12 w-12 rounded-full" />
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-[250px]" />
+                                <Skeleton className="h-4 w-[200px]" />
+                            </div>  
+                        </div> 
+                        <div className='mb-3' style={{display:'flex', alignItems:'center', columnGap:'10px'}}>
+                            <Skeleton className="h-12 w-12 rounded-full" />
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-[250px]" />
+                                <Skeleton className="h-4 w-[200px]" />
+                            </div>  
+                        </div>                     
                     </div>
+                    </div>                    
+                )}
+                {yourFriends && !loading && (
+                    <div>
+                        <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{acceptedProfiles.length} friends</h2>
+                        <div className="friends-list">
+                            <div className="space-y-4">
+                               {
+                                acceptedProfiles.map(profile => (
+                                    <PreiviewAcceptedRequests
+                                    key={profile.friendshipId} 
+                                    darkMode={darkMode}
+                                    friendshipId={profile.friendshipId}
+                                    profileId={profile.profileId}
+                                    profileName={profile.profileName}
+                                    profilePicture={profile.profilePicture}
+                                    status={profile.status}
+                                    profileAbout={profile.profileAbout}
+                                    />
+                                ))
+                                }                            
+                            </div>
+                        </div>
                     </div>
-                </div>}
+                )}
             </div>
-    </div>
-  )
+        </div>
+    );
 }
