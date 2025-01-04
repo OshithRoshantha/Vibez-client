@@ -126,10 +126,8 @@ export default function Signin() {
               if (!linkedProfiles.includes(incomingMessage.body)) {
                 linkedProfiles.push(incomingMessage.body);
                 sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
-            }
-            } else{
-              console.log('not related');
-            }
+              }
+            } 
           }
           break;
         default:
