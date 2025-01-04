@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { sendFriendRequest, getFriendshipStatus, getFriendshipId, acceptFriendRequest } from '../Services/FriendshipService'
+import { set } from 'date-fns';
 
 export default function SearchResult({darkMode, profileName, profileAbout, profileImage, profileId}) {
 
@@ -21,27 +22,30 @@ export default function SearchResult({darkMode, profileName, profileAbout, profi
   }
 
   useEffect(() => {
-    const fetchFriendshipId = async () => {
+    const fetchData = async () => {
       const response = await getFriendshipId(profileId);
       if (response === 'NOT_FRIENDS') {
         setFriendshipStatus('NOT_FRIENDS');
-        setFriendshipId('0');
-      } else {
+      } 
+      else {
         setFriendshipId(response);
-      }
-    };
-    fetchFriendshipId();
-  }, []); 
+        const statusResponse = await getFriendshipStatus(response);
 
-  useEffect(() => {
-    const fetchFriendshipStatus = async () => {
-      if(friendshipId !== '0') {
-        const status = await getFriendshipStatus(friendshipId);
-        setFriendshipStatus(status);
+        if (statusResponse.status === 'ACCEPTED') {
+          setFriendshipStatus('FRIENDS');
+        } 
+        else if (statusResponse.status === 'PENDING') {
+            if (statusResponse.userId === sessionStorage.getItem('userId')) {
+              setFriendshipStatus('REQUESTED');
+            } 
+            else if (statusResponse.friendId === sessionStorage.getItem('userId')) {
+              setFriendshipStatus('CONFIRM');
+            }
+        }
       }
     };
-    fetchFriendshipStatus();
-  }, [friendshipId]); 
+    fetchData();
+  }, []); 
   
   return (
     <div className="flex items-center justify-between border-border ">

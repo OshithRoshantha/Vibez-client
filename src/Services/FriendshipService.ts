@@ -48,23 +48,12 @@ export const acceptFriendRequest = async (friendshipId: string): Promise<void> =
 };
 
 export const getFriendshipStatus = async (friendshipId: string) => {
-    const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://localhost:8080/vibez/friends/friendshipInfo/${friendshipId}`, {
+    const response = await axios.get(`http://localhost:8080/vibez/friends/getStatus/${friendshipId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
     });
-
-    if (response.data.status === 'ACCEPTED') {
-        return 'FRIENDS';
-    } else if (response.data.status === 'PENDING') {
-        if (response.data.userId === userId) {
-            return 'REQUESTED';
-        } 
-        else if (response.data.friendId === userId) {
-            return 'CONFIRM';
-        }
-    }
+    return response.data;
 };
 
 export const getFriendshipId = async (friendId: string) => {
