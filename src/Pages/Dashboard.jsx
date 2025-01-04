@@ -1,6 +1,6 @@
 import Chats from '@/Components/Chats';
 import './Styles/Dashboard.css'
-import { useEffect, useState} from 'react';
+import { useEffect, useState, useRef} from 'react';
 import Friends from '@/Components/Friends';
 import Marketplace from '@/Components/Marketplace';
 import Settings from '@/Components/Settings';
@@ -13,8 +13,14 @@ import GroupInfo from '@/Components/GroupInfo';
 import MorphingText from "@/components/ui/morphing-text";
 import mainLogo from '../assets/Icons/main-logo3.png'
 import { updateDarkMode, getdarkModePreference, fetchUserMetaData} from '../Services/ProfileService';
+import PopupNotifiter from '../Components/PopupNotifiter';
+import { useWebSocket } from '../Context/WebSocketContext';
+import { getConnectedProfileInfo, filterPendingRequests, isConnectedProfile} from '../Services/FriendshipService';
 
 export default function Dashboard() {
+
+    const { messages } = useWebSocket();
+    const audioRef = useRef(null);
     const [darkMode, setDarkMode] = useState(false);
     const [friendsMenu, setFriendsMenu] = useState(false);
     const [chatsMenu, setChatsMenu] = useState(true);
@@ -28,6 +34,10 @@ export default function Dashboard() {
     const [groupInfoMenu, setGroupInfoMenu] = useState(false);
     const [welcomeVideo, setWelcomeVideo] = useState(true);
     const [userPicture, setUserPicture] = useState('url');
+    const [showNotification, setShowNotification] = useState(false);
+    const [profileImage, setProfileImage] = useState('url');
+    const [profileName, setProfileName] = useState('');
+    const [notifiacton, setNotification] = useState('');
     
     const texts = [
         "Stay connected with your circles",
@@ -56,6 +66,38 @@ export default function Dashboard() {
         fetchDarkModePreference();
         fetchUser();
     }, []);
+
+    useEffect(() => {
+        const handleMessages = async () => {
+            if (messages.length > 0) {
+                const lastMessage = messages[messages.length - 1];
+                switch (lastMessage.action) {
+                    case 'friendshipService':{
+                        const response = await isConnectedProfile(lastMessage.body);
+                        if (response) {
+                            const profileInfo = await getConnectedProfileInfo(lastMessage.body);
+                            const filterResponse = await filterPendingRequests(lastMessage.body);
+                            if (filterResponse && profileInfo.status === 'PENDING') {
+                                setProfileImage(profileInfo.profilePicture);
+                                setProfileName(profileInfo.profileName);
+                                setNotification('sent you a friend request.');
+                                setShowNotification(true);
+                            }
+                            if (profileInfo.status === 'ACCEPTED') {
+                                setProfileImage(profileInfo.profilePicture);
+                                setProfileName(profileInfo.profileName);
+                                setNotification('accepted your friend request.');
+                                setShowNotification(true);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        };
+    
+        handleMessages();
+    }, [messages]);
 
     function hideWelcomeVideo(){
         setWelcomeVideo(false);
@@ -169,8 +211,26 @@ export default function Dashboard() {
         setFriendInfoMenu(false);
     }
 
-return (
+    useEffect(() => {
+        if (showNotification) {
+            if (audioRef.current) {
+                audioRef.current.play().catch((error) => {
+                    console.error("Audio playback failed:", error);
+                });
+            }
+            const timer = setTimeout(() => {
+                setShowNotification(false);
+            }, 9000);
+            return () => clearTimeout(timer);
+        }
+    }, [showNotification]);
+
+  return (
     <div className='dashboard-conatiner'>
+        <audio ref={audioRef} src="../assets/Tones/notification.mp3" preload="auto"></audio>
+        {showNotification && <div>
+            <PopupNotifiter darkMode={darkMode} notifiacton={notifiacton} profileImage={profileImage} profileName={profileName}/>
+        </div>}
         <div className="flex h-screen bg-background text-foreground">
             <div className={`${darkMode ? 'border-gray-600 border-r border-border':''}  flex flex-col h-screen bg-background border-r border-border button-column`}  style={{backgroundColor: darkMode ? '#262729' : ''}}>
                 <div onClick={showChatsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:chatsMenu ? '6px solid blue': 'none'}}>
