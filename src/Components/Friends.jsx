@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import './Styles/Column2.css';
 import GlobalAlert from './GlobalAlert';
-import { searchPeople, getConnectedProfileInfo } from '../Services/FriendshipService';
+import { searchPeople, getConnectedProfileInfo, filterPendingRequests } from '../Services/FriendshipService';
 import { fetchPeopleMetaData } from '../Services/ProfileService';
 import SearchResult from './SearchResult';
 import PreviewPendingRequests from './PreviewPendingRequests';
@@ -84,10 +84,26 @@ export default function Friends({ darkMode }) {
             if (linkedProfiles && linkedProfiles.length !== 0) {
                 for (let friendshipId of linkedProfiles){
                     const profileInfo = await getConnectedProfileInfo(friendshipId);
-                    if (profileInfo.status === "PENDING") {
-                        setPendingProfiles((prevProfiles) => [...prevProfiles, profileInfo]);
-                    } else if (profileInfo.status === "ACCEPTED") {
-                        setAcceptedProfiles((prevProfiles) => [...prevProfiles, profileInfo]);
+                    const response = await filterPendingRequests(friendshipId);
+                    if (response && profileInfo.status === "PENDING") {
+                        setPendingProfiles((prevProfiles) => {
+                            const isDuplicate = prevProfiles.some(profile => profile.profileId === profileInfo.profileId);
+                            if (!isDuplicate) {
+                                return [...prevProfiles, profileInfo];
+                            } else {
+                                return prevProfiles;
+                            }
+                        });
+                    }
+                    if (profileInfo.status === "ACCEPTED") {
+                        setAcceptedProfiles((prevProfiles) => {
+                            const isDuplicate = prevProfiles.some(profile => profile.profileId === profileInfo.profileId);
+                            if (!isDuplicate) {
+                                return [...prevProfiles, profileInfo];
+                            } else {
+                                return prevProfiles;
+                            }
+                        });
                     }
                 }
             }
