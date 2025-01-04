@@ -1,13 +1,13 @@
 import React from 'react'
 
-export default function PreviewPendingRequests({darkMode, user, about}) {
+export default function PreviewPendingRequests({darkMode, friendshipId, profileId, profileName, profilePicture, status, profileAbout}) {
   return (
     <div className="flex items-center justify-between border-border py-0 mt-2" >
         <div className="flex items-center">
-            <img src="https://placehold.co/40x40" className="rounded-full mr-2 w-55 h-55" />
+            <img src={profilePicture} className="rounded-full mr-2" style={{height:'45px'}}/>
             <div>
-                <p className={`${darkMode ? 'text-white' : ''} font-medium`}>{user}</p>
-                <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} text-sm `}>{about}</p>
+                <p className={`${darkMode ? 'text-white' : ''} font-medium`}>{profileName}</p>
+                <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} text-sm `}>{profileAbout}</p>
             </div>
         </div>
         <div className="btn-container">

@@ -20,6 +20,7 @@ export default function Friends({ darkMode }) {
     const [pendingProfiles, setPendingProfiles] = useState([]);
     const [acceptedProfiles, setAcceptedProfiles] = useState([]);
     var friendCount = 56;
+    var requestsCount = 3;
     var user = "testUser";
     var about = "this is test about";
 
@@ -77,16 +78,16 @@ export default function Friends({ darkMode }) {
 
     useEffect(() => {
         const fetchData = async () => {
+            setPendingProfiles([]);
+            setAcceptedProfiles([]);
             let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
             if (linkedProfiles && linkedProfiles.length !== 0) {
                 for (let friendshipId of linkedProfiles){
                     const profileInfo = await getConnectedProfileInfo(friendshipId);
                     if (profileInfo.status === "PENDING") {
-                        console.log(profileInfo);
-                        setPendingProfiles((prevProfiles) => [...prevProfiles, friendshipId]);
+                        setPendingProfiles((prevProfiles) => [...prevProfiles, profileInfo]);
                     } else if (profileInfo.status === "ACCEPTED") {
-                        console.log(profileInfo);
-                        setAcceptedProfiles((prevProfiles) => [...prevProfiles, friendshipId]);
+                        setAcceptedProfiles((prevProfiles) => [...prevProfiles, profileInfo]);
                     }
                 }
             }
@@ -152,11 +153,23 @@ export default function Friends({ darkMode }) {
                 </div>
                 {friendRequests && (
                     <div>
-                        <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>Friend requests</h2>
+                        <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{requestsCount} Pending requests</h2>
                         <div className="friends-list">
                             <div className="space-y-4">
-                                <PreviewPendingRequests darkMode={darkMode} name={'Test'} about={'Test About'}/>
-                                <PreviewPendingRequests darkMode={darkMode} name={'Test'} about={'Test About'}/>
+                                {
+                                pendingProfiles.map(profile => (
+                                    <PreviewPendingRequests
+                                    key={profile.friendshipId} 
+                                    darkMode={darkMode}
+                                    friendshipId={profile.friendshipId}
+                                    profileId={profile.profileId}
+                                    profileName={profile.profileName}
+                                    profilePicture={profile.profilePicture}
+                                    status={profile.status}
+                                    profileAbout={profile.profileAbout}
+                                    />
+                                ))
+                                }
                             </div>
                         </div>
                     </div>
@@ -203,8 +216,20 @@ export default function Friends({ darkMode }) {
                         <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{friendCount} friends</h2>
                         <div className="friends-list">
                             <div className="space-y-4">
-                                <PreiviewAcceptedRequests darkMode={darkMode} name={'Test'} about={'Test About'} toggleBlockPopup={toggleBlockPopup} toggleUnfriendPopup={toggleUnfriendPopup}/>
-                                <PreiviewAcceptedRequests darkMode={darkMode} name={'Test'} about={'Test About'} toggleBlockPopup={toggleBlockPopup} toggleUnfriendPopup={toggleUnfriendPopup}/>
+                               {
+                                acceptedProfiles.map(profile => (
+                                    <PreiviewAcceptedRequests
+                                    key={profile.friendshipId} 
+                                    darkMode={darkMode}
+                                    friendshipId={profile.friendshipId}
+                                    profileId={profile.profileId}
+                                    profileName={profile.profileName}
+                                    profilePicture={profile.profilePicture}
+                                    status={profile.status}
+                                    profileAbout={profile.profileAbout}
+                                    />
+                                ))
+                                }                            
                             </div>
                         </div>
                     </div>
