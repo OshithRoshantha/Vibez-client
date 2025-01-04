@@ -24,9 +24,9 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { ThreeDots} from 'react-loader-spinner';
 import { checkAccount, directLoginAuth, googleLoginAuth} from '../Services/AuthService';
 import { fetchUserId } from '../Services/ProfileService';
+import { getConnectedProfile } from '../Services/FriendshipService';
 
-export default function Signin() {
-  const [linkedProfiles, setLinkedProfiles] = useState(['6776864e41fe8a0206781d9b']); // This is a placeholder for the friends and pending requests
+export default function Signin({ onLogin }) {
 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -74,12 +74,14 @@ export default function Signin() {
     if (response) {
         try {
             const jwtToken = await directLoginAuth(email, password);
-            localStorage.setItem('token', jwtToken);
-            fetchProfileId();
+            sessionStorage.setItem('token', jwtToken);
+            await fetchProfileId();
+            onLogin(true);
             setIncorrectPassword(false);
             setLoading(false);
             navDashboard();
-            connectToSocket();
+            sessionStorage.setItem('linkedProfiles', JSON.stringify([]));
+            await fetchConnectedProfiles();
         } catch (error) {
             if (error.response.status === 401) {
                 setIncorrectPassword(true);
@@ -91,54 +93,80 @@ export default function Signin() {
         setLoading(false);
     }
   }
-
-
+/*
   const connectToSocket = () => {
-    const token = localStorage.getItem('token');  
+    const token = sessionStorage.getItem('token');
     const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
-    
+  
     socket.onopen = () => {
       console.log('Connected to WebSocket');
       socket.send(JSON.stringify({ action: 'subscribe', topic: 'profileService' }));
+      socket.send(JSON.stringify({ action: 'subscribe', topic: 'friendshipService' }));
     };
   
     socket.onerror = (error) => {
       console.error("WebSocket Error: ", error);
     };
   
-    socket.onmessage = (event) => {
+    socket.onmessage = async (event) => { 
       const incomingMessage = JSON.parse(event.data);
-
+  
       switch(incomingMessage.action){
-        case 'profileService':
-            if(linkedProfiles.includes(incomingMessage.body)){
-              console.log('need to refresh!'); // need to refresh fetching the linked profiles
-            }
-            break;
-
+        case 'profileService':{
+          let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
+          if(linkedProfiles.includes(incomingMessage.body)){
+            console.log('need to refresh!');
+          }
+        }
+          break;
+        case 'friendshipService':{
+          const response = await isConnectedProfile(incomingMessage.body);
+            if (response) {
+              let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
+              if (!linkedProfiles.includes(incomingMessage.body)) {
+                linkedProfiles.push(incomingMessage.body);
+                sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+              }
+              setRefreshFriends(!refreshFriends);
+            } 
+          }
+          break;
         default:
           console.log('Unknown Action');
       }
     };
   };
-  
-  
-
-   const handleGoogleLogin = async (credentialResponse) => {
+*/  
+  const handleGoogleLogin = async (credentialResponse) => {
+        setLoading(true);
         const googleToken = credentialResponse.credential; 
         const decoded = jwtDecode(googleToken);
         const { name, picture, email, sub } = decoded;
         const jwtToken = await googleLoginAuth(email, name, picture, sub);
-        localStorage.setItem('token', jwtToken);
-        fetchProfileId();
+        sessionStorage.setItem('token', jwtToken);
+        await fetchProfileId();
+        onLogin(true);
         handleSwipe();
         navDashboard();
-        connectToSocket();
+        setLoading(false);
+        sessionStorage.setItem('linkedProfiles', JSON.stringify([]));
+        await fetchConnectedProfiles();
    }
 
    const fetchProfileId = async () => {
-        const response = await fetchUserId(localStorage.getItem('token'));
-        localStorage.setItem('userId', response);
+        const response = await fetchUserId(sessionStorage.getItem('token'));
+        sessionStorage.setItem('userId', response);
+   }
+
+   const fetchConnectedProfiles = async () => {
+        const response = await getConnectedProfile();
+        if (response.length !== 0) {
+        let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
+        response.forEach((profile) => {
+            linkedProfiles.push(profile);
+        });
+        sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+      }
    }
 
   return (
