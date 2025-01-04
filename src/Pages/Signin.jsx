@@ -74,12 +74,12 @@ export default function Signin() {
         try {
             const jwtToken = await directLoginAuth(email, password);
             sessionStorage.setItem('token', jwtToken);
-            fetchProfileId();
+            await fetchProfileId();
             setIncorrectPassword(false);
             setLoading(false);
             navDashboard();
             sessionStorage.setItem('linkedProfiles', JSON.stringify([]));
-            fetchConnectedProfiles();
+            await fetchConnectedProfiles();
             connectToSocket();
         } catch (error) {
             if (error.response.status === 401) {
@@ -136,11 +136,13 @@ export default function Signin() {
   };
   
   const handleGoogleLogin = async (credentialResponse) => {
+        setLoading(true);
         const googleToken = credentialResponse.credential; 
         const decoded = jwtDecode(googleToken);
         const { name, picture, email, sub } = decoded;
         const jwtToken = await googleLoginAuth(email, name, picture, sub);
         sessionStorage.setItem('token', jwtToken);
+        setLoading(false);
         await fetchProfileId();
         handleSwipe();
         navDashboard();
