@@ -12,7 +12,7 @@ export default function PreviewPendingRequests({darkMode, friendshipId, profileI
   return (
     <>
     {isAccepted && <>
-        <div className="flex items-center justify-between border-border py-0 mt-2" >
+    <div className="flex items-center justify-between border-border py-0 mt-2" >
         <div className="flex items-center">
             <img src={profilePicture} className="rounded-full mr-2" style={{height:'45px'}}/>
             <div>

@@ -142,10 +142,10 @@ export default function Signin() {
         const { name, picture, email, sub } = decoded;
         const jwtToken = await googleLoginAuth(email, name, picture, sub);
         sessionStorage.setItem('token', jwtToken);
-        setLoading(false);
         await fetchProfileId();
         handleSwipe();
         navDashboard();
+        setLoading(false);
         sessionStorage.setItem('linkedProfiles', JSON.stringify([]));
         await fetchConnectedProfiles();
         connectToSocket();
