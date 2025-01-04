@@ -78,8 +78,8 @@ export default function Friends({ darkMode}) {
                             if (!linkedProfiles.includes(lastMessage.body)) {
                                 linkedProfiles.push(lastMessage.body);
                                 sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
-                                fetchFrienships();
                             }
+                            fetchFrienships();
                         }
                         break;
                     }
