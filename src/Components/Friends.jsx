@@ -1,14 +1,11 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './Styles/Column2.css';
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover";
 import GlobalAlert from './GlobalAlert';
-import { searchPeople } from '../Services/FriendshipService';
+import { searchPeople, getConnectedProfileInfo } from '../Services/FriendshipService';
 import { fetchPeopleMetaData } from '../Services/ProfileService';
 import SearchResult from './SearchResult';
+import PreviewPendingRequests from './PreviewPendingRequests';
+import PreiviewAcceptedRequests from './PreiviewAcceptedRequests';
 
 export default function Friends({ darkMode }) {
     const [friendRequests, setFriendRequests] = useState(true);
@@ -20,6 +17,8 @@ export default function Friends({ darkMode }) {
     const [searchKeyword, setSearchKeyword] = useState('');
     const [results, setResults] = useState([]);
     const [isResultsEmpty, setIsResultsEmpty] = useState(false);
+    const [pendingProfiles, setPendingProfiles] = useState([]);
+    const [acceptedProfiles, setAcceptedProfiles] = useState([]);
     var friendCount = 56;
     var user = "testUser";
     var about = "this is test about";
@@ -75,6 +74,25 @@ export default function Friends({ darkMode }) {
             setIsResultsEmpty(true);
         }
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
+            if (linkedProfiles && linkedProfiles.length !== 0) {
+                for (let friendshipId of linkedProfiles){
+                    const profileInfo = await getConnectedProfileInfo(friendshipId);
+                    if (profileInfo.status === "PENDING") {
+                        console.log(profileInfo);
+                        setPendingProfiles((prevProfiles) => [...prevProfiles, friendshipId]);
+                    } else if (profileInfo.status === "ACCEPTED") {
+                        console.log(profileInfo);
+                        setAcceptedProfiles((prevProfiles) => [...prevProfiles, friendshipId]);
+                    }
+                }
+            }
+        };
+        fetchData();
+    }, []);
 
     return (
         <div>
@@ -137,23 +155,8 @@ export default function Friends({ darkMode }) {
                         <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>Friend requests</h2>
                         <div className="friends-list">
                             <div className="space-y-4">
-                                <div className="flex items-center justify-between border-border py-2">
-                                    <div className="flex items-center">
-                                        <img src="https://placehold.co/40x40" className="rounded-full mr-2 w-55 h-55" />
-                                        <div>
-                                            <p className={`${darkMode ? 'text-white' : ''} font-medium`}>{user}</p>
-                                            <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} text-sm `}>About</p>
-                                        </div>
-                                    </div>
-                                    <div className="btn-container">
-                                        <button className="bg-primary text-primary-foreground px-3 py-1 mr-2 rounded">Confirm</button>
-                                        <button
-                                            className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]' : 'bg-muted text-muted-foreground hover:bg-gray-300'} border-none px-3 py-1 rounded`}
-                                        >
-                                            Delete
-                                        </button>
-                                    </div>
-                                </div>
+                                <PreviewPendingRequests darkMode={darkMode} name={'Test'} about={'Test About'}/>
+                                <PreviewPendingRequests darkMode={darkMode} name={'Test'} about={'Test About'}/>
                             </div>
                         </div>
                     </div>
@@ -200,89 +203,8 @@ export default function Friends({ darkMode }) {
                         <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{friendCount} friends</h2>
                         <div className="friends-list">
                             <div className="space-y-4">
-                                <div className="flex items-center justify-between border-border py-2">
-                                    <div className="flex items-center">
-                                        <img src="https://placehold.co/40x40" className="rounded-full mr-2" />
-                                        <div>
-                                            <p className={`${darkMode ? 'text-white' : ''} font-medium`}>{user}</p>
-                                            <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} text-sm `}>About</p>
-                                        </div>
-                                    </div>
-                                    <div className="btn-container">
-                                        <div className="ml-mr-4 btns">
-                                            <i className="bi bi-chat-fill text-primary"></i>
-                                        </div>
-                                        <Popover>
-                                            <PopoverTrigger asChild>
-                                                <div className="btns">
-                                                    <i
-                                                        className={`${darkMode ? 'text-white' : ''} bi bi-three-dots-vertical`}
-                                                    ></i>
-                                                </div>
-                                            </PopoverTrigger>
-                                            <PopoverContent
-                                                style={{
-                                                    width: '220px',
-                                                    marginRight: '200px',
-                                                    height: '105px',
-                                                    backgroundColor: darkMode ? '#262729' : '',
-                                                }}
-                                            >
-                                                <div className="bg-card text-card-foreground p-0 rounded-lg ">
-                                                    <div
-                                                        className="flex-grow friend-buttons"
-                                                        style={{
-                                                            marginLeft: '-20px',
-                                                            marginTop: '-17px',
-                                                            backgroundColor: darkMode ? '#262729' : '',
-                                                        }}
-                                                    >
-                                                        <button
-                                                            onClick={toggleBlockPopup}
-                                                            className="flex flex-grow items-center w-full p-2 text-left rounded bg-transparent text-black border-none focus:ring-0 hover:border-none"
-                                                        >
-                                                            <span
-                                                                className="material-icons"
-                                                                style={{
-                                                                    display: 'flex',
-                                                                    justifyContent: 'center',
-                                                                    alignItems: 'center',
-                                                                    backgroundColor: darkMode ? '#3b3c3e' : '#d1d1d1',
-                                                                    width: '29px',
-                                                                    height: '29px',
-                                                                    borderRadius: '50%',
-                                                                }}
-                                                            >
-                                                                <i className="bi bi-slash-circle-fill text-red-500"></i>
-                                                            </span>
-                                                            Block
-                                                        </button>
-                                                        <button
-                                                            onClick={toggleUnfriendPopup}
-                                                            className="flex flex-grow items-center w-full p-2 text-left rounded bg-transparent text-black border-none focus:ring-0 hover:border-none"
-                                                        >
-                                                            <span
-                                                                className="material-icons"
-                                                                style={{
-                                                                    display: 'flex',
-                                                                    justifyContent: 'center',
-                                                                    alignItems: 'center',
-                                                                    backgroundColor: darkMode ? '#3b3c3e' : '#d1d1d1',
-                                                                    width: '29px',
-                                                                    height: '29px',
-                                                                    borderRadius: '50%',
-                                                                }}
-                                                            >
-                                                                <i className="bi bi-person-x-fill text-red-500"></i>
-                                                            </span>
-                                                            Remove Friend
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </PopoverContent>
-                                        </Popover>
-                                    </div>
-                                </div>
+                                <PreiviewAcceptedRequests darkMode={darkMode} name={'Test'} about={'Test About'} toggleBlockPopup={toggleBlockPopup} toggleUnfriendPopup={toggleUnfriendPopup}/>
+                                <PreiviewAcceptedRequests darkMode={darkMode} name={'Test'} about={'Test About'} toggleBlockPopup={toggleBlockPopup} toggleUnfriendPopup={toggleUnfriendPopup}/>
                             </div>
                         </div>
                     </div>
