@@ -6,8 +6,10 @@ import { fetchPeopleMetaData } from '../Services/ProfileService';
 import SearchResult from './SearchResult';
 import PreviewPendingRequests from './PreviewPendingRequests';
 import PreiviewAcceptedRequests from './PreiviewAcceptedRequests';
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Friends({ darkMode }) {
+    const [loading, setLoading] = useState(true);
     const [friendRequests, setFriendRequests] = useState(true);
     const [yourFriends, setYourFriends] = useState(false);
     const [blockPopup, setBlockPopup] = useState(false);
@@ -26,6 +28,7 @@ export default function Friends({ darkMode }) {
 
     useEffect(() => {
         const fetchFrienships = async () => {
+            setLoading(true);
             setPendingProfiles([]);
             setAcceptedProfiles([]);
             let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
@@ -34,6 +37,7 @@ export default function Friends({ darkMode }) {
                 for (let friendshipId of linkedProfiles){
                     const profileInfo = await getConnectedProfileInfo(friendshipId);
                     const response = await filterPendingRequests(friendshipId);
+                    setLoading(false);
                     if (response && profileInfo.status === "PENDING") {
                         setPendingProfiles((prevProfiles) => {
                             const isDuplicate = prevProfiles.some(profile => profile.profileId === profileInfo.profileId);
@@ -168,7 +172,35 @@ export default function Friends({ darkMode }) {
                         Friend Requests
                     </button>
                 </div>
-                {friendRequests && (
+                {friendRequests && loading && ( 
+                    <div>
+                    <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{pendingProfiles.length} Pending requests</h2>
+                    <div className="friends-list skeleton-container">
+                        <div className='mb-3' style={{display:'flex', alignItems:'center', columnGap:'10px'}}>
+                            <Skeleton className="h-12 w-12 rounded-full" />
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-[250px] " />
+                                <Skeleton className="h-4 w-[200px]" />
+                            </div>  
+                        </div> 
+                        <div className='mb-3' style={{display:'flex', alignItems:'center', columnGap:'10px'}}>
+                            <Skeleton className="h-12 w-12 rounded-full" />
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-[250px]" />
+                                <Skeleton className="h-4 w-[200px]" />
+                            </div>  
+                        </div> 
+                        <div className='mb-3' style={{display:'flex', alignItems:'center', columnGap:'10px'}}>
+                            <Skeleton className="h-12 w-12 rounded-full" />
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-[250px]" />
+                                <Skeleton className="h-4 w-[200px]" />
+                            </div>  
+                        </div>                     
+                    </div>
+                    </div>                    
+                )}
+                {friendRequests && !loading && (
                     <div>
                         <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{pendingProfiles.length} Pending requests</h2>
                         <div className="friends-list">
@@ -227,8 +259,35 @@ export default function Friends({ darkMode }) {
                         </div>
                     </div>
                 )}
-
-                {yourFriends && (
+                {yourFriends && loading && ( 
+                    <div>
+                    <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{acceptedProfiles.length} friends</h2>
+                    <div className="friends-list skeleton-container">
+                        <div className='mb-3' style={{display:'flex', alignItems:'center', columnGap:'10px'}}>
+                            <Skeleton className="h-12 w-12 rounded-full" />
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-[250px] " />
+                                <Skeleton className="h-4 w-[200px]" />
+                            </div>  
+                        </div> 
+                        <div className='mb-3' style={{display:'flex', alignItems:'center', columnGap:'10px'}}>
+                            <Skeleton className="h-12 w-12 rounded-full" />
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-[250px]" />
+                                <Skeleton className="h-4 w-[200px]" />
+                            </div>  
+                        </div> 
+                        <div className='mb-3' style={{display:'flex', alignItems:'center', columnGap:'10px'}}>
+                            <Skeleton className="h-12 w-12 rounded-full" />
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-[250px]" />
+                                <Skeleton className="h-4 w-[200px]" />
+                            </div>  
+                        </div>                     
+                    </div>
+                    </div>                    
+                )}
+                {yourFriends && !loading && (
                     <div>
                         <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{acceptedProfiles.length} friends</h2>
                         <div className="friends-list">
