@@ -1,6 +1,6 @@
 import './Styles/Signin.css'
 import mainLogo from '../assets/Icons/main-logo.png'
-import { useState,  useEffect } from 'react';
+import { useState } from 'react';
 import {
   Card,
   CardContent,
@@ -24,11 +24,10 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { ThreeDots} from 'react-loader-spinner';
 import { checkAccount, directLoginAuth, googleLoginAuth} from '../Services/AuthService';
 import { fetchUserId } from '../Services/ProfileService';
-import { isConnectedProfile } from '../Services/FriendshipService';
+import { isConnectedProfile, getConnectedProfile } from '../Services/FriendshipService';
 
 
 export default function Signin() {
-  const [linkedProfiles, setLinkedProfiles] = useState(['test1', 'test2']); 
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [emailNotFound, setEmailNotFound] = useState(false);
@@ -80,7 +79,9 @@ export default function Signin() {
             setIncorrectPassword(false);
             setLoading(false);
             navDashboard();
+            sessionStorage.setItem('linkedProfiles', JSON.stringify([]));
             connectToSocket();
+            fetchConnectedProfiles();
         } catch (error) {
             if (error.response.status === 401) {
                 setIncorrectPassword(true);
@@ -111,15 +112,21 @@ export default function Signin() {
       const incomingMessage = JSON.parse(event.data);
   
       switch(incomingMessage.action){
-        case 'profileService':
+        case 'profileService':{
+          let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
           if(linkedProfiles.includes(incomingMessage.body)){
             console.log('need to refresh!');
           }
+        }
           break;
         case 'friendshipService':{
           const response = await isConnectedProfile(incomingMessage.body);
             if (response) {
-              console.log('related');
+              let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
+              if (!linkedProfiles.includes(incomingMessage.body)) {
+                linkedProfiles.push(incomingMessage.body);
+                sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+            }
             } else{
               console.log('not related');
             }
@@ -130,10 +137,6 @@ export default function Signin() {
       }
     };
   };
-
-  useEffect(() => {
-    console.log(linkedProfiles);
-  }, [linkedProfiles]);
   
   const handleGoogleLogin = async (credentialResponse) => {
         const googleToken = credentialResponse.credential; 
@@ -144,12 +147,27 @@ export default function Signin() {
         fetchProfileId();
         handleSwipe();
         navDashboard();
+        sessionStorage.setItem('linkedProfiles', JSON.stringify([]));
         connectToSocket();
+        fetchConnectedProfiles();
    }
 
    const fetchProfileId = async () => {
         const response = await fetchUserId(sessionStorage.getItem('token'));
         sessionStorage.setItem('userId', response);
+   }
+
+   const fetchConnectedProfiles = async () => {
+        const response = await getConnectedProfile();
+        if (response.length !== 0) {
+        let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
+        response.forEach((profile) => {
+          if (!linkedProfiles.includes(profile)) {
+            linkedProfiles.push(profile);
+          }
+        });
+        sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+      }
    }
 
   return (
