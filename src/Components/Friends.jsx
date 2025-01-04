@@ -8,7 +8,7 @@ import PreviewPendingRequests from './PreviewPendingRequests';
 import PreiviewAcceptedRequests from './PreiviewAcceptedRequests';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
-import { isConnectedProfile } from '../Services/FriendshipService';
+import { isConnectedProfile, getConnectedProfile } from '../Services/FriendshipService';
 
 export default function Friends({ darkMode}) {
 
@@ -84,8 +84,10 @@ export default function Friends({ darkMode}) {
                         break;
                     }
                     case 'profileService':{
+                        const response = await getConnectedProfile(lastMessage.body);
                         let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
-                        if(linkedProfiles.includes(lastMessage.body)){
+                        const refresh = response.some(profile => linkedProfiles.includes(profile));
+                        if (refresh) {
                             fetchFrienships();
                         }
                       }
