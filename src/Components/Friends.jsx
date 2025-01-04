@@ -7,8 +7,12 @@ import SearchResult from './SearchResult';
 import PreviewPendingRequests from './PreviewPendingRequests';
 import PreiviewAcceptedRequests from './PreiviewAcceptedRequests';
 import { Skeleton } from "@/components/ui/skeleton";
+import { useWebSocket } from '../Context/WebSocketContext';
+import { isConnectedProfile } from '../Services/FriendshipService';
 
-export default function Friends({ darkMode }) {
+export default function Friends({ darkMode}) {
+
+    const { messages } = useWebSocket();
     const [loading, setLoading] = useState(true);
     const [friendRequests, setFriendRequests] = useState(true);
     const [yourFriends, setYourFriends] = useState(false);
@@ -61,6 +65,31 @@ export default function Friends({ darkMode }) {
     useEffect(() => {
         fetchFrienships();
     }, []);
+
+    useEffect(() => {
+        const handleMessages = async () => {
+            if (messages.length > 0) {
+                const lastMessage = messages[messages.length - 1];
+                switch (lastMessage.action) {
+                    case 'friendshipService':{
+                        const response = await isConnectedProfile(lastMessage.body);
+                        if (response) {
+                            let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
+                            if (!linkedProfiles.includes(lastMessage.body)) {
+                                linkedProfiles.push(lastMessage.body);
+                                sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+                                fetchFrienships();
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        };
+    
+        handleMessages();
+    }, [messages]);
+    
 
     function hideFriendRequests() {
         setFriendRequests(true);

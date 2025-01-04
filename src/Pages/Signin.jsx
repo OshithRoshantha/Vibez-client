@@ -24,9 +24,10 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { ThreeDots} from 'react-loader-spinner';
 import { checkAccount, directLoginAuth, googleLoginAuth} from '../Services/AuthService';
 import { fetchUserId } from '../Services/ProfileService';
-import { isConnectedProfile, getConnectedProfile } from '../Services/FriendshipService';
+import { getConnectedProfile } from '../Services/FriendshipService';
 
-export default function Signin() {
+export default function Signin({ onLogin }) {
+
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [emailNotFound, setEmailNotFound] = useState(false);
@@ -75,12 +76,12 @@ export default function Signin() {
             const jwtToken = await directLoginAuth(email, password);
             sessionStorage.setItem('token', jwtToken);
             await fetchProfileId();
+            onLogin(true);
             setIncorrectPassword(false);
             setLoading(false);
             navDashboard();
             sessionStorage.setItem('linkedProfiles', JSON.stringify([]));
             await fetchConnectedProfiles();
-            connectToSocket();
         } catch (error) {
             if (error.response.status === 401) {
                 setIncorrectPassword(true);
@@ -92,7 +93,7 @@ export default function Signin() {
         setLoading(false);
     }
   }
-
+/*
   const connectToSocket = () => {
     const token = sessionStorage.getItem('token');
     const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
@@ -126,6 +127,7 @@ export default function Signin() {
                 linkedProfiles.push(incomingMessage.body);
                 sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
               }
+              setRefreshFriends(!refreshFriends);
             } 
           }
           break;
@@ -134,7 +136,7 @@ export default function Signin() {
       }
     };
   };
-  
+*/  
   const handleGoogleLogin = async (credentialResponse) => {
         setLoading(true);
         const googleToken = credentialResponse.credential; 
@@ -143,12 +145,12 @@ export default function Signin() {
         const jwtToken = await googleLoginAuth(email, name, picture, sub);
         sessionStorage.setItem('token', jwtToken);
         await fetchProfileId();
+        onLogin(true);
         handleSwipe();
         navDashboard();
         setLoading(false);
         sessionStorage.setItem('linkedProfiles', JSON.stringify([]));
         await fetchConnectedProfiles();
-        connectToSocket();
    }
 
    const fetchProfileId = async () => {
@@ -158,7 +160,6 @@ export default function Signin() {
 
    const fetchConnectedProfiles = async () => {
         const response = await getConnectedProfile();
-        console.log('response is: '+response);
         if (response.length !== 0) {
         let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
         response.forEach((profile) => {
