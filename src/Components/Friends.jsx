@@ -83,7 +83,14 @@ export default function Friends({ darkMode}) {
                         }
                         break;
                     }
-                }
+                    case 'profileService':{
+                        let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
+                        if(linkedProfiles.includes(lastMessage.body)){
+                            fetchFrienships();
+                        }
+                      }
+                        break;
+                    }
             }
         };
     
