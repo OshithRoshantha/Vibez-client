@@ -170,7 +170,7 @@ export default function Friends({ darkMode }) {
                 </div>
                 {friendRequests && (
                     <div>
-                        <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{requestsCount} Pending requests</h2>
+                        <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{pendingProfiles.length} Pending requests</h2>
                         <div className="friends-list">
                             <div className="space-y-4">
                                 {
@@ -230,7 +230,7 @@ export default function Friends({ darkMode }) {
 
                 {yourFriends && (
                     <div>
-                        <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{friendCount} friends</h2>
+                        <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{acceptedProfiles.length} friends</h2>
                         <div className="friends-list">
                             <div className="space-y-4">
                                {
