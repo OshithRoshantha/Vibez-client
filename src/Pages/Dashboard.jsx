@@ -15,7 +15,7 @@ import mainLogo from '../assets/Icons/main-logo3.png'
 import { updateDarkMode, getdarkModePreference, fetchUserMetaData} from '../Services/ProfileService';
 import PopupNotifiter from '../Components/PopupNotifiter';
 import { useWebSocket } from '../Context/WebSocketContext';
-import { getConnectedProfileInfo, filterPendingRequests, isConnectedProfile} from '../Services/FriendshipService';
+import { getConnectedProfileInfo, filterPendingRequests, filterAcceptedRequests, isConnectedProfile} from '../Services/FriendshipService';
 
 export default function Dashboard() {
 
@@ -77,13 +77,14 @@ export default function Dashboard() {
                         if (response) {
                             const profileInfo = await getConnectedProfileInfo(lastMessage.body);
                             const filterResponse = await filterPendingRequests(lastMessage.body);
+                            const filterAccepted = await filterAcceptedRequests(lastMessage.body);
                             if (filterResponse && profileInfo.status === 'PENDING') {
                                 setProfileImage(profileInfo.profilePicture);
                                 setProfileName(profileInfo.profileName);
                                 setNotification('sent you a friend request.');
                                 setShowNotification(true);
                             }
-                            if (profileInfo.status === 'ACCEPTED') {
+                            else if (filterAccepted && profileInfo.status === 'ACCEPTED') {
                                 setProfileImage(profileInfo.profilePicture);
                                 setProfileName(profileInfo.profileName);
                                 setNotification('accepted your friend request.');
