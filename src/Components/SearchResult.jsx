@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { sendFriendRequest, getFriendshipStatus, getFriendshipId, acceptFriendRequest } from '../Services/FriendshipService'
-import { set } from 'date-fns';
 
 export default function SearchResult({darkMode, profileName, profileAbout, profileImage, profileId}) {
 

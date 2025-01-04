@@ -26,7 +26,6 @@ import { checkAccount, directLoginAuth, googleLoginAuth} from '../Services/AuthS
 import { fetchUserId } from '../Services/ProfileService';
 import { isConnectedProfile, getConnectedProfile } from '../Services/FriendshipService';
 
-
 export default function Signin() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -147,7 +146,6 @@ export default function Signin() {
         navDashboard();
         sessionStorage.setItem('linkedProfiles', JSON.stringify([]));
         connectToSocket();
-        fetchConnectedProfiles();
    }
 
    const fetchProfileId = async () => {
