@@ -58,7 +58,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
     }
 
     const handleLogOut = () => {
-        localStorage.clear();
+        sessionStorage.clear();
         navigate('/');
     }
 

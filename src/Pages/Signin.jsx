@@ -79,8 +79,8 @@ export default function Signin() {
             setLoading(false);
             navDashboard();
             sessionStorage.setItem('linkedProfiles', JSON.stringify([]));
-            connectToSocket();
             fetchConnectedProfiles();
+            connectToSocket();
         } catch (error) {
             if (error.response.status === 401) {
                 setIncorrectPassword(true);
@@ -141,10 +141,11 @@ export default function Signin() {
         const { name, picture, email, sub } = decoded;
         const jwtToken = await googleLoginAuth(email, name, picture, sub);
         sessionStorage.setItem('token', jwtToken);
-        fetchProfileId();
+        await fetchProfileId();
         handleSwipe();
         navDashboard();
         sessionStorage.setItem('linkedProfiles', JSON.stringify([]));
+        await fetchConnectedProfiles();
         connectToSocket();
    }
 
@@ -155,12 +156,11 @@ export default function Signin() {
 
    const fetchConnectedProfiles = async () => {
         const response = await getConnectedProfile();
+        console.log('response is: '+response);
         if (response.length !== 0) {
         let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
         response.forEach((profile) => {
-          if (!linkedProfiles.includes(profile)) {
             linkedProfiles.push(profile);
-          }
         });
         sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
       }
