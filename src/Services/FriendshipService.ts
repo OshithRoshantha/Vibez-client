@@ -86,3 +86,13 @@ export const isConnectedProfile = async (friendshipId: string) => {
     });
     return response.data;
 };
+
+export const getConnectedProfile = async () => {
+    const userId = sessionStorage.getItem('userId');
+    const response = await axios.get(`http://localhost:8080/vibez/friends/linked/${userId}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+}
