@@ -21,46 +21,44 @@ export default function Friends({ darkMode }) {
     const [isResultsEmpty, setIsResultsEmpty] = useState(false);
     const [pendingProfiles, setPendingProfiles] = useState([]);
     const [acceptedProfiles, setAcceptedProfiles] = useState([]);
-    var friendCount = 56;
-    var requestsCount = 3;
     var user = "testUser";
-    var about = "this is test about";
 
-    useEffect(() => {
-        const fetchFrienships = async () => {
-            setLoading(true);
-            setPendingProfiles([]);
-            setAcceptedProfiles([]);
-            let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
-            if (linkedProfiles.length === 0) {setLoading(false);}
-            if (linkedProfiles && linkedProfiles.length !== 0) {
-                for (let friendshipId of linkedProfiles){
-                    const profileInfo = await getConnectedProfileInfo(friendshipId);
-                    const response = await filterPendingRequests(friendshipId);
-                    setLoading(false);
-                    if (response && profileInfo.status === "PENDING") {
-                        setPendingProfiles((prevProfiles) => {
-                            const isDuplicate = prevProfiles.some(profile => profile.profileId === profileInfo.profileId);
-                            if (!isDuplicate) {
-                                return [...prevProfiles, profileInfo];
-                            } else {
-                                return prevProfiles;
-                            }
-                        });
-                    }
-                    if (profileInfo.status === "ACCEPTED") {
-                        setAcceptedProfiles((prevProfiles) => {
-                            const isDuplicate = prevProfiles.some(profile => profile.profileId === profileInfo.profileId);
-                            if (!isDuplicate) {
-                                return [...prevProfiles, profileInfo];
-                            } else {
-                                return prevProfiles;
-                            }
-                        });
-                    }
+    const fetchFrienships = async () => {
+        setLoading(true);
+        setPendingProfiles([]);
+        setAcceptedProfiles([]);
+        let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
+        if (linkedProfiles.length === 0) {setLoading(false);}
+        if (linkedProfiles && linkedProfiles.length !== 0) {
+            for (let friendshipId of linkedProfiles){
+                const profileInfo = await getConnectedProfileInfo(friendshipId);
+                const response = await filterPendingRequests(friendshipId);
+                setLoading(false);
+                if (response && profileInfo.status === "PENDING") {
+                    setPendingProfiles((prevProfiles) => {
+                        const isDuplicate = prevProfiles.some(profile => profile.profileId === profileInfo.profileId);
+                        if (!isDuplicate) {
+                            return [...prevProfiles, profileInfo];
+                        } else {
+                            return prevProfiles;
+                        }
+                    });
+                }
+                if (profileInfo.status === "ACCEPTED") {
+                    setAcceptedProfiles((prevProfiles) => {
+                        const isDuplicate = prevProfiles.some(profile => profile.profileId === profileInfo.profileId);
+                        if (!isDuplicate) {
+                            return [...prevProfiles, profileInfo];
+                        } else {
+                            return prevProfiles;
+                        }
+                    });
                 }
             }
-        };
+        }
+    };
+
+    useEffect(() => {
         fetchFrienships();
     }, []);
 
