@@ -27,6 +27,7 @@ export default function Friends({darkMode, setPendingRequests}) {
     const [acceptedProfiles, setAcceptedProfiles] = useState([]);
     const prevPendingCountRef = useRef(0); 
     var user = "testUser";
+    const err = darkMode ? './src/assets/Icons/searchErdark.png' : './src/assets/Icons/searchEr.png';
 
     const fetchFriendships = async () => {
         setLoading(true);
@@ -291,7 +292,7 @@ export default function Friends({darkMode, setPendingRequests}) {
                                         <img
                                             aria-hidden="true"
                                             alt="document-icon"
-                                            src="./src/assets/Icons/errorIcon1.png"
+                                            src={err}
                                             style={{ height: '125px', width: '125px' }}
                                         />
                                         <h2 className={`${darkMode ? 'text-white' : ''} mt-4 text-lg font-semibold`}>
