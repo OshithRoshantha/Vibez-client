@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
 import { isConnectedProfile } from '../Services/FriendshipService';
 
-export default function Friends({ darkMode}) {
+export default function Friends({darkMode, setPendingRequests}) {
 
     const { messages } = useWebSocket();
     const [loading, setLoading] = useState(true);
@@ -35,7 +35,6 @@ export default function Friends({ darkMode}) {
         if (linkedProfiles.length === 0) {setLoading(false);}
         else if (linkedProfiles.length > 0) {
             for (let friendshipId of linkedProfiles){
-                console.log(friendshipId);
                 const profileInfo = await getConnectedProfileInfo(friendshipId);
                 const response = await filterPendingRequests(friendshipId);
                 setLoading(false);
@@ -47,6 +46,7 @@ export default function Friends({ darkMode}) {
                         } else {
                             return prevProfiles;
                         }
+
                     });
                 }
                 if (profileInfo.status === "ACCEPTED") {
