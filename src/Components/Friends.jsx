@@ -26,6 +26,7 @@ export default function Friends({darkMode, setPendingRequests}) {
     const [pendingProfiles, setPendingProfiles] = useState([]);
     const [acceptedProfiles, setAcceptedProfiles] = useState([]);
     const prevPendingCountRef = useRef(0); 
+    
     var user = "testUser";
     const err = darkMode ? './src/assets/Icons/searchErdark.png' : './src/assets/Icons/searchEr.png';
 
@@ -365,6 +366,8 @@ export default function Friends({darkMode, setPendingRequests}) {
                                     profilePicture={profile.profilePicture}
                                     status={profile.status}
                                     profileAbout={profile.profileAbout}
+                                    setBlockPopup={setBlockPopup}
+                                    setUnfriendPopup={setUnfriendPopup}
                                     />
                                 ))
                                 }                            
