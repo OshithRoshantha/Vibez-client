@@ -36,7 +36,7 @@ export default function PreiviewAcceptedRequests({darkMode, friendshipId, profil
                 <div className="fixed absolute inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100'}}>
                     <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} p-6 rounded-lg shadow-lg text-left`}>
                     <h2 className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold mb-1`} >
-                        Block ${profileName}?
+                        Block {profileName}?
                     </h2>
                     <p className={`${darkMode ? 'text-gray-300' : 'text-muted-foreground'} mb-4`}>Blocked contacts will no longer be able to send you messages.</p>
                     <div className="flex justify-end space-x-4">
@@ -55,7 +55,7 @@ export default function PreiviewAcceptedRequests({darkMode, friendshipId, profil
                 <div className="fixed absolute inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100'}}>
                     <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} p-6 rounded-lg shadow-lg text-left`}>
                     <h2 className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold mb-1`} >
-                        Remove ${profileName}?
+                        Remove {profileName}?
                     </h2>
                     <p className={`${darkMode ? 'text-gray-300' : 'text-muted-foreground'} mb-4`}>Removing this contact will remove them from your friends list.</p>
                     <div className="flex justify-end space-x-4">

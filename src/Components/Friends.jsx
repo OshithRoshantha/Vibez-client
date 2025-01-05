@@ -98,6 +98,7 @@ export default function Friends({darkMode, setPendingRequests}) {
                                 fetchFriendships();
                             }
                             else if (lastMessage.status === 'UNFRIENDED') {
+                                console.log('removed' + lastMessage.friendshipId);
                                 linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
                                 sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
                                 fetchFriendships();
@@ -330,8 +331,6 @@ export default function Friends({darkMode, setPendingRequests}) {
                                     profileName={profile.profileName}
                                     profilePicture={profile.profilePicture}
                                     profileAbout={profile.profileAbout}
-                                    setBlockPopup={setBlockPopup}
-                                    setUnfriendPopup={setUnfriendPopup}
                                     />
                                 ))
                                 }                            
