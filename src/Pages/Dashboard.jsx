@@ -93,7 +93,7 @@ export default function Dashboard() {
                 switch (lastMessage.action) {
                     case 'friendshipService':{
                         const response = await isConnectedProfile(lastMessage.friendshipId);
-                        if (response) {
+                        if (response && (lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED')) {
                             const profileInfo = await getConnectedProfileInfo(lastMessage.friendshipId);
                             const filterResponse = await filterPendingRequests(lastMessage.friendshipId);
                             const filterAccepted = await filterAcceptedRequests(lastMessage.friendshipId);
