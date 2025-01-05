@@ -24,8 +24,6 @@ export default function Friends({darkMode, setPendingRequests}) {
     const [acceptedProfiles, setAcceptedProfiles] = useState([]);
     const prevPendingCountRef = useRef(0);
 
-
-    var user = "testUser";
     const err = darkMode ? './src/assets/Icons/searchErdark.png' : './src/assets/Icons/searchEr.png';
 
     const fetchFriendships = async () => {

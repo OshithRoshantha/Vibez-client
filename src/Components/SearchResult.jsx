@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import { sendFriendRequest, getFriendshipStatus, getFriendshipId, acceptFriendRequest } from '../Services/FriendshipService'
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SearchResult({darkMode, profileName, profileAbout, profileImage, profileId}) {
 
   const [friendshipStatus, setFriendshipStatus] = useState('');
   const [friendshipId, setFriendshipId] = useState('');
+  const [loading, setLoading] = useState(true);
   
   const newFriendRequest = async () => {
     setFriendshipStatus('REQUESTED');
@@ -22,6 +24,7 @@ export default function SearchResult({darkMode, profileName, profileAbout, profi
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const response = await getFriendshipId(profileId);
       if (response === 'NOT_FRIENDS') {
         setFriendshipStatus('NOT_FRIENDS');
@@ -44,52 +47,83 @@ export default function SearchResult({darkMode, profileName, profileAbout, profi
       }
     };
     fetchData();
+    setLoading(false);
   }, []); 
   
   return (
-    <div className="flex items-center justify-between border-border ">
-    <div className="flex items-center">
-        <img className="w-12 h-12 rounded-full mr-4" src={profileImage} alt="User Profile Picture" />
-        <div>
-            <h2 className={`${darkMode ? 'text-white':''}`}>{profileName}</h2>
-            <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'}`}>{profileAbout}</p>
+    <>
+    {loading && <>
+        <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{pendingProfiles.length} Pending requests</h2>
+          <div className="friends-list skeleton-container">
+            <div className='mb-3' style={{display:'flex', alignItems:'center', columnGap:'10px'}}>
+              <Skeleton className="h-12 w-12 rounded-full" />
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-[250px] " />
+                  <Skeleton className="h-4 w-[200px]" />
+                </div>  
+            </div> 
+            <div className='mb-3' style={{display:'flex', alignItems:'center', columnGap:'10px'}}>
+              <Skeleton className="h-12 w-12 rounded-full" />
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-[250px]" />
+                  <Skeleton className="h-4 w-[200px]" />
+                </div>  
+            </div> 
+            <div className='mb-3' style={{display:'flex', alignItems:'center', columnGap:'10px'}}>
+              <Skeleton className="h-12 w-12 rounded-full" />
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-[250px]" />
+                  <Skeleton className="h-4 w-[200px]" />
+                </div>  
+            </div>                     
+        </div>    
+    </>}
+    {!loading && <>
+        <div className="flex items-center justify-between border-border ">
+        <div className="flex items-center">
+            <img className="w-12 h-12 rounded-full mr-4" src={profileImage} alt="User Profile Picture" />
+            <div>
+                <h2 className={`${darkMode ? 'text-white':''}`}>{profileName}</h2>
+                <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'}`}>{profileAbout}</p>
+            </div>
         </div>
-    </div>
-    <div className='btn-container'>
-        {friendshipStatus === 'NOT_FRIENDS' && (
-          <button
-            onClick={newFriendRequest}
-            className="border-none hover:border-none bg-primary text-white p-2 px-3 rounded"
-          >
-            Add Friend
-          </button>
-        )}
-        {friendshipStatus === 'FRIENDS' && (
-          <button
-            onClick={sendMessage}
-            className="border-none hover:border-none bg-primary text-white p-2 px-3 rounded"
-          >
-            Message
-          </button>
-        )}
-        {friendshipStatus === 'REQUESTED' && (
-          <button
-            disabled
-            className="border-none bg-blue-400 text-white p-2 px-3 rounded cursor-not-allowed"
-          >
-            Requested
-          </button>
-        )}
-        {friendshipStatus === 'CONFIRM' && (
-          <button
-            onClick={approveFriendRequest}
-            className="border-none hover:border-none bg-primary text-white p-2 px-3 rounded"
-          >
-            Confirm
-          </button>
-        )} 
-    
-    </div>
-    </div>
+        <div className='btn-container'>
+            {friendshipStatus === 'NOT_FRIENDS' && (
+              <button
+                onClick={newFriendRequest}
+                className="border-none hover:border-none bg-primary text-white p-2 px-3 rounded"
+              >
+                Add Friend
+              </button>
+            )}
+            {friendshipStatus === 'FRIENDS' && (
+              <button
+                onClick={sendMessage}
+                className="border-none hover:border-none bg-primary text-white p-2 px-3 rounded"
+              >
+                Message
+              </button>
+            )}
+            {friendshipStatus === 'REQUESTED' && (
+              <button
+                disabled
+                className="border-none bg-blue-400 text-white p-2 px-3 rounded cursor-not-allowed"
+              >
+                Requested
+              </button>
+            )}
+            {friendshipStatus === 'CONFIRM' && (
+              <button
+                onClick={approveFriendRequest}
+                className="border-none hover:border-none bg-primary text-white p-2 px-3 rounded"
+              >
+                Confirm
+              </button>
+            )} 
+        
+        </div>
+        </div>
+    </>}
+    </>
   )
 }
