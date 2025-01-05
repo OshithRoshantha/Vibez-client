@@ -6,16 +6,70 @@ import {
 import { unFriend } from '../Services/FriendshipService';
 import { useState } from 'react';
 
-export default function PreiviewAcceptedRequests({darkMode, friendshipId, profileName, profilePicture, profileAbout, setBlockPopup, setUnfriendPopup}) {
+export default function PreiviewAcceptedRequests({darkMode, friendshipId, profileName, profilePicture, profileAbout}) {
   
     const [isUnfriended, setIsUnfriended] = useState(false);
+    const [blockPopup, setBlockPopup] = useState(false);
+    const [unfriendPopup, setUnfriendPopup] = useState(false);
 
     const handleUnfriend = async () => {
         await unFriend(friendshipId);
         setIsUnfriended(true);
+        setUnfriendPopup(false);
     }
+
+    const handleBlock = async () => {
+        await unFriend(friendshipId);
+        setIsUnfriended(true);
+        setBlockPopup(false);
+    }
+
+    const cancelPopup = () => {
+        setBlockPopup(false);
+        setUnfriendPopup(false);
+    }
+
     return (
             <>
+
+            {blockPopup && <>
+                <div className="fixed absolute inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100'}}>
+                    <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} p-6 rounded-lg shadow-lg text-left`}>
+                    <h2 className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold mb-1`} >
+                        Block ${profileName}?
+                    </h2>
+                    <p className={`${darkMode ? 'text-gray-300' : 'text-muted-foreground'} mb-4`}>Blocked contacts will no longer be able to send you messages.</p>
+                    <div className="flex justify-end space-x-4">
+                        <button onClick={cancelPopup} className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} border-none px-4 py-2 rounded`}>
+                            Cancel
+                        </button>
+                        <button onClick={handleBlock}  className="bg-primary text-primary-foreground hover:bg-primary/80 px-4 py-2 rounded">
+                            Block
+                        </button>
+                    </div>
+                </div>
+                </div>            
+            </>}
+
+            {unfriendPopup && <>
+                <div className="fixed absolute inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100'}}>
+                    <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} p-6 rounded-lg shadow-lg text-left`}>
+                    <h2 className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold mb-1`} >
+                        Remove ${profileName}?
+                    </h2>
+                    <p className={`${darkMode ? 'text-gray-300' : 'text-muted-foreground'} mb-4`}>Removing this contact will remove them from your friends list.</p>
+                    <div className="flex justify-end space-x-4">
+                        <button onClick={cancelPopup}  className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} border-none px-4 py-2 rounded`}>
+                            Cancel
+                        </button>
+                        <button onClick={handleUnfriend} className="bg-primary text-primary-foreground hover:bg-primary/80 px-4 py-2 rounded">
+                            Remove
+                        </button>
+                    </div>
+                </div>
+                </div>            
+            </>}
+
             {!isUnfriended && <>
                     <div className="flex items-center justify-between border-border py-0 mt-2">
                     <div className="flex items-center">
