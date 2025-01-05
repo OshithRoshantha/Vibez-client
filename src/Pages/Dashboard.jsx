@@ -46,10 +46,29 @@ export default function Dashboard() {
         "Build and grow your network",
         "Chat and shop in harmony"
       ];
+
+   const fetchPendingRequests = async () => {
+      let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
+        if (linkedProfiles.length === 0) {setPendingRequests(0);}
+        else if (linkedProfiles.length > 0) {
+            let count = 0;
+            for (let friendshipId of linkedProfiles){
+                const profileInfo = await getConnectedProfileInfo(friendshipId);
+                const response = await filterPendingRequests(friendshipId);
+                if (response && profileInfo.status === "PENDING") {
+                    setPendingRequests(count += 1);
+                }      
+        }
+     }    
+   };
+
+   useEffect(() => {
+        fetchPendingRequests;
+    }, []);
     
     useEffect(() => {
         async function DarkModePreference() {
-            await updateDarkMode(darkMode);
+            await updateDarkMode( darkMode === true ? 'true' : 'false');
         }
         DarkModePreference();
     }, [darkMode]);
@@ -66,6 +85,7 @@ export default function Dashboard() {
         };
         fetchDarkModePreference();
         fetchUser();
+        fetchPendingRequests();
     }, []);
 
     useEffect(() => {

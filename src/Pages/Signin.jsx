@@ -93,50 +93,7 @@ export default function Signin({ onLogin }) {
         setLoading(false);
     }
   }
-/*
-  const connectToSocket = () => {
-    const token = sessionStorage.getItem('token');
-    const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
   
-    socket.onopen = () => {
-      console.log('Connected to WebSocket');
-      socket.send(JSON.stringify({ action: 'subscribe', topic: 'profileService' }));
-      socket.send(JSON.stringify({ action: 'subscribe', topic: 'friendshipService' }));
-    };
-  
-    socket.onerror = (error) => {
-      console.error("WebSocket Error: ", error);
-    };
-  
-    socket.onmessage = async (event) => { 
-      const incomingMessage = JSON.parse(event.data);
-  
-      switch(incomingMessage.action){
-        case 'profileService':{
-          let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
-          if(linkedProfiles.includes(incomingMessage.body)){
-            console.log('need to refresh!');
-          }
-        }
-          break;
-        case 'friendshipService':{
-          const response = await isConnectedProfile(incomingMessage.body);
-            if (response) {
-              let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
-              if (!linkedProfiles.includes(incomingMessage.body)) {
-                linkedProfiles.push(incomingMessage.body);
-                sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
-              }
-              setRefreshFriends(!refreshFriends);
-            } 
-          }
-          break;
-        default:
-          console.log('Unknown Action');
-      }
-    };
-  };
-*/  
   const handleGoogleLogin = async (credentialResponse) => {
         setLoading(true);
         const googleToken = credentialResponse.credential; 
