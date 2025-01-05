@@ -44,9 +44,10 @@ export default function PreiviewAcceptedRequests({darkMode, friendshipId, profil
                 marginRight: '200px',
                 height: '105px',
                 backgroundColor: darkMode ? '#262729' : '',
+                
                 }}
             >
-                <div className="bg-card text-card-foreground p-0 rounded-lg">
+                <div className="bg-card text-card-foreground p-0 rounded-lg pl-3">
                 <div
                     className="flex-grow friend-buttons"
                     style={{
@@ -57,10 +58,10 @@ export default function PreiviewAcceptedRequests({darkMode, friendshipId, profil
                 >
                     <button
                     onClick={toggleBlockPopup}
-                    className="flex flex-grow items-center w-full p-2 text-left rounded bg-transparent text-black border-none focus:ring-0 hover:border-none"
+                    className={`${darkMode ? 'text-white' : ''} flex flex-grow items-center w-full p-2 text-left rounded bg-transparent border-none focus:ring-0 hover:border-none`}
                     >
                     <span
-                        className="material-icons"
+                        className="material-icons mr-3"
                         style={{
                         display: 'flex',
                         justifyContent: 'center',
@@ -71,17 +72,17 @@ export default function PreiviewAcceptedRequests({darkMode, friendshipId, profil
                         borderRadius: '50%',
                         }}
                     >
-                        <i className="bi bi-slash-circle-fill text-red-500"></i>
-                    </span>
-                    Block
+                        <i className="bi bi-slash-circle-fill "></i>
+                    </span>	
+                    Block {profileName.split(' ')[0]}
                     </button>
 
                     <button
                     onClick={toggleUnfriendPopup}
-                    className="flex flex-grow items-center w-full p-2 text-left rounded bg-transparent text-black border-none focus:ring-0 hover:border-none"
+                    className={`${darkMode ? 'text-white' : ''} flex flex-grow items-center w-full p-2 text-left rounded bg-transparent border-none focus:ring-0 hover:border-none`}
                     >
                     <span
-                        className="material-icons"
+                        className="material-icons mr-3"
                         style={{
                         display: 'flex',
                         justifyContent: 'center',
@@ -92,9 +93,9 @@ export default function PreiviewAcceptedRequests({darkMode, friendshipId, profil
                         borderRadius: '50%',
                         }}
                     >
-                        <i className="bi bi-person-x-fill text-red-500"></i>
+                        <i className="bi bi-person-x-fill "></i>
                     </span>
-                    Remove Friend
+                    Remove {profileName.split(' ')[0]}
                     </button>
                 </div>
                 </div>
