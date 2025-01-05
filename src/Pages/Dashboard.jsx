@@ -20,6 +20,8 @@ import { getConnectedProfileInfo, filterPendingRequests, filterAcceptedRequests,
 export default function Dashboard() {
 
     const { messages } = useWebSocket();
+    const [processedMessages, setProcessedMessages] = useState([]);
+    
     const audioRef = useRef(null);
     const [darkMode, setDarkMode] = useState();
     const [friendsMenu, setFriendsMenu] = useState(false);
@@ -88,40 +90,46 @@ export default function Dashboard() {
     useEffect(() => {
         const handleMessages = async () => {
             if (messages.length > 0) {
-                const lastMessage = messages[messages.length - 1];
-                switch (lastMessage.action) {
-                    case 'friendshipService':{
-                        let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles')); 
-                        if((lastMessage.status === 'UNFRIENDED' || lastMessage.status === 'BLOCKED') && (linkedProfiles.includes(lastMessage.friendshipId))){
-                            linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
-                            sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
-                        }
-                        const response = await isConnectedProfile(lastMessage.friendshipId);
-                        if (response && (lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED')) {
-                            const profileInfo = await getConnectedProfileInfo(lastMessage.friendshipId);
-                            const filterResponse = await filterPendingRequests(lastMessage.friendshipId);
-                            const filterAccepted = await filterAcceptedRequests(lastMessage.friendshipId);
-                            if (filterResponse && profileInfo.status === 'PENDING') {
-                                setProfileImage(profileInfo.profilePicture);
-                                setProfileName(profileInfo.profileName);
-                                setNotification('sent you a friend request.');
-                                setPendingRequests(pendingRequests + 1);
-                                setShowNotification(true);
+                const newMessages = messages.filter(message => !processedMessages.includes(message.id));
+                for (const lastMessage of newMessages) {
+                    switch (lastMessage.action) {
+                        case 'friendshipService': {
+                            let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
+                            if ((lastMessage.status === 'UNFRIENDED' || lastMessage.status === 'BLOCKED') && (linkedProfiles.includes(lastMessage.friendshipId))) {
+                                linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
+                                sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
                             }
-                            else if (filterAccepted && profileInfo.status === 'ACCEPTED') {
-                                setProfileImage(profileInfo.profilePicture);
-                                setProfileName(profileInfo.profileName);
-                                setNotification('accepted your friend request.');
-                                setShowNotification(true);
+                            const response = await isConnectedProfile(lastMessage.friendshipId);
+                            if (response && (lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED')) {
+                                const profileInfo = await getConnectedProfileInfo(lastMessage.friendshipId);
+                                const filterResponse = await filterPendingRequests(lastMessage.friendshipId);
+                                const filterAccepted = await filterAcceptedRequests(lastMessage.friendshipId);
+                                if (filterResponse && profileInfo.status === 'PENDING') {
+                                    setProfileImage(profileInfo.profilePicture);
+                                    setProfileName(profileInfo.profileName);
+                                    setNotification('sent you a friend request.');
+                                    setPendingRequests(pendingRequests + 1);
+                                    setShowNotification(true);
+                                }
+                                else if (filterAccepted && profileInfo.status === 'ACCEPTED') {
+                                    setProfileImage(profileInfo.profilePicture);
+                                    setProfileName(profileInfo.profileName);
+                                    setNotification('accepted your friend request.');
+                                    setShowNotification(true);
+                                }
                             }
+                            break;
                         }
-                        break;
+                        default:
+                            break;
                     }
                 }
+                setProcessedMessages(prevProcessedMessages => [...prevProcessedMessages, ...newMessages.map(message => message.id)]);
             }
         };
         handleMessages();
-    }, [messages]);
+    }, [messages, processedMessages]);
+    
 
     function hideWelcomeVideo(){
         setWelcomeVideo(false);
