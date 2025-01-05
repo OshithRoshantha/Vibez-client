@@ -97,7 +97,6 @@ export default function Dashboard() {
                 }
             }
         };
-    
         handleMessages();
     }, [messages]);
 
