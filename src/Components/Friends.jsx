@@ -68,6 +68,10 @@ export default function Friends({darkMode, setPendingRequests}) {
     }, []);
 
     useEffect(() => {
+        setPendingRequests(pendingProfiles.length);
+    }, [pendingProfiles]);
+
+    useEffect(() => {
         const handleMessages = async () => {
             if (messages.length > 0) {
                 const lastMessage = messages[messages.length - 1];
