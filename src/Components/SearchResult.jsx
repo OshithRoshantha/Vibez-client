@@ -53,7 +53,6 @@ export default function SearchResult({darkMode, profileName, profileAbout, profi
   return (
     <>
     {loading && <>
-        <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{pendingProfiles.length} Pending requests</h2>
           <div className="friends-list skeleton-container">
             <div className='mb-3' style={{display:'flex', alignItems:'center', columnGap:'10px'}}>
               <Skeleton className="h-12 w-12 rounded-full" />
