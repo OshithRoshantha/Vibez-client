@@ -6,7 +6,7 @@ import {
 import { unFriend } from '../Services/FriendshipService';
 import { useState } from 'react';
 
-export default function PreiviewAcceptedRequests({darkMode, friendshipId, profileId, profileName, profilePicture, status, profileAbout, setBlockPopup, setUnfriendPopup}) {
+export default function PreiviewAcceptedRequests({darkMode, friendshipId, profileName, profilePicture, profileAbout, setBlockPopup, setUnfriendPopup}) {
   
     const [isUnfriended, setIsUnfriended] = useState(false);
 
