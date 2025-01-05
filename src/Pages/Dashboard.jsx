@@ -91,6 +91,11 @@ export default function Dashboard() {
                 const lastMessage = messages[messages.length - 1];
                 switch (lastMessage.action) {
                     case 'friendshipService':{
+                        let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles')); 
+                        if((lastMessage.status === 'UNFRIENDED' || lastMessage.status === 'BLOCKED') && (linkedProfiles.includes(lastMessage.friendshipId))){
+                            linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
+                            sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+                        }
                         const response = await isConnectedProfile(lastMessage.friendshipId);
                         if (response && (lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED')) {
                             const profileInfo = await getConnectedProfileInfo(lastMessage.friendshipId);
