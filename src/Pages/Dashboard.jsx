@@ -92,11 +92,11 @@ export default function Dashboard() {
                 const lastMessage = messages[messages.length - 1];
                 switch (lastMessage.action) {
                     case 'friendshipService':{
-                        const response = await isConnectedProfile(lastMessage.body);
+                        const response = await isConnectedProfile(lastMessage.friendshipId);
                         if (response) {
-                            const profileInfo = await getConnectedProfileInfo(lastMessage.body);
-                            const filterResponse = await filterPendingRequests(lastMessage.body);
-                            const filterAccepted = await filterAcceptedRequests(lastMessage.body);
+                            const profileInfo = await getConnectedProfileInfo(lastMessage.friendshipId);
+                            const filterResponse = await filterPendingRequests(lastMessage.friendshipId);
+                            const filterAccepted = await filterAcceptedRequests(lastMessage.friendshipId);
                             if (filterResponse && profileInfo.status === 'PENDING') {
                                 setProfileImage(profileInfo.profilePicture);
                                 setProfileName(profileInfo.profileName);
