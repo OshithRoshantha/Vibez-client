@@ -16,7 +16,6 @@ import { updateDarkMode, getdarkModePreference, fetchUserMetaData} from '../Serv
 import PopupNotifiter from '../Components/PopupNotifiter';
 import { useWebSocket } from '../Context/WebSocketContext';
 import { getConnectedProfileInfo, filterPendingRequests, filterAcceptedRequests, isConnectedProfile} from '../Services/FriendshipService';
-import { set } from 'date-fns';
 
 export default function Dashboard() {
 
@@ -101,6 +100,7 @@ export default function Dashboard() {
                                 setProfileImage(profileInfo.profilePicture);
                                 setProfileName(profileInfo.profileName);
                                 setNotification('sent you a friend request.');
+                                setPendingRequests(pendingRequests + 1);
                                 setShowNotification(true);
                             }
                             else if (filterAccepted && profileInfo.status === 'ACCEPTED') {
