@@ -12,6 +12,8 @@ import { isConnectedProfile } from '../Services/FriendshipService';
 export default function Friends({darkMode, setPendingRequests}) {
 
     const { messages } = useWebSocket();
+    const [processedMessages, setProcessedMessages] = useState([]);
+
     const [loading, setLoading] = useState(true);
     const [friendRequests, setFriendRequests] = useState(true);
     const [yourFriends, setYourFriends] = useState(false);
@@ -84,49 +86,53 @@ export default function Friends({darkMode, setPendingRequests}) {
     useEffect(() => {
         const handleMessages = async () => {
             if (messages.length > 0) {
-                const lastMessage = messages[messages.length - 1];
-                switch (lastMessage.action) {
-                    case 'friendshipService':{
-                        let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));  
-                        if ((lastMessage.status === 'UNFRIENDED' || lastMessage.status === 'BLOCKED') && (linkedProfiles.includes(lastMessage.friendshipId))){
-                            linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
-                            sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
-                            fetchFriendships();
-                        }
-                        const response = await isConnectedProfile(lastMessage.friendshipId);
-                        if (response) {
-                            if (lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED') {
-                                if (!linkedProfiles.includes(lastMessage.friendshipId)) {
-                                    linkedProfiles.push(lastMessage.friendshipId);
-                                    sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
-                                }
-                                fetchFriendships();
-                            }
-                            else if (lastMessage.status === 'UNFRIENDED') {
+                const newMessages = messages.filter(message => !processedMessages.includes(message.id));
+                for (const lastMessage of newMessages) {
+                    switch (lastMessage.action) {
+                        case 'friendshipService': {
+                            let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
+                            if ((lastMessage.status === 'UNFRIENDED' || lastMessage.status === 'BLOCKED') && (linkedProfiles.includes(lastMessage.friendshipId))) {
                                 linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
                                 sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
                                 fetchFriendships();
                             }
-                        }
-                        break;
-                    }
-                    case 'profileService':{
-                        let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
-                        for (const friendshipId of linkedProfiles){
-                            const isFriend = await isConnectedProfile(friendshipId);
-                            if(isFriend){
-                                fetchFriendships();
+                            const response = await isConnectedProfile(lastMessage.friendshipId);
+                            if (response) {
+                                if (lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED') {
+                                    if (!linkedProfiles.includes(lastMessage.friendshipId)) {
+                                        linkedProfiles.push(lastMessage.friendshipId);
+                                        sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+                                    }
+                                    fetchFriendships();
+                                }
+                                else if (lastMessage.status === 'UNFRIENDED') {
+                                    linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
+                                    sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+                                    fetchFriendships();
+                                }
                             }
+                            break;
                         }
-                      }
-                        break;
+                        case 'profileService': {
+                            let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
+                            for (const friendshipId of linkedProfiles) {
+                                const isFriend = await isConnectedProfile(friendshipId);
+                                if (isFriend) {
+                                    fetchFriendships();
+                                }
+                            }
+                            break;
+                        }
+                        default:
+                            break;
                     }
+                }
+                setProcessedMessages(prevProcessedMessages => [...prevProcessedMessages, ...newMessages.map(message => message.id)]);
             }
         };
-    
         handleMessages();
-    }, [messages]);
-    
+    }, [messages, processedMessages]);
+
 
     function hideFriendRequests() {
         setFriendRequests(true);
