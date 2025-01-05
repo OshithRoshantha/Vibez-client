@@ -78,10 +78,10 @@ export default function Signin({ onLogin }) {
             await fetchProfileId();
             onLogin(true);
             setIncorrectPassword(false);
-            setLoading(false);
-            navDashboard();
             sessionStorage.setItem('linkedProfiles', JSON.stringify([]));
             await fetchConnectedProfiles();
+            navDashboard();
+            setLoading(false);
         } catch (error) {
             if (error.response.status === 401) {
                 setIncorrectPassword(true);
@@ -104,10 +104,10 @@ export default function Signin({ onLogin }) {
         await fetchProfileId();
         onLogin(true);
         handleSwipe();
-        navDashboard();
-        setLoading(false);
         sessionStorage.setItem('linkedProfiles', JSON.stringify([]));
         await fetchConnectedProfiles();
+        navDashboard();
+        setLoading(false);
    }
 
    const fetchProfileId = async () => {

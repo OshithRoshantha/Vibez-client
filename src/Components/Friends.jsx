@@ -25,51 +25,66 @@ export default function Friends({darkMode, setPendingRequests}) {
     const [isResultsEmpty, setIsResultsEmpty] = useState(false);
     const [pendingProfiles, setPendingProfiles] = useState([]);
     const [acceptedProfiles, setAcceptedProfiles] = useState([]);
+    const prevPendingCountRef = useRef(0); 
     var user = "testUser";
 
-    const fetchFrienships = async () => {
+    const fetchFriendships = async () => {
         setLoading(true);
         setPendingProfiles([]);
         setAcceptedProfiles([]);
-        let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
-        if (linkedProfiles.length === 0) {setLoading(false);}
-        else if (linkedProfiles.length > 0) {
-            for (let friendshipId of linkedProfiles){
-                const profileInfo = await getConnectedProfileInfo(friendshipId);
-                const response = await filterPendingRequests(friendshipId);
-                setLoading(false);
+    
+        const linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles')) || [];
+        if (linkedProfiles.length === 0) {
+            setLoading(false);
+            return;
+        }
+        const profilesPromises = linkedProfiles.map(async (friendshipId) => {
+            const profileInfo = await getConnectedProfileInfo(friendshipId);
+            const response = await filterPendingRequests(friendshipId);
+            return { profileInfo, response };
+        });
+    
+        try {
+            const results = await Promise.all(profilesPromises);
+    
+            const pending = [];
+            const accepted = [];
+    
+            results.forEach(({ profileInfo, response }) => {
                 if (response && profileInfo.status === "PENDING") {
-                    setPendingProfiles((prevProfiles) => {
-                        const isDuplicate = prevProfiles.some(profile => profile.profileId === profileInfo.profileId);
-                        if (!isDuplicate) {
-                            return [...prevProfiles, profileInfo];
-                        } else {
-                            return prevProfiles;
-                        }
-
-                    });
+                    if (!pending.some(profile => profile.profileId === profileInfo.profileId)) {
+                        pending.push(profileInfo);
+                    }
                 }
                 if (profileInfo.status === "ACCEPTED") {
-                    setAcceptedProfiles((prevProfiles) => {
-                        const isDuplicate = prevProfiles.some(profile => profile.profileId === profileInfo.profileId);
-                        if (!isDuplicate) {
-                            return [...prevProfiles, profileInfo];
-                        } else {
-                            return prevProfiles;
-                        }
-                    });
+                    if (!accepted.some(profile => profile.profileId === profileInfo.profileId)) {
+                        accepted.push(profileInfo);
+                    }
                 }
-            }
+            });
+    
+            setPendingProfiles(pending);
+            setAcceptedProfiles(accepted);
+        } catch (error) {
+            console.error("Error fetching friendships:", error);
+        } finally {
+            setLoading(false);
         }
     };
+    
 
     useEffect(() => {
-        fetchFrienships();
+        fetchFriendships();
     }, []);
 
     useEffect(() => {
-        setPendingRequests(pendingProfiles.length);
-    }, [pendingProfiles]);
+        const currentPendingCount = pendingProfiles.length;
+        const prevPendingCount = prevPendingCountRef.current;
+        if (currentPendingCount !== prevPendingCount) {
+            setPendingRequests(currentPendingCount);
+            prevPendingCountRef.current = currentPendingCount;
+        }
+    }, [pendingProfiles, setPendingRequests]);
 
     useEffect(() => {
         const handleMessages = async () => {
@@ -84,7 +99,7 @@ export default function Friends({darkMode, setPendingRequests}) {
                                 linkedProfiles.push(lastMessage.body);
                                 sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
                             }
-                            fetchFrienships();
+                            fetchFriendships();
                         }
                         break;
                     }
@@ -93,7 +108,7 @@ export default function Friends({darkMode, setPendingRequests}) {
                         for (const friendshipId of linkedProfiles){
                             const isFriend = await isConnectedProfile(friendshipId);
                             if(isFriend){
-                                fetchFrienships();
+                                fetchFriendships();
                             }
                         }
                       }
