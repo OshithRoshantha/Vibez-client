@@ -63,11 +63,8 @@ export default function Friends({darkMode, setPendingRequests}) {
                     }
                 }
             });
-    
             setPendingProfiles(pending);
             setAcceptedProfiles(accepted);
-        } catch (error) {
-            console.error("Error fetching friendships:", error);
         } finally {
             setLoading(false);
         }
@@ -93,14 +90,21 @@ export default function Friends({darkMode, setPendingRequests}) {
                 const lastMessage = messages[messages.length - 1];
                 switch (lastMessage.action) {
                     case 'friendshipService':{
-                        const response = await isConnectedProfile(lastMessage.body);
+                        const response = await isConnectedProfile(lastMessage.friendshipId);
                         if (response) {
                             let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
-                            if (!linkedProfiles.includes(lastMessage.body)) {
-                                linkedProfiles.push(lastMessage.body);
-                                sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+                            if (lastMessage.status !== 'UNFRIENDED') {
+                                if (!linkedProfiles.includes(lastMessage.friendshipId)) {
+                                    linkedProfiles.push(lastMessage.friendshipId);
+                                    sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+                                }
+                                fetchFriendships();
                             }
-                            fetchFriendships();
+                            else if (lastMessage.status === 'UNFRIENDED') {
+                                linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
+                                sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+                                fetchFriendships();
+                            }
                         }
                         break;
                     }
