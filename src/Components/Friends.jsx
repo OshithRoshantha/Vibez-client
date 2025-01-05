@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
 import './Styles/Column2.css';
-import GlobalAlert from './GlobalAlert';
 import { searchPeople, getConnectedProfileInfo, filterPendingRequests } from '../Services/FriendshipService';
 import { fetchPeopleMetaData } from '../Services/ProfileService';
 import SearchResult from './SearchResult';
@@ -16,8 +15,6 @@ export default function Friends({darkMode, setPendingRequests}) {
     const [loading, setLoading] = useState(true);
     const [friendRequests, setFriendRequests] = useState(true);
     const [yourFriends, setYourFriends] = useState(false);
-    const [blockPopup, setBlockPopup] = useState(false);
-    const [unfriendPopup, setUnfriendPopup] = useState(false);
     const inputRef = useRef(null);
     const [showResults, setShowResults] = useState(false);
     const [searchKeyword, setSearchKeyword] = useState('');
@@ -140,14 +137,6 @@ export default function Friends({darkMode, setPendingRequests}) {
         setShowResults(false);
     }
 
-    function toggleBlockPopup() {
-        setBlockPopup(!blockPopup);
-    }
-
-    function toggleUnfriendPopup() {
-        setUnfriendPopup(!unfriendPopup);
-    }
-
     const handleSearchChange = async (e) => {
         const value = e.target.value;
         setSearchKeyword(value); 
@@ -182,28 +171,6 @@ export default function Friends({darkMode, setPendingRequests}) {
 
     return (
         <div>
-            {blockPopup && (
-                <GlobalAlert
-                    darkMode={darkMode}
-                    text={`Block ${user}?`}
-                    textOP={'Blocked contacts will no longer be able to send you messages.'}
-                    button1={'Cancel'}
-                    button2={'Block'}
-                    btn1Function={toggleBlockPopup}
-                    btn2Function={toggleBlockPopup}
-                />
-            )}
-            {unfriendPopup && (
-                <GlobalAlert
-                    darkMode={darkMode}
-                    text={`Remove ${user}?`}
-                    textOP={'Removing this contact will remove them from your friends list.'}
-                    button1={'Cancel'}
-                    button2={'Remove'}
-                    btn1Function={toggleUnfriendPopup}
-                    btn2Function={toggleUnfriendPopup}
-                />
-            )}
             <div
                 className={`${darkMode ? 'border-gray-600 border-r border-border' : 'border-r border-border'}  p-4 friends-column`}
                 style={{ backgroundColor: darkMode ? '#262729' : '', height: '100vh' }}
