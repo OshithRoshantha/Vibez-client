@@ -87,9 +87,14 @@ export default function Friends({darkMode, setPendingRequests}) {
                 const lastMessage = messages[messages.length - 1];
                 switch (lastMessage.action) {
                     case 'friendshipService':{
+                        let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));  
+                        if ((lastMessage.status === 'UNFRIENDED' || lastMessage.status === 'BLOCKED') && (linkedProfiles.includes(lastMessage.friendshipId))){
+                            linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
+                            sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+                            fetchFriendships();
+                        }
                         const response = await isConnectedProfile(lastMessage.friendshipId);
                         if (response) {
-                            let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));  //error here
                             if (lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED') {
                                 if (!linkedProfiles.includes(lastMessage.friendshipId)) {
                                     linkedProfiles.push(lastMessage.friendshipId);

@@ -13,12 +13,18 @@ export default function PreiviewAcceptedRequests({darkMode, friendshipId, profil
     const [unfriendPopup, setUnfriendPopup] = useState(false);
 
     const handleUnfriend = async () => {
+        let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
+        linkedProfiles = linkedProfiles.filter(profile => profile !== friendshipId);
+        sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
         await unFriend(friendshipId);
         setIsUnfriended(true);
         setUnfriendPopup(false);
     }
 
     const handleBlock = async () => {
+        let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
+        linkedProfiles = linkedProfiles.filter(profile => profile !== friendshipId);
+        sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
         await unFriend(friendshipId);
         setIsUnfriended(true);
         setBlockPopup(false);
