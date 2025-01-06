@@ -265,7 +265,7 @@ export default function Dashboard() {
 
   return (
     <div className='dashboard-conatiner'>
-        <audio ref={audioRef} src="../assets/Tones/notification.mp3" />
+        <audio ref={audioRef} src="/assets/Tones/notification.mp3" />
         {showNotification && <div>
             <PopupNotifiter darkMode={darkMode} notifiacton={notifiacton} profileImage={profileImage} profileName={profileName}/>
         </div>}
