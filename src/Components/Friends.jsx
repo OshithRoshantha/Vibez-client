@@ -9,7 +9,7 @@ import { useWebSocket } from '../Context/WebSocketContext';
 import { isConnectedProfile } from '../Services/FriendshipService';
 import PreviewAcceptedRequests from './PreviewAcceptedRequests';
 
-export default function Friends({darkMode, setPendingRequests}) {
+export default function Friends({darkMode, setPendingRequests, fetchPendingRequests}) {
 
     const { messages } = useWebSocket();
     const [processedMessages, setProcessedMessages] = useState([]);
@@ -122,6 +122,7 @@ export default function Friends({darkMode, setPendingRequests}) {
                                         linkedProfiles.push(lastMessage.friendshipId);
                                         sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
                                     }
+                                    fetchPendingRequests();
                                     fetchFriendships();
                                 } else if (lastMessage.status === 'UNFRIENDED') {
                                     linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
