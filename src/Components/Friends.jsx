@@ -1,23 +1,22 @@
 import { useState, useRef, useEffect } from 'react';
 import './Styles/Column2.css';
-import GlobalAlert from './GlobalAlert';
 import { searchPeople, getConnectedProfileInfo, filterPendingRequests } from '../Services/FriendshipService';
 import { fetchPeopleMetaData } from '../Services/ProfileService';
 import SearchResult from './SearchResult';
 import PreviewPendingRequests from './PreviewPendingRequests';
-import PreiviewAcceptedRequests from './PreiviewAcceptedRequests';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
 import { isConnectedProfile } from '../Services/FriendshipService';
+import PreviewAcceptedRequests from './PreviewAcceptedRequests';
 
-export default function Friends({darkMode, setPendingRequests}) {
+export default function Friends({darkMode, setPendingRequests, fetchPendingRequests}) {
 
     const { messages } = useWebSocket();
+    const [processedMessages, setProcessedMessages] = useState([]);
+
     const [loading, setLoading] = useState(true);
     const [friendRequests, setFriendRequests] = useState(true);
     const [yourFriends, setYourFriends] = useState(false);
-    const [blockPopup, setBlockPopup] = useState(false);
-    const [unfriendPopup, setUnfriendPopup] = useState(false);
     const inputRef = useRef(null);
     const [showResults, setShowResults] = useState(false);
     const [searchKeyword, setSearchKeyword] = useState('');
@@ -25,9 +24,17 @@ export default function Friends({darkMode, setPendingRequests}) {
     const [isResultsEmpty, setIsResultsEmpty] = useState(false);
     const [pendingProfiles, setPendingProfiles] = useState([]);
     const [acceptedProfiles, setAcceptedProfiles] = useState([]);
-    const prevPendingCountRef = useRef(0); 
-    var user = "testUser";
+    const prevPendingCountRef = useRef(0);
+
     const err = darkMode ? './src/assets/Icons/searchErdark.png' : './src/assets/Icons/searchEr.png';
+
+    const handleIconClick = () => {
+        if (searchKeyword !== '') {
+          setSearchKeyword(''); 
+          setShowResults(false);
+          setYourFriends(true);
+        }
+      };
 
     const fetchFriendships = async () => {
         setLoading(true);
@@ -63,11 +70,8 @@ export default function Friends({darkMode, setPendingRequests}) {
                     }
                 }
             });
-    
             setPendingProfiles(pending);
             setAcceptedProfiles(accepted);
-        } catch (error) {
-            console.error("Error fetching friendships:", error);
         } finally {
             setLoading(false);
         }
@@ -89,38 +93,69 @@ export default function Friends({darkMode, setPendingRequests}) {
 
     useEffect(() => {
         const handleMessages = async () => {
-            if (messages.length > 0) {
-                const lastMessage = messages[messages.length - 1];
+            if (messages.length === 0) {
+                return;
+            }
+            const newMessages = messages.filter(message => !processedMessages.includes(message.id));
+            if (newMessages.length === 0) {
+                return; 
+            }
+            let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles')) || [];
+            for (const lastMessage of newMessages) {
                 switch (lastMessage.action) {
-                    case 'friendshipService':{
-                        const response = await isConnectedProfile(lastMessage.body);
-                        if (response) {
-                            let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
-                            if (!linkedProfiles.includes(lastMessage.body)) {
-                                linkedProfiles.push(lastMessage.body);
-                                sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
-                            }
+                    case 'friendshipService': {
+                        if ((lastMessage.status === 'UNFRIENDED' || lastMessage.status === 'BLOCKED') && linkedProfiles.includes(lastMessage.friendshipId)) {
+                            linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
+                            sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
                             fetchFriendships();
+                            setProcessedMessages(prevProcessedMessages => [
+                                ...prevProcessedMessages,
+                                ...newMessages.map(message => message.id),
+                            ]);
+                        }
+
+                        else{
+                            const response = await isConnectedProfile(lastMessage.friendshipId);
+                            if (response) {
+                                if (lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED') {
+                                    if (!linkedProfiles.includes(lastMessage.friendshipId)) {
+                                        linkedProfiles.push(lastMessage.friendshipId);
+                                        sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+                                    }
+                                    fetchPendingRequests();
+                                    fetchFriendships();
+                                } else if (lastMessage.status === 'UNFRIENDED') {
+                                    linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
+                                    sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+                                    fetchFriendships();
+                                }
+                            }
                         }
                         break;
+                        
                     }
-                    case 'profileService':{
-                        let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
-                        for (const friendshipId of linkedProfiles){
+                    case 'profileService': {
+                        for (const friendshipId of linkedProfiles) {
                             const isFriend = await isConnectedProfile(friendshipId);
-                            if(isFriend){
+                            if (isFriend) {
                                 fetchFriendships();
                             }
                         }
-                      }
                         break;
                     }
+                    default:
+                        break;
+                }
             }
+            setProcessedMessages(prevProcessedMessages => [
+                ...prevProcessedMessages,
+                ...newMessages.map(message => message.id),
+            ]);
         };
-    
         handleMessages();
-    }, [messages]);
+    }, [messages, processedMessages]); 
     
+
 
     function hideFriendRequests() {
         setFriendRequests(true);
@@ -132,14 +167,6 @@ export default function Friends({darkMode, setPendingRequests}) {
         setYourFriends(true);
         setFriendRequests(false);
         setShowResults(false);
-    }
-
-    function toggleBlockPopup() {
-        setBlockPopup(!blockPopup);
-    }
-
-    function toggleUnfriendPopup() {
-        setUnfriendPopup(!unfriendPopup);
     }
 
     const handleSearchChange = async (e) => {
@@ -176,28 +203,6 @@ export default function Friends({darkMode, setPendingRequests}) {
 
     return (
         <div>
-            {blockPopup && (
-                <GlobalAlert
-                    darkMode={darkMode}
-                    text={`Block ${user}?`}
-                    textOP={'Blocked contacts will no longer be able to send you messages.'}
-                    button1={'Cancel'}
-                    button2={'Block'}
-                    btn1Function={toggleBlockPopup}
-                    btn2Function={toggleBlockPopup}
-                />
-            )}
-            {unfriendPopup && (
-                <GlobalAlert
-                    darkMode={darkMode}
-                    text={`Remove ${user}?`}
-                    textOP={'Removing this contact will remove them from your friends list.'}
-                    button1={'Cancel'}
-                    button2={'Remove'}
-                    btn1Function={toggleUnfriendPopup}
-                    btn2Function={toggleUnfriendPopup}
-                />
-            )}
             <div
                 className={`${darkMode ? 'border-gray-600 border-r border-border' : 'border-r border-border'}  p-4 friends-column`}
                 style={{ backgroundColor: darkMode ? '#262729' : '', height: '100vh' }}
@@ -212,10 +217,15 @@ export default function Friends({darkMode, setPendingRequests}) {
                     className={`${darkMode ? 'bg-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'bg-gray-200'} w-full px-4 py-2 mb-4 focus:outline-none focus:border-none placeholder:text-gray-500  text-gray-500 `}
                     style={{ borderRadius: '20px' }}
                 />
-                <i
-                    className={`${darkMode ? 'text-[#abacae]' : 'text-gray-500'} bi absolute text-2xl bi-search`}
-                    style={{ marginLeft: '-3%', marginTop: '0.2%' }}
-                ></i>
+                    <i
+                        className={`${
+                        darkMode ? 'text-[#abacae]' : 'text-gray-500'
+                        } bi cursor-pointer absolute text-2xl ${
+                        searchKeyword === '' ? 'bi-search' : 'bi-x-circle-fill'
+                        }`}
+                        style={{ marginLeft: '-3%', marginTop: '0.2%' }}
+                        onClick={handleIconClick}
+                    ></i>
                 <div className="flex space-x-2 mb-4">
                     <button
                         onClick={hideYourFriends}
@@ -352,15 +362,14 @@ export default function Friends({darkMode, setPendingRequests}) {
                             <div className="space-y-4">
                                {
                                 acceptedProfiles.map(profile => (
-                                    <PreiviewAcceptedRequests
-                                    key={profile.friendshipId} 
-                                    darkMode={darkMode}
-                                    friendshipId={profile.friendshipId}
-                                    profileId={profile.profileId}
-                                    profileName={profile.profileName}
-                                    profilePicture={profile.profilePicture}
-                                    status={profile.status}
-                                    profileAbout={profile.profileAbout}
+                                    <PreviewAcceptedRequests
+                                        key={profile.friendshipId} 
+                                        darkMode={darkMode}
+                                        friendshipId={profile.friendshipId}
+                                        profileName={profile.profileName}
+                                        profilePicture={profile.profilePicture}
+                                        profileAbout={profile.profileAbout}
+                                        fetchFriendships={fetchFriendships}
                                     />
                                 ))
                                 }                            

@@ -16,11 +16,12 @@ import { updateDarkMode, getdarkModePreference, fetchUserMetaData} from '../Serv
 import PopupNotifiter from '../Components/PopupNotifiter';
 import { useWebSocket } from '../Context/WebSocketContext';
 import { getConnectedProfileInfo, filterPendingRequests, filterAcceptedRequests, isConnectedProfile} from '../Services/FriendshipService';
-import { set } from 'date-fns';
 
 export default function Dashboard() {
 
     const { messages } = useWebSocket();
+    const [processedMessages, setProcessedMessages] = useState([]);
+    
     const audioRef = useRef(null);
     const [darkMode, setDarkMode] = useState();
     const [friendsMenu, setFriendsMenu] = useState(false);
@@ -88,35 +89,57 @@ export default function Dashboard() {
 
     useEffect(() => {
         const handleMessages = async () => {
-            if (messages.length > 0) {
-                const lastMessage = messages[messages.length - 1];
-                switch (lastMessage.action) {
-                    case 'friendshipService':{
-                        const response = await isConnectedProfile(lastMessage.body);
-                        if (response) {
-                            const profileInfo = await getConnectedProfileInfo(lastMessage.body);
-                            const filterResponse = await filterPendingRequests(lastMessage.body);
-                            const filterAccepted = await filterAcceptedRequests(lastMessage.body);
-                            if (filterResponse && profileInfo.status === 'PENDING') {
-                                setProfileImage(profileInfo.profilePicture);
-                                setProfileName(profileInfo.profileName);
-                                setNotification('sent you a friend request.');
-                                setShowNotification(true);
+            if (messages.length === 0) {
+                return;
+            }
+            const newMessages = messages.filter(message => !processedMessages.includes(message.id));
+            if (newMessages.length === 0) {
+                return; 
+            }    
+            let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles')) || [];    
+            for (const lastMessage of newMessages) {
+                if (lastMessage.action === 'friendshipService') {
+                        if ((lastMessage.status === 'UNFRIENDED' || lastMessage.status === 'BLOCKED') && linkedProfiles.includes(lastMessage.friendshipId)) {
+                            linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
+                            sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+                            setProcessedMessages(prevProcessedMessages => [
+                                ...prevProcessedMessages,
+                                ...newMessages.map(message => message.id),
+                            ]);
+                        } 
+
+                        else {
+                            const response = await isConnectedProfile(lastMessage.friendshipId);
+                            if (response && (lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED')) {
+                                const profileInfo = await getConnectedProfileInfo(lastMessage.friendshipId);
+                                const filterResponse = await filterPendingRequests(lastMessage.friendshipId);
+                                const filterAccepted = await filterAcceptedRequests(lastMessage.friendshipId);
+                                if (filterResponse && profileInfo.status === 'PENDING') {
+                                    setProfileImage(profileInfo.profilePicture);
+                                    setProfileName(profileInfo.profileName);
+                                    setNotification('sent you a friend request.');
+                                    setPendingRequests(prev => prev + 1);
+                                    setShowNotification(true);
+                                } else if (filterAccepted && profileInfo.status === 'ACCEPTED') {
+                                    setProfileImage(profileInfo.profilePicture);
+                                    setProfileName(profileInfo.profileName);
+                                    setNotification('accepted your friend request.');
+                                    setShowNotification(true);
+                                }
                             }
-                            else if (filterAccepted && profileInfo.status === 'ACCEPTED') {
-                                setProfileImage(profileInfo.profilePicture);
-                                setProfileName(profileInfo.profileName);
-                                setNotification('accepted your friend request.');
-                                setShowNotification(true);
-                            }
+                        
                         }
-                        break;
-                    }
                 }
             }
+            setProcessedMessages(prevProcessedMessages => [
+                ...prevProcessedMessages,
+                ...newMessages.map(message => message.id),
+            ]);
         };
         handleMessages();
-    }, [messages]);
+    }, [messages, processedMessages]); 
+    
+    
 
     function hideWelcomeVideo(){
         setWelcomeVideo(false);
@@ -232,21 +255,17 @@ export default function Dashboard() {
 
     useEffect(() => {
         if (showNotification) {
-            if (audioRef.current) {
-                audioRef.current.play().catch((error) => {
-                    console.error("Audio playback failed:", error);
-                });
-            }
-            const timer = setTimeout(() => {
-                setShowNotification(false);
-            }, 9000);
-            return () => clearTimeout(timer);
+          audioRef.current.play();
+          const timer = setTimeout(() => {
+            setShowNotification(false);
+          }, 9000);
+          return () => clearTimeout(timer);
         }
-    }, [showNotification]);
+      }, [showNotification]);
 
   return (
     <div className='dashboard-conatiner'>
-        <audio ref={audioRef} src="../assets/Tones/notification.mp3" preload="auto"></audio>
+        <audio ref={audioRef} src="/assets/Tones/notification.mp3" />
         {showNotification && <div>
             <PopupNotifiter darkMode={darkMode} notifiacton={notifiacton} profileImage={profileImage} profileName={profileName}/>
         </div>}
@@ -278,7 +297,7 @@ export default function Dashboard() {
             </div>
             {chatsMenu && <Chats darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
             {groupsMenu && <GroupChats darkMode={darkMode} showGroupMessages={showGroupMessages}/>}
-            {friendsMenu && <Friends darkMode={darkMode} setPendingRequests={setPendingRequests}/>}
+            {friendsMenu && <Friends darkMode={darkMode} setPendingRequests={setPendingRequests} fetchPendingRequests={fetchPendingRequests}/>}
             {marketplaceMenu && <Marketplace  darkMode={darkMode}/>}
             {settingsMenu && <Settings darkModeOn={darkModeOn} darkModeOff={darkModeOff} darkMode={darkMode}/>}
             {profileMenu && <Profile  darkMode={darkMode} setUserPicture={setUserPicture}/>}
