@@ -252,24 +252,20 @@ export default function Dashboard() {
         setGroupInfoMenu(false);
         setFriendInfoMenu(false);
     }
-
+    
     useEffect(() => {
         if (showNotification) {
-            if (audioRef.current) {
-                audioRef.current.play().catch((error) => {
-                    console.error("Audio playback failed:", error);
-                });
-            }
-            const timer = setTimeout(() => {
-                setShowNotification(false);
-            }, 9000);
-            return () => clearTimeout(timer);
+          audioRef.current.play();
+          const timer = setTimeout(() => {
+            setShowNotification(false);
+          }, 9000);
+          return () => clearTimeout(timer);
         }
-    }, [showNotification]);
+      }, [showNotification]);
 
   return (
     <div className='dashboard-conatiner'>
-        <audio ref={audioRef} src="../assets/Tones/notification.mp3" preload="auto"></audio>
+        <audio ref={audioRef} src="../assets/Tones/notification.mp3" />
         {showNotification && <div>
             <PopupNotifiter darkMode={darkMode} notifiacton={notifiacton} profileImage={profileImage} profileName={profileName}/>
         </div>}
