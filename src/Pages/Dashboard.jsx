@@ -89,16 +89,27 @@ export default function Dashboard() {
 
     useEffect(() => {
         const handleMessages = async () => {
-            if (messages.length > 0) {
-                const newMessages = messages.filter(message => !processedMessages.includes(message.id));
-                for (const lastMessage of newMessages) {
-                    switch (lastMessage.action) {
-                        case 'friendshipService': {
-                            let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
-                            if ((lastMessage.status === 'UNFRIENDED' || lastMessage.status === 'BLOCKED') && (linkedProfiles.includes(lastMessage.friendshipId))) {
-                                linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
-                                sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
-                            }
+            if (messages.length === 0) {
+                return;
+            }
+            const newMessages = messages.filter(message => !processedMessages.includes(message.id));
+            if (newMessages.length === 0) {
+                return; 
+            }    
+            let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles')) || [];    
+            for (const lastMessage of newMessages) {
+                if (lastMessage.action === 'friendshipService') {
+                        if ((lastMessage.status === 'UNFRIENDED' || lastMessage.status === 'BLOCKED') && linkedProfiles.includes(lastMessage.friendshipId)) {
+                            linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
+                            sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+
+                            setProcessedMessages(prevProcessedMessages => [
+                                ...prevProcessedMessages,
+                                ...newMessages.map(message => message.id),
+                            ]);
+                        } 
+                        
+                        else {
                             const response = await isConnectedProfile(lastMessage.friendshipId);
                             if (response && (lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED')) {
                                 const profileInfo = await getConnectedProfileInfo(lastMessage.friendshipId);
@@ -108,27 +119,27 @@ export default function Dashboard() {
                                     setProfileImage(profileInfo.profilePicture);
                                     setProfileName(profileInfo.profileName);
                                     setNotification('sent you a friend request.');
-                                    setPendingRequests(pendingRequests + 1);
+                                    setPendingRequests(prev => prev + 1);
                                     setShowNotification(true);
-                                }
-                                else if (filterAccepted && profileInfo.status === 'ACCEPTED') {
+                                } else if (filterAccepted && profileInfo.status === 'ACCEPTED') {
                                     setProfileImage(profileInfo.profilePicture);
                                     setProfileName(profileInfo.profileName);
                                     setNotification('accepted your friend request.');
                                     setShowNotification(true);
                                 }
                             }
-                            break;
+                        
                         }
-                        default:
-                            break;
-                    }
                 }
-                setProcessedMessages(prevProcessedMessages => [...prevProcessedMessages, ...newMessages.map(message => message.id)]);
             }
+            setProcessedMessages(prevProcessedMessages => [
+                ...prevProcessedMessages,
+                ...newMessages.map(message => message.id),
+            ]);
         };
         handleMessages();
-    }, [messages, processedMessages]);
+    }, [messages, processedMessages]); 
+    
     
 
     function hideWelcomeVideo(){

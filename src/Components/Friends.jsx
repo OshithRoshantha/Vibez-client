@@ -4,10 +4,10 @@ import { searchPeople, getConnectedProfileInfo, filterPendingRequests } from '..
 import { fetchPeopleMetaData } from '../Services/ProfileService';
 import SearchResult from './SearchResult';
 import PreviewPendingRequests from './PreviewPendingRequests';
-import PreviewAcceptedRequests from '../PreviewAcceptedRequests
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
 import { isConnectedProfile } from '../Services/FriendshipService';
+import PreviewAcceptedRequests from './PreviewAcceptedRequests';
 
 export default function Friends({darkMode, setPendingRequests}) {
 
@@ -85,17 +85,29 @@ export default function Friends({darkMode, setPendingRequests}) {
 
     useEffect(() => {
         const handleMessages = async () => {
-            if (messages.length > 0) {
-                const newMessages = messages.filter(message => !processedMessages.includes(message.id));
-                for (const lastMessage of newMessages) {
-                    switch (lastMessage.action) {
-                        case 'friendshipService': {
-                            let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
-                            if ((lastMessage.status === 'UNFRIENDED' || lastMessage.status === 'BLOCKED') && (linkedProfiles.includes(lastMessage.friendshipId))) {
-                                linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
-                                sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
-                                fetchFriendships();
-                            }
+            if (messages.length === 0) {
+                return;
+            }
+            const newMessages = messages.filter(message => !processedMessages.includes(message.id));
+            if (newMessages.length === 0) {
+                return; 
+            }
+            let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles')) || [];
+            for (const lastMessage of newMessages) {
+                switch (lastMessage.action) {
+                    case 'friendshipService': {
+                        if ((lastMessage.status === 'UNFRIENDED' || lastMessage.status === 'BLOCKED') && linkedProfiles.includes(lastMessage.friendshipId)) {
+                            linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
+                            sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+                            fetchFriendships();
+
+                            setProcessedMessages(prevProcessedMessages => [
+                                ...prevProcessedMessages,
+                                ...newMessages.map(message => message.id),
+                            ]);
+                        }
+
+                        else{
                             const response = await isConnectedProfile(lastMessage.friendshipId);
                             if (response) {
                                 if (lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED') {
@@ -104,34 +116,37 @@ export default function Friends({darkMode, setPendingRequests}) {
                                         sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
                                     }
                                     fetchFriendships();
-                                }
-                                else if (lastMessage.status === 'UNFRIENDED') {
+                                } else if (lastMessage.status === 'UNFRIENDED') {
                                     linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
                                     sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
                                     fetchFriendships();
                                 }
                             }
-                            break;
                         }
-                        case 'profileService': {
-                            let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
-                            for (const friendshipId of linkedProfiles) {
-                                const isFriend = await isConnectedProfile(friendshipId);
-                                if (isFriend) {
-                                    fetchFriendships();
-                                }
-                            }
-                            break;
-                        }
-                        default:
-                            break;
+                        break;
+                        
                     }
+                    case 'profileService': {
+                        for (const friendshipId of linkedProfiles) {
+                            const isFriend = await isConnectedProfile(friendshipId);
+                            if (isFriend) {
+                                fetchFriendships();
+                            }
+                        }
+                        break;
+                    }
+                    default:
+                        break;
                 }
-                setProcessedMessages(prevProcessedMessages => [...prevProcessedMessages, ...newMessages.map(message => message.id)]);
             }
+            setProcessedMessages(prevProcessedMessages => [
+                ...prevProcessedMessages,
+                ...newMessages.map(message => message.id),
+            ]);
         };
         handleMessages();
-    }, [messages, processedMessages]);
+    }, [messages, processedMessages]); 
+    
 
 
     function hideFriendRequests() {
@@ -335,12 +350,12 @@ export default function Friends({darkMode, setPendingRequests}) {
                                {
                                 acceptedProfiles.map(profile => (
                                     <PreviewAcceptedRequests
-                                    key={profile.friendshipId} 
-                                    darkMode={darkMode}
-                                    friendshipId={profile.friendshipId}
-                                    profileName={profile.profileName}
-                                    profilePicture={profile.profilePicture}
-                                    profileAbout={profile.profileAbout}
+                                        key={profile.friendshipId} 
+                                        darkMode={darkMode}
+                                        friendshipId={profile.friendshipId}
+                                        profileName={profile.profileName}
+                                        profilePicture={profile.profilePicture}
+                                        profileAbout={profile.profileAbout}
                                     />
                                 ))
                                 }                            

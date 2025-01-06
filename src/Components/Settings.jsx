@@ -59,7 +59,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
 
     const handleLogOut = () => {
         sessionStorage.clear();
-        navigate('/');
+        window.location.href = '/';
     }
 
   return (
