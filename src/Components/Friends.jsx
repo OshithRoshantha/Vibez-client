@@ -4,7 +4,7 @@ import { searchPeople, getConnectedProfileInfo, filterPendingRequests } from '..
 import { fetchPeopleMetaData } from '../Services/ProfileService';
 import SearchResult from './SearchResult';
 import PreviewPendingRequests from './PreviewPendingRequests';
-import PreiviewAcceptedRequests from './PreiviewAcceptedRequests';
+import PreviewAcceptedRequests from '../PreviewAcceptedRequests
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
 import { isConnectedProfile } from '../Services/FriendshipService';
@@ -334,7 +334,7 @@ export default function Friends({darkMode, setPendingRequests}) {
                             <div className="space-y-4">
                                {
                                 acceptedProfiles.map(profile => (
-                                    <PreiviewAcceptedRequests
+                                    <PreviewAcceptedRequests
                                     key={profile.friendshipId} 
                                     darkMode={darkMode}
                                     friendshipId={profile.friendshipId}
