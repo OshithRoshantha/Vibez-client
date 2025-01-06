@@ -1,10 +1,15 @@
-import { useState,useRef } from 'react';
+import { useState,useRef,useEffect } from 'react';
 import './Styles/Column2.css'
 import ProductInfo from './ProductInfo';
 import YourListings from './YourListings';
 import EditListing from './EditListing';
+import { getMarketplaceItems} from  '../Services/MarketplaceService';
+import PreviewProduct from './PreviewProduct';
 
 export default function Marketplace({darkMode}) {
+
+    const [productList, setProductList] = useState([]);
+
     const [forYouMenu, setForYouMenu] = useState(true);
     const [sellMenu, setSellMenu] = useState(false);
     const [productInfo, setProductInfo] = useState(false);
@@ -27,6 +32,15 @@ export default function Marketplace({darkMode}) {
         }
     }
     
+    const fetchMarketplaceItems = async () => {
+        const response = await getMarketplaceItems();
+        setProductList(response);
+    };
+    
+    useEffect(() => {
+        fetchMarketplaceItems();
+    }, []);
+
     function handleFileChange(event) {
         const files = Array.from(event.target.files); 
         const imagePreviews = files.map(function(file) {
@@ -106,13 +120,16 @@ export default function Marketplace({darkMode}) {
             {forYouMenu && 
                 <div className='product-list'>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-0 p-0 w-full"> 
-                    <div className="bg-card rounded-lg shadow-md overflow-hidden" style={{height:'87%', cursor:'pointer',backgroundColor: darkMode ? '#56585a':''}} onClick={showProductInfo}>
-                        <img src="https://placehold.co/400x300?text=Se2" alt="Se2" className="w-full h-30 object-cover" style={{height:'65%'}}/>
-                            <div className="pl-4 pr-4 pt-2 pb-2">
-                                <h2 className={`${darkMode ? 'text-white':''} text-lg font-semibold`}>{productPrice}</h2>
-                                <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'}`}>{productName}</p>
-                            </div>
-                    </div>
+                    {productList.map((product) => (
+                            <PreviewProduct
+                                key={product.productId}
+                                darkMode={darkMode}
+                                showProductInfo={showProductInfo}
+                                productPrice={product.price} 
+                                productTitle={product.productTitle}
+                                productImage={product.productPhotos[0]}
+                            />
+                    ))}
                     </div>
                 </div>
             }
