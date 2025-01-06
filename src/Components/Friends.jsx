@@ -100,7 +100,6 @@ export default function Friends({darkMode, setPendingRequests}) {
                             linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
                             sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
                             fetchFriendships();
-
                             setProcessedMessages(prevProcessedMessages => [
                                 ...prevProcessedMessages,
                                 ...newMessages.map(message => message.id),
@@ -356,6 +355,7 @@ export default function Friends({darkMode, setPendingRequests}) {
                                         profileName={profile.profileName}
                                         profilePicture={profile.profilePicture}
                                         profileAbout={profile.profileAbout}
+                                        fetchFriendships={fetchFriendships}
                                     />
                                 ))
                                 }                            

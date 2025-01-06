@@ -6,7 +6,7 @@ import {
 import { unFriend } from '../Services/FriendshipService';
 import { useState } from 'react';
 
-export default function PreviewAcceptedRequests({darkMode, friendshipId, profileName, profilePicture, profileAbout}) {
+export default function PreviewAcceptedRequests({darkMode, friendshipId, profileName, profilePicture, profileAbout, fetchFriendships}) {
   
     const [isUnfriended, setIsUnfriended] = useState(false);
     const [blockPopup, setBlockPopup] = useState(false);
@@ -16,6 +16,7 @@ export default function PreviewAcceptedRequests({darkMode, friendshipId, profile
         let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
         linkedProfiles = linkedProfiles.filter(profile => profile !== friendshipId);
         sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+        fetchFriendships();
         await unFriend(friendshipId);
         setIsUnfriended(true);
         setUnfriendPopup(false);

@@ -102,13 +102,13 @@ export default function Dashboard() {
                         if ((lastMessage.status === 'UNFRIENDED' || lastMessage.status === 'BLOCKED') && linkedProfiles.includes(lastMessage.friendshipId)) {
                             linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
                             sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
-
+                            
                             setProcessedMessages(prevProcessedMessages => [
                                 ...prevProcessedMessages,
                                 ...newMessages.map(message => message.id),
                             ]);
                         } 
-                        
+
                         else {
                             const response = await isConnectedProfile(lastMessage.friendshipId);
                             if (response && (lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED')) {
