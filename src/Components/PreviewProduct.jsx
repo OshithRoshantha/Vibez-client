@@ -3,8 +3,8 @@ import React from 'react'
 export default function PreviewProduct({darkMode, showProductInfo, productImages, productPrice, productTitle, productId, setClickedProduct}) {
 
     const handleClick = () => {
-        setClickedProduct();
-        showProductInfo(productId);
+        setClickedProduct(productId);
+        showProductInfo();
     }
 
   return (
