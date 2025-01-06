@@ -252,7 +252,7 @@ export default function Dashboard() {
         setGroupInfoMenu(false);
         setFriendInfoMenu(false);
     }
-    
+
     useEffect(() => {
         if (showNotification) {
           audioRef.current.play();
@@ -297,7 +297,7 @@ export default function Dashboard() {
             </div>
             {chatsMenu && <Chats darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
             {groupsMenu && <GroupChats darkMode={darkMode} showGroupMessages={showGroupMessages}/>}
-            {friendsMenu && <Friends darkMode={darkMode} setPendingRequests={setPendingRequests}/>}
+            {friendsMenu && <Friends darkMode={darkMode} setPendingRequests={setPendingRequests} fetchPendingRequests={fetchPendingRequests}/>}
             {marketplaceMenu && <Marketplace  darkMode={darkMode}/>}
             {settingsMenu && <Settings darkModeOn={darkModeOn} darkModeOff={darkModeOff} darkMode={darkMode}/>}
             {profileMenu && <Profile  darkMode={darkMode} setUserPicture={setUserPicture}/>}
