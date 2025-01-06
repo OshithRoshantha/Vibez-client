@@ -28,6 +28,14 @@ export default function Friends({darkMode, setPendingRequests}) {
 
     const err = darkMode ? './src/assets/Icons/searchErdark.png' : './src/assets/Icons/searchEr.png';
 
+    const handleIconClick = () => {
+        if (searchKeyword !== '') {
+          setSearchKeyword(''); 
+          setShowResults(false);
+          setYourFriends(true);
+        }
+      };
+
     const fetchFriendships = async () => {
         setLoading(true);
         setPendingProfiles([]);
@@ -208,10 +216,15 @@ export default function Friends({darkMode, setPendingRequests}) {
                     className={`${darkMode ? 'bg-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'bg-gray-200'} w-full px-4 py-2 mb-4 focus:outline-none focus:border-none placeholder:text-gray-500  text-gray-500 `}
                     style={{ borderRadius: '20px' }}
                 />
-                <i
-                    className={`${darkMode ? 'text-[#abacae]' : 'text-gray-500'} bi absolute text-2xl bi-search`}
-                    style={{ marginLeft: '-3%', marginTop: '0.2%' }}
-                ></i>
+                    <i
+                        className={`${
+                        darkMode ? 'text-[#abacae]' : 'text-gray-500'
+                        } bi cursor-pointer absolute text-2xl ${
+                        searchKeyword === '' ? 'bi-search' : 'bi-x-circle-fill'
+                        }`}
+                        style={{ marginLeft: '-3%', marginTop: '0.2%' }}
+                        onClick={handleIconClick}
+                    ></i>
                 <div className="flex space-x-2 mb-4">
                     <button
                         onClick={hideYourFriends}

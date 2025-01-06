@@ -102,7 +102,6 @@ export default function Dashboard() {
                         if ((lastMessage.status === 'UNFRIENDED' || lastMessage.status === 'BLOCKED') && linkedProfiles.includes(lastMessage.friendshipId)) {
                             linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
                             sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
-                            fetchPendingRequests();
                             setProcessedMessages(prevProcessedMessages => [
                                 ...prevProcessedMessages,
                                 ...newMessages.map(message => message.id),
