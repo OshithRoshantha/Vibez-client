@@ -1,13 +1,16 @@
 import './Styles/Column2.css'
 
 export default function ProductInfo({productId, darkMode}) {
+    const productPrice = 'LKR 57,500';
+    const productDescription = 'This is a brand new Apple iPhone 11 Pro. It is in perfect condition and has never been used. It comes with a charger and a case.';
+    const sellerName = 'John Doe';
   return (
     <div>
         <div className="bg-card text-card-foreground w-full p-4 pt-2 mt-1 product-info"  style={{backgroundColor: darkMode ? '#262729' : ''}}>
                 <div className="grid grid-cols-3 gap-1 mb-4">
                     <img src="https://placehold.co/400x300" alt="Apple 11 Pro" className="rounded-lg mb-0"/>
                 </div>
-                <h2 className={`${darkMode ? 'text-white':''} text-lg font-bold`}>{productName}</h2>
+                <h2 className={`${darkMode ? 'text-white':''} text-lg font-bold`}>{productId}</h2>
                 <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'}`}>{productPrice}</p>
                 <p className={`${darkMode ? 'text-white':''} text-sm`}>Send seller a message</p>
                 <button className="bg-primary text-white  py-2 px-4 rounded-lg mt-2 mr-5">Send Message</button>
