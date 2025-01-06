@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 export const searchPeople = async (keyword: string) => {
-    const response = await axios.get(`http://localhost:8080/vibez/search/${keyword}`);
+    const userId = sessionStorage.getItem('userId');
+    const response = await axios.get(`http://localhost:8080/vibez/search/${userId}/${keyword}`);
     return response.data;
 }
 
