@@ -1,6 +1,6 @@
 import './Styles/Column2.css'
 
-export default function ProductInfo({productName, productPrice, productDescription, sellerName, darkMode}) {
+export default function ProductInfo({productId, darkMode}) {
   return (
     <div>
         <div className="bg-card text-card-foreground w-full p-4 pt-2 mt-1 product-info"  style={{backgroundColor: darkMode ? '#262729' : ''}}>

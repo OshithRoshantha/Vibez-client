@@ -9,6 +9,7 @@ import PreviewProduct from './PreviewProduct';
 export default function Marketplace({darkMode}) {
 
     const [productList, setProductList] = useState([]);
+    const [clickedProduct, setClickedProduct] = useState();
 
     const [forYouMenu, setForYouMenu] = useState(true);
     const [sellMenu, setSellMenu] = useState(false);
@@ -125,9 +126,11 @@ export default function Marketplace({darkMode}) {
                                 key={product.productId}
                                 darkMode={darkMode}
                                 showProductInfo={showProductInfo}
+                                productId = {product.productId}
                                 productPrice={product.price} 
                                 productTitle={product.productTitle}
-                                productImage={product.productPhotos[0]}
+                                productImages={product.productPhotos}
+                                setClickedProduct={setClickedProduct}
                             />
                     ))}
                     </div>
@@ -238,7 +241,7 @@ export default function Marketplace({darkMode}) {
             {yourListningMenu && <div className='product-list'><YourListings  darkMode={darkMode} showEditListingMenu={showEditListingMenu}/></div>}
             {editListingMenu && <div className='sell-products' ref={sellProductsRef}><EditListing darkMode={darkMode} showYourListningMenu={showYourListningMenu}/></div>}
             {productInfo && <div>
-                    <ProductInfo darkMode={darkMode} productName={productName} productPrice={productPrice} productDescription={productDescription} sellerName={sellerName}/>      
+                    <ProductInfo darkMode={darkMode} productId={clickedProduct}/>      
             </div>}
             </div>
     </div>
