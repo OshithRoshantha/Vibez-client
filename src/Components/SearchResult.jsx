@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { sendFriendRequest, getFriendshipStatus, getFriendshipId, acceptFriendRequest } from '../Services/FriendshipService';
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SearchResult({ darkMode, profileName, profileAbout, profileImage, profileId }) {
   const [friendshipStatus, setFriendshipStatus] = useState('');
@@ -45,7 +46,16 @@ export default function SearchResult({ darkMode, profileName, profileAbout, prof
   }, []); 
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>
+                        <div className='mb-3' style={{display:'flex', alignItems:'center', columnGap:'10px'}}>
+                            <Skeleton className="h-12 w-12 rounded-full" />
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-[250px] " />
+                                <Skeleton className="h-4 w-[200px]" />
+                            </div>  
+                        </div> 
+
+    </div>;
   }
 
   return (
