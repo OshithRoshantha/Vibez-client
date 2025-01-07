@@ -16,6 +16,7 @@ export const WebSocketProvider = ({ children, isLoggedIn }) => {
       ws.onopen = () => {
         ws.send(JSON.stringify({ action: 'subscribe', topic: 'profileService' }));
         ws.send(JSON.stringify({ action: 'subscribe', topic: 'friendshipService' }));
+        ws.send(JSON.stringify({ action: 'subscribe', topic: 'marketplaceService' }));
       };
 
       ws.onerror = (error) => {
