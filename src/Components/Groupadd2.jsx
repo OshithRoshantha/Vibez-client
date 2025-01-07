@@ -109,4 +109,9 @@ const UserCard = ({ user, about, darkMode }) => (
       </div>
     </label>
   );
-  
+  <UserCard 
+  user={user} 
+  about={about} 
+  darkMode={darkMode} 
+  className="group-add-member-card"
+/>
