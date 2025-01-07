@@ -1,7 +1,7 @@
 import './Styles/Column2.css'
 import { useState} from 'react';
 
-export default function YourListings({showEditListingMenu, darkMode, productTitle, productDesc, productPhotos, price, listedDate}) {
+export default function YourListings({productId, showEditListingMenu, darkMode, productTitle, productDesc, productPhotos, price, listedDate, setEditingProductId}) {
   const [deleteMenu, setDeleteMenu] = useState(false);
 
   function showDeleteMenu() {
@@ -11,6 +11,12 @@ export default function YourListings({showEditListingMenu, darkMode, productTitl
   function hideDeleteMenu() {
       setDeleteMenu(false);
   }
+
+  const handleEdit = () =>{
+    setEditingProductId(productId);
+    showEditListingMenu();
+  }
+
 
   return (  
     <div>
@@ -39,7 +45,7 @@ export default function YourListings({showEditListingMenu, darkMode, productTitl
             <p className="text-lg font-bold text-primary">LRK {price}</p>
             <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} text-sm`}>Listed on {listedDate}</p>
             <div className="flex space-x-2 mt-1">
-                <button onClick={showEditListingMenu} className="bg-primary text-white hover:bg-secondary/80 px-2 py-1 rounded-lg text-sm"><i className="bi bi-pencil-square"></i>&nbsp;Edit listing</button>
+                <button onClick={handleEdit} className="bg-primary text-white hover:bg-secondary/80 px-2 py-1 rounded-lg text-sm"><i className="bi bi-pencil-square"></i>&nbsp;Edit listing</button>
                 <button onClick={showDeleteMenu} className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'}  px-2 py-1 text-sm border-none`}><i className="bi bi-trash"></i>&nbsp;Delete listing</button>
             </div>
         </div>
