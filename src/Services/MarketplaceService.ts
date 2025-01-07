@@ -11,7 +11,6 @@ export const getMarketplaceItems  = async () => {
 };
 
 export const getItemInfo = async (productId: string) => {
-    console.log(productId);
     const response = await axios.get(`http://localhost:8080/vibez/product/find/${productId}}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
