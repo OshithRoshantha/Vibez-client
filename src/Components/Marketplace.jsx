@@ -54,8 +54,6 @@ export default function Marketplace({darkMode}) {
     const toggleHideFromFriends = () => setHideFromFriends((prev) => !prev);
 
     const createListing = async () => {
-        const defaultImage = "https://static7.depositphotos.com/1056394/786/v/450/depositphotos_7867981-stock-illustration-vector-cardboard-box.jpg";
-        
         const validationErrors = validateFields();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
@@ -68,10 +66,6 @@ export default function Marketplace({darkMode}) {
             return; 
         }
 
-        if (selectedImages.length === 0) {
-            setSelectedImages([defaultImage]);
-        }
-
         await addListing(title, price, description, selectedImages, location, hideFromFriends, category);
         if (sellProductsRef.current) {
             sellProductsRef.current.scrollTo({
@@ -79,6 +73,7 @@ export default function Marketplace({darkMode}) {
                 behavior: "smooth", 
             });
         }
+
         setTitle("");
         setPrice("");
         setCategory("");
