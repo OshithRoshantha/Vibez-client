@@ -17,4 +17,5 @@ const GradientOverlay = ({ position }) => (
   GradientOverlay.propTypes = {
     position: PropTypes.oneOf(['left', 'right']).isRequired,
   };
-  
+  <GradientOverlay position="left" />
+<GradientOverlay position="right" />
