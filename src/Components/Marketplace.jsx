@@ -3,12 +3,13 @@ import './Styles/Column2.css'
 import ProductInfo from './ProductInfo';
 import YourListings from './YourListings';
 import EditListing from './EditListing';
-import { getMarketplaceItems, addListing, getActiveListingCount} from  '../Services/MarketplaceService';
+import { getMarketplaceItems, addListing, getActiveListingCount, getMyListings} from  '../Services/MarketplaceService';
 import PreviewProduct from './PreviewProduct';
 
 export default function Marketplace({darkMode}) {
 
     const [productList, setProductList] = useState([]);
+    const [myListings, setMyListings] = useState([]);
     const [clickedProduct, setClickedProduct] = useState();
 
     const [forYouMenu, setForYouMenu] = useState(true);
@@ -103,13 +104,19 @@ export default function Marketplace({darkMode}) {
         const response = await getActiveListingCount();
         setActiveListingsCount(response);
     }
+
+    const fetchMyListings = async () => {
+        const response = await getMyListings();
+        setMyListings(response);
+    }
     
     useEffect(() => {
         fetchMarketplaceItems();
         fetchActiveListingCount();
+        fetchMyListings();
     }, [productList]);
 
-    
+
 
     function handleFileChange(event) {
         const files = Array.from(event.target.files); 
@@ -300,7 +307,19 @@ export default function Marketplace({darkMode}) {
                     </p>
                 </div>            
             </div>}
-            {yourListningMenu && <div className='product-list'><YourListings  darkMode={darkMode} showEditListingMenu={showEditListingMenu}/></div>}
+            {yourListningMenu && <div className='product-list'>
+                {myListings.map((listing) => (
+                    <YourListings
+                        key={listing.productId}
+                        darkMode={darkMode}
+                        showEditListingMenu={showEditListingMenu}
+                        productTitle={listing.productTitle}
+                        productDesc={listing.productDesc}
+                        price={listing.price}
+                        productPhotos={listing.productPhotos[0]}
+                    />
+                ))}
+            </div>}
             {editListingMenu && <div className='sell-products' ref={sellProductsRef}><EditListing darkMode={darkMode} showYourListningMenu={showYourListningMenu}/></div>}
             {productInfo && <div>
                     <ProductInfo darkMode={darkMode} productId={clickedProduct}/>      
