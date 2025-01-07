@@ -1,5 +1,6 @@
 import './Styles/Column2.css'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getItemInfo } from  '../Services/MarketplaceService';
 
 export default function EditListing({showYourListningMenu, darkMode, editingProductId, autoScroll}) {
 
@@ -18,6 +19,19 @@ export default function EditListing({showYourListningMenu, darkMode, editingProd
         if (!price.trim()) newErrors.price = "Enter a price to continue.";
         return newErrors;
     };
+
+    useEffect(() => {
+        const fetchItemInfo = async () => {
+            const response = await getItemInfo(editingProductId);
+            setTitle(response.productTitle);
+            setPrice(response.price);
+            setCategory(response.condition);
+            setDescription(response.productDesc);
+            setLocation(response.location);
+            setHideFromFriends(response.visibleToFriends);
+        };
+        fetchItemInfo();
+    }, []);    
 
     const handleTitleChange = (e) => setTitle(e.target.value);
     const handlePriceChange = (event) => {
