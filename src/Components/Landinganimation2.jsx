@@ -23,3 +23,20 @@ const GradientOverlay = ({ position }) => (
     height="32"
     alt={`${name}'s profile picture`}
     src={img} /></>
+    import { render } from '@testing-library/react';
+    import ReviewCard from './ReviewCard';
+    
+    test('renders ReviewCard with props', () => {
+      const { getByText } = render(
+        <ReviewCard
+          img="https://example.com/img.jpg"
+          name="John Doe"
+          username="@johndoe"
+          body="This is a test review."
+        />
+      );
+      expect(getByText('John Doe')).toBeInTheDocument();
+      expect(getByText('@johndoe')).toBeInTheDocument();
+      expect(getByText('This is a test review.')).toBeInTheDocument();
+    });
+    
