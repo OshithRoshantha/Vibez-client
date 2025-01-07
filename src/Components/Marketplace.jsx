@@ -10,9 +10,9 @@ export default function Marketplace({darkMode}) {
 
     const [productList, setProductList] = useState([]);
     const [myListings, setMyListings] = useState([]);
-    const [clickedProduct, setClickedProduct] = useState();
     const [editingProductId, setEditingProductId] = useState();
-
+    const [expandingProductId, setExpandingProductId] = useState();
+ 
     const [forYouMenu, setForYouMenu] = useState(true);
     const [sellMenu, setSellMenu] = useState(false);
     const [productInfo, setProductInfo] = useState(false);
@@ -200,7 +200,7 @@ export default function Marketplace({darkMode}) {
                                 productPrice={product.price} 
                                 productTitle={product.productTitle}
                                 productImages={product.productPhotos}
-                                setClickedProduct={setClickedProduct}
+                                setExpandingProductId={setExpandingProductId}
                             />
                     ))}
                     </div>
@@ -329,7 +329,7 @@ export default function Marketplace({darkMode}) {
             </div>}
             {editListingMenu && <div className='sell-products' ref={sellProductsRef}><EditListing autoScroll={autoScroll} darkMode={darkMode} editingProductId={editingProductId} showYourListningMenu={showYourListningMenu}/></div>}
             {productInfo && <div>
-                    <ProductInfo darkMode={darkMode} productId={clickedProduct}/>      
+                    <ProductInfo darkMode={darkMode} expandingProductId={expandingProductId}/>      
             </div>}
             </div>
     </div>

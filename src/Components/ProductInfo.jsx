@@ -2,7 +2,7 @@ import './Styles/Column2.css'
 import { getItemInfo } from  '../Services/MarketplaceService';
 import { useState, useEffect } from 'react';
 
-export default function ProductInfo({productId, darkMode}) {
+export default function ProductInfo({expandingProductId, darkMode}) {
 
     const [isLoading, setIsLoading] = useState(false);
     
@@ -10,14 +10,14 @@ export default function ProductInfo({productId, darkMode}) {
     const productDescription = 'This is a brand new Apple iPhone 11 Pro. It is in perfect condition and has never been used. It comes with a charger and a case.';
     const sellerName = 'John Doe';
 
-    const fetchProductInfo = async () => {
+ /*   const fetchProductInfo = async () => {
         const response = await getItemInfo(productId);
         console.log(response);
     }
 
     useEffect(() => {
         fetchProductInfo();
-    }, [productId]);
+    }, [productId]);*/
 
   return (
     <div>
@@ -27,7 +27,7 @@ export default function ProductInfo({productId, darkMode}) {
                 <div className="grid grid-cols-3 gap-1 mb-4">
                     <img src="https://placehold.co/400x300" alt="Apple 11 Pro" className="rounded-lg mb-0"/>
                 </div>
-                <h2 className={`${darkMode ? 'text-white':''} text-lg font-bold`}>{productId}</h2>
+                <h2 className={`${darkMode ? 'text-white':''} text-lg font-bold`}>{expandingProductId}</h2>
                 <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'}`}>{productPrice}</p>
                 <p className={`${darkMode ? 'text-white':''} text-sm`}>Send seller a message</p>
                 <button className="bg-primary text-white  py-2 px-4 rounded-lg mt-2 mr-5">Send Message</button>

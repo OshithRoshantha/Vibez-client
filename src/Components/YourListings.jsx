@@ -1,7 +1,7 @@
 import './Styles/Column2.css'
 import { useState} from 'react';
 
-export default function YourListings({productId, showEditListingMenu, darkMode, productTitle, productDesc, productPhotos, price, listedDate, setEditingProductId}) {
+export default function YourListings({productId, showEditListingMenu, darkMode, productTitle, productPhotos, price, listedDate, setEditingProductId}) {
   const [deleteMenu, setDeleteMenu] = useState(false);
 
   function showDeleteMenu() {
