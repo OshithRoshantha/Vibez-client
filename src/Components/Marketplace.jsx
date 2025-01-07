@@ -57,6 +57,12 @@ export default function Marketplace({darkMode}) {
         const validationErrors = validateFields();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
+            if (sellProductsRef.current) {
+                sellProductsRef.current.scrollTo({
+                    top: 0,
+                    behavior: "smooth", 
+                });
+            }
             return; 
         }
 
