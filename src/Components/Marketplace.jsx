@@ -19,13 +19,22 @@ export default function Marketplace({darkMode}) {
     const sellProductsRef = useRef(null);
     const fileInputRef = useRef(null);
     const [selectedImages, setSelectedImages] = useState([]);
+    const [title, setTitle] = useState("");
+    const [price, setPrice] = useState("");
+    const [category, setCategory] = useState("");
+    const [description, setDescription] = useState("");
+    const [location, setLocation] = useState("");
+    const [hideFromFriends, setHideFromFriends] = useState(false);
+
     var chatToAnswerCount = 15;
     var activeListingsCount = 3;
-    const productName = "Wireless Headphones";
-    const productPrice = "$150";
-    const productDescription =
-        "High-quality wireless headphones with noise cancellation and up to 20 hours of battery life.";
-    const sellerName = "Tech Store";
+  
+    const handleTitleChange = (e) => setTitle(e.target.value);
+    const handlePriceChange = (e) => setPrice(e.target.value);
+    const handleCategoryChange = (e) => setCategory(e.target.value);
+    const handleDescriptionChange = (e) => setDescription(e.target.value);
+    const handleLocationChange = (e) => setLocation(e.target.value);
+    const toggleHideFromFriends = () => setHideFromFriends((prev) => !prev);
 
     function addImages() {
         if (fileInputRef.current) {
@@ -195,13 +204,13 @@ export default function Marketplace({darkMode}) {
                 </div>
                 </div>
                 <div className="mb-4">
-                    <input type="text" className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-400 ' : ' bg-white text-black placeholder:text-gray-500'} py-2 border rounded-lg p-2 w-full`} style={{ outline: '1px solid #c1c3c7'}} placeholder="Title" />
+                    <input type="text" className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-400 ' : ' bg-white text-black placeholder:text-gray-500'} py-2 border rounded-lg p-2 w-full`} style={{ outline: '1px solid #c1c3c7'}} placeholder="Title" value={title} onChange={handleTitleChange}/>
                 </div>
                 <div className="mb-4">
-                    <input type="text" className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-400 ' : ' bg-white text-black placeholder:text-gray-500'} py-2 border rounded-lg p-2 w-full`} style={{ outline: '1px solid #c1c3c7'}} placeholder="Price" />
+                    <input type="text" className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-400 ' : ' bg-white text-black placeholder:text-gray-500'} py-2 border rounded-lg p-2 w-full`} style={{ outline: '1px solid #c1c3c7'}} placeholder="Price" value={price} onChange={handlePriceChange}/>
                 </div>
                 <div className="mb-4">
-                    <select className={`${darkMode ? 'bg-[#262729] text-gray-400' : 'bg-white text-gray-500'} border rounded-lg p-2 w-full`} style={{ outline: '1px solid #c1c3c7'}}>
+                    <select className={`${darkMode ? 'bg-[#262729] text-gray-400' : 'bg-white text-gray-500'} border rounded-lg p-2 w-full`} style={{ outline: '1px solid #c1c3c7'}} value={category} onChange={handleCategoryChange}>
                         <option value="" disabled selected>Category</option>
                         <option className={`${darkMode ? 'text-white' : 'text-black'}`}>New</option>
                         <option className={`${darkMode ? 'text-white' : 'text-black'}`}>Used - like new</option>
@@ -210,10 +219,10 @@ export default function Marketplace({darkMode}) {
                     </select>
                 </div>
                 <div className="mb-4">
-                    <textarea className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-400 ' : ' bg-white text-black placeholder:text-gray-500'} py-2 border rounded-lg p-2 w-full`} style={{ outline: '1px solid #c1c3c7'}}  placeholder="Description" rows="4"></textarea>
+                    <textarea className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-400 ' : ' bg-white text-black placeholder:text-gray-500'} py-2 border rounded-lg p-2 w-full`} style={{ outline: '1px solid #c1c3c7'}}  placeholder="Description" rows="4" value={description} onChange={handleDescriptionChange}></textarea>
                 </div>
                 <div className="mb-4">
-                    <input type="text" className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-400 ' : ' bg-white text-black placeholder:text-gray-500'} py-2 border rounded-lg p-2 w-full`} style={{ outline: '1px solid #c1c3c7'}}  placeholder="Location" />
+                    <input type="text" className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-400 ' : ' bg-white text-black placeholder:text-gray-500'} py-2 border rounded-lg p-2 w-full`} style={{ outline: '1px solid #c1c3c7'}}  placeholder="Location" value={location} onChange={handleLocationChange}/>
                 </div>
                     <h2 className={`${darkMode ? 'text-white':'text-foreground'} text-lg font-semibold`}>Listing Options</h2>
                     <div className="flex items-center justify-between p-4 border-b border-border">
@@ -222,7 +231,7 @@ export default function Marketplace({darkMode}) {
                             <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'}`}>This listing is still public but will be hidden from your friends on Vibez.</p>
                         </div>
                         <label className="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" className="sr-only peer" />
+                            <input type="checkbox" className="sr-only peer" checked={hideFromFriends} onChange={toggleHideFromFriends}/>
                             <div className="w-11 h-6 bg-zinc-200 rounded-full peer peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:bg-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border after:border-zinc-300 after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
                         </label>
                     </div>
