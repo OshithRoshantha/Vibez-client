@@ -20,19 +20,6 @@ export default function EditListing({showYourListningMenu, darkMode, editingProd
         return newErrors;
     };
 
-    useEffect(() => {
-        const fetchItemInfo = async () => {
-            const response = await getItemInfo(editingProductId);
-            setTitle(response.productTitle);
-            setPrice(response.price);
-            setCategory(response.condition);
-            setDescription(response.productDesc);
-            setLocation(response.location);
-            setHideFromFriends(response.visibleToFriends);
-        };
-        fetchItemInfo();
-    }, []);    
-
     const handleTitleChange = (e) => setTitle(e.target.value);
     const handlePriceChange = (event) => {
         const inputValue = event.target.value;
