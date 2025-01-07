@@ -89,4 +89,24 @@ const UserCard = ({ user, about, darkMode }) => (
     about: PropTypes.string.isRequired,
     darkMode: PropTypes.bool.isRequired,
   };
+  const UserCard = ({ user, about, darkMode }) => (
+    <label className="flex items-center mb-2">
+      <input 
+        type="checkbox" 
+        className="mr-2 cursor-pointer" 
+        style={{ width: '15px', height: '15px' }} 
+        aria-label={`Select ${user}`}
+      />
+      <img 
+        src="https://placehold.co/40x40" 
+        alt={`${user}'s avatar`} 
+        className="w-8 h-8 rounded-full mx-2"
+        loading="lazy"
+      />
+      <div>
+        <span className={`${darkMode ? 'text-white' : 'text-black'} font-semibold`}>{user}</span>
+        <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'} text-xs`}>{about}</p>
+      </div>
+    </label>
+  );
   
