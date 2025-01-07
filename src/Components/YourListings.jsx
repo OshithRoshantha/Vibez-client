@@ -1,5 +1,6 @@
 import './Styles/Column2.css'
 import { useState} from 'react';
+import { deleteListing } from  '../Services/MarketplaceService';
 
 export default function YourListings({productId, showEditListingMenu, darkMode, productTitle, productPhotos, price, listedDate, setEditingProductId}) {
   const [deleteMenu, setDeleteMenu] = useState(false);
@@ -17,6 +18,11 @@ export default function YourListings({productId, showEditListingMenu, darkMode, 
     showEditListingMenu();
   }
 
+  const handleDelete = async () => {
+    await deleteListing(productId);
+    hideDeleteMenu();
+  }
+
   return (  
     <div>
         {deleteMenu && <div>
@@ -31,7 +37,7 @@ export default function YourListings({productId, showEditListingMenu, darkMode, 
                   <p className={`${darkMode ? 'text-gray-200' : 'text-muted-foreground'}`}>🛒 {productTitle}</p>
                 </div>
                 <div>
-                  <button style={{cursor:'pointer'}} onClick={hideDeleteMenu} className="bg-primary text-primary-foreground px-4 py-1 rounded-lg w-full mt-3 mb-2">Delete</button>
+                  <button style={{cursor:'pointer'}} onClick={handleDelete} className="bg-primary text-primary-foreground px-4 py-1 rounded-lg w-full mt-3 mb-2">Delete</button>
                   <button style={{cursor:'pointer'}} onClick={hideDeleteMenu} className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} px-4 py-1 border-none w-full`}>Cancel</button>
                 </div>
               </div>

@@ -97,3 +97,24 @@ export const updateListing = async (productId: string, productTitle: string, pri
         };
     });   
 }
+
+export const deleteListing = async (productId: string): Promise<void> => {
+    return new Promise((resolve) => {
+        const token = sessionStorage.getItem('token');
+        const productAction = 'REMOVE';
+
+        const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
+
+        socket.onopen = () => {
+            const message = {
+                action: 'marketplaceService',
+                body: {
+                    productId,
+                    productAction
+                },
+            };
+        socket.send(JSON.stringify(message));
+        resolve(); 
+        };
+    });   
+}
