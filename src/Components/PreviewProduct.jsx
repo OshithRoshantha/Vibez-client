@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function PreviewProduct({darkMode, showProductInfo, productImages, productPrice, productTitle, productId, setClickedProduct}) {
+export default function PreviewProduct({darkMode, showProductInfo, productImages, productPrice, productTitle, productId, setExpandingProductId}) {
 
     const handleClick = () => {
-        setClickedProduct(productId);
+        setExpandingProductId(productId);
         showProductInfo();
     }
 
