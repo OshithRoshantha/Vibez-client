@@ -11,6 +11,7 @@ export default function Marketplace({darkMode}) {
     const [productList, setProductList] = useState([]);
     const [myListings, setMyListings] = useState([]);
     const [clickedProduct, setClickedProduct] = useState();
+    const [editingProductId, setEditingProductId] = useState();
 
     const [forYouMenu, setForYouMenu] = useState(true);
     const [sellMenu, setSellMenu] = useState(false);
@@ -30,7 +31,6 @@ export default function Marketplace({darkMode}) {
     const [activeListingsCount, setActiveListingsCount] = useState(0);
 
     var chatToAnswerCount = 15;
-
 
     const validateFields = () => {
         const newErrors = {};
@@ -87,6 +87,15 @@ export default function Marketplace({darkMode}) {
         setHideFromFriends(false);
         setSelectedImages([]);
         setErrors({});
+    }
+
+    const autoScroll = () => {
+        if (sellProductsRef.current) {
+            sellProductsRef.current.scrollTo({
+                top: 0,
+                behavior: "smooth", 
+            });
+        }
     }
 
     function addImages() {
@@ -312,16 +321,18 @@ export default function Marketplace({darkMode}) {
                     <YourListings
                         key={listing.productId}
                         darkMode={darkMode}
+                        productId={listing.productId}
                         showEditListingMenu={showEditListingMenu}
                         productTitle={listing.productTitle}
                         productDesc={listing.productDesc}
                         price={listing.price}
                         productPhotos={listing.productPhotos[0]}
                         listedDate={listing.listedDate}
+                        setEditingProductId={setEditingProductId}
                     />
                 ))}
             </div>}
-            {editListingMenu && <div className='sell-products' ref={sellProductsRef}><EditListing darkMode={darkMode} showYourListningMenu={showYourListningMenu}/></div>}
+            {editListingMenu && <div className='sell-products' ref={sellProductsRef}><EditListing autoScroll={autoScroll} darkMode={darkMode} editingProductId={editingProductId} showYourListningMenu={showYourListningMenu}/></div>}
             {productInfo && <div>
                     <ProductInfo darkMode={darkMode} productId={clickedProduct}/>      
             </div>}
