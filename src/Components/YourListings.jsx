@@ -17,7 +17,6 @@ export default function YourListings({productId, showEditListingMenu, darkMode, 
     showEditListingMenu();
   }
 
-
   return (  
     <div>
         {deleteMenu && <div>

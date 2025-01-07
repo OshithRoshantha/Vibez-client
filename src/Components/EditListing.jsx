@@ -20,6 +20,8 @@ export default function EditListing({showYourListningMenu, darkMode, editingProd
         return newErrors;
     };
 
+    
+
     const handleTitleChange = (e) => setTitle(e.target.value);
     const handlePriceChange = (event) => {
         const inputValue = event.target.value;
