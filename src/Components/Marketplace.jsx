@@ -3,7 +3,7 @@ import './Styles/Column2.css'
 import ProductInfo from './ProductInfo';
 import YourListings from './YourListings';
 import EditListing from './EditListing';
-import { getMarketplaceItems, addListing} from  '../Services/MarketplaceService';
+import { getMarketplaceItems, addListing, getActiveListingCount} from  '../Services/MarketplaceService';
 import PreviewProduct from './PreviewProduct';
 
 export default function Marketplace({darkMode}) {
@@ -26,9 +26,10 @@ export default function Marketplace({darkMode}) {
     const [location, setLocation] = useState("");
     const [hideFromFriends, setHideFromFriends] = useState(false);
     const [errors, setErrors] = useState({});
+    const [activeListingsCount, setActiveListingsCount] = useState(0);
 
     var chatToAnswerCount = 15;
-    var activeListingsCount = 3;
+
 
     const validateFields = () => {
         const newErrors = {};
@@ -97,10 +98,18 @@ export default function Marketplace({darkMode}) {
         const response = await getMarketplaceItems();
         setProductList(response);
     };
+
+    const fetchActiveListingCount = async () => {
+        const response = await getActiveListingCount();
+        setActiveListingsCount(response);
+    }
     
     useEffect(() => {
         fetchMarketplaceItems();
-    }, []);
+        fetchActiveListingCount();
+    }, [productList]);
+
+    
 
     function handleFileChange(event) {
         const files = Array.from(event.target.files); 
