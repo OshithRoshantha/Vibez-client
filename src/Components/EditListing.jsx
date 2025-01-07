@@ -53,7 +53,7 @@ export default function EditListing({showYourListningMenu, darkMode, editingProd
     const handleLocationChange = (e) => setLocation(e.target.value);
     const toggleHideFromFriends = () => setHideFromFriends((prev) => !prev);
 
-    const updateListing = async () => {
+    const handleUpdateListing = async () => {
         const validationErrors = validateFields();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
@@ -105,7 +105,7 @@ export default function EditListing({showYourListningMenu, darkMode, editingProd
             </div>
         </div>
         <div className="flex justify-between mb-4 mt-4">
-                <button onClick={updateListing} className="bg-primary text-primary-foreground px-4 py-2 rounded-lg w-full" >Update</button>
+                <button onClick={handleUpdateListing} className="bg-primary text-primary-foreground px-4 py-2 rounded-lg w-full" >Update</button>
         </div>
     </div>
   )
