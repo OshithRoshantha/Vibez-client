@@ -1,6 +1,7 @@
 import './Styles/Column2.css'
 import { getProductDetails } from  '../Services/MarketplaceService';
 import { useState, useEffect } from 'react';
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProductInfo({expandingProductId, darkMode}) {
 
@@ -27,7 +28,36 @@ export default function ProductInfo({expandingProductId, darkMode}) {
   return (
     <div>
         <div className="bg-card text-card-foreground w-full p-4 pt-2 mt-1 product-info"  style={{backgroundColor: darkMode ? '#262729' : ''}}>
-                {loading && <></>}
+                {loading && <>             
+                    <div className="grid grid-cols-3 gap-1 mb-4">
+                    {Array.from({ length: 3 }).map((_, index) => (
+                        <Skeleton key={index} className="h-[150px] w-full rounded-lg" />
+                    ))}
+                    </div>
+                    <Skeleton className="h-6 w-[200px]" />
+                    <Skeleton className="h-4 w-[100px] mt-2" />
+                    <Skeleton className="h-4 w-[150px] mt-2" />
+                    <div className="flex space-x-3 mt-4">
+                    <Skeleton className="h-10 w-[120px] rounded-lg" />
+                    <Skeleton className="h-10 w-[120px] rounded-lg" />
+                    </div>
+                    <Skeleton className="h-6 w-[120px] mt-4" />
+                    <Skeleton className="h-4 w-full mt-2" />
+                    <Skeleton className="h-6 w-[120px] mt-4" />
+                    <Skeleton className="h-4 w-[200px] mt-2" />
+                    <Skeleton className="h-6 w-[120px] mt-4" />
+                    <Skeleton className="h-4 w-[200px] mt-2" />
+                    <div className="mt-4">
+                    <Skeleton className="h-6 w-[200px]" />
+                    <div className="flex items-center mt-2 space-x-2">
+                        <Skeleton className="h-10 w-10 rounded-full" />
+                        <div>
+                        <Skeleton className="h-4 w-[150px]" />
+                        <Skeleton className="h-4 w-[100px] mt-1" />
+                        </div>
+                    </div>
+                    </div>
+                </>}
                 {!loading && <>
                     <div className="grid grid-cols-3 gap-1 mb-4">
                         {product.productPhotos?.map((photo, index) => (
