@@ -1,6 +1,6 @@
 import './Styles/Column2.css'
 import { useState, useEffect } from 'react';
-import { getProductDetails } from  '../Services/MarketplaceService';
+import { getProductDetails, updateListing } from  '../Services/MarketplaceService';
 
 export default function EditListing({showYourListningMenu, darkMode, editingProductId, autoScroll}) {
 
@@ -9,6 +9,7 @@ export default function EditListing({showYourListningMenu, darkMode, editingProd
     const [category, setCategory] = useState("");
     const [description, setDescription] = useState("");
     const [location, setLocation] = useState("");
+    const [productPhotos, setProductPhotos] = useState([]);
     const [hideFromFriends, setHideFromFriends] = useState(false);
     const [errors, setErrors] = useState({});
 
@@ -37,6 +38,7 @@ export default function EditListing({showYourListningMenu, darkMode, editingProd
         setCategory(productDetails.condition);
         setDescription(productDetails.productDesc);
         setLocation(productDetails.location);
+        setProductPhotos(productDetails.productPhotos);
         setHideFromFriends(productDetails.visibleToFriends);
     };
   
@@ -58,7 +60,7 @@ export default function EditListing({showYourListningMenu, darkMode, editingProd
             autoScroll();
             return; 
         }
-        // Send the data to the server
+        await updateListing(editingProductId, title, price, description, location, hideFromFriends, category, productPhotos);
         showYourListningMenu();
     }
 

@@ -65,6 +65,35 @@ export const addListing = async (productTitle: string, price: string, productDes
         socket.send(JSON.stringify(message));
         resolve(); 
         };
-    });
-    
+    });   
+}
+
+export const updateListing = async (productId: string, productTitle: string, price: string, productDesc: string, location: string, visibleToFriends: boolean, condition: string, productPhotos: string[]): Promise<void> => {
+    return new Promise((resolve) => {
+        const token = sessionStorage.getItem('token');
+        const sellerId = sessionStorage.getItem('userId');
+        const productAction = 'UPDATE';
+
+        const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
+
+        socket.onopen = () => {
+            const message = {
+                action: 'marketplaceService',
+                body: {
+                    sellerId,
+                    productId,
+                    productTitle,
+                    productDesc,
+                    condition,
+                    price,
+                    location,
+                    visibleToFriends,
+                    productPhotos,
+                    productAction
+                },
+            };
+        socket.send(JSON.stringify(message));
+        resolve(); 
+        };
+    });   
 }
