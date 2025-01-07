@@ -17,5 +17,9 @@ const GradientOverlay = ({ position }) => (
   GradientOverlay.propTypes = {
     position: PropTypes.oneOf(['left', 'right']).isRequired,
   };
-  <GradientOverlay position="left" />
-<GradientOverlay position="right" />
+  <><><GradientOverlay position="left" /><GradientOverlay position="right" /></><img
+    className="rounded-full"
+    width="32"
+    height="32"
+    alt={`${name}'s profile picture`}
+    src={img} /></>
