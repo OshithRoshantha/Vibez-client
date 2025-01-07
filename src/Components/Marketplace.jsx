@@ -5,6 +5,8 @@ import YourListings from './YourListings';
 import EditListing from './EditListing';
 import { getMarketplaceItems, addListing, getActiveListingCount, getMyListings} from  '../Services/MarketplaceService';
 import PreviewProduct from './PreviewProduct';
+import { Skeleton } from "@/components/ui/skeleton";
+import { set } from 'date-fns';
 
 export default function Marketplace({darkMode}) {
 
@@ -12,6 +14,7 @@ export default function Marketplace({darkMode}) {
     const [myListings, setMyListings] = useState([]);
     const [editingProductId, setEditingProductId] = useState();
     const [expandingProductId, setExpandingProductId] = useState();
+    const [loading, setLoading] = useState(true); 
  
     const [forYouMenu, setForYouMenu] = useState(true);
     const [sellMenu, setSellMenu] = useState(false);
@@ -115,9 +118,11 @@ export default function Marketplace({darkMode}) {
     }
     
     useEffect(() => {
+        setLoading(true);
         fetchMarketplaceItems();
         fetchActiveListingCount();
         fetchMyListings();
+        setLoading(false);
     }, [productList]);
 
 
@@ -191,6 +196,28 @@ export default function Marketplace({darkMode}) {
             {forYouMenu && 
                 <div className='product-list'>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-0 p-0 w-full"> 
+                    {loading && <>
+                        {Array.from({ length: 6 }).map((_, index) => (
+                            <div
+                            key={index}
+                            className="bg-card rounded-lg shadow-md overflow-hidden"
+                            style={{
+                                height: '220px',
+                                cursor: 'pointer',
+                                backgroundColor: darkMode ? '#56585a' : '#c9c9c9',
+                                marginBottom: '25px',
+                                width: '95%'
+                            }}
+                            >
+                            <Skeleton className="w-full h-[65%] object-cover" />
+                            <div className="pl-2 pr-4 pt-2 pb-2 mt-0">
+                                <Skeleton className="h-6 w-[120px]" />
+                                <Skeleton className="h-4 w-[160px] mt-2" />
+                            </div>
+                            </div>
+                        ))}                  
+                    </>}
+                    {!loading && <>
                     {productList.map((product) => (
                             <PreviewProduct
                                 key={product.productId}
@@ -203,6 +230,7 @@ export default function Marketplace({darkMode}) {
                                 setExpandingProductId={setExpandingProductId}
                             />
                     ))}
+                    </>}
                     </div>
                 </div>
             }

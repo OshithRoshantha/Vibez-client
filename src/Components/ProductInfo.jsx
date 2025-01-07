@@ -28,7 +28,8 @@ export default function ProductInfo({expandingProductId, darkMode}) {
   return (
     <div>
         <div className="bg-card text-card-foreground w-full p-4 pt-2 mt-1 product-info"  style={{backgroundColor: darkMode ? '#262729' : ''}}>
-                {loading && <>             
+                {loading && <>  
+                <div>       
                     <div className="grid grid-cols-3 gap-1 mb-4">
                     {Array.from({ length: 3 }).map((_, index) => (
                         <Skeleton key={index} className="h-[150px] w-full rounded-lg" />
@@ -57,6 +58,7 @@ export default function ProductInfo({expandingProductId, darkMode}) {
                         </div>
                     </div>
                     </div>
+                  </div>        
                 </>}
                 {!loading && <>
                     <div className="grid grid-cols-3 gap-1 mb-4">
