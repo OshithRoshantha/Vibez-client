@@ -10,15 +10,6 @@ export default function ProductInfo({productId, darkMode}) {
     const productDescription = 'This is a brand new Apple iPhone 11 Pro. It is in perfect condition and has never been used. It comes with a charger and a case.';
     const sellerName = 'John Doe';
 
-    useEffect(() => {
-        const fetchItemInfo = async () => {
-            const response = await getItemInfo(productId);
-            console.log('API Response:', response);
-        };
-        fetchItemInfo();
-    }, [productId]);
-      
-
   return (
     <div>
         {isLoading && <><p>Loading...</p></>}
