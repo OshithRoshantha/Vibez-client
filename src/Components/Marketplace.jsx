@@ -3,7 +3,7 @@ import './Styles/Column2.css'
 import ProductInfo from './ProductInfo';
 import YourListings from './YourListings';
 import EditListing from './EditListing';
-import { getMarketplaceItems} from  '../Services/MarketplaceService';
+import { getMarketplaceItems, addListing} from  '../Services/MarketplaceService';
 import PreviewProduct from './PreviewProduct';
 
 export default function Marketplace({darkMode}) {
@@ -25,16 +25,61 @@ export default function Marketplace({darkMode}) {
     const [description, setDescription] = useState("");
     const [location, setLocation] = useState("");
     const [hideFromFriends, setHideFromFriends] = useState(false);
+    const [errors, setErrors] = useState({});
 
     var chatToAnswerCount = 15;
     var activeListingsCount = 3;
+
+    const validateFields = () => {
+        const newErrors = {};
+        if (!title.trim()) newErrors.title = "Enter a title to continue.";
+        if (!category.trim()) newErrors.category = "Select a category to finish your listing.";
+        if (!price.trim()) newErrors.price = "Enter a price to continue.";
+        return newErrors;
+    };
   
     const handleTitleChange = (e) => setTitle(e.target.value);
-    const handlePriceChange = (e) => setPrice(e.target.value);
+    const handlePriceChange = (event) => {
+        const inputValue = event.target.value;
+        const numericValue = inputValue.replace(/^LRK\s*/, "");
+        if (/^\d*\.?\d*$/.test(numericValue)) {
+          setPrice(numericValue); 
+        }
+    };
     const handleCategoryChange = (e) => setCategory(e.target.value);
     const handleDescriptionChange = (e) => setDescription(e.target.value);
     const handleLocationChange = (e) => setLocation(e.target.value);
     const toggleHideFromFriends = () => setHideFromFriends((prev) => !prev);
+
+    const createListing = async () => {
+        const defaultImage = "https://static7.depositphotos.com/1056394/786/v/450/depositphotos_7867981-stock-illustration-vector-cardboard-box.jpg";
+        
+        const validationErrors = validateFields();
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return; 
+        }
+
+        if (selectedImages.length === 0) {
+            setSelectedImages([defaultImage]);
+        }
+
+        await addListing(title, price, description, selectedImages, location, hideFromFriends, category);
+        if (sellProductsRef.current) {
+            sellProductsRef.current.scrollTo({
+                top: 0,
+                behavior: "smooth", 
+            });
+        }
+        setTitle("");
+        setPrice("");
+        setCategory("");
+        setDescription("");
+        setLocation("");
+        setHideFromFriends(false);
+        setSelectedImages([]);
+        setErrors({});
+    }
 
     function addImages() {
         if (fileInputRef.current) {
@@ -105,16 +150,6 @@ export default function Marketplace({darkMode}) {
         setForYouMenu(false);
         setYourListningMenu(false);
     }
-
-    function handlePublishClick() {
-        if (sellProductsRef.current) {
-            sellProductsRef.current.scrollTo({
-                top: 0,
-                behavior: "smooth", 
-            });
-        }
-    }
-    
 
   return (
     <div>
@@ -204,19 +239,22 @@ export default function Marketplace({darkMode}) {
                 </div>
                 </div>
                 <div className="mb-4">
-                    <input type="text" className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-400 ' : ' bg-white text-black placeholder:text-gray-500'} py-2 border rounded-lg p-2 w-full`} style={{ outline: '1px solid #c1c3c7'}} placeholder="Title" value={title} onChange={handleTitleChange}/>
+                    <input type="text" className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-400 ' : ' bg-white text-black placeholder:text-gray-500'} py-2 border rounded-lg p-2 w-full`} style={{ outline: errors.title ? '1px solid #f01e2c' : '1px solid #c1c3c7'}} placeholder="Title" value={title} onChange={handleTitleChange}/>
+                    {errors.title && <span style={{ color: "red", fontSize:'85%'}}>{errors.title}</span>}
                 </div>
                 <div className="mb-4">
-                    <input type="text" className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-400 ' : ' bg-white text-black placeholder:text-gray-500'} py-2 border rounded-lg p-2 w-full`} style={{ outline: '1px solid #c1c3c7'}} placeholder="Price" value={price} onChange={handlePriceChange}/>
+                    <input type="text" className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-400 ' : ' bg-white text-black placeholder:text-gray-500'} py-2 border rounded-lg p-2 w-full`} style={{ outline: errors.price ? '1px solid #f01e2c' : '1px solid #c1c3c7'}} placeholder="Price"  value={price ? `LRK ${price}` : ""} onChange={handlePriceChange}/>
+                    {errors.price && <span style={{ color: "red", fontSize:'85%'}}>{errors.price}</span>}
                 </div>
                 <div className="mb-4">
-                    <select className={`${darkMode ? 'bg-[#262729] text-gray-400' : 'bg-white text-gray-500'} border rounded-lg p-2 w-full`} style={{ outline: '1px solid #c1c3c7'}} value={category} onChange={handleCategoryChange}>
+                    <select className={`${darkMode ? 'bg-[#262729] text-gray-400' : 'bg-white text-gray-500'} border rounded-lg p-2 w-full`} style={{ outline: errors.category ? '1px solid #f01e2c' : '1px solid #c1c3c7'}} value={category} onChange={handleCategoryChange}>
                         <option value="" disabled selected>Category</option>
                         <option className={`${darkMode ? 'text-white' : 'text-black'}`}>New</option>
                         <option className={`${darkMode ? 'text-white' : 'text-black'}`}>Used - like new</option>
                         <option className={`${darkMode ? 'text-white' : 'text-black'}`}>Used - good</option>
                         <option className={`${darkMode ? 'text-white' : 'text-black'}`}>Used - fair</option>
                     </select>
+                    {errors.category && <span style={{ color: "red", fontSize:'85%'}}>{errors.category}</span>}
                 </div>
                 <div className="mb-4">
                     <textarea className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-400 ' : ' bg-white text-black placeholder:text-gray-500'} py-2 border rounded-lg p-2 w-full`} style={{ outline: '1px solid #c1c3c7'}}  placeholder="Description" rows="4" value={description} onChange={handleDescriptionChange}></textarea>
@@ -237,7 +275,7 @@ export default function Marketplace({darkMode}) {
                     </div>
                 </div>
                 <div className="flex justify-between mb-4">
-                    <button className="bg-primary text-primary-foreground px-4 py-2 rounded-lg w-full" onClick={handlePublishClick}>Publish</button>
+                    <button className="bg-primary text-primary-foreground px-4 py-2 rounded-lg w-full" onClick={createListing}>Publish</button>
                 </div>
                     <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} mt-4 text-sm`}>
                         Marketplace items are public and can be seen by anyone on or off Vibez. 
