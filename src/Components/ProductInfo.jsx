@@ -4,12 +4,13 @@ import { useState, useEffect } from 'react';
 
 export default function ProductInfo({productId, darkMode}) {
 
-    const [itemInfo, setItemInfo] = useState({});
+    const [itemInfo, setItemInfo] = useState();
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchItemInfo = async () => {
         setIsLoading(true);
         const itemInfo = await getItemInfo(productId);
+        console.log(itemInfo);
         setItemInfo(itemInfo);
         setIsLoading(false);
     }
@@ -18,13 +19,10 @@ export default function ProductInfo({productId, darkMode}) {
         fetchItemInfo();
     }, []); 
     
-    useEffect(() => {
-        console.log(itemInfo);
-    }, [itemInfo]);
-
     const productPrice = 'LKR 57,500';
     const productDescription = 'This is a brand new Apple iPhone 11 Pro. It is in perfect condition and has never been used. It comes with a charger and a case.';
     const sellerName = 'John Doe';
+
   return (
     <div>
         {isLoading && <><p>Loading...</p></>}
