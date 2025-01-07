@@ -1,18 +1,22 @@
 import './Styles/Column2.css'
-import { getProductDetails } from  '../Services/MarketplaceService';
+import { getProductDetails, isUserSeller } from  '../Services/MarketplaceService';
 import { useState, useEffect } from 'react';
 import { Skeleton } from "@/components/ui/skeleton";
+import { useWebSocket } from '../Context/WebSocketContext';
 
 export default function ProductInfo({expandingProductId, darkMode}) {
 
-    const [product, setProduct] = useState(null); 
-    const [loading, setLoading] = useState(true); 
+  const { messages } = useWebSocket();
+  const [processedMessages, setProcessedMessages] = useState([]);
+
+  const [product, setProduct] = useState(null); 
+  const [loading, setLoading] = useState(true); 
   
     const fetchProductInfo = async () => {
       try {
         setLoading(true); 
+        console.log('Fetching product info');
         const productDetails = await getProductDetails(expandingProductId);
-        console.log(productDetails);
         setProduct(productDetails); 
       } finally {
         setLoading(false); 
@@ -24,6 +28,41 @@ export default function ProductInfo({expandingProductId, darkMode}) {
         fetchProductInfo();
       }
     }, [expandingProductId]);
+
+    useEffect(() => {
+        const handleMessages = async () => {
+            if (messages.length === 0) {
+                return;
+            }
+            const newMessages = messages.filter(message => !processedMessages.includes(message.id));
+            if (newMessages.length === 0) {
+                return; 
+            }
+            for (const lastMessage of newMessages) {
+                switch (lastMessage.action) {
+                    case 'marketplaceService': {
+                        console.log('Marketplace service message received');
+                        fetchProductInfo();
+                        break; 
+                    }
+                    case 'profileService': {
+                        const response = await isUserSeller(lastMessage.body);
+                        if(response){
+                          fetchProductInfo();
+                        }
+                        break;  
+                    }
+                    default:
+                        break;
+                }
+            }
+            setProcessedMessages(prevProcessedMessages => [
+                ...prevProcessedMessages,
+                ...newMessages.map(message => message.id),
+            ]);
+        };
+        handleMessages();
+    }, [messages, processedMessages]);     
 
   return (
     <div>
@@ -72,7 +111,7 @@ export default function ProductInfo({expandingProductId, darkMode}) {
                         ))}
                     </div>
                     <h2 className={`${darkMode ? 'text-white':''} text-lg font-bold`}>{product.productTitle}</h2>
-                    <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'}`}>LRK {product.price}</p>
+                    <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} font-bold`}>LRK {product.price}</p>
                     <p className={`${darkMode ? 'text-white':''} text-sm`}>Send seller a message</p>
                     <button className="bg-primary text-white  py-2 px-4 rounded-lg mt-2 mr-5">Send Message</button>
                     <button className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} py-2 px-4 rounded-lg border-none`}>Share offer</button>

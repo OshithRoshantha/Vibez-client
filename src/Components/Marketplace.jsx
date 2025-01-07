@@ -3,12 +3,15 @@ import './Styles/Column2.css'
 import ProductInfo from './ProductInfo';
 import YourListings from './YourListings';
 import EditListing from './EditListing';
-import { getMarketplaceItems, addListing, getActiveListingCount, getMyListings} from  '../Services/MarketplaceService';
+import { getMarketplaceItems, addListing, getActiveListingCount, getMyListings, isUserSeller} from  '../Services/MarketplaceService';
 import PreviewProduct from './PreviewProduct';
 import { Skeleton } from "@/components/ui/skeleton";
-import { set } from 'date-fns';
+import { useWebSocket } from '../Context/WebSocketContext';
 
 export default function Marketplace({darkMode}) {
+
+    const { messages } = useWebSocket();
+    const [processedMessages, setProcessedMessages] = useState([]);
 
     const [productList, setProductList] = useState([]);
     const [myListings, setMyListings] = useState([]);
@@ -181,6 +184,42 @@ export default function Marketplace({darkMode}) {
         setForYouMenu(false);
         setYourListningMenu(false);
     }
+
+ useEffect(() => {
+        const handleMessages = async () => {
+            if (messages.length === 0) {
+                return;
+            }
+            const newMessages = messages.filter(message => !processedMessages.includes(message.id));
+            if (newMessages.length === 0) {
+                return; 
+            }
+            for (const lastMessage of newMessages) {
+                switch (lastMessage.action) {
+                    case 'marketplaceService': {
+                        fetchMarketplaceItems();
+                        break; 
+                    }
+                    case 'profileService': {
+                        const response = await isUserSeller(lastMessage.body);
+                        if(response){
+                            fetchMarketplaceItems();
+                        }
+                        break;  
+                    }
+                    default:
+                        break;
+                }
+            }
+            setProcessedMessages(prevProcessedMessages => [
+                ...prevProcessedMessages,
+                ...newMessages.map(message => message.id),
+            ]);
+        };
+        handleMessages();
+}, [messages, processedMessages]); 
+
+
 
   return (
     <div>

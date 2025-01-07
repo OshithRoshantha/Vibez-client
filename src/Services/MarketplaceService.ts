@@ -29,6 +29,15 @@ export const getActiveListingCount = async () => {
     return response.data;
 }
 
+export const isUserSeller = async (userId: string) => {
+    const response = await axios.get(`http://localhost:8080/vibez/product/isSeller/${userId}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+}
+
 export const getMyListings = async () => {
     const userId = sessionStorage.getItem('userId');
     const response = await axios.get(`http://localhost:8080/vibez/product/my/${userId}`, {
