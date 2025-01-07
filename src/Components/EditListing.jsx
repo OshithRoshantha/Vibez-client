@@ -1,6 +1,6 @@
 import './Styles/Column2.css'
 import { useState, useEffect } from 'react';
-import { getItemInfo } from  '../Services/MarketplaceService';
+import { getProductDetails } from  '../Services/MarketplaceService';
 
 export default function EditListing({showYourListningMenu, darkMode, editingProductId, autoScroll}) {
 
@@ -20,8 +20,6 @@ export default function EditListing({showYourListningMenu, darkMode, editingProd
         return newErrors;
     };
 
-    
-
     const handleTitleChange = (e) => setTitle(e.target.value);
     const handlePriceChange = (event) => {
         const inputValue = event.target.value;
@@ -30,6 +28,24 @@ export default function EditListing({showYourListningMenu, darkMode, editingProd
           setPrice(numericValue); 
         }
     };
+
+    const fetchProductInfo = async () => {
+        const productDetails = await getProductDetails(editingProductId);
+        console.log(productDetails);
+        setTitle(productDetails.productTitle);
+        setPrice(productDetails.price);
+        setCategory(productDetails.condition);
+        setDescription(productDetails.productDesc);
+        setLocation(productDetails.location);
+        setHideFromFriends(productDetails.visibleToFriends);
+    };
+  
+    useEffect(() => {
+      if (editingProductId) {
+        fetchProductInfo();
+      }
+    }, [editingProductId]);
+
     const handleCategoryChange = (e) => setCategory(e.target.value);
     const handleDescriptionChange = (e) => setDescription(e.target.value);
     const handleLocationChange = (e) => setLocation(e.target.value);
