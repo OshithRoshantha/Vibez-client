@@ -9,6 +9,8 @@ export default function ProductInfo({expandingProductId, darkMode}) {
     const productPrice = 'LKR 57,500';
     const productDescription = 'This is a brand new Apple iPhone 11 Pro. It is in perfect condition and has never been used. It comes with a charger and a case.';
     const sellerName = 'John Doe';
+    const sellerLocation = 'Colombo, Sri Lanka';
+    const condition = 'Brand new';
 
  /*   const fetchProductInfo = async () => {
         const response = await getItemInfo(productId);
@@ -34,6 +36,10 @@ export default function ProductInfo({expandingProductId, darkMode}) {
                 <button className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} py-2 px-4 rounded-lg border-none`}>Share offer</button>
                 <h3 className={`${darkMode ? 'text-white':''} mt-4 font-semibold`}>Description</h3>
                 <p className={`${darkMode ? 'text-gray-300':'text-muted-foreground'} text-sm`}>{productDescription}</p>
+                <h3 className={`${darkMode ? 'text-white':''} mt-4 font-semibold`}>Condition</h3>
+                <p className={`${darkMode ? 'text-gray-300':'text-muted-foreground'} text-sm`}>{condition}</p>
+                <h3 className={`${darkMode ? 'text-white':''} mt-4 font-semibold`}>Location</h3>
+                <p className={`${darkMode ? 'text-gray-300':'text-muted-foreground'} text-sm`}>{sellerLocation}</p>
                 <div className="mt-4">
                     <h4 className={`${darkMode ? 'text-white':''} font-semibold`}>Seller information</h4>
                     <div className="flex items-center mt-2">
