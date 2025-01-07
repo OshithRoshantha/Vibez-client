@@ -317,6 +317,7 @@ export default function Marketplace({darkMode}) {
                         productDesc={listing.productDesc}
                         price={listing.price}
                         productPhotos={listing.productPhotos[0]}
+                        listedDate={listing.listedDate}
                     />
                 ))}
             </div>}
