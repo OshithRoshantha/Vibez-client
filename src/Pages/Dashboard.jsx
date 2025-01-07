@@ -130,6 +130,9 @@ export default function Dashboard() {
                         
                         }
                 }
+                else if (lastMessage.action === 'marketplaceService'){
+                    // give notification for marketplace
+                }
             }
             setProcessedMessages(prevProcessedMessages => [
                 ...prevProcessedMessages,
