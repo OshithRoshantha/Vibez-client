@@ -368,41 +368,18 @@ export default function Marketplace({darkMode}) {
                         ))}                  
                     </>}
                     {!loading && <>
-                        <div>
-                            {resultsList.length === 0 ? (
-                                <div className="flex flex-col items-center justify-center" style={{ marginTop: '20%' }}>
-                                    <img
-                                        aria-hidden="true"
-                                        alt="document-icon"
-                                        src={err2}
-                                        style={{ height: '125px', width: '125px' }}
-                                    />
-                                    <h2
-                                        className={`${
-                                            darkMode ? 'text-white' : ''
-                                        } mt-4 text-lg font-semibold`}
-                                    >
-                                        We couldn't find anything to show for
-                                    </h2>
-                                    <p className={`${darkMode ? 'text-gray-300' : 'text-muted-foreground' } mt-2 font-bold`}>
-                                        {searchKeyword}
-                                    </p>
-                                </div>
-                            ) : (
-                                resultsList.map((product) => (
-                                    <PreviewProduct
-                                        key={product.productId}
-                                        darkMode={darkMode}
-                                        showProductInfo={showProductInfo}
-                                        productId={product.productId}
-                                        productPrice={product.price}
-                                        productTitle={product.productTitle}
-                                        productImages={product.productPhotos}
-                                        setExpandingProductId={setExpandingProductId}
-                                    />
-                                ))
-                            )}
-                        </div>
+                    {productList.map((product) => (
+                            <PreviewProduct
+                                key={product.productId}
+                                darkMode={darkMode}
+                                showProductInfo={showProductInfo}
+                                productId = {product.productId}
+                                productPrice={product.price} 
+                                productTitle={product.productTitle}
+                                productImages={product.productPhotos}
+                                setExpandingProductId={setExpandingProductId}
+                            />
+                    ))}
                     </>}
                     </div>
                 </div>
