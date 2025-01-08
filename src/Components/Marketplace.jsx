@@ -14,6 +14,7 @@ export default function Marketplace({darkMode}) {
     const [processedMessages, setProcessedMessages] = useState([]);
 
     const [productList, setProductList] = useState([]);
+    const [resultsList, setResultsList] = useState([]);
     const [myListings, setMyListings] = useState([]);
     const [editingProductId, setEditingProductId] = useState();
     const [expandingProductId, setExpandingProductId] = useState();
@@ -285,7 +286,47 @@ export default function Marketplace({darkMode}) {
                     <button onClick={showYourListningMenu} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}>Your listings</button>
                     <button onClick={showForYouMenu} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}>For you</button>
                 </div>
-            {showResults && <div className='product-list'>Results</div>}
+            {showResults && <div className='product-list'>
+                <div className='product-list'>
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-0 p-0 w-full"> 
+                    {loading && <>
+                        {Array.from({ length: 6 }).map((_, index) => (
+                            <div
+                            key={index}
+                            className="bg-card rounded-lg shadow-md overflow-hidden"
+                            style={{
+                                height: '220px',
+                                cursor: 'pointer',
+                                backgroundColor: darkMode ? '#56585a' : '#c9c9c9',
+                                marginBottom: '25px',
+                                width: '95%'
+                            }}
+                            >
+                            <Skeleton className="w-full h-[65%] object-cover" />
+                            <div className="pl-2 pr-4 pt-2 pb-2 mt-0">
+                                <Skeleton className="h-6 w-[120px]" />
+                                <Skeleton className="h-4 w-[160px] mt-2" />
+                            </div>
+                            </div>
+                        ))}                  
+                    </>}
+                    {!loading && <>
+                    {resultsList.map((product) => (
+                            <PreviewProduct
+                                key={product.productId}
+                                darkMode={darkMode}
+                                showProductInfo={showProductInfo}
+                                productId = {product.productId}
+                                productPrice={product.price} 
+                                productTitle={product.productTitle}
+                                productImages={product.productPhotos}
+                                setExpandingProductId={setExpandingProductId}
+                            />
+                    ))}
+                    </>}
+                    </div>
+                </div>                         
+            </div>}
             {forYouMenu && 
                 <div className='product-list'>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-0 p-0 w-full"> 
