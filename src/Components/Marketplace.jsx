@@ -46,6 +46,7 @@ export default function Marketplace({darkMode}) {
         const value = e.target.value;
         setSearchKeyword(value); 
         if (value.length > 0) {
+            setLoading(true);
             setShowResults(true);
             setForYouMenu(false);
             setSellMenu(false);
@@ -53,6 +54,7 @@ export default function Marketplace({darkMode}) {
             setYourListningMenu(false);
             setEditListingMenu(false);
             fetchSearchResults();
+            setLoading(false);
         } else {
             setShowResults(false);
             setForYouMenu(true);
@@ -196,6 +198,7 @@ export default function Marketplace({darkMode}) {
         setProductInfo(false);
         setYourListningMenu(false);
         setEditListingMenu(false);
+        setShowResults(false);
     }
 
     function showSellMenu(){
@@ -204,6 +207,7 @@ export default function Marketplace({darkMode}) {
         setProductInfo(false);
         setYourListningMenu(false);
         setEditListingMenu(false);
+        setShowResults(false);
     }
 
     function showProductInfo(){
@@ -211,7 +215,8 @@ export default function Marketplace({darkMode}) {
         setSellMenu(false);
         setForYouMenu(false);
         setYourListningMenu(false);
-        setEditListingMenu(false);  
+        setEditListingMenu(false); 
+        setShowResults(false); 
     }
 
     function showYourListningMenu(){
@@ -220,6 +225,7 @@ export default function Marketplace({darkMode}) {
         setSellMenu(false);
         setForYouMenu(false);
         setEditListingMenu(false);
+        setShowResults(false);
     }
 
     function showEditListingMenu(){
@@ -228,6 +234,7 @@ export default function Marketplace({darkMode}) {
         setSellMenu(false);
         setForYouMenu(false);
         setYourListningMenu(false);
+        setShowResults(false);
     }
 
     useEffect(() => {
