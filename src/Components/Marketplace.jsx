@@ -37,11 +37,13 @@ export default function Marketplace({darkMode}) {
     const [location, setLocation] = useState("");
     const [hideFromFriends, setHideFromFriends] = useState(false);
     const [errors, setErrors] = useState({});
-    const err = darkMode ? './src/assets/Icons/listingErdark.png' : './src/assets/Icons/listingEr.png';
     const [activeListingsCount, setActiveListingsCount] = useState(0);
     const [totalClicks, setTotalClicks] = useState(0);
     const inputRef = useRef(null);
     const [searchKeyword, setSearchKeyword] = useState('');
+
+    const err = darkMode ? './src/assets/Icons/listingErdark.png' : './src/assets/Icons/listingEr.png';
+    const err2 = darkMode ? './src/assets/Icons/searchErdark.png' : './src/assets/Icons/searchEr.png';
 
     const handleSearchChange = async (e) => {
         const value = e.target.value;
@@ -325,18 +327,18 @@ export default function Marketplace({darkMode}) {
                             ))}                  
                         </>}
                         {!loadingResults && <>
-                        {resultsList.map((product) => (
-                                <PreviewProduct
-                                    key={product.productId}
-                                    darkMode={darkMode}
-                                    showProductInfo={showProductInfo}
-                                    productId = {product.productId}
-                                    productPrice={product.price} 
-                                    productTitle={product.productTitle}
-                                    productImages={product.productPhotos}
-                                    setExpandingProductId={setExpandingProductId}
-                                />
-                        ))}
+                            {resultsList.map((product) => (
+                                    <PreviewProduct
+                                        key={product.productId}
+                                        darkMode={darkMode}
+                                        showProductInfo={showProductInfo}
+                                        productId = {product.productId}
+                                        productPrice={product.price} 
+                                        productTitle={product.productTitle}
+                                        productImages={product.productPhotos}
+                                        setExpandingProductId={setExpandingProductId}
+                                    />
+                            ))}
                         </>}
                     </div>
                 </div>                         
@@ -366,18 +368,41 @@ export default function Marketplace({darkMode}) {
                         ))}                  
                     </>}
                     {!loading && <>
-                    {productList.map((product) => (
-                            <PreviewProduct
-                                key={product.productId}
-                                darkMode={darkMode}
-                                showProductInfo={showProductInfo}
-                                productId = {product.productId}
-                                productPrice={product.price} 
-                                productTitle={product.productTitle}
-                                productImages={product.productPhotos}
-                                setExpandingProductId={setExpandingProductId}
-                            />
-                    ))}
+                        <div>
+                            {resultsList.length === 0 ? (
+                                <div className="flex flex-col items-center justify-center" style={{ marginTop: '20%' }}>
+                                    <img
+                                        aria-hidden="true"
+                                        alt="document-icon"
+                                        src={err2}
+                                        style={{ height: '125px', width: '125px' }}
+                                    />
+                                    <h2
+                                        className={`${
+                                            darkMode ? 'text-white' : ''
+                                        } mt-4 text-lg font-semibold`}
+                                    >
+                                        We couldn't find anything to show for
+                                    </h2>
+                                    <p className={`${darkMode ? 'text-gray-300' : 'text-muted-foreground' } mt-2 font-bold`}>
+                                        {searchKeyword}
+                                    </p>
+                                </div>
+                            ) : (
+                                resultsList.map((product) => (
+                                    <PreviewProduct
+                                        key={product.productId}
+                                        darkMode={darkMode}
+                                        showProductInfo={showProductInfo}
+                                        productId={product.productId}
+                                        productPrice={product.price}
+                                        productTitle={product.productTitle}
+                                        productImages={product.productPhotos}
+                                        setExpandingProductId={setExpandingProductId}
+                                    />
+                                ))
+                            )}
+                        </div>
                     </>}
                     </div>
                 </div>
