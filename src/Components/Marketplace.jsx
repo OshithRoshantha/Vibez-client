@@ -19,6 +19,7 @@ export default function Marketplace({darkMode}) {
     const [editingProductId, setEditingProductId] = useState();
     const [expandingProductId, setExpandingProductId] = useState();
     const [loading, setLoading] = useState(true); 
+    const [loadingResults, setLoadingResults] = useState(true);
  
     const [forYouMenu, setForYouMenu] = useState(true);
     const [sellMenu, setSellMenu] = useState(false);
@@ -46,6 +47,7 @@ export default function Marketplace({darkMode}) {
         const value = e.target.value;
         setSearchKeyword(value); 
         if (value.length > 0) {
+            setLoadingResults(true);
             setShowResults(true);
             setForYouMenu(false);
             setSellMenu(false);
@@ -53,6 +55,8 @@ export default function Marketplace({darkMode}) {
             setYourListningMenu(false);
             setEditListingMenu(false);
             fetchSearchResults();
+            setLoadingResults(false);
+
         } else {
             setShowResults(false);
             setForYouMenu(true);
@@ -299,7 +303,7 @@ export default function Marketplace({darkMode}) {
             {showResults && <div className='product-list'>
                 <div className='product-list'>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-0 p-0 w-full"> 
-                        {loading && <>
+                        {loadingResults && <>
                             {Array.from({ length: 6 }).map((_, index) => (
                                 <div
                                 key={index}
@@ -320,7 +324,7 @@ export default function Marketplace({darkMode}) {
                                 </div>
                             ))}                  
                         </>}
-                        {!loading && <>
+                        {!loadingResults && <>
                         {resultsList.map((product) => (
                                 <PreviewProduct
                                     key={product.productId}
