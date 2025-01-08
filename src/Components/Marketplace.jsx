@@ -38,8 +38,6 @@ export default function Marketplace({darkMode}) {
     const [activeListingsCount, setActiveListingsCount] = useState(0);
     const [totalClicks, setTotalClicks] = useState(0);
 
-    var chatToAnswerCount = 15;
-
     const err = darkMode ? './src/assets/Icons/listingErdark.png' : './src/assets/Icons/listingEr.png';
 
     const validateFields = () => {
@@ -291,7 +289,7 @@ export default function Marketplace({darkMode}) {
                 <div className="grid grid-cols-2 gap-x-4 gap-y-0 mb-6">
                     <div className="pl-5 pt-2 border border-border rounded-lg" style={{height:'120%'}}>
                         <div style={{display:'flex', fontWeight:'bold', alignItems:'center'}}>
-                            <i className={`${darkMode ? 'text-white':''} bi bi-mouse text-xl`}></i>&nbsp;&nbsp;<h3 className={`${darkMode ? 'text-white':''} text-xl`}>{chatToAnswerCount}</h3>
+                            <i className={`${darkMode ? 'text-white':''} bi bi-mouse text-xl`}></i>&nbsp;&nbsp;<h3 className={`${darkMode ? 'text-white':''} text-xl`}>{totalClicks}</h3>
                         </div>
                         <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'}`}>Total clicks</p>
                     </div>
