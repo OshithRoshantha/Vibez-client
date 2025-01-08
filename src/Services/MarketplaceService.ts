@@ -48,6 +48,25 @@ export const getMyListings = async () => {
     return response.data;
 }
 
+export const addClick = async (productId: string) => {
+    const response = await axios.put(`http://localhost:8080/vibez/product/addClick/${productId}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data;  
+}
+
+export const getTotalClicks = async () => {
+    const sellerId = sessionStorage.getItem('userId');
+    const response = await axios.get(`http://localhost:8080/vibez/product/totalClicks/${sellerId}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data; 
+}
+
 export const addListing = async (productTitle: string, price: string, productDesc: string, productPhotos: string[], location: string, visibleToFriends: boolean, condition: string): Promise<void> => {
     return new Promise((resolve) => {
         const token = sessionStorage.getItem('token');
