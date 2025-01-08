@@ -152,3 +152,13 @@ export const searchProducts = async (keyword: string) => {
     const response = await axios.get(`http://localhost:8080/vibez/product/search/${userId}/${keyword}`);
     return response.data;
 }
+
+export const isProductListed = async (productId: string) => {
+    const userId = sessionStorage.getItem('userId');
+    const response = await axios.get(`http://localhost:8080/vibez/product/isAdded/${productId}/${userId}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data;    
+}
