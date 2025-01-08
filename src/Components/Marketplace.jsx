@@ -3,7 +3,7 @@ import './Styles/Column2.css'
 import ProductInfo from './ProductInfo';
 import YourListings from './YourListings';
 import EditListing from './EditListing';
-import { getMarketplaceItems, addListing, getActiveListingCount, getMyListings, isUserSeller, getTotalClicks} from  '../Services/MarketplaceService';
+import { getMarketplaceItems, addListing, getActiveListingCount, getMyListings, isUserSeller, getTotalClicks, searchProducts} from  '../Services/MarketplaceService';
 import PreviewProduct from './PreviewProduct';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
@@ -52,7 +52,7 @@ export default function Marketplace({darkMode}) {
             setProductInfo(false);
             setYourListningMenu(false);
             setEditListingMenu(false);
-            //getSearchedResults(value);
+            fetchSearchResults();
         } else {
             setShowResults(false);
             setForYouMenu(true);
@@ -143,6 +143,11 @@ export default function Marketplace({darkMode}) {
         setProductList(response);
     };
 
+    const fetchSearchResults = async () => {
+        const response = await searchProducts(searchKeyword);
+        setResultsList(response);
+    }
+
     const fetchActiveListingCount = async () => {
         const response = await getActiveListingCount();
         setActiveListingsCount(response);
@@ -225,7 +230,7 @@ export default function Marketplace({darkMode}) {
         setYourListningMenu(false);
     }
 
- useEffect(() => {
+    useEffect(() => {
         const handleMessages = async () => {
             if (messages.length === 0) {
                 return;
@@ -257,7 +262,7 @@ export default function Marketplace({darkMode}) {
             ]);
         };
         handleMessages();
-}, [messages, processedMessages]); 
+    }, [messages, processedMessages]); 
 
   return (
     <div>
