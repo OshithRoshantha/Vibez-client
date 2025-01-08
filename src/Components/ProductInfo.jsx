@@ -1,28 +1,136 @@
 import './Styles/Column2.css'
+import { getProductDetails, isUserSeller, addClick } from  '../Services/MarketplaceService';
+import { useState, useEffect } from 'react';
+import { Skeleton } from "@/components/ui/skeleton";
+import { useWebSocket } from '../Context/WebSocketContext';
 
-export default function ProductInfo({productName, productPrice, productDescription, sellerName, darkMode}) {
+export default function ProductInfo({expandingProductId, darkMode}) {
+
+  const { messages } = useWebSocket();
+  const [processedMessages, setProcessedMessages] = useState([]);
+
+  const [product, setProduct] = useState(null); 
+  const [loading, setLoading] = useState(true); 
+  
+    const fetchProductInfo = async () => {
+      try {
+        setLoading(true); 
+        const productDetails = await getProductDetails(expandingProductId);
+        setProduct(productDetails); 
+        await addClick(expandingProductId);
+      } finally {
+        setLoading(false); 
+      }
+    };
+  
+    useEffect(() => {
+      if (expandingProductId) {
+        fetchProductInfo();
+      }
+    }, [expandingProductId]);
+
+    useEffect(() => {
+        const handleMessages = async () => {
+            if (messages.length === 0) {
+                return;
+            }
+            const newMessages = messages.filter(message => !processedMessages.includes(message.id));
+            if (newMessages.length === 0) {
+                return; 
+            }
+            for (const lastMessage of newMessages) {
+                switch (lastMessage.action) {
+                    case 'marketplaceService': {
+                        console.log('Marketplace service message received');
+                        fetchProductInfo();
+                        break; 
+                    }
+                    case 'profileService': {
+                        const response = await isUserSeller(lastMessage.body);
+                        if(response){
+                          fetchProductInfo();
+                        }
+                        break;  
+                    }
+                    default:
+                        break;
+                }
+            }
+            setProcessedMessages(prevProcessedMessages => [
+                ...prevProcessedMessages,
+                ...newMessages.map(message => message.id),
+            ]);
+        };
+        handleMessages();
+    }, [messages, processedMessages]);     
+
   return (
     <div>
         <div className="bg-card text-card-foreground w-full p-4 pt-2 mt-1 product-info"  style={{backgroundColor: darkMode ? '#262729' : ''}}>
-                <div className="grid grid-cols-3 gap-1 mb-4">
-                    <img src="https://placehold.co/400x300" alt="Apple 11 Pro" className="rounded-lg mb-0"/>
-                </div>
-                <h2 className={`${darkMode ? 'text-white':''} text-lg font-bold`}>{productName}</h2>
-                <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'}`}>{productPrice}</p>
-                <p className={`${darkMode ? 'text-white':''} text-sm`}>Send seller a message</p>
-                <button className="bg-primary text-white  py-2 px-4 rounded-lg mt-2 mr-5">Send Message</button>
-                <button className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} py-2 px-4 rounded-lg border-none`}>Share offer</button>
-                <h3 className={`${darkMode ? 'text-white':''} mt-4 font-semibold`}>Description</h3>
-                <p className={`${darkMode ? 'text-gray-300':'text-muted-foreground'} text-sm`}>{productDescription}</p>
-                <div className="mt-4">
-                    <h4 className={`${darkMode ? 'text-white':''} font-semibold`}>Seller information</h4>
-                    <div className="flex items-center mt-2">
-                        <img src="https://placehold.co/40x40" className="rounded-full mr-2 w-55 h-55" />
+                {loading && <>  
+                <div>       
+                    <div className="grid grid-cols-3 gap-1 mb-4">
+                    {Array.from({ length: 3 }).map((_, index) => (
+                        <Skeleton key={index} className="h-[150px] w-full rounded-lg" />
+                    ))}
+                    </div>
+                    <Skeleton className="h-6 w-[200px]" />
+                    <Skeleton className="h-4 w-[100px] mt-2" />
+                    <Skeleton className="h-4 w-[150px] mt-2" />
+                    <div className="flex space-x-3 mt-4">
+                    <Skeleton className="h-10 w-[120px] rounded-lg" />
+                    <Skeleton className="h-10 w-[120px] rounded-lg" />
+                    </div>
+                    <Skeleton className="h-6 w-[120px] mt-4" />
+                    <Skeleton className="h-4 w-full mt-2" />
+                    <Skeleton className="h-6 w-[120px] mt-4" />
+                    <Skeleton className="h-4 w-[200px] mt-2" />
+                    <Skeleton className="h-6 w-[120px] mt-4" />
+                    <Skeleton className="h-4 w-[200px] mt-2" />
+                    <div className="mt-4">
+                    <Skeleton className="h-6 w-[200px]" />
+                    <div className="flex items-center mt-2 space-x-2">
+                        <Skeleton className="h-10 w-10 rounded-full" />
                         <div>
-                            <p className={`${darkMode ? 'text-white':''} text-sm`}>{sellerName}</p>
+                        <Skeleton className="h-4 w-[150px]" />
+                        <Skeleton className="h-4 w-[100px] mt-1" />
                         </div>
                     </div>
-                </div>
+                    </div>
+                  </div>        
+                </>}
+                {!loading && <>
+                    <div className="grid grid-cols-3 gap-1 mb-4">
+                        {product.productPhotos?.map((photo, index) => (
+                            <img
+                            key={index}
+                            src={photo}
+                            alt={`Product Image ${index + 1}`}
+                            className="rounded-lg mb-0"
+                            />
+                        ))}
+                    </div>
+                    <h2 className={`${darkMode ? 'text-white':''} text-lg font-bold`}>{product.productTitle}</h2>
+                    <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} font-bold`}>LRK {product.price}</p>
+                    <p className={`${darkMode ? 'text-white':''} text-sm`}>Send seller a message</p>
+                    <button className="bg-primary text-white  py-2 px-4 rounded-lg mt-2 mr-5">Send Message</button>
+                    <button className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} py-2 px-4 rounded-lg border-none`}>Share offer</button>
+                    <h3 className={`${darkMode ? 'text-white':''} mt-4 font-semibold`}>Description</h3>
+                    <p className={`${darkMode ? 'text-gray-300':'text-muted-foreground'} text-sm`}>{product.productDesc || 'Contact seller for details.'}</p>
+                    <h3 className={`${darkMode ? 'text-white':''} mt-4 font-semibold`}>Condition</h3>
+                    <p className={`${darkMode ? 'text-gray-300':'text-muted-foreground'} text-sm`}>{product.condition}</p>
+                    <h3 className={`${darkMode ? 'text-white':''} mt-4 font-semibold`}>Location</h3>
+                    <p className={`${darkMode ? 'text-gray-300':'text-muted-foreground'} text-sm`}>{product.location || 'Contact seller for location'}</p>
+                    <div className="mt-4">
+                        <h4 className={`${darkMode ? 'text-white':''} font-semibold`}>Seller information</h4>
+                        <div className="flex items-center mt-2">
+                            <img src={product.sellerProfilePicture} className="rounded-full mr-2 w-55 h-55" style={{height:'35px', width:'35px'}} />
+                            <div>
+                                <p className={`${darkMode ? 'text-white':''} text-sm`}>{product.sellerName}</p>
+                            </div>
+                        </div>
+                    </div>
+                </>}
         </div>
     </div>
   )

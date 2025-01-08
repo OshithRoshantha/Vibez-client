@@ -34,7 +34,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
           setShowResults(false);
           setYourFriends(true);
         }
-      };
+    };
 
     const fetchFriendships = async () => {
         setLoading(true);
@@ -217,7 +217,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                     className={`${darkMode ? 'bg-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'bg-gray-200'} w-full px-4 py-2 mb-4 focus:outline-none focus:border-none placeholder:text-gray-500  text-gray-500 `}
                     style={{ borderRadius: '20px' }}
                 />
-                    <i
+                <i
                         className={`${
                         darkMode ? 'text-[#abacae]' : 'text-gray-500'
                         } bi cursor-pointer absolute text-2xl ${
@@ -225,7 +225,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                         }`}
                         style={{ marginLeft: '-3%', marginTop: '0.2%' }}
                         onClick={handleIconClick}
-                    ></i>
+                ></i>
                 <div className="flex space-x-2 mb-4">
                     <button
                         onClick={hideYourFriends}
