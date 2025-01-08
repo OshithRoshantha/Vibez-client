@@ -47,16 +47,16 @@ export default function Marketplace({darkMode}) {
         const value = e.target.value;
         setSearchKeyword(value); 
         if (value.length > 0) {
-            setLoadingResults(true);
+            setLoadingResults(true); 
             setShowResults(true);
             setForYouMenu(false);
             setSellMenu(false);
             setProductInfo(false);
             setYourListningMenu(false);
             setEditListingMenu(false);
-            fetchSearchResults();
+            await new Promise((resolve) => setTimeout(resolve, 0));
+            await fetchSearchResults(); 
             setLoadingResults(false);
-
         } else {
             setShowResults(false);
             setForYouMenu(true);
@@ -66,7 +66,7 @@ export default function Marketplace({darkMode}) {
             setEditListingMenu(false);
         }
     };
-
+    
     const handleIconClick = () => {
         if (searchKeyword !== '') {
         setSearchKeyword(''); 
