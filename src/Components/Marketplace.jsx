@@ -491,20 +491,20 @@ export default function Marketplace({darkMode}) {
             </div>}
             {yourListningMenu && <div className='product-list'>
                 {myListings.length === 0 ? (
-                    <div>
-                        
-                        <div className="flex flex-col items-center justify-center" style={{ marginTop: '20%' }}>
-                                        <img
-                                            aria-hidden="true"
-                                            alt="document-icon"
-                                            src={err}
-                                            style={{ height: '125px', width: '125px' }}
-                                        />
-                                        <h2 className={`${darkMode ? 'text-white' : ''} mt-4 text-lg font-semibold`}>
-                                           Ready to start selling?
-                                        </h2>
-                                        <p className={`${darkMode ? 'text-gray-300' : 'text-muted-foreground'} mt-0 text-center`}>Once you're up and running, use "Your listings" to manage all of your selling activites in one place.</p>
-                                    </div>                        
+                    <div> 
+                        <div className="flex flex-col items-center justify-center" style={{ marginTop: '15%', padding: '0 5%' }}>
+                            <img
+                                aria-hidden="true"
+                                alt="document-icon"
+                                src={err}
+                                style={{ height: '125px', width: '125px' }}
+                            />
+                            <h2 className={`${darkMode ? 'text-white' : ''} mt-2 text-lg font-semibold`}>
+                            Ready to start selling?
+                            </h2>
+                            <p className={`${darkMode ? 'text-gray-300' : 'text-muted-foreground'} mt-0 text-center`}>Once you're up and running, use "Your listings" to manage all of your selling activites in one place.</p>
+                            <button className="bg-primary text-primary-foreground hover:bg-primary/80 px-3 py-2 rounded" style={{marginTop:'20px'}}>Create new listing</button>
+                        </div>                        
                     </div>
                 ) : (
                     myListings.map((listing) => (
