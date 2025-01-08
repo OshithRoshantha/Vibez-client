@@ -16,6 +16,7 @@ import { updateDarkMode, getdarkModePreference, fetchUserMetaData} from '../Serv
 import PopupNotifiter from '../Components/PopupNotifiter';
 import { useWebSocket } from '../Context/WebSocketContext';
 import { getConnectedProfileInfo, filterPendingRequests, filterAcceptedRequests, isConnectedProfile} from '../Services/FriendshipService';
+import { isProductListed, getProductDetails } from '../Services/MarketplaceService';
 
 export default function Dashboard() {
 
@@ -131,7 +132,16 @@ export default function Dashboard() {
                         }
                 }
                 else if (lastMessage.action === 'marketplaceService'){
-                    // give notification for marketplace
+                    if (lastMessage.productAction === 'ADDED'){
+                        const response = await isProductListed(lastMessage.body);
+                        if (response){
+                            const productDetails = await getProductDetails(lastMessage.body);
+                            setProfileImage(productDetails.productPhotos[0]);
+                            setProfileName('');
+                            setNotification(`Your new listing for ${productDetails.productTitle} has been created.`);
+                            setShowNotification(true);
+                        }
+                    }
                 }
             }
             setProcessedMessages(prevProcessedMessages => [
