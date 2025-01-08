@@ -3,7 +3,7 @@ import './Styles/Column2.css'
 import ProductInfo from './ProductInfo';
 import YourListings from './YourListings';
 import EditListing from './EditListing';
-import { getMarketplaceItems, addListing, getActiveListingCount, getMyListings, isUserSeller} from  '../Services/MarketplaceService';
+import { getMarketplaceItems, addListing, getActiveListingCount, getMyListings, isUserSeller, getTotalClicks} from  '../Services/MarketplaceService';
 import PreviewProduct from './PreviewProduct';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
@@ -34,9 +34,13 @@ export default function Marketplace({darkMode}) {
     const [location, setLocation] = useState("");
     const [hideFromFriends, setHideFromFriends] = useState(false);
     const [errors, setErrors] = useState({});
+
     const [activeListingsCount, setActiveListingsCount] = useState(0);
+    const [totalClicks, setTotalClicks] = useState(0);
 
     var chatToAnswerCount = 15;
+
+    const err = darkMode ? './src/assets/Icons/listingErdark.png' : './src/assets/Icons/listingEr.png';
 
     const validateFields = () => {
         const newErrors = {};
@@ -115,6 +119,12 @@ export default function Marketplace({darkMode}) {
         setActiveListingsCount(response);
     }
 
+    const fetchTotalClicks = async () => {
+        const response = await getTotalClicks();
+        setTotalClicks(response);
+
+    }
+
     const fetchMyListings = async () => {
         const response = await getMyListings();
         setMyListings(response);
@@ -124,6 +134,7 @@ export default function Marketplace({darkMode}) {
         setLoading(true);
         fetchMarketplaceItems();
         fetchActiveListingCount();
+        fetchTotalClicks();
         fetchMyListings();
         setLoading(false);
     }, [productList]);
@@ -280,9 +291,9 @@ export default function Marketplace({darkMode}) {
                 <div className="grid grid-cols-2 gap-x-4 gap-y-0 mb-6">
                     <div className="pl-5 pt-2 border border-border rounded-lg" style={{height:'120%'}}>
                         <div style={{display:'flex', fontWeight:'bold', alignItems:'center'}}>
-                            <i className={`${darkMode ? 'text-white':''} bi bi-chat text-xl`}></i>&nbsp;&nbsp;<h3 className={`${darkMode ? 'text-white':''} text-xl`}>{chatToAnswerCount}</h3>
+                            <i className={`${darkMode ? 'text-white':''} bi bi-mouse text-xl`}></i>&nbsp;&nbsp;<h3 className={`${darkMode ? 'text-white':''} text-xl`}>{chatToAnswerCount}</h3>
                         </div>
-                        <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'}`}>Total replies</p>
+                        <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'}`}>Total clicks</p>
                     </div>
                     <div className="pl-5 pt-2 border border-border rounded-lg" style={{height:'120%', cursor:'pointer'}} onClick={showYourListningMenu}>
                         <div style={{display:'flex', fontWeight:'bold', alignItems:'center'}}>
@@ -379,20 +390,38 @@ export default function Marketplace({darkMode}) {
                 </div>            
             </div>}
             {yourListningMenu && <div className='product-list'>
-                {myListings.map((listing) => (
-                    <YourListings
-                        key={listing.productId}
-                        darkMode={darkMode}
-                        productId={listing.productId}
-                        showEditListingMenu={showEditListingMenu}
-                        productTitle={listing.productTitle}
-                        productDesc={listing.productDesc}
-                        price={listing.price}
-                        productPhotos={listing.productPhotos[0]}
-                        listedDate={listing.listedDate}
-                        setEditingProductId={setEditingProductId}
-                    />
-                ))}
+                {myListings.length === 0 ? (
+                    <div>
+                        
+                        <div className="flex flex-col items-center justify-center" style={{ marginTop: '20%' }}>
+                                        <img
+                                            aria-hidden="true"
+                                            alt="document-icon"
+                                            src={err}
+                                            style={{ height: '125px', width: '125px' }}
+                                        />
+                                        <h2 className={`${darkMode ? 'text-white' : ''} mt-4 text-lg font-semibold`}>
+                                           Ready to start selling?
+                                        </h2>
+                                        <p className={`${darkMode ? 'text-gray-300' : 'text-muted-foreground'} mt-0 text-center`}>Once you're up and running, use "Your listings" to manage all of your selling activites in one place.</p>
+                                    </div>                        
+                    </div>
+                ) : (
+                    myListings.map((listing) => (
+                        <YourListings
+                            key={listing.productId}
+                            darkMode={darkMode}
+                            productId={listing.productId}
+                            showEditListingMenu={showEditListingMenu}
+                            productTitle={listing.productTitle}
+                            productDesc={listing.productDesc}
+                            price={listing.price}
+                            productPhotos={listing.productPhotos[0]}
+                            listedDate={listing.listedDate}
+                            setEditingProductId={setEditingProductId}
+                        />
+                    ))
+                )}
             </div>}
             {editListingMenu && <div className='sell-products' ref={sellProductsRef}><EditListing autoScroll={autoScroll} darkMode={darkMode} editingProductId={editingProductId} showYourListningMenu={showYourListningMenu}/></div>}
             {productInfo && <div>

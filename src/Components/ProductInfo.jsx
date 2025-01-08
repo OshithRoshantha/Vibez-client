@@ -1,5 +1,5 @@
 import './Styles/Column2.css'
-import { getProductDetails, isUserSeller } from  '../Services/MarketplaceService';
+import { getProductDetails, isUserSeller, addClick } from  '../Services/MarketplaceService';
 import { useState, useEffect } from 'react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
@@ -15,9 +15,9 @@ export default function ProductInfo({expandingProductId, darkMode}) {
     const fetchProductInfo = async () => {
       try {
         setLoading(true); 
-        console.log('Fetching product info');
         const productDetails = await getProductDetails(expandingProductId);
         setProduct(productDetails); 
+        await addClick(expandingProductId);
       } finally {
         setLoading(false); 
       }
