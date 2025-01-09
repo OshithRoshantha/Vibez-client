@@ -310,8 +310,8 @@ export default function Dashboard() {
             </div>
             {chatsMenu && <Chats darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
             {groupsMenu && <GroupChats darkMode={darkMode} showGroupMessages={showGroupMessages}/>}
-            {friendsMenu && <Friends darkMode={darkMode} setPendingRequests={setPendingRequests} fetchPendingRequests={fetchPendingRequests}/>}
-            {marketplaceMenu && <Marketplace  darkMode={darkMode}/>}
+            {friendsMenu && <Friends darkMode={darkMode} showDirectMessages={showDirectMessages} setPendingRequests={setPendingRequests} fetchPendingRequests={fetchPendingRequests}/>}
+            {marketplaceMenu && <Marketplace showDirectMessages={showDirectMessages}  darkMode={darkMode}/>}
             {settingsMenu && <Settings darkModeOn={darkModeOn} darkModeOff={darkModeOff} darkMode={darkMode}/>}
             {profileMenu && <Profile  darkMode={darkMode} setUserPicture={setUserPicture}/>}
             {friendInfoMenu && <FriendInfo  darkMode={darkMode}/>}
