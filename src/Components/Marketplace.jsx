@@ -8,7 +8,7 @@ import PreviewProduct from './PreviewProduct';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
 
-export default function Marketplace({darkMode}) {
+export default function Marketplace({darkMode, showDirectMessages}) {
 
     const { messages } = useWebSocket();
     const [processedMessages, setProcessedMessages] = useState([]);
@@ -525,7 +525,7 @@ export default function Marketplace({darkMode}) {
             </div>}
             {editListingMenu && <div className='sell-products' ref={sellProductsRef}><EditListing autoScroll={autoScroll} darkMode={darkMode} editingProductId={editingProductId} showYourListningMenu={showYourListningMenu}/></div>}
             {productInfo && <div>
-                    <ProductInfo darkMode={darkMode} expandingProductId={expandingProductId}/>      
+                    <ProductInfo darkMode={darkMode} showDirectMessages={showDirectMessages} expandingProductId={expandingProductId}/>      
             </div>}
             </div>
     </div>
