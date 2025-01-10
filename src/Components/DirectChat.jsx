@@ -2,7 +2,7 @@ import ReceiveMessage from "./ReceiveMessage";
 import SendMessage from "./SendMessage";
 import { useState, useEffect, useRef } from "react";
 import { ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { getReceiptInfo } from '../Services/DirectChatService';
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 
 export default function DirectChat({showFriendInfoMenu, darkMode, directChatId}) {
@@ -11,6 +11,8 @@ export default function DirectChat({showFriendInfoMenu, darkMode, directChatId})
   const [showScrollButton, setShowScrollButton] = useState(false);
   const chatWallpaper = darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)';
   const [magicReplyButton, setMagicReplyButton] = useState(false);
+  const [userName, setUserName] = useState('User Name');
+  const [userAvatar, setUserAvatar] = useState('https://placehold.co/40x40');
 
     function handleScroll() {
       const chatContainer = chatRef.current;
@@ -52,16 +54,23 @@ export default function DirectChat({showFriendInfoMenu, darkMode, directChatId})
       };
     }, []);
   
-  
+    useEffect(() => {
+      const fetchMetaData = async () => {
+        const response = await getReceiptInfo(directChatId);
+        setUserName(response.name);
+        setUserAvatar(response.profilePicture);
+      }
+      fetchMetaData();
+  }, []); 
 
   return (
     <div>
         <div className={`${darkMode ? 'bg-[#262729]' : 'bg-background' } min-h-screen flex flex-col`} >
         <div onClick={showFriendInfoMenu} style={{cursor:'pointer'}} className={`${darkMode ? 'border-gray-600' : 'border-border'} flex items-center px-4 py-3 border-b`}>
             <div className="flex items-center">
-            <img src="https://placehold.co/40x40" alt="User Avatar" className="rounded-full mr-2" />
+            <img src={userAvatar} alt="User Avatar" className="rounded-full mr-2" />
             <div>
-              <span className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold`}>{directChatId}</span>
+              <span className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold`}>{userName}</span>
               <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} mt-0`}  style={{fontSize:'70%'}}>Click here for contact info</p>
             </div>
             </div>
