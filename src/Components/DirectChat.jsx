@@ -5,7 +5,7 @@ import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 
-export default function DirectChat({showFriendInfoMenu, darkMode}) {
+export default function DirectChat({showFriendInfoMenu, darkMode, directChatId}) {
 
   const chatRef = useRef(null);
   const [showScrollButton, setShowScrollButton] = useState(false);
@@ -61,7 +61,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode}) {
             <div className="flex items-center">
             <img src="https://placehold.co/40x40" alt="User Avatar" className="rounded-full mr-2" />
             <div>
-              <span className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold`}>TestUser</span>
+              <span className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold`}>{directChatId}</span>
               <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} mt-0`}  style={{fontSize:'70%'}}>Click here for contact info</p>
             </div>
             </div>

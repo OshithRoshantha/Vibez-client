@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { sendFriendRequest, getFriendshipStatus, getFriendshipId, acceptFriendRequest } from '../Services/FriendshipService';
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function SearchResult({ darkMode, profileName, profileAbout, profileImage, profileId, showDirectMessages }) {
+export default function SearchResult({ darkMode, profileName, profileAbout, profileImage, profileId, showDirectMessages, setDirectChatId }) {
   const [friendshipStatus, setFriendshipStatus] = useState('');
   const [friendshipId, setFriendshipId] = useState('');
   const [loading, setLoading] = useState(true); 
@@ -18,6 +18,7 @@ export default function SearchResult({ darkMode, profileName, profileAbout, prof
   };
 
   const sendMessage = () => {
+    setDirectChatId(friendshipId);
     showDirectMessages();
   };
 

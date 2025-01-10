@@ -42,6 +42,7 @@ export default function Dashboard() {
     const [profileName, setProfileName] = useState('');
     const [notifiacton, setNotification] = useState('');
     const [pendingRequests, setPendingRequests] = useState(0);
+    const [directChatId, setDirectChatId] = useState('');
     
     const texts = [
         "Stay connected with your circles",
@@ -310,7 +311,7 @@ export default function Dashboard() {
             </div>
             {chatsMenu && <Chats darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
             {groupsMenu && <GroupChats darkMode={darkMode} showGroupMessages={showGroupMessages}/>}
-            {friendsMenu && <Friends darkMode={darkMode} showDirectMessages={showDirectMessages} setPendingRequests={setPendingRequests} fetchPendingRequests={fetchPendingRequests}/>}
+            {friendsMenu && <Friends setDirectChatId={setDirectChatId} darkMode={darkMode} showDirectMessages={showDirectMessages} setPendingRequests={setPendingRequests} fetchPendingRequests={fetchPendingRequests}/>}
             {marketplaceMenu && <Marketplace showDirectMessages={showDirectMessages}  darkMode={darkMode}/>}
             {settingsMenu && <Settings darkModeOn={darkModeOn} darkModeOff={darkModeOff} darkMode={darkMode}/>}
             {profileMenu && <Profile  darkMode={darkMode} setUserPicture={setUserPicture}/>}
@@ -326,7 +327,7 @@ export default function Dashboard() {
                     </div>  
                 </div>
                 }
-                {directMessages && <DirectChat darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
+                {directMessages && <DirectChat directChatId={directChatId} darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
                 {groupMessages && <GroupChat darkMode={darkMode} showGroupInfoMenu={showGroupInfoMenu}/>}  
             </div>
         </div>
