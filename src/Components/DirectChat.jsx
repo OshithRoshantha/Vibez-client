@@ -2,7 +2,6 @@ import ReceiveMessage from "./ReceiveMessage";
 import SendMessage from "./SendMessage";
 import { useState, useEffect, useRef } from "react";
 import { ChevronRight } from "lucide-react";
-import { getReceiptInfo } from '../Services/DirectChatService';
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 
 export default function DirectChat({showFriendInfoMenu, darkMode, directChatId}) {
@@ -52,16 +51,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, directChatId})
           chatContainer.removeEventListener("scroll", handleScroll);
         }
       };
-    }, []);
-  
-    useEffect(() => {
-      const fetchMetaData = async () => {
-        const response = await getReceiptInfo(directChatId);
-        setUserName(response.name);
-        setUserAvatar(response.profilePicture);
-      }
-      fetchMetaData();
-  }, []); 
+    }, []); 
 
   return (
     <div>
@@ -70,7 +60,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, directChatId})
             <div className="flex items-center">
             <img src={userAvatar} alt="User Avatar" className="rounded-full mr-2" />
             <div>
-              <span className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold`}>{userName}</span>
+              <span className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold`}>{directChatId}</span>
               <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} mt-0`}  style={{fontSize:'70%'}}>Click here for contact info</p>
             </div>
             </div>
