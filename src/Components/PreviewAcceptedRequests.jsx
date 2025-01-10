@@ -6,7 +6,7 @@ import {
 import { unFriend } from '../Services/FriendshipService';
 import { useState } from 'react';
 
-export default function PreviewAcceptedRequests({darkMode, friendshipId, profileName, profilePicture, profileAbout, fetchFriendships, showDirectMessages}) {
+export default function PreviewAcceptedRequests({darkMode, friendshipId, profileName, profilePicture, profileAbout, fetchFriendships, showDirectMessages, setDirectChatId}) {
   
     const [isUnfriended, setIsUnfriended] = useState(false);
     const [blockPopup, setBlockPopup] = useState(false);
@@ -34,6 +34,11 @@ export default function PreviewAcceptedRequests({darkMode, friendshipId, profile
     const cancelPopup = () => {
         setBlockPopup(false);
         setUnfriendPopup(false);
+    }
+
+    const handleSendMessage = () => {
+        setDirectChatId(friendshipId);
+        showDirectMessages();
     }
 
     return (
@@ -89,7 +94,7 @@ export default function PreviewAcceptedRequests({darkMode, friendshipId, profile
 
                     <div className="btn-container">
                         <div className="ml-mr-4 btns">
-                        <i onClick={showDirectMessages} className="bi bi-chat-fill text-primary"></i>
+                        <i onClick={handleSendMessage} className="bi bi-chat-fill text-primary"></i>
                         </div>
 
                         <Popover>
