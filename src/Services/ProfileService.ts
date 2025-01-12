@@ -29,6 +29,15 @@ export const fetchUserMetaData = async () => {
     return response.data;
 }
 
+export const fetchUserMetaDataById = async (userId: string) => {
+    const response = await axios.get(`http://localhost:8080/vibez/profile/${userId}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+}
+
 export const updateDarkMode = async (darkMode: boolean) => {
     await axios.put(
         `http://localhost:8080/vibez/profile/darkmode/${sessionStorage.getItem('userId')}/${darkMode}`,

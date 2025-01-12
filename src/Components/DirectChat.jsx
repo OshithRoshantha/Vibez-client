@@ -3,8 +3,9 @@ import SendMessage from "./SendMessage";
 import { useState, useEffect, useRef } from "react";
 import { ChevronRight } from "lucide-react";
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
+import { fetchUserMetaDataById } from '../Services/ProfileService';
 
-export default function DirectChat({showFriendInfoMenu, darkMode, directChatId}) {
+export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
 
   const chatRef = useRef(null);
   const [showScrollButton, setShowScrollButton] = useState(false);
@@ -39,8 +40,15 @@ export default function DirectChat({showFriendInfoMenu, darkMode, directChatId})
         });
       }
     }
+
+    const fetchReceiverInfo = async () => {
+        const response = await fetchUserMetaDataById(receiverId);
+        setUserName(response.userName);
+        setUserAvatar(response.profilePicture);
+    }
     
     useEffect(() => {
+      fetchReceiverInfo();
       const chatContainer = chatRef.current;
       if (chatContainer) {
         chatContainer.addEventListener("scroll", handleScroll);
@@ -58,9 +66,9 @@ export default function DirectChat({showFriendInfoMenu, darkMode, directChatId})
         <div className={`${darkMode ? 'bg-[#262729]' : 'bg-background' } min-h-screen flex flex-col`} >
         <div onClick={showFriendInfoMenu} style={{cursor:'pointer'}} className={`${darkMode ? 'border-gray-600' : 'border-border'} flex items-center px-4 py-3 border-b`}>
             <div className="flex items-center">
-            <img src={userAvatar} alt="User Avatar" className="rounded-full mr-2" />
+            <img src={userAvatar} alt="User Avatar" className="rounded-full mr-2" style={{height:'45px'}}/>
             <div>
-              <span className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold`}>{directChatId}</span>
+              <span className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold`}>{userName}</span>
               <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} mt-0`}  style={{fontSize:'70%'}}>Click here for contact info</p>
             </div>
             </div>

@@ -42,7 +42,7 @@ export default function Dashboard() {
     const [profileName, setProfileName] = useState('');
     const [notifiacton, setNotification] = useState('');
     const [pendingRequests, setPendingRequests] = useState(0);
-    const [directChatId, setDirectChatId] = useState('');
+    const [receiverId, setReceiverId] = useState('');
     
     const texts = [
         "Stay connected with your circles",
@@ -311,8 +311,8 @@ export default function Dashboard() {
             </div>
             {chatsMenu && <Chats darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
             {groupsMenu && <GroupChats darkMode={darkMode} showGroupMessages={showGroupMessages}/>}
-            {friendsMenu && <Friends setDirectChatId={setDirectChatId} darkMode={darkMode} showDirectMessages={showDirectMessages} setPendingRequests={setPendingRequests} fetchPendingRequests={fetchPendingRequests}/>}
-            {marketplaceMenu && <Marketplace showDirectMessages={showDirectMessages}  darkMode={darkMode}/>}
+            {friendsMenu && <Friends setReceiverId={setReceiverId} darkMode={darkMode} showDirectMessages={showDirectMessages} setPendingRequests={setPendingRequests} fetchPendingRequests={fetchPendingRequests}/>}
+            {marketplaceMenu && <Marketplace setReceiverId={setReceiverId} showDirectMessages={showDirectMessages}  darkMode={darkMode}/>}
             {settingsMenu && <Settings darkModeOn={darkModeOn} darkModeOff={darkModeOff} darkMode={darkMode}/>}
             {profileMenu && <Profile  darkMode={darkMode} setUserPicture={setUserPicture}/>}
             {friendInfoMenu && <FriendInfo  darkMode={darkMode}/>}
@@ -327,7 +327,7 @@ export default function Dashboard() {
                     </div>  
                 </div>
                 }
-                {directMessages && <DirectChat directChatId={directChatId} darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
+                {directMessages && <DirectChat receiverId={receiverId} darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
                 {groupMessages && <GroupChat darkMode={darkMode} showGroupInfoMenu={showGroupInfoMenu}/>}  
             </div>
         </div>
