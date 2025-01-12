@@ -6,7 +6,7 @@ import {
 import { unFriend } from '../Services/FriendshipService';
 import { useState } from 'react';
 
-export default function PreviewAcceptedRequests({darkMode, friendshipId, profileName, profilePicture, profileAbout, fetchFriendships, showDirectMessages, setDirectChatId}) {
+export default function PreviewAcceptedRequests({darkMode, friendshipId, profileName, profilePicture, profileAbout, fetchFriendships, showDirectMessages, setReceiverId, friendId}) {
   
     const [isUnfriended, setIsUnfriended] = useState(false);
     const [blockPopup, setBlockPopup] = useState(false);
@@ -37,7 +37,7 @@ export default function PreviewAcceptedRequests({darkMode, friendshipId, profile
     }
 
     const handleSendMessage = () => {
-        setDirectChatId(friendshipId);
+        setReceiverId(friendId);
         showDirectMessages();
     }
 
