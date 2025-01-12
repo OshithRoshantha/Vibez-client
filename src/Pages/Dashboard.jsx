@@ -315,7 +315,7 @@ export default function Dashboard() {
             {marketplaceMenu && <Marketplace setReceiverId={setReceiverId} showDirectMessages={showDirectMessages}  darkMode={darkMode}/>}
             {settingsMenu && <Settings darkModeOn={darkModeOn} darkModeOff={darkModeOff} darkMode={darkMode}/>}
             {profileMenu && <Profile  darkMode={darkMode} setUserPicture={setUserPicture}/>}
-            {friendInfoMenu && <FriendInfo  darkMode={darkMode}/>}
+            {friendInfoMenu && <FriendInfo receiverId={receiverId} darkMode={darkMode}/>}
             {groupInfoMenu && <GroupInfo  darkMode={darkMode}/>}
             <div className="flex-1 p-0 messages-column" style={{height:'100vh'}}>
                 {welcomeVideo &&

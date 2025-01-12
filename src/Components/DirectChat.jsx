@@ -11,8 +11,8 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
   const [showScrollButton, setShowScrollButton] = useState(false);
   const chatWallpaper = darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)';
   const [magicReplyButton, setMagicReplyButton] = useState(false);
-  const [userName, setUserName] = useState('User Name');
-  const [userAvatar, setUserAvatar] = useState('https://placehold.co/40x40');
+  const [userName, setUserName] = useState('');
+  const [userAvatar, setUserAvatar] = useState('');
 
     function handleScroll() {
       const chatContainer = chatRef.current;
