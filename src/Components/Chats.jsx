@@ -1,6 +1,36 @@
 import './Styles/Column2.css'
+import { useState, useEffect } from 'react';
+import { getAllChats, getFavaouriteChats, getChatPreivew } from '../Services/ChatService';
+import DirectChatPreview from './DirectChatPreview';
 
-export default function Chats({showDirectMessages, darkMode}) {
+export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
+
+    const [chats, setChats] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchAllChats = async () => {
+        try {
+            const friendIds = await getAllChats(); 
+            const chatPreviews = await Promise.all(
+                friendIds.map(async (friendId) => {
+                    const chatPreview = await getChatPreivew(friendId);
+                    return chatPreview;
+                })
+            );
+            setChats(chatPreviews); 
+        }finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchAllChats();
+    }, []);
+
+    const fetchFavouriteChats = async () => {
+        const response = await getFavaouriteChats();
+    }
+
   return (
     <div>
         <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 chats-column`} style={{backgroundColor: darkMode ? '#262729' : '', height:'100vh'}}>
@@ -12,17 +42,48 @@ export default function Chats({showDirectMessages, darkMode}) {
                     <button className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}>Unread</button>
                     <button className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}>Favorites</button>
                 </div>
-                <div className='chat-list'>
-                <div onClick={showDirectMessages} className="space-y-2" style={{cursor: 'pointer'}}>
-                    <div className={`${darkMode ? 'hover:bg-[#2d3243]' : 'hover:bg-muted'} flex items-center p-2 rounded`}>
-                        <img src="https://placehold.co/40x40" alt="User" className="rounded-full mr-2 w-18 h-18" />
-                        <div>
-                            <div className={`${darkMode ? 'text-white':''} font-medium`}>FriendName</div>
-                            <div className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} text-sm `}>User1: Lorem ipsum dolor sit amet.</div>
-                        </div>
-                        <span className={`${darkMode ? 'text-gray-400':''} ml-auto text-xs`}>13:14</span>
-                    </div>
-                </div>
+                <div className='chat-list'>       
+                    {loading ? (
+                        <p className="text-center">Loading...</p>
+                    ) : (
+                        chats
+                            .sort((a, b) => new Date(b.lastActiveTime) - new Date(a.lastActiveTime))
+                            .map((chat) => {
+                                const now = new Date();
+                                const date = new Date(chat.lastActiveTime);
+                                let formattedTime;
+
+                                if (
+                                    now.getFullYear() === date.getFullYear() &&
+                                    now.getMonth() === date.getMonth() &&
+                                    now.getDate() === date.getDate()
+                                ) {
+                                    formattedTime = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+                                } else if (
+                                    now.getFullYear() === date.getFullYear() &&
+                                    now.getMonth() === date.getMonth() &&
+                                    now.getDate() - date.getDate() === 1
+                                ) {
+                                    formattedTime = 'Yesterday';
+                                } else {
+                                    formattedTime = `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
+                                }
+
+                                return (
+                                    <DirectChatPreview
+                                        key={chat.friendId}
+                                        friendId={chat.friendId}
+                                        friendName={chat.friendName}
+                                        friendAvatar={chat.friendAvatar}
+                                        lastMessage={chat.lastMessage}
+                                        lastMessageSender={chat.lastMessageSender}
+                                        lastActiveTime={formattedTime}
+                                        showDirectMessages={showDirectMessages}
+                                        setReceiverId={setReceiverId}
+                                    />
+                                );
+                            })
+                    )}
                 </div>
             </div>
     </div>

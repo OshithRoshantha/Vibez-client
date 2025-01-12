@@ -309,7 +309,7 @@ export default function Dashboard() {
                     <img src={userPicture} alt="Profile" className={`${profileMenu ? 'border border-primary border-3' : ''} rounded-full`} style={{width:'60px', height:'60px'}}/>
                 </div>
             </div>
-            {chatsMenu && <Chats darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
+            {chatsMenu && <Chats setReceiverId={setReceiverId} darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
             {groupsMenu && <GroupChats darkMode={darkMode} showGroupMessages={showGroupMessages}/>}
             {friendsMenu && <Friends setReceiverId={setReceiverId} darkMode={darkMode} showDirectMessages={showDirectMessages} setPendingRequests={setPendingRequests} fetchPendingRequests={fetchPendingRequests}/>}
             {marketplaceMenu && <Marketplace setReceiverId={setReceiverId} showDirectMessages={showDirectMessages}  darkMode={darkMode}/>}
