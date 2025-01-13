@@ -96,7 +96,7 @@ export const addListing = async (productTitle: string, price: string, productDes
     });   
 }
 
-export const updateListing = async (productId: string, productTitle: string, price: string, productDesc: string, location: string, visibleToFriends: boolean, condition: string, productPhotos: string[]): Promise<void> => {
+export const updateListing = async (productId: string, productTitle: string, price: string, productDesc: string, location: string, visibleToFriends: boolean, condition: string, productPhotos: string[], totalClicks: string, listedDate: string): Promise<void> => {
     return new Promise((resolve) => {
         const token = sessionStorage.getItem('token');
         const sellerId = sessionStorage.getItem('userId');
@@ -117,7 +117,9 @@ export const updateListing = async (productId: string, productTitle: string, pri
                     location,
                     visibleToFriends,
                     productPhotos,
-                    productAction
+                    productAction,
+                    totalClicks,
+                    listedDate
                 },
             };
         socket.send(JSON.stringify(message));
