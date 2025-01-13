@@ -5,18 +5,22 @@ import { ChevronRight } from "lucide-react";
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 import { fetchUserMetaDataById } from '../Services/ProfileService';
 import { Skeleton } from "@/components/ui/skeleton";
-import { getChatMessages } from '../Services/ChatService';
+import { useWebSocket } from '../Context/WebSocketContext';
+import { getChatMessages, checkIsRelated } from '../Services/ChatService';
 
 export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
 
   const chatRef = useRef(null);
+  const { messages } = useWebSocket();
+  const [processedMessages, setProcessedMessages] = useState([]);
+
   const [showScrollButton, setShowScrollButton] = useState(false);
   const chatWallpaper = darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)';
   const [magicReplyButton, setMagicReplyButton] = useState(false);
   const [userName, setUserName] = useState('');
   const [userAvatar, setUserAvatar] = useState('');
   const [loading, setLoading] = useState(true);
-  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState([]);
 
     function handleScroll() {
       const chatContainer = chatRef.current;
@@ -59,7 +63,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
     const fetchChatMessages = async () => {
       try{
         const response = await getChatMessages(receiverId);
-        setMessages(response);
+        setMessage(response);
       }
       catch(error){
         console.log(error);
@@ -79,6 +83,33 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
         }
       };
     }, []); 
+
+   useEffect(() => {
+        const handleMessages = async () => {
+            if (messages.length === 0) {
+                return;
+            }
+            const newMessages = messages.filter(
+                (message) => !processedMessages.includes(message.id)
+            );
+            if (newMessages.length === 0) {
+                return;
+            }
+            for (const lastMessage of newMessages) {
+                if (lastMessage.action === 'messageService') {
+                    const isRelated = await checkIsRelated(lastMessage.chatId);
+                    if (isRelated) {
+                       fetchChatMessages();
+                    }
+                }
+            }
+            setProcessedMessages((prevProcessedMessages) => [
+                ...prevProcessedMessages,
+                ...newMessages.map((message) => message.id),
+            ]);
+        };
+        handleMessages();
+    }, [messages, processedMessages]);
 
     useEffect(() => {
       fetchReceiverInfo();
@@ -116,7 +147,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
         </div>
         <div className="p-4" ref={chatRef} style={{height:'78vh', overflowY:'auto', scrollbarWidth:'none', backgroundImage: chatWallpaper, backgroundSize: 'cover' , display:'flex', flexDirection:'column', justifyContent:'end'}}>
         {showScrollButton && <i onClick={scrollToBottom} className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} cursor-pointer absolute bi bi-arrow-down-circle-fill text-4xl text-primary`} style={{left: '67%'}}></i>}
-            {messages.map((message, index) =>
+            {message.map((message, index) =>
                 message.isSendByMe ? (
                   <SendMessage
                     key={index}
