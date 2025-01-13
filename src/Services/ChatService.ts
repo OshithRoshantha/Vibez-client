@@ -29,3 +29,13 @@ export const getChatPreivew = async (chatId: string) => {
     });
     return response.data;
 }
+
+export const checkIsRelated = async (chatId: string) => {
+    const userId = sessionStorage.getItem('userId');
+    const response = await axios.get(`http://localhost:8080/vibez/directChat/isRelated/${userId}/${chatId}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data;    
+}

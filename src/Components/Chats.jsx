@@ -1,9 +1,13 @@
 import './Styles/Column2.css'
 import { useState, useEffect } from 'react';
-import { getAllChats, getFavaouriteChats, getChatPreivew } from '../Services/ChatService';
+import { getAllChats, getFavaouriteChats, getChatPreivew, checkIsRelated } from '../Services/ChatService';
 import DirectChatPreview from './DirectChatPreview';
+import { useWebSocket } from '../Context/WebSocketContext';
 
 export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
+
+    const { messages } = useWebSocket();
+    const [processedMessages, setProcessedMessages] = useState([]);
 
     const [chats, setChats] = useState([]);
     const [favouriteChats, setFavouriteChats] = useState([]);
@@ -41,8 +45,36 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
         finally {
             setLoading2(false);
         }
-    };
-
+    };    
+    
+   useEffect(() => {
+        const handleMessages = async () => {
+            if (messages.length === 0) {
+                return;
+            }
+            const newMessages = messages.filter(
+                (message) => !processedMessages.includes(message.id)
+            );
+            if (newMessages.length === 0) {
+                return;
+            }
+            for (const lastMessage of newMessages) {
+                if (lastMessage.action === 'messageService') {
+                    const isRelated = await checkIsRelated(lastMessage.chatId);
+                    if (isRelated) {
+                        console.log('isRelated');
+                        await Promise.all([fetchAllChats(), fetchFavouriteChats()]); 
+                    }
+                }
+            }
+            setProcessedMessages((prevProcessedMessages) => [
+                ...prevProcessedMessages,
+                ...newMessages.map((message) => message.id),
+            ]);
+        };
+        handleMessages();
+    }, [messages, processedMessages]);
+    
     useEffect(() => {
         fetchAllChats();
         fetchFavouriteChats();
