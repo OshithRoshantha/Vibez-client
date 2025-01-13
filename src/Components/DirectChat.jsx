@@ -61,6 +61,10 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
       };
     }, []); 
 
+    useEffect(() => {
+      fetchReceiverInfo();
+    }, [receiverId]);
+
   return (
     <div>
         <div className={`${darkMode ? 'bg-[#262729]' : 'bg-background' } min-h-screen flex flex-col`} >
