@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { getAllChats, getFavaouriteChats, getChatPreivew, checkIsRelated } from '../Services/ChatService';
 import DirectChatPreview from './DirectChatPreview';
 import { useWebSocket } from '../Context/WebSocketContext';
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
 
@@ -101,7 +102,20 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
                 <div className='chat-list'>
                     {showAll ? (
                         loading ? (
-                            <p className="text-center">Loading...</p>
+                            <div>
+                            {[...Array(6)].map((_, index) => (
+                              <div key={index} className="space-y-2">
+                                <div className={`flex items-center p-2 rounded`}>
+                                  <Skeleton className="h-12 w-12 rounded-full mr-2" />
+                                  <div className="flex-1 space-y-1">
+                                    <Skeleton className="h-4 w-[150px]" />
+                                    <Skeleton className="h-4 w-[200px]" />
+                                  </div>
+                                  <Skeleton className="h-4 w-16" />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
                         ) : (
                             chats
                                 .sort((a, b) => new Date(b.lastActiveTime) - new Date(a.lastActiveTime))
@@ -137,13 +151,27 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
                                             lastActiveTime={formattedTime}
                                             showDirectMessages={showDirectMessages}
                                             setReceiverId={setReceiverId}
+                                            darkMode={darkMode}
                                         />
                                     );
                                 })
                         )
                     ) : (
                         loading2 ? (
-                            <p className="text-center">Loading...</p>
+                          <div>
+                            {[...Array(6)].map((_, index) => (
+                              <div key={index} className="space-y-2">
+                                <div className={`flex items-center p-2 rounded`}>
+                                  <Skeleton className="h-12 w-12 rounded-full mr-2" />
+                                  <div className="flex-1 space-y-1">
+                                    <Skeleton className="h-4 w-[150px]" />
+                                    <Skeleton className="h-4 w-[200px]" />
+                                  </div>
+                                  <Skeleton className="h-4 w-16" />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
                         ) : (
                             favouriteChats
                                 .sort((a, b) => new Date(b.lastActiveTime) - new Date(a.lastActiveTime))
@@ -179,6 +207,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
                                             lastActiveTime={formattedTime}
                                             showDirectMessages={showDirectMessages}
                                             setReceiverId={setReceiverId}
+                                            darkMode={darkMode}
                                         />
                                     );
                                 })
