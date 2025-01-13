@@ -5,6 +5,7 @@ import { ChevronRight } from "lucide-react";
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 import { fetchUserMetaDataById } from '../Services/ProfileService';
 import { Skeleton } from "@/components/ui/skeleton";
+import { getChatMessages } from '../Services/ChatService';
 
 export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
 
@@ -15,6 +16,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
   const [userName, setUserName] = useState('');
   const [userAvatar, setUserAvatar] = useState('');
   const [loading, setLoading] = useState(true);
+  const [messages, setMessages] = useState([]);
 
     function handleScroll() {
       const chatContainer = chatRef.current;
@@ -53,6 +55,16 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
         setLoading(false);
       }
     }
+
+    const fetchChatMessages = async () => {
+      try{
+        const response = await getChatMessages(receiverId);
+        setMessages(response);
+      }
+      catch(error){
+        console.log(error);
+      }
+    }
     
     useEffect(() => {
       fetchReceiverInfo();
@@ -70,6 +82,10 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
 
     useEffect(() => {
       fetchReceiverInfo();
+    }, [receiverId]);
+
+    useEffect(() => {
+      fetchChatMessages();
     }, [receiverId]);
 
   return (
@@ -98,14 +114,23 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
               </div>
             ) }
         </div>
-        <div className="p-4" ref={chatRef} style={{height:'78vh', overflowY:'auto', scrollbarWidth:'none', backgroundImage: chatWallpaper, backgroundSize: 'cover' }}>
+        <div className="p-4" ref={chatRef} style={{height:'78vh', overflowY:'auto', scrollbarWidth:'none', backgroundImage: chatWallpaper, backgroundSize: 'cover' , display:'flex', flexDirection:'column', justifyContent:'end'}}>
         {showScrollButton && <i onClick={scrollToBottom} className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} cursor-pointer absolute bi bi-arrow-down-circle-fill text-4xl text-primary`} style={{left: '67%'}}></i>}
-            <ReceiveMessage time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'}/>
-            <ReceiveMessage time={'00:26'} message={'receive message'}/>
-            <SendMessage time={'00:26'} message={'send message'}/>
-            <SendMessage time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'}/>
-            <SendMessage time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'}/>
-            <SendMessage time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'}/>
+            {messages.map((message, index) =>
+                message.isSendByMe ? (
+                  <SendMessage
+                    key={index}
+                    time={message.timestamp}
+                    message={message.message}
+                  />
+                ) : (
+                  <ReceiveMessage
+                    key={index}
+                    time={message.timestamp}
+                    message={message.message}
+                  />
+                )
+            )}        
         {magicReplyButton && <div style={{left: '64%', bottom: '13%'}} className="absolute cursor-pointer bg-white rounded-full">
           <AnimatedGradientText>
             <span
