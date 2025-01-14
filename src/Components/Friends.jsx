@@ -9,7 +9,7 @@ import { useWebSocket } from '../Context/WebSocketContext';
 import { isConnectedProfile } from '../Services/FriendshipService';
 import PreviewAcceptedRequests from './PreviewAcceptedRequests';
 
-export default function Friends({darkMode, setPendingRequests, fetchPendingRequests}) {
+export default function Friends({darkMode, setPendingRequests, fetchPendingRequests, showDirectMessages, setReceiverId}) {
 
     const { messages } = useWebSocket();
     const [processedMessages, setProcessedMessages] = useState([]);
@@ -320,6 +320,8 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                                         profileAbout={result.about}
                                         profileImage={result.profilePicture}
                                         profileId={result.userId}
+                                        showDirectMessages={showDirectMessages}
+                                        setReceiverId={setReceiverId}
                                         />
                                     ))
                                 )}
@@ -370,6 +372,9 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                                         profilePicture={profile.profilePicture}
                                         profileAbout={profile.profileAbout}
                                         fetchFriendships={fetchFriendships}
+                                        showDirectMessages={showDirectMessages}
+                                        setReceiverId={setReceiverId}
+                                        friendId={profile.profileId} 
                                     />
                                 ))
                                 }                            

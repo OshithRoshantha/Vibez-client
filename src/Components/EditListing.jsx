@@ -10,6 +10,8 @@ export default function EditListing({showYourListningMenu, darkMode, editingProd
     const [description, setDescription] = useState("");
     const [location, setLocation] = useState("");
     const [productPhotos, setProductPhotos] = useState([]);
+    const [totalClicks, setTotalClicks] = useState(0);
+    const [listedDate, setListedDate] = useState("");
     const [hideFromFriends, setHideFromFriends] = useState(false);
     const [errors, setErrors] = useState({});
 
@@ -32,7 +34,6 @@ export default function EditListing({showYourListningMenu, darkMode, editingProd
 
     const fetchProductInfo = async () => {
         const productDetails = await getProductDetails(editingProductId);
-        console.log(productDetails);
         setTitle(productDetails.productTitle);
         setPrice(productDetails.price);
         setCategory(productDetails.condition);
@@ -40,6 +41,8 @@ export default function EditListing({showYourListningMenu, darkMode, editingProd
         setLocation(productDetails.location);
         setProductPhotos(productDetails.productPhotos);
         setHideFromFriends(productDetails.visibleToFriends);
+        setTotalClicks(productDetails.totalClicks);
+        setListedDate(productDetails.listedDate);
     };
   
     useEffect(() => {
@@ -60,7 +63,7 @@ export default function EditListing({showYourListningMenu, darkMode, editingProd
             autoScroll();
             return; 
         }
-        await updateListing(editingProductId, title, price, description, location, hideFromFriends, category, productPhotos);
+        await updateListing(editingProductId, title, price, description, location, hideFromFriends, category, productPhotos, totalClicks, listedDate);
         showYourListningMenu();
     }
 
