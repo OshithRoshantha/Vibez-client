@@ -3,6 +3,7 @@ import { getProductDetails, isUserSeller, addClick } from  '../Services/Marketpl
 import { useState, useEffect } from 'react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
+import { sendMessage } from '../Services/ChatService';
 
 export default function ProductInfo({expandingProductId, darkMode, showDirectMessages, setReceiverId}) {
 
@@ -69,6 +70,11 @@ export default function ProductInfo({expandingProductId, darkMode, showDirectMes
         showDirectMessages();
     }
 
+    const sendMessageToSeller = async () => {
+      const typedMessage = `I'm interested in the ${product.productTitle} listed by you at LKR ${product.price}. Is it still available?`;
+      await sendMessage(product.sellerId, typedMessage);
+    }
+
   return (
     <div>
         <div className="bg-card text-card-foreground w-full p-4 pt-2 mt-1 product-info"  style={{backgroundColor: darkMode ? '#262729' : ''}}>
@@ -118,7 +124,7 @@ export default function ProductInfo({expandingProductId, darkMode, showDirectMes
                     <h2 className={`${darkMode ? 'text-white':''} text-lg font-bold`}>{product.productTitle}</h2>
                     <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} font-bold`}>LRK {product.price}</p>
                     <p className={`${darkMode ? 'text-white':''} text-sm`}>Send seller a message</p>
-                    <button onClick={handleSendMessage} className="bg-primary text-white  py-2 px-4 rounded-lg mt-2 mr-5">Send Message</button>
+                    <button onClick={() => { handleSendMessage(); sendMessageToSeller(); }} className="bg-primary text-white  py-2 px-4 rounded-lg mt-2 mr-5">Send Message</button>
                     <button className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} py-2 px-4 rounded-lg border-none`}>Share offer</button>
                     <h3 className={`${darkMode ? 'text-white':''} mt-4 font-semibold`}>Description</h3>
                     <p className={`${darkMode ? 'text-gray-300':'text-muted-foreground'} text-sm`}>{product.productDesc || 'Contact seller for details.'}</p>
