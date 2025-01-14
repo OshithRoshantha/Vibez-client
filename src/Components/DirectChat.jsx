@@ -122,7 +122,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
     }, [receiverId]);
 
     const handleSendMessage = async () => {
-      await sendMessage('67761526c2f7bd5122fad6d9', typedMessage);
+      await sendMessage(receiverId, typedMessage);
       setTypedMessage('');
     }
 
@@ -200,7 +200,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
               )
             ) : (
               <div className={`${darkMode ? 'text-gray-300' : 'text-gray-500'} text-center`}>	 
-                No messages to display.
+                Say hello and start the conversation! 😊
               </div>
             )
           )}      
