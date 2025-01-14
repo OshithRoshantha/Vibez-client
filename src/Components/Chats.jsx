@@ -151,6 +151,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
                                             showDirectMessages={showDirectMessages}
                                             setReceiverId={setReceiverId}
                                             darkMode={darkMode}
+                                            chatId={chat.chatId}
                                         />
                                     );
                                 })

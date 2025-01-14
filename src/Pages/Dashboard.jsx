@@ -157,7 +157,9 @@ export default function Dashboard() {
                     const isRelated = await checkIsRelated(lastMessage.chatId);
                     if(isRelated){
                         fetchUnreadMessages();
-                        audioRef2.current.play();
+                        if(lastMessage.sender !== sessionStorage.getItem('userId')){
+                            audioRef2.current.play();
+                        }
                     }
                 }
             }

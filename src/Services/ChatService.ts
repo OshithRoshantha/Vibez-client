@@ -97,3 +97,13 @@ export const getUnreadCount = async () => {
     });
     return response.data;  
 }
+
+export const checkIsUnreadChat = async (chatId: string) => {
+    const userId = sessionStorage.getItem('userId');
+    const response = await axios.get(`http://localhost:8080/vibez/messages/checkUnread/${chatId}/${userId}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data;    
+}
