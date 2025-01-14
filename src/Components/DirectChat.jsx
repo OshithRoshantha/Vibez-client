@@ -20,7 +20,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
 
   const [showScrollButton, setShowScrollButton] = useState(false);
   const chatWallpaper = darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)';
-  const [magicReplyButton, setMagicReplyButton] = useState(true);
+  const [magicReplyButton, setMagicReplyButton] = useState(false);
   const [userName, setUserName] = useState('');
   const [userAvatar, setUserAvatar] = useState('');
   const [loading, setLoading] = useState(true);
@@ -153,6 +153,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
   useEffect(() => {
     if (message.length > 0) {
       setTemporalMessage(false);
+      setMagicReplyButton(true);
     }
   }, [message]);
 
