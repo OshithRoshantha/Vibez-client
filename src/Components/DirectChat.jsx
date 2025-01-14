@@ -9,7 +9,7 @@ import { useWebSocket } from '../Context/WebSocketContext';
 import { getChatMessages, checkIsRelated, sendMessage, markAsRead } from '../Services/ChatService';
 import TemporalMessage from "./TemporalMessage";
 
-export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
+export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fetchUnreadMessages}) {
 
   const chatRef = useRef(null);
   const { messages } = useWebSocket();
@@ -76,6 +76,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
 
     const doMarkAsRead = async () => {
       await markAsRead(receiverId);
+      fetchUnreadMessages();
     }
 
     useEffect(() => {
