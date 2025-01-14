@@ -71,3 +71,13 @@ export const sendMessage = async (receiverId: string, messageToSend: string): Pr
         };
     });   
 }
+
+export const markAsRead = async (chatId: string) => {
+    const userId = sessionStorage.getItem('userId');
+    const response = await axios.get(`http://localhost:8080/vibez/message/markAsRead/${userId}/${chatId}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data; 
+}
