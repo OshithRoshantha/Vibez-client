@@ -28,127 +28,139 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
   const [temporalMessage, setTemporalMessage] = useState(false);
   const [temporalMessageContent, setTemporalMessageContent] = useState('');
 
-    function handleScroll() {
-      const chatContainer = chatRef.current;
+  function handleScroll() {
+    const chatContainer = chatRef.current;
+    if (chatContainer) {
+      const isAtBottom = chatContainer.scrollHeight - chatContainer.scrollTop === chatContainer.clientHeight;
+      setShowScrollButton(!isAtBottom);
+    }
+  }
+
+  function showMagicReplyButton(){
+    setMagicReplyButton(true);
+  }
+
+  function hideMagicReplyButton(){
+    setMagicReplyButton(false);
+  }
+  
+  function scrollToBottom() {
+    const chatContainer = chatRef.current;
+    if (chatContainer) {
+      chatContainer.scrollTo({
+        top: chatContainer.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }
+
+  const fetchReceiverInfo = async () => {
+    try{
+      const response = await fetchUserMetaDataById(receiverId);
+      setUserName(response.userName);
+      setUserAvatar(response.profilePicture);
+    }
+    finally{
+      setLoading(false);
+    }
+  }
+
+  const fetchChatMessages = async () => {
+    try{
+      const response = await getChatMessages(receiverId);
+      setMessage(response);
+    }
+    finally{
+      setChatsLoading(false);
+    }
+  }
+
+  const doMarkAsRead = async () => {
+    await markAsRead(receiverId);
+    fetchUnreadMessages();
+  }
+
+  useEffect(() => {
+    doMarkAsRead();
+  }, [receiverId]); 
+  
+  useEffect(() => {
+    fetchReceiverInfo();
+    const chatContainer = chatRef.current;
+    if (chatContainer) {
+      chatContainer.addEventListener("scroll", handleScroll);
+      scrollToBottom();
+    }
+    return () => {
       if (chatContainer) {
-        const isAtBottom = chatContainer.scrollHeight - chatContainer.scrollTop === chatContainer.clientHeight;
-        setShowScrollButton(!isAtBottom);
+        chatContainer.removeEventListener("scroll", handleScroll);
       }
-    }
+    };
+  }, []); 
 
-    function showMagicReplyButton(){
-      setMagicReplyButton(true);
-    }
+ useEffect(() => {
+      const handleMessages = async () => {
+          if (messages.length === 0) {
+              return;
+          }
+          const newMessages = messages.filter(
+              (message) => !processedMessages.includes(message.id)
+          );
+          if (newMessages.length === 0) {
+              return;
+          }
+          for (const lastMessage of newMessages) {
+              if (lastMessage.action === 'messageService') {
+                  const isRelated = await checkIsRelated(lastMessage.chatId);
+                  if (isRelated) {
+                     fetchChatMessages();
+                     doMarkAsRead();
+                  }
+              }
+          }
+          setProcessedMessages((prevProcessedMessages) => [
+              ...prevProcessedMessages,
+              ...newMessages.map((message) => message.id),
+          ]);
+      };
+      handleMessages();
+  }, [messages, processedMessages]);
 
-    function hideMagicReplyButton(){
-      setMagicReplyButton(false);
+  useEffect(() => {
+    fetchReceiverInfo();
+  }, [receiverId]);
+
+  useEffect(() => {
+    fetchChatMessages();
+  }, [receiverId]);
+
+  useEffect(() => {
+    if (message.length > 0) {
+      setTemporalMessage(false);
     }
-    
-    function scrollToBottom() {
+  }, [message]);
+
+  const handleSendMessage = async () => {
+    await sendMessage(receiverId, typedMessage);
+    setTemporalMessageContent(typedMessage);
+    setTypedMessage('');
+  }
+
+  const displayTemporalMessage = () => {
+    setTemporalMessage(true);
+  }
+
+  useEffect(() => {
+    if (message.length > 0 || temporalMessage) {
       const chatContainer = chatRef.current;
       if (chatContainer) {
         chatContainer.scrollTo({
           top: chatContainer.scrollHeight,
-          behavior: "smooth",
+          behavior: 'smooth',
         });
       }
     }
-
-    const fetchReceiverInfo = async () => {
-      try{
-        const response = await fetchUserMetaDataById(receiverId);
-        setUserName(response.userName);
-        setUserAvatar(response.profilePicture);
-      }
-      finally{
-        setLoading(false);
-      }
-    }
-
-    const fetchChatMessages = async () => {
-      try{
-        const response = await getChatMessages(receiverId);
-        setMessage(response);
-      }
-      finally{
-        setChatsLoading(false);
-      }
-    }
-
-    const doMarkAsRead = async () => {
-      await markAsRead(receiverId);
-      fetchUnreadMessages();
-    }
-
-    useEffect(() => {
-      doMarkAsRead();
-    }, [receiverId]); 
-    
-    useEffect(() => {
-      fetchReceiverInfo();
-      const chatContainer = chatRef.current;
-      if (chatContainer) {
-        chatContainer.addEventListener("scroll", handleScroll);
-        scrollToBottom();
-      }
-      return () => {
-        if (chatContainer) {
-          chatContainer.removeEventListener("scroll", handleScroll);
-        }
-      };
-    }, []); 
-
-   useEffect(() => {
-        const handleMessages = async () => {
-            if (messages.length === 0) {
-                return;
-            }
-            const newMessages = messages.filter(
-                (message) => !processedMessages.includes(message.id)
-            );
-            if (newMessages.length === 0) {
-                return;
-            }
-            for (const lastMessage of newMessages) {
-                if (lastMessage.action === 'messageService') {
-                    const isRelated = await checkIsRelated(lastMessage.chatId);
-                    if (isRelated) {
-                       fetchChatMessages();
-                       doMarkAsRead();
-                    }
-                }
-            }
-            setProcessedMessages((prevProcessedMessages) => [
-                ...prevProcessedMessages,
-                ...newMessages.map((message) => message.id),
-            ]);
-        };
-        handleMessages();
-    }, [messages, processedMessages]);
-
-    useEffect(() => {
-      fetchReceiverInfo();
-    }, [receiverId]);
-
-    useEffect(() => {
-      fetchChatMessages();
-    }, [receiverId]);
-
-    useEffect(() => {
-      if (message.length > 0) {
-        setTemporalMessage(false);
-      }
-    }, [message]);
-
-    const handleSendMessage = async () => {
-      await sendMessage(receiverId, typedMessage);
-      setTemporalMessageContent(typedMessage);
-      setTypedMessage('');
-    }
-
-    const displayTemporalMessage = () => {
-      setTemporalMessage(true);
-    }
+  }, [message, temporalMessage]);
 
   return (
     <div>
