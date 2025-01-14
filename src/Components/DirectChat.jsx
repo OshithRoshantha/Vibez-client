@@ -8,7 +8,9 @@ import { fetchUserMetaDataById } from '../Services/ProfileService';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
 import { getChatMessages, checkIsRelated, sendMessage, markAsRead } from '../Services/ChatService';
+import { getChatHistory, getSmartReply } from '../Services/VibezIntelligence';
 import TemporalMessage from "./TemporalMessage";
+import { DotLoader } from 'react-spinners';
 
 export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fetchUnreadMessages}) {
 
@@ -18,7 +20,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
 
   const [showScrollButton, setShowScrollButton] = useState(false);
   const chatWallpaper = darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)';
-  const [magicReplyButton, setMagicReplyButton] = useState(false);
+  const [magicReplyButton, setMagicReplyButton] = useState(true);
   const [userName, setUserName] = useState('');
   const [userAvatar, setUserAvatar] = useState('');
   const [loading, setLoading] = useState(true);
@@ -27,6 +29,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
   const [typedMessage, setTypedMessage] = useState('');
   const [temporalMessage, setTemporalMessage] = useState(false);
   const [temporalMessageContent, setTemporalMessageContent] = useState('');
+  const [generateReply, setGenerateReply] = useState(false);
 
   function handleScroll() {
     const chatContainer = chatRef.current;
@@ -79,6 +82,18 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
   const doMarkAsRead = async () => {
     await markAsRead(receiverId);
     fetchUnreadMessages();
+  }
+
+  const fetchSmartReply = async () => {
+    try{
+      setGenerateReply(true);
+      const chatHistory = await getChatHistory(receiverId);
+      const response = await getSmartReply(chatHistory);
+      setTypedMessage(response);
+    }
+    finally{
+      setGenerateReply(false);
+    }
   }
 
   useEffect(() => {
@@ -219,12 +234,10 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
             )
           )}  
         {temporalMessage && <TemporalMessage message={temporalMessageContent}/> }    
-        {magicReplyButton && <div style={{left: '64%', bottom: '13%'}} className="absolute cursor-pointer bg-white rounded-full">
+        {magicReplyButton && <div style={{left: '64%', bottom: '13%'}} onClick={fetchSmartReply} className="absolute cursor-pointer bg-white rounded-full">
           <AnimatedGradientText>
             <span
-              className={cn(
-                `inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent`,
-              )}
+              className={`inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:200%_100%] bg-clip-text text-transparent`}
             >
               Magic Reply
             </span>
@@ -233,9 +246,22 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
         </div>}
         </div>
         <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3  border-t`} style={{display:'flex', alignItems:'center',columnGap:'1rem'}}>
-            <input type="text" value={typedMessage} onChange={(e) => setTypedMessage(e.target.value)} placeholder="Type a message" className={`${darkMode ? ' text-white' : 'bg-input text-black'} focus:border-none focus:outline-none w-full p-2 rounded-lg`}/>
-            <span><i style={{cursor:'pointer'}} onClick={() => { handleSendMessage(); displayTemporalMessage();}} className="bi bi-send-fill text-2xl text-primary"></i></span>
-        </div>
+            <input 
+              type="text" 
+              value={typedMessage} 
+              onChange={(e) => setTypedMessage(e.target.value)} 
+              placeholder={generateReply ? "Generating reply..." : "Type a message"}
+              className={`${darkMode ? 'text-white' : 'bg-input text-black'} focus:border-none focus:outline-none w-full p-2 rounded-lg`} 
+              disabled={generateReply} 
+            />
+            {generateReply ? 
+            (<div>
+                <DotLoader size={40} color="#1311ff"/>
+            </div>) : 
+            (<div>
+                <span><i style={{cursor:'pointer'}} onClick={() => { handleSendMessage(); displayTemporalMessage();}} className="bi bi-send-fill text-2xl text-primary"></i></span>
+            </div>)}
+            </div>
         </div>
     </div>
   )
