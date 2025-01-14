@@ -137,7 +137,6 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
 
     const displayTemporalMessage = () => {
       setTemporalMessage(true);
-      scrollToBottom();
     }
 
   return (
@@ -234,7 +233,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
         </div>
         <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3  border-t`} style={{display:'flex', alignItems:'center',columnGap:'1rem'}}>
             <input type="text" value={typedMessage} onChange={(e) => setTypedMessage(e.target.value)} placeholder="Type a message" className={`${darkMode ? ' text-white' : 'bg-input text-black'} focus:border-none focus:outline-none w-full p-2 rounded-lg`}/>
-            <span><i style={{cursor:'pointer'}} onClick={() => { handleSendMessage(); displayTemporalMessage(); }} className="bi bi-send-fill text-2xl text-primary"></i></span>
+            <span><i style={{cursor:'pointer'}} onClick={() => { handleSendMessage(); displayTemporalMessage();}} className="bi bi-send-fill text-2xl text-primary"></i></span>
         </div>
         </div>
     </div>
