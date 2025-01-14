@@ -74,10 +74,26 @@ export const sendMessage = async (receiverId: string, messageToSend: string): Pr
 
 export const markAsRead = async (receiverId: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.put(`http://localhost:8080/vibez/message/markAsRead/${receiverId}/${userId}`, {
+    const token = sessionStorage.getItem('token');
+    
+    const response = await axios.put(
+        `http://localhost:8080/vibez/message/markAsRead/${receiverId}/${userId}`, 
+        {},  
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+    return response.data; 
+}
+
+export const getUnreadCount = async () => {
+    const userId = sessionStorage.getItem('userId');
+    const response = await axios.get(`http://localhost:8080/vibez/message/unReadCount/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
     });
-    return response.data; 
+    return response.data;  
 }
