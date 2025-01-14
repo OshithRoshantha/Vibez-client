@@ -3,6 +3,7 @@ import SendMessage from "./SendMessage";
 import { useState, useEffect, useRef } from "react";
 import { ChevronRight } from "lucide-react";
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
+import CircularProgress from '@mui/material/CircularProgress';
 import { fetchUserMetaDataById } from '../Services/ProfileService';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
@@ -178,31 +179,8 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
         <div className="p-4" ref={chatRef} style={{height:'78vh', overflowY:'auto', scrollbarWidth:'none', backgroundImage: chatWallpaper, backgroundSize: 'cover'}}>
         {showScrollButton && <i onClick={scrollToBottom} className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} cursor-pointer absolute bi bi-arrow-down-circle-fill text-4xl text-primary`} style={{left: '67%'}}></i>}
           {chatsLoading ? (
-            <div>
-              <div className="w-full" style={{ display: 'flex', justifyContent: 'right' }}>
-                <div className="flex items-start mb-2">
-                  <div className="bg-primary text-white p-2 rounded-lg max-w-xs break-words">
-                    <Skeleton className="h-12 w-[200px] mb-2" />
-                    <Skeleton className="h-3 w-[100px]" />
-                  </div>
-                </div>
-              </div>
-              <div className="w-full" style={{ display: 'flex', justifyContent: 'right' }}>
-                <div className="flex items-start mb-2">
-                  <div className="bg-primary text-white p-2 rounded-lg max-w-xs break-words">
-                    <Skeleton className="h-4 w-[200px] mb-1" />
-                    <Skeleton className="h-3 w-[100px]" />
-                  </div>
-                </div>
-              </div>
-              <div className="w-full" style={{ display: 'flex', justifyContent: 'left' }}>
-                <div className="flex items-start mb-2">
-                  <div className="bg-[#1c1c1c] text-white p-2 rounded-lg max-w-xs break-words">
-                    <Skeleton className="h-12 w-[200px] mb-2" />
-                    <Skeleton className="h-3 w-[100px]" />
-                  </div>
-                </div>
-              </div>        
+            <div className="text-center">
+              <CircularProgress size="30px"/>       
             </div>
           ) : (
             message.length > 0 ? (
