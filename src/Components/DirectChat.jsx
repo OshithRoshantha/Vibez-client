@@ -77,10 +77,13 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
     const doMarkAsRead = async () => {
       await markAsRead(receiverId);
     }
+
+    useEffect(() => {
+      doMarkAsRead();
+    }, [receiverId]); 
     
     useEffect(() => {
       fetchReceiverInfo();
-      doMarkAsRead();
       const chatContainer = chatRef.current;
       if (chatContainer) {
         chatContainer.addEventListener("scroll", handleScroll);
@@ -109,6 +112,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
                     const isRelated = await checkIsRelated(lastMessage.chatId);
                     if (isRelated) {
                        fetchChatMessages();
+                       doMarkAsRead();
                     }
                 }
             }
