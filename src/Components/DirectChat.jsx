@@ -6,7 +6,7 @@ import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 import { fetchUserMetaDataById } from '../Services/ProfileService';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
-import { getChatMessages, checkIsRelated, sendMessage } from '../Services/ChatService';
+import { getChatMessages, checkIsRelated, sendMessage, markAsRead } from '../Services/ChatService';
 import TemporalMessage from "./TemporalMessage";
 
 export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
@@ -73,9 +73,14 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
         setChatsLoading(false);
       }
     }
+
+    const doMarkAsRead = async () => {
+      await markAsRead(receiverId);
+    }
     
     useEffect(() => {
       fetchReceiverInfo();
+      doMarkAsRead();
       const chatContainer = chatRef.current;
       if (chatContainer) {
         chatContainer.addEventListener("scroll", handleScroll);
