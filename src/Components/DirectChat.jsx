@@ -52,6 +52,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
         behavior: "smooth",
       });
     }
+    setShowScrollButton(false);  
   }
 
   const fetchReceiverInfo = async () => {
@@ -89,7 +90,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
     const chatContainer = chatRef.current;
     if (chatContainer) {
       chatContainer.addEventListener("scroll", handleScroll);
-      scrollToBottom();
+      scrollToBottom();  
     }
     return () => {
       if (chatContainer) {
