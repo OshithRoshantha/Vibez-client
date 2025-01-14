@@ -23,12 +23,13 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
   const [chatsLoading, setChatsLoading] = useState(true);
   const [message, setMessage] = useState([]);
   const [typedMessage, setTypedMessage] = useState('');
+  const [temporalMessage, setTemporalMessage] = useState(false);
+  const [temporalMessageContent, setTemporalMessageContent] = useState('');
 
     function handleScroll() {
       const chatContainer = chatRef.current;
       if (chatContainer) {
-        const isAtBottom =
-          chatContainer.scrollHeight - chatContainer.scrollTop === chatContainer.clientHeight;
+        const isAtBottom = chatContainer.scrollHeight - chatContainer.scrollTop === chatContainer.clientHeight;
         setShowScrollButton(!isAtBottom);
       }
     }
@@ -121,9 +122,21 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
       fetchChatMessages();
     }, [receiverId]);
 
+    useEffect(() => {
+      if (message.length > 0) {
+        setTemporalMessage(false);
+      }
+    }, [message]);
+
     const handleSendMessage = async () => {
       await sendMessage(receiverId, typedMessage);
+      setTemporalMessageContent(typedMessage);
       setTypedMessage('');
+    }
+
+    const displayTemporalMessage = () => {
+      setTemporalMessage(true);
+      scrollToBottom();
     }
 
   return (
@@ -152,7 +165,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
               </div>
             ) }
         </div>
-        <div className="p-4" ref={chatRef} style={{height:'78vh', overflowY:'auto', scrollbarWidth:'none', backgroundImage: chatWallpaper, backgroundSize: 'cover' , display:'flex', flexDirection:'column', justifyContent:'end'}}>
+        <div className="p-4" ref={chatRef} style={{height:'78vh', overflowY:'auto', scrollbarWidth:'none', backgroundImage: chatWallpaper, backgroundSize: 'cover'}}>
         {showScrollButton && <i onClick={scrollToBottom} className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} cursor-pointer absolute bi bi-arrow-down-circle-fill text-4xl text-primary`} style={{left: '67%'}}></i>}
           {chatsLoading ? (
             <div>
@@ -203,7 +216,8 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
                 Say hello and start the conversation! 😊
               </div>
             )
-          )}      
+          )}  
+        {temporalMessage && <SendMessage time="Sending..." message={temporalMessageContent} />}   
         {magicReplyButton && <div style={{left: '64%', bottom: '13%'}} className="absolute cursor-pointer bg-white rounded-full">
           <AnimatedGradientText>
             <span
@@ -219,7 +233,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
         </div>
         <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3  border-t`} style={{display:'flex', alignItems:'center',columnGap:'1rem'}}>
             <input type="text" value={typedMessage} onChange={(e) => setTypedMessage(e.target.value)} placeholder="Type a message" className={`${darkMode ? ' text-white' : 'bg-input text-black'} focus:border-none focus:outline-none w-full p-2 rounded-lg`}/>
-            <span><i style={{cursor:'pointer'}} onClick={handleSendMessage} className="bi bi-send-fill text-2xl text-primary"></i></span>
+            <span><i style={{cursor:'pointer'}} onClick={() => { handleSendMessage(); displayTemporalMessage(); }} className="bi bi-send-fill text-2xl text-primary"></i></span>
         </div>
         </div>
     </div>
