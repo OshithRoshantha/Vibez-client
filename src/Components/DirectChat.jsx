@@ -7,6 +7,7 @@ import { fetchUserMetaDataById } from '../Services/ProfileService';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
 import { getChatMessages, checkIsRelated, sendMessage } from '../Services/ChatService';
+import TemporalMessage from "./TemporalMessage";
 
 export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
 
@@ -217,7 +218,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
               </div>
             )
           )}  
-        {temporalMessage && <SendMessage time="Sending..." message={temporalMessageContent} />}   
+        {temporalMessage && <TemporalMessage message={temporalMessageContent}/> }    
         {magicReplyButton && <div style={{left: '64%', bottom: '13%'}} className="absolute cursor-pointer bg-white rounded-full">
           <AnimatedGradientText>
             <span
