@@ -98,6 +98,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
 
   useEffect(() => {
     doMarkAsRead();
+    setMagicReplyButton(false);
   }, [receiverId]); 
   
   useEffect(() => {
