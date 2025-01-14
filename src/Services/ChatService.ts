@@ -49,3 +49,26 @@ export const getChatMessages = async (reciverId: string) => {
     });
     return response.data;
 }
+
+export const sendMessage = async (reciverId: string, messageToSend: string): Promise<void> => {
+    return new Promise((resolve) => {
+        const token = sessionStorage.getItem('token');
+        const senderId = sessionStorage.getItem('userId');
+        const reciverId = '67761526c2f7bd5122fad6d9';
+
+        const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
+
+        socket.onopen = () => {
+            const message = {
+                action: 'messageService',
+                body: {
+                    senderId,
+                    reciverId,
+                    message: messageToSend,
+                },
+            };
+        socket.send(JSON.stringify(message));
+        resolve(); 
+        };
+    });   
+}

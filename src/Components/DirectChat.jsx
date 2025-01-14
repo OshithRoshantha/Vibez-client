@@ -6,7 +6,7 @@ import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 import { fetchUserMetaDataById } from '../Services/ProfileService';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
-import { getChatMessages, checkIsRelated } from '../Services/ChatService';
+import { getChatMessages, checkIsRelated, sendMessage } from '../Services/ChatService';
 
 export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
 
@@ -20,7 +20,9 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
   const [userName, setUserName] = useState('');
   const [userAvatar, setUserAvatar] = useState('');
   const [loading, setLoading] = useState(true);
+  const [chatsLoading, setChatsLoading] = useState(true);
   const [message, setMessage] = useState([]);
+  const [typedMessage, setTypedMessage] = useState('');
 
     function handleScroll() {
       const chatContainer = chatRef.current;
@@ -65,8 +67,8 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
         const response = await getChatMessages(receiverId);
         setMessage(response);
       }
-      catch(error){
-        console.log(error);
+      finally{
+        setChatsLoading(false);
       }
     }
     
@@ -119,6 +121,11 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
       fetchChatMessages();
     }, [receiverId]);
 
+    const handleSendMessage = async () => {
+      await sendMessage('67761526c2f7bd5122fad6d9', typedMessage);
+      setTypedMessage('');
+    }
+
   return (
     <div>
         <div className={`${darkMode ? 'bg-[#262729]' : 'bg-background' } min-h-screen flex flex-col`} >
@@ -147,7 +154,36 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
         </div>
         <div className="p-4" ref={chatRef} style={{height:'78vh', overflowY:'auto', scrollbarWidth:'none', backgroundImage: chatWallpaper, backgroundSize: 'cover' , display:'flex', flexDirection:'column', justifyContent:'end'}}>
         {showScrollButton && <i onClick={scrollToBottom} className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} cursor-pointer absolute bi bi-arrow-down-circle-fill text-4xl text-primary`} style={{left: '67%'}}></i>}
-            {message.map((message, index) =>
+          {chatsLoading ? (
+            <div>
+              <div className="w-full" style={{ display: 'flex', justifyContent: 'right' }}>
+                <div className="flex items-start mb-2">
+                  <div className="bg-primary text-white p-2 rounded-lg max-w-xs break-words">
+                    <Skeleton className="h-12 w-[200px] mb-2" />
+                    <Skeleton className="h-3 w-[100px]" />
+                  </div>
+                </div>
+              </div>
+              <div className="w-full" style={{ display: 'flex', justifyContent: 'right' }}>
+                <div className="flex items-start mb-2">
+                  <div className="bg-primary text-white p-2 rounded-lg max-w-xs break-words">
+                    <Skeleton className="h-4 w-[200px] mb-1" />
+                    <Skeleton className="h-3 w-[100px]" />
+                  </div>
+                </div>
+              </div>
+              <div className="w-full" style={{ display: 'flex', justifyContent: 'left' }}>
+                <div className="flex items-start mb-2">
+                  <div className="bg-[#1c1c1c] text-white p-2 rounded-lg max-w-xs break-words">
+                    <Skeleton className="h-12 w-[200px] mb-2" />
+                    <Skeleton className="h-3 w-[100px]" />
+                  </div>
+                </div>
+              </div>        
+            </div>
+          ) : (
+            message.length > 0 ? (
+              message.map((message, index) =>
                 message.isSendByMe ? (
                   <SendMessage
                     key={index}
@@ -161,7 +197,13 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
                     message={message.message}
                   />
                 )
-            )}        
+              )
+            ) : (
+              <div className={`${darkMode ? 'text-gray-300' : 'text-gray-500'} text-center`}>	 
+                No messages to display.
+              </div>
+            )
+          )}      
         {magicReplyButton && <div style={{left: '64%', bottom: '13%'}} className="absolute cursor-pointer bg-white rounded-full">
           <AnimatedGradientText>
             <span
@@ -176,8 +218,8 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId}) {
         </div>}
         </div>
         <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3  border-t`} style={{display:'flex', alignItems:'center',columnGap:'1rem'}}>
-            <input type="text" placeholder="Type a message" className={`${darkMode ? ' text-white' : 'bg-input text-black'} focus:border-none focus:outline-none w-full p-2 rounded-lg`}/>
-            <span><i style={{cursor:'pointer'}} className="bi bi-send-fill text-2xl text-primary"></i></span>
+            <input type="text" value={typedMessage} onChange={(e) => setTypedMessage(e.target.value)} placeholder="Type a message" className={`${darkMode ? ' text-white' : 'bg-input text-black'} focus:border-none focus:outline-none w-full p-2 rounded-lg`}/>
+            <span><i style={{cursor:'pointer'}} onClick={handleSendMessage} className="bi bi-send-fill text-2xl text-primary"></i></span>
         </div>
         </div>
     </div>
