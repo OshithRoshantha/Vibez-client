@@ -7,10 +7,10 @@ import GroupChatPreview from './GroupChatPreview';
 import { Skeleton } from "@/components/ui/skeleton";
 import { getAllGroups, getGroupInfo } from '../Services/GroupsService';
 
-export default function GroupChats({showGroupMessages, darkMode}) {
+export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
 
     const [groups, setGroups] = useState([]);
-
+    const [loading, setLoading] = useState(true);
     const [addMembersMenu, setAddMembersMenu] = useState(false);
     const [finishCreateGroup, setFinishCreateGroup] = useState(false);
     const [groupChats, setGroupChats] = useState(true);
@@ -21,7 +21,6 @@ export default function GroupChats({showGroupMessages, darkMode}) {
     const [cropedImage, setCropedImage] = useState(null);
     const fileInputRef = useRef(null);
     const avatarEditorRef = useRef(null);  
-    const [loading, setLoading] = useState(true);  
 
     const defaultImage = "./src/assets/groupDefault.jpg";
 
@@ -263,16 +262,16 @@ export default function GroupChats({showGroupMessages, darkMode}) {
 
                                     return (
                                         <GroupChatPreview
-                                            key={group.friendId}
-                                            friendId={group.friendId}
-                                            friendName={group.friendName}
-                                            friendAvatar={group.friendAvatar}
+                                            key={group.groupId}
+                                            groupId={group.groupId}
+                                            groupName={group.groupName}
+                                            groupAvatar={group.groupIcon}
                                             lastMessage={group.lastMessage}
                                             lastMessageSender={group.lastMessageSender}
                                             lastActiveTime={formattedTime}
                                             showGroupMessages={showGroupMessages}
+                                            setGroupId={setGroupId}
                                             darkMode={darkMode}
-                                            chatId={group.chatId}
                                         />
                                     );
                             })

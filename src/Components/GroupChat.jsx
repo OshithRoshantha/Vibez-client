@@ -4,12 +4,32 @@ import { useState, useEffect, useRef } from "react";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
+import { getGroupInfo } from '../Services/GroupsService';
+import { Skeleton } from "@/components/ui/skeleton";
 
-export default function GroupChat({ showGroupInfoMenu, darkMode }) {
+export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
+
   const chatRef = useRef(null);
+  const [groupName, setGroupName] = useState('');
+  const [groupAvatar, setGroupAvatar] = useState('');
+  const [loading, setLoading] = useState(true);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const chatWallpaper = darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)';
   const [magicReplyButton, setMagicReplyButton] = useState(false);
+
+  const fetchGroupInfo = async () => {
+    try{
+      const response = await getGroupInfo(groupId);
+      setGroupName(response.groupName);
+      setGroupAvatar(response.groupIcon);
+    } finally{
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchGroupInfo();
+  }, []);
 
   function handleScroll() {
     const chatContainer = chatRef.current;
@@ -55,13 +75,27 @@ export default function GroupChat({ showGroupInfoMenu, darkMode }) {
     <div>
       <div className={`${darkMode ? 'bg-[#262729]' : 'bg-background'} min-h-screen flex flex-col`}>
         <div onClick={showGroupInfoMenu} style={{ cursor: 'pointer' }} className={`${darkMode ? 'border-gray-600' : 'border-border'} flex items-center px-4 py-3 border-b`}>
-          <div className="flex items-center">
-            <img src="https://placehold.co/40x40" alt="User Avatar" className="rounded-full mr-2" />
-            <div>
-              <span className={`${darkMode ? 'text-white' : 'text-black'} text-lg font-semibold`}>Group1</span>
-              <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} mt-0`} style={{ fontSize: '70%' }}>Click here for group info</p>
-            </div>
-          </div>
+        {loading ? (
+              <div>
+                <div className="flex items-center">
+                  <Skeleton className="h-11 w-11 rounded-full mr-2"/>
+                  <div className="mt-1">
+                    <Skeleton className="h-4 w-[150px] mb-2" />
+                    <Skeleton className="h-3 w-[200px]" />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <div className="flex items-center">
+                  <img src={groupAvatar} alt="User Avatar" className="rounded-full mr-2" style={{height:'45px'}}/>
+                  <div>
+                    <span className={`${darkMode ? 'text-white' : 'text-black'} text-lg font-semibold`}>{groupName}</span>
+                    <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} mt-0`} style={{ fontSize: '70%' }}>Click here for group info</p>
+                  </div>
+                </div>
+              </div>
+            ) }
         </div>
         <div className="p-4" ref={chatRef} style={{ height: '78vh', overflowY: 'auto', scrollbarWidth: 'none', backgroundImage: chatWallpaper, backgroundSize: 'cover' }}>
           {showScrollButton && <i onClick={scrollToBottom} className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} cursor-pointer absolute bi bi-arrow-down-circle-fill text-4xl text-primary`} style={{ left: '67%' }}></i>}
