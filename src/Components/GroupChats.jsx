@@ -4,6 +4,7 @@ import './Styles/SignupElement.css'
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
 import GroupChatPreview from './GroupChatPreview';
+import { Skeleton } from "@/components/ui/skeleton";
 import { getAllGroups, getGroupInfo } from '../Services/GroupsService';
 
 export default function GroupChats({showGroupMessages, darkMode}) {
@@ -221,7 +222,61 @@ export default function GroupChats({showGroupMessages, darkMode}) {
                     </div>           
                 </div>}
                 {groupChats && <div>
-                    <GroupChatPreview darkMode={darkMode} showGroupMessages={showGroupMessages}/>
+                    {loading ? (
+                            <div>
+                            {[...Array(6)].map((_, index) => (
+                              <div key={index} className="space-y-2">
+                                <div className={`flex items-center p-2 rounded`}>
+                                  <Skeleton className="h-12 w-12 rounded-full mr-2" />
+                                  <div className="flex-1 space-y-1">
+                                    <Skeleton className="h-4 w-[150px]" />
+                                    <Skeleton className="h-4 w-[200px]" />
+                                  </div>
+                                  <Skeleton className="h-4 w-16" />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                            groups
+                                .sort((a, b) => new Date(b.lastUpdate) - new Date(a.lastUpdate))
+                                .map((group) => {
+                                    const now = new Date();
+                                    const date = new Date(group.lastUpdate);
+                                    let formattedTime;
+
+                                    if (
+                                        now.getFullYear() === date.getFullYear() &&
+                                        now.getMonth() === date.getMonth() &&
+                                        now.getDate() === date.getDate()
+                                    ) {
+                                        formattedTime = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+                                    } else if (
+                                        now.getFullYear() === date.getFullYear() &&
+                                        now.getMonth() === date.getMonth() &&
+                                        now.getDate() - date.getDate() === 1
+                                    ) {
+                                        formattedTime = 'Yesterday';
+                                    } else {
+                                        formattedTime = `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
+                                    }
+
+                                    return (
+                                        <GroupChatPreview
+                                            key={group.friendId}
+                                            friendId={group.friendId}
+                                            friendName={group.friendName}
+                                            friendAvatar={group.friendAvatar}
+                                            lastMessage={group.lastMessage}
+                                            lastMessageSender={group.lastMessageSender}
+                                            lastActiveTime={formattedTime}
+                                            showGroupMessages={showGroupMessages}
+                                            darkMode={darkMode}
+                                            chatId={group.chatId}
+                                        />
+                                    );
+                            })
+                        )}
                 </div>}
                 </div>
             </div>
