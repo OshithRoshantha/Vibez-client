@@ -26,6 +26,7 @@ export default function GroupInfo({darkMode, groupId}) {
   const [memberCount, setMemberCount] = useState(0);
   const [avatar, setAvatar] = useState('');
   const [members, setMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const checkAdminStatus = async () => {
     const response = await checkAdmin(groupId);
@@ -33,14 +34,18 @@ export default function GroupInfo({darkMode, groupId}) {
   }
 
   const fetchGroupInfo = async () => {
-    const response = await getGroupInfo(groupId);
-    setName(response.groupName);
-    setDescp(response.groupDesc);
-    setMemberCount(response.memberIds.length);
-    setAvatar(response.groupIcon);
-    const memberPromises = response.memberIds.map(userId => fetchUserMetaDataById(userId));
-    const memberData = await Promise.all(memberPromises);
-    setMembers(memberData);
+    try{
+        const response = await getGroupInfo(groupId);
+        setName(response.groupName);
+        setDescp(response.groupDesc);
+        setMemberCount(response.memberIds.length);
+        setAvatar(response.groupIcon);
+        const memberPromises = response.memberIds.map(userId => fetchUserMetaDataById(userId));
+        const memberData = await Promise.all(memberPromises);
+        setMembers(memberData);
+    } finally{
+      //setLoading(false);
+    }
   }  
 
   useEffect(() => {
@@ -195,7 +200,7 @@ export default function GroupInfo({darkMode, groupId}) {
             <div className={`${darkMode ? 'border-gray-700' : 'border-border'} border-b  my-4`}></div>
             </div>}
           <div className={`w-full  ${isAmAdmin ? 'h-[25vh]' : 'h-[38vh]'}`} style={{overflowY:'auto', scrollbarWidth:'none'}}>
-            {isAmAdmin ? <GroupMemberList members={members} groupName={name} darkMode={darkMode}/> : <GroupMemberList2 members={members} groupName={name} darkMode={darkMode}/>}
+            {isAmAdmin ? <GroupMemberList loading={loading} members={members} groupName={name} darkMode={darkMode}/> : <GroupMemberList2 loading={loading} members={members} groupName={name} darkMode={darkMode}/>}
           </div>
         </div>
       </div>
