@@ -1,12 +1,14 @@
-import { useRef, useState} from 'react';
+import { useRef, useState, useEffect} from 'react';
 import GroupMemberList from './GroupMemberList';
 import GroupMemberList2 from './GroupMemberList2';
 import GroupAddMembers from './GroupAddMembers';
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
+import { checkAdmin, getGroupInfo } from '../Services/GroupsService';
+import { fetchUserMetaDataById } from '../Services/ProfileService';
 
-export default function GroupInfo({darkMode}) {
-  var memberCount = 5
+export default function GroupInfo({darkMode, groupId}) {
+
   const [isAmAdmin, setIsAmAdmin] = useState(true);
   const [addMemberMenu, setAddMemberMenu] = useState(false);
   const [profilePicHover, setProfilePicHover] = useState(false);
@@ -18,10 +20,33 @@ export default function GroupInfo({darkMode}) {
   const avatarEditorRef = useRef(null);
   const [isEditingDescp, setIsEditingDescp] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
-  const [name, setName] = useState('friends');
-  const [descp, setDescp] = useState('This is a group of friends');
 
-  const defaultImage = "./src/assets/groupDefault.jpg"; //user current group picture
+  const [name, setName] = useState('');
+  const [descp, setDescp] = useState('');
+  const [memberCount, setMemberCount] = useState(0);
+  const [avatar, setAvatar] = useState('');
+  const [members, setMembers] = useState([]);
+
+  const checkAdminStatus = async () => {
+    const response = await checkAdmin(groupId);
+    setIsAmAdmin(response);
+  }
+
+  const fetchGroupInfo = async () => {
+    const response = await getGroupInfo(groupId);
+    setName(response.groupName);
+    setDescp(response.groupDesc);
+    setMemberCount(response.memberIds.length);
+    setAvatar(response.groupIcon);
+    const memberPromises = response.memberIds.map(userId => fetchUserMetaDataById(userId));
+    const memberData = await Promise.all(memberPromises);
+    setMembers(memberData);
+  }  
+
+  useEffect(() => {
+      checkAdminStatus();
+      fetchGroupInfo();
+  }, []);
 
   function handleNameClick() {
       setIsEditingName(true);
@@ -107,7 +132,7 @@ export default function GroupInfo({darkMode}) {
         <div className="bg-card p-6 w-full" style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7'}} >
           <div className="flex flex-col items-center mb-5" style={{marginTop:'-5%'}}>
             {isAmAdmin && 
-              <div onClick={uploadImg} onMouseEnter={showProfilePicHover} onMouseLeave={hideProfilePicHover} className=" rounded-full flex items-center justify-center mb-1 text-xs" style={{border: '1px solid rgb(104, 104, 104)', width:'150px', height:'150px', cursor:'pointer', marginTop:'-5%',backgroundImage: cropedImage ? `url(${cropedImage})` : `url(${defaultImage})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
+              <div onClick={uploadImg} onMouseEnter={showProfilePicHover} onMouseLeave={hideProfilePicHover} className=" rounded-full flex items-center justify-center mb-1 text-xs" style={{border: '1px solid rgb(104, 104, 104)', width:'150px', height:'150px', cursor:'pointer', marginTop:'-5%',backgroundImage: cropedImage ? `url(${cropedImage})` : `url(${avatar})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
                 {profilePicHover && <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'}} >
                         <span className='camera-icon'><i className="bi bi-camera-fill"></i></span>CHANGE GROUP ICON
                 </div>}
@@ -121,7 +146,7 @@ export default function GroupInfo({darkMode}) {
                 onChange={handleFileChange}
             />            
             {!isAmAdmin &&
-              <img src={defaultImage} className=" rounded-full flex items-center justify-center mb-1" style={{width:'150px', height:'150px', marginTop:'-5%', border: '1px solid rgb(104, 104, 104)'}}/>  
+              <img src={avatar} className=" rounded-full flex items-center justify-center mb-1" style={{width:'150px', height:'150px', marginTop:'-5%', border: '1px solid rgb(104, 104, 104)'}}/>  
             }
             {isAmAdmin && (
               <>
@@ -170,7 +195,7 @@ export default function GroupInfo({darkMode}) {
             <div className={`${darkMode ? 'border-gray-700' : 'border-border'} border-b  my-4`}></div>
             </div>}
           <div className={`w-full  ${isAmAdmin ? 'h-[25vh]' : 'h-[38vh]'}`} style={{overflowY:'auto', scrollbarWidth:'none'}}>
-            {isAmAdmin ? <GroupMemberList darkMode={darkMode}/> : <GroupMemberList2 darkMode={darkMode}/>}
+            {isAmAdmin ? <GroupMemberList members={members} groupName={name} darkMode={darkMode}/> : <GroupMemberList2 members={members} groupName={name} darkMode={darkMode}/>}
           </div>
         </div>
       </div>

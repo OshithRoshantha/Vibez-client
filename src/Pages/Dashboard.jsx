@@ -338,7 +338,7 @@ export default function Dashboard() {
             {settingsMenu && <Settings darkModeOn={darkModeOn} darkModeOff={darkModeOff} darkMode={darkMode}/>}
             {profileMenu && <Profile  darkMode={darkMode} setUserPicture={setUserPicture}/>}
             {friendInfoMenu && <FriendInfo receiverId={receiverId} darkMode={darkMode}/>}
-            {groupInfoMenu && <GroupInfo  darkMode={darkMode}/>}
+            {groupInfoMenu && <GroupInfo groupId={groupId} darkMode={darkMode}/>}
             <div className="flex-1 p-0 messages-column" style={{height:'100vh'}}>
                 {welcomeVideo &&
                 <div className="w-full flex flexflex-column items-center justify-center" style={{height:'100vh', backgroundImage: darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)', backgroundSize: 'cover'}}>
