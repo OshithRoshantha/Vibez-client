@@ -44,7 +44,7 @@ export default function GroupInfo({darkMode, groupId}) {
         const memberData = await Promise.all(memberPromises);
         setMembers(memberData);
     } finally{
-      //setLoading(false);
+      setLoading(false);
     }
   }  
 

@@ -1,13 +1,19 @@
 import {useState, useEffect} from 'react'
 import { groupAddList } from '../Services/GroupsService';
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function GroupAddMembers({showAddMemberMenu, darkMode, groupId}) {
 
     const [members, setMembers] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const fetchAddMembersList = async () => {
-        const response = await groupAddList(groupId);
-        setMembers(response);
+        try{
+            const response = await groupAddList(groupId);
+            setMembers(response);
+        } finally{
+            setLoading(false);
+        }
     }
 
     useEffect(() => {
@@ -24,34 +30,49 @@ export default function GroupAddMembers({showAddMemberMenu, darkMode, groupId}) 
             <div className="p-4">
                 <h3 className={`${darkMode ? 'text-gray-300' : 'text-muted'} text-sm font-medium `}>FRIENDS</h3>
                 <div className='w-full' style={{maxHeight:'40vh', overflowY:'auto', scrollbarWidth:'none'}}>
-                    {members.map((member, index) => (
-                    <div key={index} className="mt-2">
+                    {loading ? (
+                    Array.from({ length: 3 }).map((_, index) => (
+                        <div key={index} className="mt-2">
+                        <div className="flex items-center mb-2">
+                            <Skeleton className="mr-2 h-4 w-4 rounded-sm" />
+                            <Skeleton className="w-8 h-8 rounded-full mx-2" />
+                            <div>
+                            <Skeleton className="h-4 w-[80px] mb-1" />
+                            <Skeleton className="h-3 w-[150px]" />
+                            </div>
+                        </div>
+                        </div>
+                    ))
+                    ) : (
+                    members.map((member, index) => (
+                        <div key={index} className="mt-2">
                         <label className="flex items-center mb-2">
-                        <input
+                            <input
                             type="checkbox"
                             className="mr-2"
                             style={{ cursor: 'pointer', width: '15px', height: '15px' }}
-                        />
-                        <img
+                            />
+                            <img
                             src={member.profilePicture}
                             className="w-8 h-8 rounded-full mx-2"
                             alt="Member"
-                        />
-                        <div>
+                            />
+                            <div>
                             <span className={`${darkMode ? 'text-white' : ''} font-semibold`}>
-                            {member.userName}
+                                {member.userName}
                             </span>
                             <p
-                            className={`${
+                                className={`${
                                 darkMode ? 'text-gray-400' : 'text-muted-foreground'
-                            } text-xs`}
+                                } text-xs`}
                             >
-                            {member.about} 
+                                {member.about}
                             </p>
-                        </div>
+                            </div>
                         </label>
-                    </div>
-                    ))}
+                        </div>
+                    ))
+                    )}
                 </div>
             </div>
             <div className={`${darkMode ? 'border-gray-700' : 'border-border'} px-4 py-3 border-t`}>
