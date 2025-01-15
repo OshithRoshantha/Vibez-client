@@ -45,7 +45,9 @@ export default function Dashboard() {
     const [notifiacton, setNotification] = useState('');
     const [pendingRequests, setPendingRequests] = useState(0);
     const [unreadMessages, setUnreadMessages] = useState(0);
+
     const [receiverId, setReceiverId] = useState('');
+    const [groupId, setGroupId] = useState('');
     
     const texts = [
         "Stay connected with your circles",
@@ -330,7 +332,7 @@ export default function Dashboard() {
                 </div>
             </div>
             {chatsMenu && <Chats setReceiverId={setReceiverId} darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
-            {groupsMenu && <GroupChats darkMode={darkMode} showGroupMessages={showGroupMessages}/>}
+            {groupsMenu && <GroupChats darkMode={darkMode} setGroupId={setGroupId} showGroupMessages={showGroupMessages}/>}
             {friendsMenu && <Friends setReceiverId={setReceiverId} darkMode={darkMode} showDirectMessages={showDirectMessages} setPendingRequests={setPendingRequests} fetchPendingRequests={fetchPendingRequests}/>}
             {marketplaceMenu && <Marketplace setReceiverId={setReceiverId} showDirectMessages={showDirectMessages}  darkMode={darkMode}/>}
             {settingsMenu && <Settings darkModeOn={darkModeOn} darkModeOff={darkModeOff} darkMode={darkMode}/>}
@@ -348,7 +350,7 @@ export default function Dashboard() {
                 </div>
                 }
                 {directMessages && <DirectChat fetchUnreadMessages={fetchUnreadMessages} receiverId={receiverId} darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
-                {groupMessages && <GroupChat darkMode={darkMode} showGroupInfoMenu={showGroupInfoMenu}/>}  
+                {groupMessages && <GroupChat darkMode={darkMode} groupId={groupId} showGroupInfoMenu={showGroupInfoMenu}/>}  
             </div>
         </div>
     </div>
