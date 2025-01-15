@@ -1,11 +1,15 @@
 import './Styles/Column2.css'
-import { useRef, useState} from 'react';
+import { useRef, useState, useEffect} from 'react';
 import './Styles/SignupElement.css'
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
 import GroupChatPreview from './GroupChatPreview';
+import { getAllGroups, getGroupInfo } from '../Services/GroupsService';
 
 export default function GroupChats({showGroupMessages, darkMode}) {
+
+    const [groups, setGroups] = useState([]);
+
     const [addMembersMenu, setAddMembersMenu] = useState(false);
     const [finishCreateGroup, setFinishCreateGroup] = useState(false);
     const [groupChats, setGroupChats] = useState(true);
@@ -15,9 +19,30 @@ export default function GroupChats({showGroupMessages, darkMode}) {
     const [cropFactor, setCropFactor] = useState(1);
     const [cropedImage, setCropedImage] = useState(null);
     const fileInputRef = useRef(null);
-    const avatarEditorRef = useRef(null);    
+    const avatarEditorRef = useRef(null);  
+    const [loading, setLoading] = useState(true);  
 
     const defaultImage = "./src/assets/groupDefault.jpg";
+
+    const fetchAllGroups = async () => {
+        try{
+            const groupIds = await getAllGroups();
+            const groupPreviews = await Promise.all(
+                groupIds.map(async (groupId) => {
+                    const groupPreview = await getGroupInfo(groupId);
+                    return groupPreview;
+                })
+            );
+            setGroups(groupPreviews);
+        } 
+        finally{
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        fetchAllGroups();
+    }, []);    
 
     function clearCropedImage() {
         setCropedImage(null);

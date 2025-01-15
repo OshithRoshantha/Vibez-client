@@ -9,3 +9,12 @@ export const getAllGroups = async () => {
     });
     return response.data;
 };
+
+export const getGroupInfo = async (groupId: string) => {
+    const response = await axios.get(`http://localhost:8080/vibez/group/info/${groupId}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+}
