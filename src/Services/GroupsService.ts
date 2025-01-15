@@ -18,3 +18,13 @@ export const getGroupInfo = async (groupId: string) => {
     });
     return response.data;
 }
+
+export const checkAdmin = async (groupId: string) => {
+    const userId = sessionStorage.getItem('userId');
+    const response = await axios.get(`http://localhost:8080/vibez/group/isAdmin/${groupId}/${userId}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+}
