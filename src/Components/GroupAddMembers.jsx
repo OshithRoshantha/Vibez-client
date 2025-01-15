@@ -1,8 +1,19 @@
-import React from 'react'
+import {useState, useEffect} from 'react'
+import { groupAddList } from '../Services/GroupsService';
 
-export default function GroupAddMembers({showAddMemberMenu, darkMode}) {
-    var user = 'User1'
-    var about = 'This is user1'
+export default function GroupAddMembers({showAddMemberMenu, darkMode, groupId}) {
+
+    const [members, setMembers] = useState([]);
+
+    const fetchAddMembersList = async () => {
+        const response = await groupAddList(groupId);
+        setMembers(response);
+    }
+
+    useEffect(() => {
+        fetchAddMembersList();
+    }, []); 
+
   return (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
         <div className={`${darkMode ? 'bg-[#262729]' : 'bg-card'} rounded-lg shadow-lg w-full max-w-md`}>
@@ -13,18 +24,34 @@ export default function GroupAddMembers({showAddMemberMenu, darkMode}) {
             <div className="p-4">
                 <h3 className={`${darkMode ? 'text-gray-300' : 'text-muted'} text-sm font-medium `}>FRIENDS</h3>
                 <div className='w-full' style={{maxHeight:'40vh', overflowY:'auto', scrollbarWidth:'none'}}>
-                <div className="mt-2">
-                    <label className="flex items-center mb-2">
-                    <input type="checkbox" className="mr-2" style={{cursor: 'pointer', width: '15px', height: '15px'}} />
-                    <img src="https://openui.fly.dev/openui/24x24.svg?text=👤" className="w-8 h-8 rounded-full mx-2"/>
-                    <div>
-                        <span className={`${darkMode ? 'text-white':''} font-semibold`}>{user}</span>
-                        <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} text-xs `}>
-                        {about}
-                        </p>
+                    {members.map((member, index) => (
+                    <div key={index} className="mt-2">
+                        <label className="flex items-center mb-2">
+                        <input
+                            type="checkbox"
+                            className="mr-2"
+                            style={{ cursor: 'pointer', width: '15px', height: '15px' }}
+                        />
+                        <img
+                            src={member.profilePicture}
+                            className="w-8 h-8 rounded-full mx-2"
+                            alt="Member"
+                        />
+                        <div>
+                            <span className={`${darkMode ? 'text-white' : ''} font-semibold`}>
+                            {member.userName}
+                            </span>
+                            <p
+                            className={`${
+                                darkMode ? 'text-gray-400' : 'text-muted-foreground'
+                            } text-xs`}
+                            >
+                            {member.about} 
+                            </p>
+                        </div>
+                        </label>
                     </div>
-                    </label>
-                </div>
+                    ))}
                 </div>
             </div>
             <div className={`${darkMode ? 'border-gray-700' : 'border-border'} px-4 py-3 border-t`}>
