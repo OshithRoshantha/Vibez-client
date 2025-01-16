@@ -69,12 +69,12 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
         fetchAllGroups();
     }, []);
     
-    const handleAddClick = (friendshipId) => {
-        setAddedFriends((prev) => ({ ...prev, [friendshipId]: true }));
+    const handleAddClick = (userId) => {
+        setAddedFriends((prev) => ({ ...prev, [userId]: true }));
       };
   
-      const handleRemoveClick = (friendshipId) => {
-        setAddedFriends((prev) => ({ ...prev, [friendshipId]: false }));
+      const handleRemoveClick = (userId) => {
+        setAddedFriends((prev) => ({ ...prev, [userId]: false }));
       };
 
     function clearCropedImage() {
@@ -179,9 +179,9 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
                     ) : (
                         <>
                             {friends?.map((friend) => {
-                                const isAdded = addedFriends?.[friend.friendshipId] || false;
+                                const isAdded = addedFriends?.[friend.userId] || false;
                                 return (
-                                    <div key={friend.friendshipId} className="flex items-center justify-between border-border py-2">
+                                    <div key={friend.userId} className="flex items-center justify-between border-border py-2">
                                         <div className="flex items-center">
                                             <img
                                                 src={friend.profilePicture}
@@ -202,7 +202,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
                                                 className={`px-3 py-1 mr-2 rounded text-primary-foreground ${
                                                     isAdded ? "bg-blue-300" : "bg-primary"
                                                 }`}
-                                                onClick={() => handleAddClick(friend.friendshipId)}
+                                                onClick={() => handleAddClick(friend.userId)}
                                                 disabled={isAdded}
                                             >
                                                 {isAdded ? "Added" : "Add"}
@@ -214,7 +214,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
                                                             ? "bg-[#6a6b6d] text-white hover:bg-[#545454]"
                                                             : "bg-muted text-muted-foreground hover:bg-gray-300"
                                                     } border-none px-3 py-1 rounded`}
-                                                    onClick={() => handleRemoveClick(friend.friendshipId)}
+                                                    onClick={() => handleRemoveClick(friend.userId)}
                                                 >
                                                     Remove
                                                 </button>
