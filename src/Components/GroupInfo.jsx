@@ -75,14 +75,20 @@ export default function GroupInfo({darkMode, groupId}) {
         for (const lastMessage of newMessages) {
             switch (lastMessage.action) {
                 case 'groupService': {
-                    const isRelated = await isGroupRelated(lastMessage.groupId);
-                    if (isRelated) {
-                        fetchGroupInfo();
-                    }
-                    break;
+                  const isRelated = await isGroupRelated(lastMessage.groupId);
+                  if (isRelated) {
+                    fetchGroupInfo();
+                  }
+                  break;
+                }
+                case 'profileService': {
+                  if(members.some(member => member.userId === lastMessage.body)){
+                    fetchGroupInfo();
+                  }
+                  break;
                 }
                 default:
-                    break;
+                  break;
             }
         }
         setProcessedMessages(prevProcessedMessages => [
