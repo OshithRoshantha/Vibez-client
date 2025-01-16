@@ -137,3 +137,13 @@ export const filterAcceptedRequests = async (friendshipId: string) => {
     });
     return response.data;
 }
+
+export const getAllFriends = async () => {
+    const userId = sessionStorage.getItem('userId');
+    const response = await axios.get(`http://localhost:8080/vibez/friends/getAll/${userId}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+}
