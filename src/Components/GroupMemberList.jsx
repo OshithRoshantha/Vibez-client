@@ -1,13 +1,19 @@
 import {useState} from 'react'
 import GlobalAlert from './GlobalAlert';
 import { Skeleton } from "@/components/ui/skeleton";
+import { removeMembers } from '../Services/GroupsService';
 
-export default function GroupMemberList({darkMode, members, groupName, loading}) {
+export default function GroupMemberList({darkMode, members, groupName, loading, groupId}) {
 
   const userId = sessionStorage.getItem('userId');
   const [deleteGroupPopup, setDeleteGroupPopup] = useState(false);
   const [removeMemberPopup, setRemoveMemberPopup] = useState(false);
   const [member, setMember] = useState('');
+  const [memberId, setMemberId] = useState([]);
+
+  const removeMemberFromGroup = async () => {
+    await removeMembers(groupId, memberId);
+  }
 
   function toggleDeleteGroupPopup(memberName = ''){
     setMember(memberName);
@@ -19,10 +25,16 @@ export default function GroupMemberList({darkMode, members, groupName, loading})
     setRemoveMemberPopup(!removeMemberPopup);
   }
 
+  const removeMember = async () => {
+    toggleRemoveMemberPopup();
+    await removeMemberFromGroup();
+    setMemberId([]);
+  }
+
   return (
     <div className="mt-0">
         {deleteGroupPopup && <GlobalAlert darkMode={darkMode} text={`Delete "${groupName}" group?`} textOP={'Deleting this group will remove it permanently for all members. '} button1={'Cancel'} button2={'Delete group'} btn1Function={toggleDeleteGroupPopup} btn2Function={toggleDeleteGroupPopup}/>}
-        {removeMemberPopup && <GlobalAlert darkMode={darkMode} text={`Remove ${member} from "${groupName}" group?`} textOP={'This action cannot be undone. '} button1={'Cancel'} button2={'Remove'} btn1Function={toggleRemoveMemberPopup} btn2Function={toggleRemoveMemberPopup}/>}
+        {removeMemberPopup && <GlobalAlert darkMode={darkMode} text={`Remove ${member} from "${groupName}" group?`} textOP={'This action cannot be undone. '} button1={'Cancel'} button2={'Remove'} btn1Function={toggleRemoveMemberPopup} btn2Function={removeMember}/>}
         {loading ? (
           <>
             <div className="flex items-center mb-3">
@@ -100,7 +112,7 @@ export default function GroupMemberList({darkMode, members, groupName, loading})
                     </p>
                   </div>
                   <button
-                    onClick={() => toggleRemoveMemberPopup(member.userName)}
+                    onClick={() => {setMemberId((prevIds) => [...prevIds, member.userId]); toggleRemoveMemberPopup(member.userName);}}
                     className={`${
                       darkMode
                         ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]'
