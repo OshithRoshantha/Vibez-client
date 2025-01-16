@@ -5,7 +5,7 @@ import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
 import GroupChatPreview from './GroupChatPreview';
 import { Skeleton } from "@/components/ui/skeleton";
-import { getAllGroups, getGroupInfo } from '../Services/GroupsService';
+import { getAllGroups, getGroupInfo, createGroup } from '../Services/GroupsService';
 import { getAllFriends } from '../Services/FriendshipService'
 
 export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
@@ -16,14 +16,15 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
     const [addMembersMenu, setAddMembersMenu] = useState(false);
     const [finishCreateGroup, setFinishCreateGroup] = useState(false);
     const [groupChats, setGroupChats] = useState(true);
-    const [isAdded, setIsAdded] = useState(false);
     const [editPictureForm, setEditPictureForm] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const [cropFactor, setCropFactor] = useState(1);
-    const [cropedImage, setCropedImage] = useState(null);
     const fileInputRef = useRef(null);
-    const avatarEditorRef = useRef(null);  
+    const avatarEditorRef = useRef(null); 
 
+    const [groupSubject, setGroupSubject] = useState("");
+    const [groupDescription, setGroupDescription] = useState("");
+    const [cropedImage, setCropedImage] = useState(null);
     const [addedFriends, setAddedFriends] = useState({});
 
     const defaultImage = "./src/assets/groupDefault.jpg";
@@ -49,18 +50,21 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
         setFriends(friends);
     }
 
+    const createNewGroup = async () => {
+        const selectedFriendIds = Object.keys(addedFriends).filter((id) => addedFriends[id] === true);
+        await createGroup(groupSubject, cropedImage, groupDescription, selectedFriendIds);
+    }
+
     useEffect(() => {
         fetchAllGroups();
     }, []);
     
     const handleAddClick = (friendshipId) => {
         setAddedFriends((prev) => ({ ...prev, [friendshipId]: true }));
-        setIsAdded(true);
       };
   
       const handleRemoveClick = (friendshipId) => {
         setAddedFriends((prev) => ({ ...prev, [friendshipId]: false }));
-        setIsAdded(false);
       };
 
     function clearCropedImage() {
@@ -89,6 +93,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
         setFinishCreateGroup(true);
         setAddMembersMenu(false);
         setGroupChats(false);
+        console.log(addedFriends);
     }
 
     function hideFinishCreateGroup(){
@@ -128,8 +133,6 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
         }
     }
 
-    var user = "testUser";
-
   return (
     <div>
     <div>
@@ -148,7 +151,6 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
                     <div className="space-y-0">           
                         {friends.map((friend) => {
                             const isAdded = addedFriends[friend.friendshipId] || false;
-
                             return (
                             <div
                                 key={friend.friendshipId}
@@ -242,14 +244,18 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
                     <input
                         type="text"
                         placeholder="Group subject"
+                        value={groupSubject}
+                        onChange={(e) => setGroupSubject(e.target.value)}
                         className={`${darkMode ? 'border-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'border-muted text-foreground placeholder:text-muted-foreground'} border-b  w-full py-2 mb-4 bg-transparent  focus:outline-none`}
                     />              
                     <input
                         type="text"
                         placeholder="Group description (optional)"
+                        value={groupDescription}
+                        onChange={(e) => setGroupDescription(e.target.value)}
                         className={`${darkMode ? 'border-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'border-muted text-foreground placeholder:text-muted-foreground'} border-b  w-full py-2 mb-4 bg-transparent  focus:outline-none`}
                     />
-                    <button onClick={() => {hideFinishCreateGroup(); clearCropedImage();}} className="bg-primary text-white absolute" style={{cursor: 'pointer', borderRadius:'50%', height:'54px', width:'54px', marginTop:'340px'}} >
+                    <button onClick={() => {hideFinishCreateGroup(); clearCropedImage(); createNewGroup();}} className="bg-primary text-white absolute" style={{cursor: 'pointer', borderRadius:'50%', height:'54px', width:'54px', marginTop:'340px'}} >
                         <i className="bi bi-check2"></i>
                     </button>
                     </div>           
