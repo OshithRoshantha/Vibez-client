@@ -1,13 +1,24 @@
 import { useState } from 'react';
 import GlobalAlert from './GlobalAlert';
 import { Skeleton } from "@/components/ui/skeleton";
+import { removeMembers } from '../Services/GroupsService';
 
-export default function GroupMemberList2({ darkMode, members, groupName, loading, creator }) {
+export default function GroupMemberList2({ darkMode, members, groupName, loading, creator, groupId }) {
+
   const [exitGroupPopup, setExitGroupPopup] = useState(false);
   const currentUserId = sessionStorage.getItem('userId');
 
   function toggleExitGroupPopup() {
     setExitGroupPopup(!exitGroupPopup);
+  }
+ 
+  const removeMemberFromGroup = async () => {
+    await removeMembers(groupId, [currentUserId]);
+  } 
+  
+  const handleGroupExit = () => {
+    toggleExitGroupPopup();
+    removeMemberFromGroup();
   }
 
   const currentUser = members.find(member => member.userId === currentUserId);
@@ -16,7 +27,7 @@ export default function GroupMemberList2({ darkMode, members, groupName, loading
   return (
     <div className="mt-0">
       {exitGroupPopup && (
-        <GlobalAlert darkMode={darkMode} text={`Exit "${groupName}" group?`} textOP={''} button1={'Cancel'} button2={'Exit group'} btn1Function={toggleExitGroupPopup} btn2Function={toggleExitGroupPopup}/>
+        <GlobalAlert darkMode={darkMode} text={`Exit "${groupName}" group?`} textOP={''} button1={'Cancel'} button2={'Exit group'} btn1Function={toggleExitGroupPopup} btn2Function={handleGroupExit}/>
       )}
       {loading ? (
         <>
