@@ -4,10 +4,14 @@ import { useState, useEffect, useRef } from "react";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
-import { getGroupInfo } from '../Services/GroupsService';
+import { getGroupInfo, isGroupRelated } from '../Services/GroupsService';
 import { Skeleton } from "@/components/ui/skeleton";
+import { useWebSocket } from '../Context/WebSocketContext';
 
 export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
+
+  const { messages } = useWebSocket();
+  const [processedMessages, setProcessedMessages] = useState([]);
 
   const chatRef = useRef(null);
   const [groupName, setGroupName] = useState('');
@@ -26,6 +30,36 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+          const handleMessages = async () => {
+              if (messages.length === 0) {
+                  return;
+              }
+              const newMessages = messages.filter(message => !processedMessages.includes(message.id));
+              if (newMessages.length === 0) {
+                  return; 
+              }
+              for (const lastMessage of newMessages) {
+                  switch (lastMessage.action) {
+                      case 'groupService': {
+                          const isRelated = await isGroupRelated(lastMessage.groupId);
+                          if (isRelated) {
+                              fetchGroupInfo();
+                          }
+                          break;
+                      }
+                      default:
+                          break;
+                  }
+              }
+              setProcessedMessages(prevProcessedMessages => [
+                  ...prevProcessedMessages,
+                  ...newMessages.map(message => message.id),
+              ]);
+          };
+          handleMessages();
+      }, [messages, processedMessages]);
 
   useEffect(() => {
     fetchGroupInfo();

@@ -39,6 +39,16 @@ export const groupAddList = async (groupId: string) => {
     return response.data;
 }
 
+export const isGroupRelated = async (groupId: string) => {
+    const userId = sessionStorage.getItem('userId');
+    const response = await axios.get(`http://localhost:8080/vibez/group/isRelated/${groupId}/${userId}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+}
+
 export const createGroup = async (groupName: string, groupIcon: string, groupDescp: string, memberIds: string[]): Promise<void> => {
     return new Promise((resolve) => {
         const token = sessionStorage.getItem('token');
