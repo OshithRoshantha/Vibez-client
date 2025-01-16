@@ -1,36 +1,100 @@
-import {useState} from 'react'
+import { useState } from 'react';
 import GlobalAlert from './GlobalAlert';
+import { Skeleton } from "@/components/ui/skeleton";
 
-export default function GroupMemberList2({darkMode}) {
+export default function GroupMemberList2({ darkMode, members, groupName, loading }) {
   const [exitGroupPopup, setExitGroupPopup] = useState(false);
+  const currentUserId = sessionStorage.getItem('userId');
 
-  function toggleExitGroupPopup(){
+  function toggleExitGroupPopup() {
     setExitGroupPopup(!exitGroupPopup);
   }
 
-  var groupName = "friends"
+  const currentUser = members.find(member => member.userId === currentUserId);
+  const otherMembers = members.filter(member => member.userId !== currentUserId);
 
   return (
     <div className="mt-0">
-        {exitGroupPopup && <GlobalAlert darkMode={darkMode} text={`Exit "${groupName}" group?`} textOP={''} button1={'Cancel'} button2={'Exit group'} btn1Function={toggleExitGroupPopup} btn2Function={toggleExitGroupPopup}/>}
-        <div className="flex items-center mb-2">
+      {exitGroupPopup && (
+        <GlobalAlert darkMode={darkMode} text={`Exit "${groupName}" group?`} textOP={''} button1={'Cancel'} button2={'Exit group'} btn1Function={toggleExitGroupPopup} btn2Function={toggleExitGroupPopup}/>
+      )}
+      {loading ? (
+        <>
+          <div className="flex items-center mb-3">
+            <Skeleton className="w-9 h-9 rounded-full bg-gray-300 mr-2" />
+            <div>
+              <Skeleton className="h-4 w-[80px] mb-1" />
+              <Skeleton className="h-3 w-[150px]" />
+            </div>
+            <Skeleton className="ml-auto h-6 w-[90px] rounded" />
+          </div>
 
-        <div className="w-8 h-8 rounded-full bg-green-500 mr-2"></div>
-        <div>
-            <span className={`${darkMode ? 'text-white':''} font-semibold`}>You</span>
-            <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} text-sm `}>Hey there! I am using Vibez.</p>
-        </div>
-        <button onClick={toggleExitGroupPopup} className="ml-auto text-sm bg-red-400 text-white hover:bg-red-300 border-none">Exit group</button>
-        </div>
+          <div className="flex items-center mb-3">
+            <Skeleton className="w-9 h-9 rounded-full bg-gray-300 mr-2" />
+            <div>
+              <Skeleton className="h-4 w-[80px] mb-1" />
+              <Skeleton className="h-3 w-[120px]" />
+            </div>
+            <Skeleton className="ml-auto h-3 w-[70px]" />
+          </div>
 
-        <div className="flex items-center mb-2">
-        <div className="w-8 h-8 rounded-full bg-blue-500 mr-2"></div>
-        <div>
-            <span className={`${darkMode ? 'text-white':''} font-semibold`}>user01</span>
-            <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} text-sm `}>Available</p>
-        </div>
-        <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} text-sm ml-auto`}>Owner</p>
-        </div>
+          <div className="flex items-center mb-2">
+            <Skeleton className="w-9 h-9 rounded-full bg-gray-300 mr-2" />
+            <div>
+              <Skeleton className="h-4 w-[80px] mb-1" />
+              <Skeleton className="h-3 w-[120px]" />
+            </div>
+            <Skeleton className="ml-auto h-3 w-[70px]" />
+          </div>        
+        </>
+      ) : (
+        <>
+          {currentUser && (
+            <div className="flex items-center mb-2">
+              <div
+                className="w-8 h-8 rounded-full mr-2"
+                style={{
+                  backgroundImage: `url(${currentUser.profilePicture})`,
+                  backgroundSize: 'cover',
+                }}
+              ></div>          
+              <div>
+                <span className={`${darkMode ? 'text-white' : ''} font-semibold`}>You</span>
+                <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} text-sm`}>
+                  {currentUser.about}
+                </p>
+              </div>
+              <button
+                onClick={toggleExitGroupPopup}
+                className="ml-auto text-sm bg-red-400 text-white hover:bg-red-300 border-none"
+              >
+                Exit group
+              </button>
+            </div>
+          )}
+
+          {otherMembers.map((member) => (
+            <div key={member.userId} className="flex items-center mb-2">
+              <div
+                className="w-8 h-8 rounded-full mr-2"
+                style={{
+                  backgroundImage: `url(${member.profilePicture})`,
+                  backgroundSize: 'cover',
+                }}
+              ></div> 
+              <div>
+                <span className={`${darkMode ? 'text-white' : ''} font-semibold`}>{member.userName}</span>
+                <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} text-sm`}>
+                  {member.about}
+                </p>
+              </div>
+              <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} text-sm ml-auto`}>
+                {member.role === 'owner' ? 'Owner' : ''}
+              </p>
+            </div>
+          ))}
+        </>
+      )}
     </div>
-  )
+  );
 }
