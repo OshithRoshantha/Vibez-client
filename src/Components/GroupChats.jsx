@@ -32,7 +32,6 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
     const fetchAllGroups = async () => {
         try{
             const groupIds = await getAllGroups();
-            console.log(groupIds);
             const groupPreviews = await Promise.all(
                 groupIds.map(async (groupId) => {
                     const groupPreview = await getGroupInfo(groupId);
@@ -54,6 +53,10 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
     const createNewGroup = async () => {
         const selectedFriendIds = Object.keys(addedFriends).filter((id) => addedFriends[id] === true);
         await createGroup(groupSubject, cropedImage, groupDescription, selectedFriendIds);
+        setGroupSubject("");    
+        setGroupDescription("");
+        setAddedFriends({});
+        setCropedImage(null);
     }
 
     useEffect(() => {
@@ -94,7 +97,6 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
         setFinishCreateGroup(true);
         setAddMembersMenu(false);
         setGroupChats(false);
-        console.log(addedFriends);
     }
 
     function hideFinishCreateGroup(){

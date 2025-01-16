@@ -39,9 +39,10 @@ export const groupAddList = async (groupId: string) => {
     return response.data;
 }
 
-export const createGroup = async (groupName: string, groupIcon: string, groupDescp: string, members: string[]): Promise<void> => {
+export const createGroup = async (groupName: string, groupIcon: string, groupDescp: string, memberIds: string[]): Promise<void> => {
     return new Promise((resolve) => {
         const token = sessionStorage.getItem('token');
+        const userId = sessionStorage.getItem('userId');
 
         const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
 
@@ -49,11 +50,11 @@ export const createGroup = async (groupName: string, groupIcon: string, groupDes
             const message = {
                 action: 'groupService',
                 body: {
-                    creatorId: sessionStorage.getItem('userId'),
+                    creatorId: userId,
                     groupName,
                     groupIcon,
                     groupDescp,
-                    memberIds: members
+                    memberIds
                 },
             };
             socket.send(JSON.stringify(message));
