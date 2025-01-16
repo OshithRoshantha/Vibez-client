@@ -32,6 +32,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
     const fetchAllGroups = async () => {
         try{
             const groupIds = await getAllGroups();
+            console.log(groupIds);
             const groupPreviews = await Promise.all(
                 groupIds.map(async (groupId) => {
                     const groupPreview = await getGroupInfo(groupId);
