@@ -5,10 +5,14 @@ import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
 import GroupChatPreview from './GroupChatPreview';
 import { Skeleton } from "@/components/ui/skeleton";
-import { getAllGroups, getGroupInfo, createGroup } from '../Services/GroupsService';
-import { getAllFriends } from '../Services/FriendshipService'
+import { getAllGroups, getGroupInfo, createGroup, isGroupRelated } from '../Services/GroupsService';
+import { getAllFriends } from '../Services/FriendshipService';
+import { useWebSocket } from '../Context/WebSocketContext';
 
 export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
+
+    const { messages } = useWebSocket();
+    const [processedMessages, setProcessedMessages] = useState([]);
 
     const [groups, setGroups] = useState([]);
     const [friends, setFriends] = useState([]);
@@ -29,6 +33,36 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
     const [addedFriends, setAddedFriends] = useState({});
 
     const defaultImage = "./src/assets/groupDefault.jpg";
+
+    useEffect(() => {
+        const handleMessages = async () => {
+            if (messages.length === 0) {
+                return;
+            }
+            const newMessages = messages.filter(message => !processedMessages.includes(message.id));
+            if (newMessages.length === 0) {
+                return; 
+            }
+            for (const lastMessage of newMessages) {
+                switch (lastMessage.action) {
+                    case 'groupService': {
+                        const isRelated = await isGroupRelated(lastMessage.groupId);
+                        if (isRelated) {
+                            fetchAllGroups();
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
+            setProcessedMessages(prevProcessedMessages => [
+                ...prevProcessedMessages,
+                ...newMessages.map(message => message.id),
+            ]);
+        };
+        handleMessages();
+    }, [messages, processedMessages]);     
 
     const fetchAllGroups = async () => {
         try{
