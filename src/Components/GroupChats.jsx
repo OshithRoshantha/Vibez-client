@@ -6,10 +6,12 @@ import Slider from '@mui/material/Slider';
 import GroupChatPreview from './GroupChatPreview';
 import { Skeleton } from "@/components/ui/skeleton";
 import { getAllGroups, getGroupInfo } from '../Services/GroupsService';
+import { getAllFriends } from '../Services/FriendshipService'
 
 export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
 
     const [groups, setGroups] = useState([]);
+    const [friends, setFriends] = useState([]);
     const [loading, setLoading] = useState(true);
     const [addMembersMenu, setAddMembersMenu] = useState(false);
     const [finishCreateGroup, setFinishCreateGroup] = useState(false);
@@ -21,6 +23,8 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
     const [cropedImage, setCropedImage] = useState(null);
     const fileInputRef = useRef(null);
     const avatarEditorRef = useRef(null);  
+
+    const [addedFriends, setAddedFriends] = useState({});
 
     const defaultImage = "./src/assets/groupDefault.jpg";
 
@@ -40,23 +44,31 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
         }
     }
 
+    const fetchAllFriends = async () => {
+        const friends = await getAllFriends();
+        setFriends(friends);
+    }
+
     useEffect(() => {
         fetchAllGroups();
-    }, []);    
+    }, []);
+    
+    const handleAddClick = (friendshipId) => {
+        setAddedFriends((prev) => ({ ...prev, [friendshipId]: true }));
+        setIsAdded(true);
+      };
+  
+      const handleRemoveClick = (friendshipId) => {
+        setAddedFriends((prev) => ({ ...prev, [friendshipId]: false }));
+        setIsAdded(false);
+      };
 
     function clearCropedImage() {
         setCropedImage(null);
     }
-
-    function handleAddClick() {
-        setIsAdded(true);
-      }
-      
-    function handleRemoveClick() {
-        setIsAdded(false);
-    }
       
     function showAddMembersMenu(){
+        fetchAllFriends();
         setAddMembersMenu(true);
         setGroupChats(false);
         setFinishCreateGroup(false);
@@ -133,34 +145,56 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
                 {addMembersMenu && <div>
                     <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>Add group members</h2>
                     <div className='group-op'>
-                    <div className="space-y-4">
-                        <div className="flex items-center justify-between border-border py-2">
-                        <div className="flex items-center">
-                            <img src="https://placehold.co/40x40" className="rounded-full mr-2 w-55 h-55" />
-                            <div>
-                                <p className={`${darkMode ? 'text-white':''} font-medium`}>{user}</p>
-                                <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} text-sm `}>About</p>
+                    <div className="space-y-0">           
+                        {friends.map((friend) => {
+                            const isAdded = addedFriends[friend.friendshipId] || false;
+
+                            return (
+                            <div
+                                key={friend.friendshipId}
+                                className="flex items-center justify-between border-border py-2"
+                            >
+                                <div className="flex items-center">
+                                <img
+                                    src={friend.profilePicture}
+                                    className="rounded-full mr-2 w-10 h-10"
+                                    alt="Profile"
+                                />
+                                <div>
+                                    <p className={`${darkMode ? "text-white" : ""} font-medium`}>
+                                    {friend.profileName}
+                                    </p>
+                                    <p className={`${darkMode ? "text-gray-400" : "text-muted-foreground"} text-sm`}>
+                                    {friend.profileAbout}
+                                    </p>
+                                </div>
+                                </div>
+                                <div className="btn-container">
+                                <button
+                                    className={`px-3 py-1 mr-2 rounded text-primary-foreground ${
+                                    isAdded ? "bg-blue-300" : "bg-primary"
+                                    }`}
+                                    onClick={() => handleAddClick(friend.friendshipId)}
+                                    disabled={isAdded}
+                                >
+                                    {isAdded ? "Added" : "Add"}
+                                </button>
+                                {isAdded && (
+                                    <button
+                                    className={`${
+                                        darkMode
+                                        ? "bg-[#6a6b6d] text-white hover:bg-[#545454]"
+                                        : "bg-muted text-muted-foreground hover:bg-gray-300"
+                                    } border-none px-3 py-1 rounded`}
+                                    onClick={() => handleRemoveClick(friend.friendshipId)}
+                                    >
+                                    Remove
+                                    </button>
+                                )}
+                                </div>
                             </div>
-                        </div>
-                        <div className='btn-container'>
-                            <button
-                                  className={`px-3 py-1 mr-2 rounded text-primary-foreground ${isAdded ? "bg-blue-300" : "bg-primary"}`}
-                                onClick={handleAddClick}
-                                disabled={isAdded}
-                            >
-                                {isAdded ? "Added" : "Add"}
-                            </button>
-                            {isAdded &&
-                            <button
-                                className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} border-none px-3 py-1 rounded`}
-                                onClick={() => {
-                                    handleRemoveClick();
-                                  }}
-                            >
-                                Remove
-                            </button>}
-                        </div>
-                        </div>
+                            );
+                        })}
                     </div>
                     </div>
                     <div className="flex items-center justify-center">
