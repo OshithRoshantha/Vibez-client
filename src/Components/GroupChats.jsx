@@ -13,6 +13,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
     const [groups, setGroups] = useState([]);
     const [friends, setFriends] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loading2, setLoading2] = useState(true);
     const [addMembersMenu, setAddMembersMenu] = useState(false);
     const [finishCreateGroup, setFinishCreateGroup] = useState(false);
     const [groupChats, setGroupChats] = useState(true);
@@ -46,8 +47,13 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
     }
 
     const fetchAllFriends = async () => {
-        const friends = await getAllFriends();
-        setFriends(friends);
+        try{
+            setLoading2(true);
+            const friends = await getAllFriends();
+            setFriends(friends);
+        } finally{
+            setLoading2(false);
+        }
     }
 
     const createNewGroup = async () => {
@@ -151,55 +157,74 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
                 {addMembersMenu && <div>
                     <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>Add group members</h2>
                     <div className='group-op'>
-                    <div className="space-y-0">           
-                        {friends.map((friend) => {
-                            const isAdded = addedFriends[friend.friendshipId] || false;
-                            return (
-                            <div
-                                key={friend.friendshipId}
-                                className="flex items-center justify-between border-border py-2"
-                            >
-                                <div className="flex items-center">
-                                <img
-                                    src={friend.profilePicture}
-                                    className="rounded-full mr-2 w-10 h-10"
-                                    alt="Profile"
-                                />
-                                <div>
-                                    <p className={`${darkMode ? "text-white" : ""} font-medium`}>
-                                    {friend.profileName}
-                                    </p>
-                                    <p className={`${darkMode ? "text-gray-400" : "text-muted-foreground"} text-sm`}>
-                                    {friend.profileAbout}
-                                    </p>
+                    <div className="space-y-0">  
+                    {loading2 ? (
+                        <>
+                            {Array.from({ length: 4 }).map((_, index) => (
+                                <div key={index} className="flex items-center justify-between border-border py-2">
+                                    <div className="flex items-center">
+                                        <Skeleton className="rounded-full mr-2 w-10 h-10" />
+                                        <div>
+                                            <Skeleton className="h-4 w-[120px] mb-1" />
+                                            <Skeleton className="h-3 w-[180px]" />
+                                        </div>
+                                    </div>
+                                    <div className="btn-container flex">
+                                        <Skeleton className="px-3 py-2 w-[60px] rounded mr-2" />
+                                        <Skeleton className="px-3 py-2 w-[70px] rounded" />
+                                    </div>
                                 </div>
-                                </div>
-                                <div className="btn-container">
-                                <button
-                                    className={`px-3 py-1 mr-2 rounded text-primary-foreground ${
-                                    isAdded ? "bg-blue-300" : "bg-primary"
-                                    }`}
-                                    onClick={() => handleAddClick(friend.friendshipId)}
-                                    disabled={isAdded}
-                                >
-                                    {isAdded ? "Added" : "Add"}
-                                </button>
-                                {isAdded && (
-                                    <button
-                                    className={`${
-                                        darkMode
-                                        ? "bg-[#6a6b6d] text-white hover:bg-[#545454]"
-                                        : "bg-muted text-muted-foreground hover:bg-gray-300"
-                                    } border-none px-3 py-1 rounded`}
-                                    onClick={() => handleRemoveClick(friend.friendshipId)}
-                                    >
-                                    Remove
-                                    </button>
-                                )}
-                                </div>
-                            </div>
-                            );
-                        })}
+                            ))}
+                        </>
+                    ) : (
+                        <>
+                            {friends?.map((friend) => {
+                                const isAdded = addedFriends?.[friend.friendshipId] || false;
+                                return (
+                                    <div key={friend.friendshipId} className="flex items-center justify-between border-border py-2">
+                                        <div className="flex items-center">
+                                            <img
+                                                src={friend.profilePicture}
+                                                className="rounded-full mr-2 w-10 h-10"
+                                                alt="Profile"
+                                            />
+                                            <div>
+                                                <p className={`${darkMode ? "text-white" : ""} font-medium`}>
+                                                    {friend.profileName}
+                                                </p>
+                                                <p className={`${darkMode ? "text-gray-400" : "text-muted-foreground"} text-sm`}>
+                                                    {friend.profileAbout}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="btn-container">
+                                            <button
+                                                className={`px-3 py-1 mr-2 rounded text-primary-foreground ${
+                                                    isAdded ? "bg-blue-300" : "bg-primary"
+                                                }`}
+                                                onClick={() => handleAddClick(friend.friendshipId)}
+                                                disabled={isAdded}
+                                            >
+                                                {isAdded ? "Added" : "Add"}
+                                            </button>
+                                            {isAdded && (
+                                                <button
+                                                    className={`${
+                                                        darkMode
+                                                            ? "bg-[#6a6b6d] text-white hover:bg-[#545454]"
+                                                            : "bg-muted text-muted-foreground hover:bg-gray-300"
+                                                    } border-none px-3 py-1 rounded`}
+                                                    onClick={() => handleRemoveClick(friend.friendshipId)}
+                                                >
+                                                    Remove
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </>
+                    )}
                     </div>
                     </div>
                     <div className="flex items-center justify-center">
