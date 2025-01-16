@@ -69,12 +69,12 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
         fetchAllGroups();
     }, []);
     
-    const handleAddClick = (userId) => {
-        setAddedFriends((prev) => ({ ...prev, [userId]: true }));
+    const handleAddClick = (profileId) => {
+        setAddedFriends((prev) => ({ ...prev, [profileId]: true }));
       };
   
-      const handleRemoveClick = (userId) => {
-        setAddedFriends((prev) => ({ ...prev, [userId]: false }));
+      const handleRemoveClick = (profileId) => {
+        setAddedFriends((prev) => ({ ...prev, [profileId]: false }));
       };
 
     function clearCropedImage() {
@@ -160,7 +160,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
                     <div className="space-y-0">  
                     {loading2 ? (
                         <>
-                            {Array.from({ length: 4 }).map((_, index) => (
+                            {Array.from({ length: 6 }).map((_, index) => (
                                 <div key={index} className="flex items-center justify-between border-border py-2">
                                     <div className="flex items-center">
                                         <Skeleton className="rounded-full mr-2 w-10 h-10" />
@@ -179,9 +179,9 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
                     ) : (
                         <>
                             {friends?.map((friend) => {
-                                const isAdded = addedFriends?.[friend.userId] || false;
+                                const isAdded = addedFriends?.[friend.profileId] || false;
                                 return (
-                                    <div key={friend.userId} className="flex items-center justify-between border-border py-2">
+                                    <div key={friend.profileId} className="flex items-center justify-between border-border py-2">
                                         <div className="flex items-center">
                                             <img
                                                 src={friend.profilePicture}
@@ -202,7 +202,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
                                                 className={`px-3 py-1 mr-2 rounded text-primary-foreground ${
                                                     isAdded ? "bg-blue-300" : "bg-primary"
                                                 }`}
-                                                onClick={() => handleAddClick(friend.userId)}
+                                                onClick={() => handleAddClick(friend.profileId)}
                                                 disabled={isAdded}
                                             >
                                                 {isAdded ? "Added" : "Add"}
@@ -214,7 +214,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
                                                             ? "bg-[#6a6b6d] text-white hover:bg-[#545454]"
                                                             : "bg-muted text-muted-foreground hover:bg-gray-300"
                                                     } border-none px-3 py-1 rounded`}
-                                                    onClick={() => handleRemoveClick(friend.userId)}
+                                                    onClick={() => handleRemoveClick(friend.profileId)}
                                                 >
                                                     Remove
                                                 </button>
