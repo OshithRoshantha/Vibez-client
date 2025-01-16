@@ -127,6 +127,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
               return;
           }
           for (const lastMessage of newMessages) {
+
               if (lastMessage.action === 'messageService') {
                   const isRelated = await checkIsRelated(lastMessage.chatId);
                   if (isRelated) {
@@ -134,6 +135,13 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
                      doMarkAsRead();
                   }
               }
+
+              if(lastMessage.action === 'profileService'){
+                if(lastMessage.body === receiverId){
+                  fetchReceiverInfo();
+                }
+              }
+              
           }
           setProcessedMessages((prevProcessedMessages) => [
               ...prevProcessedMessages,
