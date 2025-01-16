@@ -4,7 +4,7 @@ import GroupMemberList2 from './GroupMemberList2';
 import GroupAddMembers from './GroupAddMembers';
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
-import { checkAdmin, getGroupInfo } from '../Services/GroupsService';
+import { checkAdmin, getGroupInfo, updateGroup } from '../Services/GroupsService';
 import { fetchUserMetaDataById } from '../Services/ProfileService';
 
 export default function GroupInfo({darkMode, groupId}) {
@@ -31,6 +31,10 @@ export default function GroupInfo({darkMode, groupId}) {
   const checkAdminStatus = async () => {
     const response = await checkAdmin(groupId);
     setIsAmAdmin(response);
+  }
+
+  const updateGroupInfo = async () => {
+    await updateGroup(groupId, name, cropedImage, descp);
   }
 
   const fetchGroupInfo = async () => {
@@ -63,10 +67,12 @@ export default function GroupInfo({darkMode, groupId}) {
     
   function handleNameBlur() {
       setIsEditingName(false);
+      updateGroupInfo();
   }
     
   function handleDescpBlur() {
       setIsEditingDescp(false);
+      updateGroupInfo();
   }
 
   function showAddMemberMenu() {
@@ -109,6 +115,7 @@ export default function GroupInfo({darkMode, groupId}) {
         setSelectedImage(croppedImageUrl);
         setCropedImage(croppedImageUrl);
         editPictureFormHandler();
+        updateGroupInfo();
       }
   }
 
@@ -200,7 +207,7 @@ export default function GroupInfo({darkMode, groupId}) {
             <div className={`${darkMode ? 'border-gray-700' : 'border-border'} border-b  my-4`}></div>
             </div>}
           <div className={`w-full  ${isAmAdmin ? 'h-[25vh]' : 'h-[38vh]'}`} style={{overflowY:'auto', scrollbarWidth:'none'}}>
-            {isAmAdmin ? <GroupMemberList loading={loading} members={members} groupName={name} darkMode={darkMode}/> : <GroupMemberList2 loading={loading} members={members} groupName={name} darkMode={darkMode}/>}
+            {isAmAdmin ? <GroupMemberList loading={loading} groupId={groupId} members={members} groupName={name} darkMode={darkMode}/> : <GroupMemberList2 loading={loading} groupId={groupId} members={members} groupName={name} darkMode={darkMode}/>}
           </div>
         </div>
       </div>
