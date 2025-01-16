@@ -29,7 +29,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
 
     const [groupSubject, setGroupSubject] = useState("");
     const [groupDescription, setGroupDescription] = useState("");
-    const [cropedImage, setCropedImage] = useState(null);
+    const [cropedImage, setCropedImage] = useState("./src/assets/groupDefault.jpg");
     const [addedFriends, setAddedFriends] = useState({});
 
     const defaultImage = "./src/assets/groupDefault.jpg";
