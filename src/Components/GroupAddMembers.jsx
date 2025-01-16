@@ -64,7 +64,7 @@ export default function GroupAddMembers({ showAddMemberMenu, darkMode, groupId }
             ) : (
               members.map((member, index) => (
                 <div key={index} className="mt-2">
-                  <label className="flex items-center mb-2">
+                  <label className="flex items-center mb-1">
                     <input
                       type="checkbox"
                       className="mr-2"
