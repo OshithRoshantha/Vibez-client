@@ -27,6 +27,7 @@ export default function GroupInfo({darkMode, groupId}) {
   const [avatar, setAvatar] = useState('');
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [creator, setCreator] = useState('');
 
   const checkAdminStatus = async () => {
     const response = await checkAdmin(groupId);
@@ -44,6 +45,7 @@ export default function GroupInfo({darkMode, groupId}) {
         setDescp(response.groupDesc);
         setMemberCount(response.memberIds.length);
         setAvatar(response.groupIcon);
+        setCreator(response.creatorId);
         const memberPromises = response.memberIds.map(userId => fetchUserMetaDataById(userId));
         const memberData = await Promise.all(memberPromises);
         setMembers(memberData);
@@ -207,7 +209,7 @@ export default function GroupInfo({darkMode, groupId}) {
             <div className={`${darkMode ? 'border-gray-700' : 'border-border'} border-b  my-4`}></div>
             </div>}
           <div className={`w-full  ${isAmAdmin ? 'h-[25vh]' : 'h-[38vh]'}`} style={{overflowY:'auto', scrollbarWidth:'none'}}>
-            {isAmAdmin ? <GroupMemberList loading={loading} groupId={groupId} members={members} groupName={name} darkMode={darkMode}/> : <GroupMemberList2 loading={loading} groupId={groupId} members={members} groupName={name} darkMode={darkMode}/>}
+            {isAmAdmin ? <GroupMemberList loading={loading} groupId={groupId} members={members} groupName={name} darkMode={darkMode}/> : <GroupMemberList2 loading={loading} creator={creator} groupId={groupId} members={members} groupName={name} darkMode={darkMode}/>}
           </div>
         </div>
       </div>

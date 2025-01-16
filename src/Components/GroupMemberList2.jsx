@@ -2,7 +2,7 @@ import { useState } from 'react';
 import GlobalAlert from './GlobalAlert';
 import { Skeleton } from "@/components/ui/skeleton";
 
-export default function GroupMemberList2({ darkMode, members, groupName, loading }) {
+export default function GroupMemberList2({ darkMode, members, groupName, loading, creator }) {
   const [exitGroupPopup, setExitGroupPopup] = useState(false);
   const currentUserId = sessionStorage.getItem('userId');
 
@@ -89,7 +89,7 @@ export default function GroupMemberList2({ darkMode, members, groupName, loading
                 </p>
               </div>
               <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} text-sm ml-auto`}>
-                {member.role === 'owner' ? 'Owner' : ''}
+                {creator === member.userId ? 'Owner' : ''}
               </p>
             </div>
           ))}
