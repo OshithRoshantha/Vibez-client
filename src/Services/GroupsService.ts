@@ -102,3 +102,23 @@ export const removeMembers = async (groupId: string, memberList: string[]): Prom
         };
     });
 };
+
+export const deleteGroup = async (groupId: string): Promise<void> => {
+    return new Promise((resolve) => {
+        const token = sessionStorage.getItem('token');
+
+        const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
+
+        socket.onopen = () => {
+            const message = {
+                action: 'groupService',
+                groupAction: {
+                    groupId,
+                    action: 'deleteGroup'
+                },
+            };
+            socket.send(JSON.stringify(message));
+            resolve(); 
+        };
+    });
+};

@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import GlobalAlert from './GlobalAlert';
 import { Skeleton } from "@/components/ui/skeleton";
-import { removeMembers } from '../Services/GroupsService';
+import { removeMembers, deleteGroup } from '../Services/GroupsService';
 
 export default function GroupMemberList({darkMode, members, groupName, loading, groupId}) {
 
@@ -15,6 +15,10 @@ export default function GroupMemberList({darkMode, members, groupName, loading, 
     await removeMembers(groupId, memberId);
   }
 
+  const deleteGroupFromDB = async () => {
+    await deleteGroup(groupId);
+  }
+
   function toggleDeleteGroupPopup(memberName = ''){
     setMember(memberName);
     setDeleteGroupPopup(!deleteGroupPopup);
@@ -25,16 +29,21 @@ export default function GroupMemberList({darkMode, members, groupName, loading, 
     setRemoveMemberPopup(!removeMemberPopup);
   }
 
-  const removeMember = async () => {
+  const handleRemoveMember = async () => {
     toggleRemoveMemberPopup();
     await removeMemberFromGroup();
     setMemberId([]);
   }
 
+  const handleDeleteGroup = async () => {
+    toggleDeleteGroupPopup();
+    await deleteGroupFromDB();
+  }
+
   return (
     <div className="mt-0">
-        {deleteGroupPopup && <GlobalAlert darkMode={darkMode} text={`Delete "${groupName}" group?`} textOP={'Deleting this group will remove it permanently for all members. '} button1={'Cancel'} button2={'Delete group'} btn1Function={toggleDeleteGroupPopup} btn2Function={toggleDeleteGroupPopup}/>}
-        {removeMemberPopup && <GlobalAlert darkMode={darkMode} text={`Remove ${member} from "${groupName}" group?`} textOP={'This action cannot be undone. '} button1={'Cancel'} button2={'Remove'} btn1Function={toggleRemoveMemberPopup} btn2Function={removeMember}/>}
+        {deleteGroupPopup && <GlobalAlert darkMode={darkMode} text={`Delete "${groupName}" group?`} textOP={'Deleting this group will remove it permanently for all members. '} button1={'Cancel'} button2={'Delete group'} btn1Function={toggleDeleteGroupPopup} btn2Function={handleDeleteGroup}/>}
+        {removeMemberPopup && <GlobalAlert darkMode={darkMode} text={`Remove ${member} from "${groupName}" group?`} textOP={'This action cannot be undone. '} button1={'Cancel'} button2={'Remove'} btn1Function={toggleRemoveMemberPopup} btn2Function={handleRemoveMember}/>}
         {loading ? (
           <>
             <div className="flex items-center mb-3">
