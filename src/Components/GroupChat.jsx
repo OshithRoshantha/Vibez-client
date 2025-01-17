@@ -99,7 +99,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
   function handleScroll() {
     const chatContainer = chatRef.current;
     if (chatContainer) {
-      const isAtBottom = chatContainer.scrollHeight - chatContainer.scrollTop <= chatContainer.clientHeight + 1; 
+      const isAtBottom = chatContainer.scrollHeight - chatContainer.scrollTop === chatContainer.clientHeight;
       setShowScrollButton(!isAtBottom);
     }
   }
@@ -120,21 +120,21 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
         behavior: "smooth",
       });
     }
+    setShowScrollButton(false);  
   }
 
   useEffect(() => {
     const chatContainer = chatRef.current;
     if (chatContainer) {
       chatContainer.addEventListener("scroll", handleScroll);
-      scrollToBottom();
+      scrollToBottom();  
     }
     return () => {
-      const chatContainer = chatRef.current;
       if (chatContainer) {
         chatContainer.removeEventListener("scroll", handleScroll);
       }
     };
-  }, []);
+  }, []); 
 
   const handleSendMessage = async () => {
     await sendMessage(groupId, typedMessage);
@@ -151,7 +151,19 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
       setTemporalMessage(false);
       setMagicReplyButton(true);
     }
-  }, [message]);  
+  }, [message]); 
+  
+  useEffect(() => {
+    if (message.length > 0 || temporalMessage) {
+      const chatContainer = chatRef.current;
+      if (chatContainer) {
+        chatContainer.scrollTo({
+          top: chatContainer.scrollHeight,
+          behavior: 'smooth',
+        });
+      }
+    }
+  }, [message, temporalMessage]);
 
   return (
     <div>
