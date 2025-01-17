@@ -11,7 +11,7 @@ import { getChatMessages, checkIsRelated, sendMessage, markAsRead } from '../Ser
 import { getChatHistory, getSmartReply } from '../Services/VibezIntelligence';
 import TemporalMessage from "./TemporalMessage";
 import { DotLoader } from 'react-spinners';
-import { getFriendshipId } from '../Services/FriendshipService';
+import { validateFriendship } from '../Services/FriendshipService';
 
 export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fetchUnreadMessages}) {
 
@@ -74,8 +74,8 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
   }
 
   const checkIsFriends = async () => {
-    const response = await getFriendshipId(receiverId);
-    if(response === 'NOT_FRIENDS'){
+    const response = await validateFriendship(receiverId);
+    if(!response){
       setIsFriend(false);
     }
   }
@@ -279,7 +279,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
               </div>)}
             </>) : (
               <div className="w-full mt-2">
-                <p className={`${darkMode ? 'text-gray-300' : 'text-black' } text-sm text-center`}>Message sending is restricted. Please add this user as a friend first.</p>
+                <p className={`${darkMode ? 'text-gray-300' : 'text-black' } text-sm text-center`}>Looks like you're not connected. Please add this user as a friend to chat.</p>
               </div>
             )}
             </div>
