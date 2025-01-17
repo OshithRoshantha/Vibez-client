@@ -52,6 +52,15 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
                         }
                         break;
                     }
+                    case 'messageService': {
+                        if(lastMessage.type === 'group'){
+                          const isRelated = await isGroupRelated(lastMessage.groupId);
+                          if (isRelated) {
+                            fetchAllGroups();
+                          }
+                        }                        
+                      break;
+                    }
                     default:
                         break;
                 }
