@@ -156,11 +156,13 @@ export default function Dashboard() {
                     }
                 }
                 else if (lastMessage.action === 'messageService'){
-                    const isRelated = await checkIsRelated(lastMessage.chatId);
-                    if(isRelated){
-                        fetchUnreadMessages();
-                        if(lastMessage.sender !== sessionStorage.getItem('userId')){
-                            audioRef2.current.play();
+                    if(lastMessage.type === 'direct'){
+                        const isRelated = await checkIsRelated(lastMessage.chatId);
+                        if(isRelated){
+                            fetchUnreadMessages();
+                            if(lastMessage.sender !== sessionStorage.getItem('userId')){
+                                audioRef2.current.play();
+                            }
                         }
                     }
                 }

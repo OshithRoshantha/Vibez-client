@@ -49,6 +49,38 @@ export const isGroupRelated = async (groupId: string) => {
     return response.data;
 }
 
+export const getGroupMessages = async (groupId: string) => {
+    const userId = sessionStorage.getItem('userId');
+    const response = await axios.get(`http://localhost:8080/vibez/message/groupChat/${userId}/${groupId}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+}
+
+export const sendMessage = async (groupId: string, messageToSend: string): Promise<void> => {
+    return new Promise((resolve) => {
+        const token = sessionStorage.getItem('token');
+        const senderId = sessionStorage.getItem('userId');
+
+        const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
+
+        socket.onopen = () => {
+            const message = {
+                action: 'messageService',
+                body: {
+                    senderId,
+                    groupId,
+                    message: messageToSend,
+                },
+            };
+        socket.send(JSON.stringify(message));
+        resolve(); 
+        };
+    });   
+}
+
 export const createGroup = async (groupName: string, groupIcon: string, groupDescp: string, memberIds: string[]): Promise<void> => {
     return new Promise((resolve) => {
         const token = sessionStorage.getItem('token');

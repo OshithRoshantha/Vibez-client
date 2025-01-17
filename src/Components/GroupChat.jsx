@@ -4,9 +4,11 @@ import { useState, useEffect, useRef } from "react";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
-import { getGroupInfo, isGroupRelated } from '../Services/GroupsService';
+import { getGroupInfo, isGroupRelated, getGroupMessages, sendMessage } from '../Services/GroupsService';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
+import TemporalMessage from "./TemporalMessage";
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
 
@@ -17,10 +19,15 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
   const [groupName, setGroupName] = useState('');
   const [groupAvatar, setGroupAvatar] = useState('');
   const [loading, setLoading] = useState(true);
+  const [chatsLoading, setChatsLoading] = useState(true);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const chatWallpaper = darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)';
   const [magicReplyButton, setMagicReplyButton] = useState(false);
   const [removedFromGroup, setRemovedFromGroup] = useState(false);
+  const [typedMessage, setTypedMessage] = useState('');
+  const [temporalMessage, setTemporalMessage] = useState(false);
+  const [temporalMessageContent, setTemporalMessageContent] = useState('');
+  const [message, setMessage] = useState([]);
 
   const fetchGroupInfo = async () => {
     try{
@@ -32,7 +39,17 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
     }
   }
 
-  useEffect(() => {
+  const fetchChatMessages = async () => {
+    try{
+      const response = await getGroupMessages(groupId);
+      setMessage(response);
+    }
+    finally{
+      setChatsLoading(false);
+    }
+  }  
+
+    useEffect(() => {
           const handleMessages = async () => {
               if (messages.length === 0) {
                   return;
@@ -53,6 +70,15 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
                           }
                           break;
                       }
+                      case 'messageService': {
+                          if(lastMessage.type === 'group'){
+                            const isRelated = await isGroupRelated(lastMessage.groupId);
+                            if (isRelated) {
+                              fetchChatMessages();
+                            }
+                          }                        
+                        break;
+                      }
                       default:
                           break;
                   }
@@ -63,10 +89,11 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
               ]);
           };
           handleMessages();
-      }, [messages, processedMessages]);
+    }, [messages, processedMessages]);
 
   useEffect(() => {
     fetchGroupInfo();
+    fetchChatMessages();
   }, []);
 
   function handleScroll() {
@@ -109,6 +136,23 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
     };
   }, []);
 
+  const handleSendMessage = async () => {
+    await sendMessage(groupId, typedMessage);
+    setTemporalMessageContent(typedMessage);
+    setTypedMessage('');
+  }
+  
+  const displayTemporalMessage = () => {
+    setTemporalMessage(true);
+  }  
+
+  useEffect(() => {
+    if (message.length > 0) {
+      setTemporalMessage(false);
+      setMagicReplyButton(true);
+    }
+  }, [message]);  
+
   return (
     <div>
       <div className={`${darkMode ? 'bg-[#262729]' : 'bg-background'} min-h-screen flex flex-col`}>
@@ -137,11 +181,35 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
         </div>
         <div className="p-4" ref={chatRef} style={{ height: '78vh', overflowY: 'auto', scrollbarWidth: 'none', backgroundImage: chatWallpaper, backgroundSize: 'cover' }}>
           {showScrollButton && <i onClick={scrollToBottom} className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} cursor-pointer absolute bi bi-arrow-down-circle-fill text-4xl text-primary`} style={{ left: '67%' }}></i>}
-          <GroupReceiveMessage senderName={'sendUser 01'} time={'00:26'} message={'Simple AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'} />
-          <GroupReceiveMessage senderName={'sendUser 02'} time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAA'} />
-          <GroupReceiveMessage senderName={'sendUser 01'} time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'} />
-          <GroupSendMessage time={'00:26'} message={'send message'} />
-          <GroupReceiveMessage senderName={'sendUser 01'} time={'00:26'} message={'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'} />
+          {chatsLoading ? (
+            <div className="text-center">
+              <CircularProgress size="30px"/>       
+            </div>
+          ) : (
+            message.length > 0 ? (
+              message.map((message, index) =>
+                message.isSendByMe ? (
+                  <GroupSendMessage
+                    key={index}
+                    time={message.timestamp}
+                    message={message.message}
+                  />
+                ) : (
+                  <GroupReceiveMessage
+                    key={index}
+                    time={message.timestamp}
+                    message={message.message}
+                    senderName={message.sender}
+                  />
+                )
+              )
+            ) : (
+              <div className={`${darkMode ? 'text-gray-300' : 'text-gray-500'} text-center`}>	 
+                Say hello and start the conversation! 😊
+              </div>
+            )
+          )}           
+          {temporalMessage && <TemporalMessage message={temporalMessageContent}/> } 
           {magicReplyButton && <div style={{left: '64%', bottom: '13%'}} className="absolute cursor-pointer bg-white rounded-full">
               <AnimatedGradientText>
                 <span
@@ -159,8 +227,8 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
           {removedFromGroup ? (<div className="w-full mt-2">
             <p className={`${darkMode ? 'text-gray-300' : 'text-black' } text-sm text-center`}>You can't send messages to this group beacuse you're no longer a member.</p>
           </div>) : (<>
-            <input type="text" placeholder="Type a message" className={`${darkMode ? 'text-white' : 'bg-input text-black'} focus:border-none focus:outline-none w-full p-2 rounded-lg`} />
-            <span><i style={{ cursor: 'pointer' }} className="bi bi-send-fill text-2xl text-primary"></i></span>
+            <input value={typedMessage} onChange={(e) => setTypedMessage(e.target.value)} type="text" placeholder="Type a message" className={`${darkMode ? 'text-white' : 'bg-input text-black'} focus:border-none focus:outline-none w-full p-2 rounded-lg`} />
+            <span><i style={{ cursor: 'pointer' }} onClick={() => { handleSendMessage(); displayTemporalMessage();}} className="bi bi-send-fill text-2xl text-primary"></i></span>
           </>)}
         </div>
       </div>

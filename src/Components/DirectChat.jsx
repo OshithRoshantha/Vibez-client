@@ -129,11 +129,13 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
           for (const lastMessage of newMessages) {
 
               if (lastMessage.action === 'messageService') {
+                if(lastMessage.type === 'direct'){
                   const isRelated = await checkIsRelated(lastMessage.chatId);
                   if (isRelated) {
                      fetchChatMessages();
                      doMarkAsRead();
                   }
+                }
               }
 
               if(lastMessage.action === 'profileService'){
