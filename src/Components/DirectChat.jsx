@@ -11,7 +11,7 @@ import { getChatMessages, checkIsRelated, sendMessage, markAsRead } from '../Ser
 import { getChatHistory, getSmartReply } from '../Services/VibezIntelligence';
 import TemporalMessage from "./TemporalMessage";
 import { DotLoader } from 'react-spinners';
-import { validateFriendship } from '../Services/FriendshipService';
+import { validateFriendship, getFriendshipId } from '../Services/FriendshipService';
 
 export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fetchUnreadMessages}) {
 
@@ -32,6 +32,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
   const [temporalMessageContent, setTemporalMessageContent] = useState('');
   const [generateReply, setGenerateReply] = useState(false);
   const [isFriend, setIsFriend] = useState(true);
+  const [friendshipId, setFriendshipId] = useState('');
 
   function handleScroll() {
     const chatContainer = chatRef.current;
@@ -80,6 +81,11 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
     }
   }
 
+  const fetchFriendshipId = async () => {
+    const response = await getFriendshipId(receiverId);
+    setFriendshipId(response);
+  }
+
   const doMarkAsRead = async () => {
     await markAsRead(receiverId);
     fetchUnreadMessages();
@@ -105,6 +111,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
   useEffect(() => {
     fetchReceiverInfo();
     checkIsFriends();
+    fetchFriendshipId();
     const chatContainer = chatRef.current;
     if (chatContainer) {
       chatContainer.addEventListener("scroll", handleScroll);
@@ -145,6 +152,12 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
                   fetchReceiverInfo();
                 }
               }
+
+              if(lastMessage.action === 'friendshipService'){
+                if(lastMessage.friendshipId === friendshipId){
+                  checkIsFriends();
+                }
+              }
               
           }
           setProcessedMessages((prevProcessedMessages) => [
@@ -158,6 +171,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
   useEffect(() => {
     fetchReceiverInfo();
     checkIsFriends();
+    fetchFriendshipId();
   }, [receiverId]);
 
   useEffect(() => {
