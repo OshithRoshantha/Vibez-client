@@ -20,6 +20,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
   const [showScrollButton, setShowScrollButton] = useState(false);
   const chatWallpaper = darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)';
   const [magicReplyButton, setMagicReplyButton] = useState(false);
+  const [removedFromGroup, setRemovedFromGroup] = useState(false);
 
   const fetchGroupInfo = async () => {
     try{
@@ -46,6 +47,9 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
                           const isRelated = await isGroupRelated(lastMessage.groupId);
                           if (isRelated) {
                               fetchGroupInfo();
+                          }
+                          if (lastMessage.groupId === groupId && !isRelated) {
+                              setRemovedFromGroup(true);
                           }
                           break;
                       }
@@ -152,8 +156,12 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
           </div>}        
         </div>
         <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3 border-t`} style={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
-          <input type="text" placeholder="Type a message" className={`${darkMode ? 'text-white' : 'bg-input text-black'} focus:border-none focus:outline-none w-full p-2 rounded-lg`} />
-          <span><i style={{ cursor: 'pointer' }} className="bi bi-send-fill text-2xl text-primary"></i></span>
+          {removedFromGroup ? (<div className="w-full mt-2">
+            <p className={`${darkMode ? 'text-gray-300' : 'text-black' } text-sm text-center`}>You can't send messages to this group beacuse you're no longer a member.</p>
+          </div>) : (<>
+            <input type="text" placeholder="Type a message" className={`${darkMode ? 'text-white' : 'bg-input text-black'} focus:border-none focus:outline-none w-full p-2 rounded-lg`} />
+            <span><i style={{ cursor: 'pointer' }} className="bi bi-send-fill text-2xl text-primary"></i></span>
+          </>)}
         </div>
       </div>
     </div>
