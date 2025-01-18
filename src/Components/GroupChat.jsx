@@ -49,6 +49,12 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
     }
   }  
 
+  const handleShowGroupInfoMenu = () => {
+    if(!removedFromGroup){
+      showGroupInfoMenu();
+    }
+  }
+
     useEffect(() => {
           const handleMessages = async () => {
               if (messages.length === 0) {
@@ -168,7 +174,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
   return (
     <div>
       <div className={`${darkMode ? 'bg-[#262729]' : 'bg-background'} min-h-screen flex flex-col`}>
-        <div onClick={showGroupInfoMenu} style={{ cursor: 'pointer' }} className={`${darkMode ? 'border-gray-600' : 'border-border'} flex items-center px-4 py-3 border-b`}>
+        <div onClick={handleShowGroupInfoMenu} style={{ cursor: 'pointer' }} className={`${darkMode ? 'border-gray-600' : 'border-border'} flex items-center px-4 py-3 border-b`}>
         {loading ? (
               <div>
                 <div className="flex items-center">
