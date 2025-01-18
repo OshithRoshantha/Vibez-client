@@ -75,9 +75,18 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
   }
 
   const checkIsFriends = async () => {
-    const response = await validateFriendship(receiverId);
-    if(!response){
-      //setIsFriend(false);
+    const response = await getFriendshipId(receiverId);
+    if (response === 'NOT_FRIENDS') {
+      setIsFriend(true);
+    } 
+    else{
+      const response2 = await validateFriendship(receiverId);
+      if(!response2){
+        setIsFriend(false);
+      }
+      else{
+        setIsFriend(true);
+      }
     }
   }
 
@@ -106,12 +115,14 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
   useEffect(() => {
     doMarkAsRead();
     setMagicReplyButton(false);
+    setIsFriend(true);
   }, [receiverId]); 
   
   useEffect(() => {
     fetchReceiverInfo();
     checkIsFriends();
     fetchFriendshipId();
+    setIsFriend(true);
     const chatContainer = chatRef.current;
     if (chatContainer) {
       chatContainer.addEventListener("scroll", handleScroll);

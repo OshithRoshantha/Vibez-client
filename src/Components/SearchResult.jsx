@@ -30,8 +30,10 @@ export default function SearchResult({ darkMode, profileName, profileAbout, prof
       } else {
         setFriendshipId(response);
         const statusResponse = await getFriendshipStatus(response);
-
-        if (statusResponse.status === 'ACCEPTED') {
+        if(statusResponse.status === 'NOT_FRIENDS') {
+            setFriendshipStatus('NOT_FRIENDS');
+        }
+        else if (statusResponse.status === 'ACCEPTED') {
           setFriendshipStatus('FRIENDS');
         } else if (statusResponse.status === 'PENDING') {
           if (statusResponse.userId === sessionStorage.getItem('userId')) {
