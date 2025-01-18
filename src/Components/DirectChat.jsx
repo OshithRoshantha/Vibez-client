@@ -77,7 +77,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
   const checkIsFriends = async () => {
     const response = await validateFriendship(receiverId);
     if(!response){
-      setIsFriend(false);
+      //setIsFriend(false);
     }
   }
 
