@@ -45,7 +45,7 @@ export default function PreviewAcceptedRequests({darkMode, friendshipId, profile
             <>
 
             {blockPopup && <>
-                <div className="fixed absolute inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100'}}>
+                <div className="fixed absolute mt-0 inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100', height:'100vh'}}>
                     <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} p-6 rounded-lg shadow-lg text-left`}>
                     <h2 className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold mb-1`} >
                         Block {profileName}?
@@ -64,7 +64,7 @@ export default function PreviewAcceptedRequests({darkMode, friendshipId, profile
             </>}
 
             {unfriendPopup && <>
-                <div className="fixed absolute inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100'}}>
+                <div className="fixed absolute mt-0 inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100', height:'100vh'}}>
                     <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} p-6 rounded-lg shadow-lg text-left`}>
                     <h2 className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold mb-1`} >
                         Remove {profileName}?

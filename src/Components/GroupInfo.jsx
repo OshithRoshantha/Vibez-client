@@ -1,12 +1,18 @@
-import { useRef, useState} from 'react';
+import { useRef, useState, useEffect} from 'react';
 import GroupMemberList from './GroupMemberList';
 import GroupMemberList2 from './GroupMemberList2';
 import GroupAddMembers from './GroupAddMembers';
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
+import { checkAdmin, getGroupInfo, updateGroup, isGroupRelated } from '../Services/GroupsService';
+import { fetchUserMetaDataById } from '../Services/ProfileService';
+import { useWebSocket } from '../Context/WebSocketContext';
 
-export default function GroupInfo({darkMode}) {
-  var memberCount = 5
+export default function GroupInfo({darkMode, groupId}) {
+
+  const { messages } = useWebSocket();
+  const [processedMessages, setProcessedMessages] = useState([]);
+
   const [isAmAdmin, setIsAmAdmin] = useState(true);
   const [addMemberMenu, setAddMemberMenu] = useState(false);
   const [profilePicHover, setProfilePicHover] = useState(false);
@@ -18,10 +24,88 @@ export default function GroupInfo({darkMode}) {
   const avatarEditorRef = useRef(null);
   const [isEditingDescp, setIsEditingDescp] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
-  const [name, setName] = useState('friends');
-  const [descp, setDescp] = useState('This is a group of friends');
+  const [removedFromGroup, setRemovedFromGroup] = useState(false);
 
-  const defaultImage = "./src/assets/groupDefault.jpg"; //user current group picture
+  const [name, setName] = useState('');
+  const [descp, setDescp] = useState('');
+  const [memberCount, setMemberCount] = useState(0);
+  const [avatar, setAvatar] = useState('');
+  const [members, setMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [creator, setCreator] = useState('');
+
+  const checkAdminStatus = async () => {
+    if(!removedFromGroup){
+      const response = await checkAdmin(groupId);
+      setIsAmAdmin(response);
+    }
+  }
+
+  const updateGroupInfo = async () => {
+    await updateGroup(groupId, name, cropedImage, descp);
+  }
+
+  const fetchGroupInfo = async () => {
+    if(!removedFromGroup){
+      try{
+          const response = await getGroupInfo(groupId);
+          setName(response.groupName);
+          setDescp(response.groupDesc);
+          setMemberCount(response.memberIds.length);
+          setAvatar(response.groupIcon);
+          setCreator(response.creatorId);
+          const memberPromises = response.memberIds.map(userId => fetchUserMetaDataById(userId));
+          const memberData = await Promise.all(memberPromises);
+          setMembers(memberData);
+      } finally{
+        setLoading(false);
+      }
+    }
+  }  
+
+  useEffect(() => {
+      checkAdminStatus();
+      fetchGroupInfo();
+  }, []);
+
+  useEffect(() => {
+    const handleMessages = async () => {
+        if (messages.length === 0) {
+            return;
+        }
+        const newMessages = messages.filter(message => !processedMessages.includes(message.id));
+        if (newMessages.length === 0) {
+            return; 
+        }
+        for (const lastMessage of newMessages) {
+            switch (lastMessage.action) {
+                case 'groupService': {
+                  const isRelated = await isGroupRelated(lastMessage.groupId);
+                  if (isRelated) {
+                    fetchGroupInfo();
+                  }
+                  if (lastMessage.groupId === groupId && !isRelated) {
+                    setRemovedFromGroup(true);
+                  }
+                  break;
+                }
+                case 'profileService': {
+                  if(members.some(member => member.userId === lastMessage.body)){
+                    fetchGroupInfo();
+                  }
+                  break;
+                }
+                default:
+                  break;
+            }
+        }
+        setProcessedMessages(prevProcessedMessages => [
+            ...prevProcessedMessages,
+            ...newMessages.map(message => message.id),
+        ]);
+    };
+    handleMessages();
+}, [messages, processedMessages]);
 
   function handleNameClick() {
       setIsEditingName(true);
@@ -33,10 +117,12 @@ export default function GroupInfo({darkMode}) {
     
   function handleNameBlur() {
       setIsEditingName(false);
+      updateGroupInfo();
   }
     
   function handleDescpBlur() {
       setIsEditingDescp(false);
+      updateGroupInfo();
   }
 
   function showAddMemberMenu() {
@@ -79,12 +165,13 @@ export default function GroupInfo({darkMode}) {
         setSelectedImage(croppedImageUrl);
         setCropedImage(croppedImageUrl);
         editPictureFormHandler();
+        updateGroupInfo();
       }
   }
 
   return (
 <div>
-      {addMemberMenu && <GroupAddMembers darkMode={darkMode} showAddMemberMenu={showAddMemberMenu}/>}
+      {addMemberMenu && <GroupAddMembers darkMode={darkMode} groupId={groupId} showAddMemberMenu={showAddMemberMenu}/>}
       <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}   p-4 info-column`} style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7'}}>
         {editPictureForm && <div className='edit-picture-form2 shadow-lg bg-white' style={{marginTop:'8%'}}>
                                 <AvatarEditor
@@ -103,11 +190,11 @@ export default function GroupInfo({darkMode}) {
                                     <button onClick={handleCrop} className='border-none' style={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</button>
                                 </div>
         </div>}
-      <h2 className={`${darkMode ? 'text-white' : '' } text-lg font-semibold mb-4`}>Group info</h2>
+        {removedFromGroup ? (<><div className='bg-yellow-200 py-2 pl-4 mb-4' style={{borderRadius:'10px'}}><i className=" text-gray-600 bi bi-exclamation-triangle"></i>   You're no longer a member in this group.</div></>) : (<> <h2 className={`${darkMode ? 'text-white' : '' } text-lg font-semibold mb-4`}>Group info</h2></>)}
         <div className="bg-card p-6 w-full" style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7'}} >
           <div className="flex flex-col items-center mb-5" style={{marginTop:'-5%'}}>
             {isAmAdmin && 
-              <div onClick={uploadImg} onMouseEnter={showProfilePicHover} onMouseLeave={hideProfilePicHover} className=" rounded-full flex items-center justify-center mb-1 text-xs" style={{border: '1px solid rgb(104, 104, 104)', width:'150px', height:'150px', cursor:'pointer', marginTop:'-5%',backgroundImage: cropedImage ? `url(${cropedImage})` : `url(${defaultImage})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
+              <div onClick={uploadImg} onMouseEnter={showProfilePicHover} onMouseLeave={hideProfilePicHover} className=" rounded-full flex items-center justify-center mb-1 text-xs" style={{border: '1px solid rgb(104, 104, 104)', width:'150px', height:'150px', cursor:'pointer', marginTop:'-5%',backgroundImage: cropedImage ? `url(${cropedImage})` : `url(${avatar})`, backgroundSize: 'cover', backgroundPosition: 'center'}}>
                 {profilePicHover && <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'}} >
                         <span className='camera-icon'><i className="bi bi-camera-fill"></i></span>CHANGE GROUP ICON
                 </div>}
@@ -121,7 +208,7 @@ export default function GroupInfo({darkMode}) {
                 onChange={handleFileChange}
             />            
             {!isAmAdmin &&
-              <img src={defaultImage} className=" rounded-full flex items-center justify-center mb-1" style={{width:'150px', height:'150px', marginTop:'-5%', border: '1px solid rgb(104, 104, 104)'}}/>  
+              <img src={avatar} className=" rounded-full flex items-center justify-center mb-1" style={{width:'150px', height:'150px', marginTop:'-5%', border: '1px solid rgb(104, 104, 104)'}}/>  
             }
             {isAmAdmin && (
               <>
@@ -133,8 +220,8 @@ export default function GroupInfo({darkMode}) {
                     autoFocus
                 />
             ) : (<h2 className={`${darkMode ? 'text-white' : 'text-foreground'} text-xl font-semibold mt-4`}>{name}</h2>)}
-            {!isEditingName && <i onClick={handleNameClick} className={`${darkMode ? 'text-white' : ''} absolute bi bi-pencil-fill`} style={{cursor:'pointer', marginTop:'10.3%', marginLeft:'25%'}}></i>} 
-            {isEditingName && <i onClick={handleNameBlur} className={`${darkMode ? 'text-white' : ''} absolute bi bi-check2`} style={{cursor:'pointer', fontSize:'125%', marginTop:'10.3%', marginLeft:'25%'}}></i>}
+            {!isEditingName && !removedFromGroup && <i onClick={handleNameClick} className={`${darkMode ? 'text-white' : ''} absolute bi bi-pencil-fill`} style={{cursor:'pointer', marginTop:'10.3%', marginLeft:'25%'}}></i>} 
+            {isEditingName && !removedFromGroup &&  <i onClick={handleNameBlur} className={`${darkMode ? 'text-white' : ''} absolute bi bi-check2`} style={{cursor:'pointer', fontSize:'125%', marginTop:'10.3%', marginLeft:'25%'}}></i>}
             </>
             )}
             {!isAmAdmin && <h2 className={`${darkMode ? 'text-white' : 'text-foreground'} text-xl font-semibold mt-4`}>{name}</h2>}
@@ -154,15 +241,15 @@ export default function GroupInfo({darkMode}) {
                     autoFocus
                 />
             ) : (<p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'}`}>{descp}</p>)}
-            {!isEditingDescp && <i onClick={handleDescpClick} className={`${darkMode ? 'text-white' : ''} absolute bi bi-pencil-fill`} style={{cursor:'pointer', marginTop:'13.7%', marginLeft:'25%'}}></i>} 
-            {isEditingDescp && <i onClick={handleDescpBlur} className={`${darkMode ? 'text-white' : ''} absolute bi bi-check2`}  style={{cursor:'pointer', fontSize:'125%', marginTop:'13.7%', marginLeft:'25%'}}></i>}
+            {!isEditingDescp && !removedFromGroup &&  <i onClick={handleDescpClick} className={`${darkMode ? 'text-white' : ''} absolute bi bi-pencil-fill`} style={{cursor:'pointer', marginTop:'13.7%', marginLeft:'25%'}}></i>} 
+            {isEditingDescp && !removedFromGroup &&  <i onClick={handleDescpBlur} className={`${darkMode ? 'text-white' : ''} absolute bi bi-check2`}  style={{cursor:'pointer', fontSize:'125%', marginTop:'13.7%', marginLeft:'25%'}}></i>}
               </>
             )}
           </div>
           <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-4`} style={{marginTop:'-5%'}}>{memberCount} members</h2>
           {isAmAdmin && <div>
             <div className="flex items-center mb-1">
-              <button onClick={showAddMemberMenu} className={`${darkMode ? 'bg-[#3b3c3e]' : 'bg-gray-300 text-gray-600 hover:bg-gray-200'} mr-2`} style={{borderRadius:'50%', width:'38px', height:'38px', display:'flex', justifyContent:'center', alignItems:'center', border:'none'}}>
+              <button disabled={removedFromGroup} onClick={showAddMemberMenu} className={`${darkMode ? 'bg-[#3b3c3e]' : 'bg-gray-300 text-gray-600 hover:bg-gray-200'} mr-2`} style={{borderRadius:'50%', width:'38px', height:'38px', display:'flex', justifyContent:'center', alignItems:'center', border:'none'}}>
                 <i className={`${darkMode ? 'text-white':''} bi bi-person-fill-add`}></i>
               </button>
               <span className={`${darkMode ? 'text-white' : 'text-base'}`}>Add member</span>
@@ -170,7 +257,7 @@ export default function GroupInfo({darkMode}) {
             <div className={`${darkMode ? 'border-gray-700' : 'border-border'} border-b  my-4`}></div>
             </div>}
           <div className={`w-full  ${isAmAdmin ? 'h-[25vh]' : 'h-[38vh]'}`} style={{overflowY:'auto', scrollbarWidth:'none'}}>
-            {isAmAdmin ? <GroupMemberList darkMode={darkMode}/> : <GroupMemberList2 darkMode={darkMode}/>}
+            {isAmAdmin ? <GroupMemberList removedFromGroup={removedFromGroup} loading={loading} groupId={groupId} members={members} groupName={name} darkMode={darkMode}/> : <GroupMemberList2 removedFromGroup={removedFromGroup} loading={loading} creator={creator} groupId={groupId} members={members} groupName={name} darkMode={darkMode}/>}
           </div>
         </div>
       </div>

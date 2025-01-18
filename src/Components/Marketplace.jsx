@@ -43,7 +43,6 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
     const [searchKeyword, setSearchKeyword] = useState('');
 
     const err = darkMode ? './src/assets/Icons/listingErdark.png' : './src/assets/Icons/listingEr.png';
-    const err2 = darkMode ? './src/assets/Icons/searchErdark.png' : './src/assets/Icons/searchEr.png';
 
     const handleSearchChange = async (e) => {
         const value = e.target.value;
@@ -145,8 +144,12 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
     }
     
     const fetchMarketplaceItems = async () => {
-        const response = await getMarketplaceItems();
-        setProductList(response);
+        try{
+            const response = await getMarketplaceItems();
+            setProductList(response);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const fetchSearchResults = async () => {
@@ -171,12 +174,10 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
     }
     
     useEffect(() => {
-        setLoading(true);
         fetchMarketplaceItems();
         fetchActiveListingCount();
         fetchTotalClicks();
         fetchMyListings();
-        setLoading(false);
     }, [productList]);
 
 
@@ -346,7 +347,7 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
             {forYouMenu && 
                 <div className='product-list'>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-0 p-0 w-full"> 
-                    {loading && <>
+                    {loading ? (<>
                         {Array.from({ length: 6 }).map((_, index) => (
                             <div
                             key={index}
@@ -365,10 +366,9 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
                                 <Skeleton className="h-4 w-[160px] mt-2" />
                             </div>
                             </div>
-                        ))}                  
-                    </>}
-                    {!loading && <>
-                    {productList.map((product) => (
+                        ))}                     
+                    </>) : (<>
+                        {productList.map((product) => (
                             <PreviewProduct
                                 key={product.productId}
                                 darkMode={darkMode}
@@ -379,8 +379,7 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
                                 productImages={product.productPhotos}
                                 setExpandingProductId={setExpandingProductId}
                             />
-                    ))}
-                    </>}
+                    ))}</>)}
                     </div>
                 </div>
             }

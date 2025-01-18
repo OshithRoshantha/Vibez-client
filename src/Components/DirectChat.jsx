@@ -11,6 +11,7 @@ import { getChatMessages, checkIsRelated, sendMessage, markAsRead } from '../Ser
 import { getChatHistory, getSmartReply } from '../Services/VibezIntelligence';
 import TemporalMessage from "./TemporalMessage";
 import { DotLoader } from 'react-spinners';
+import { validateFriendship, getFriendshipId } from '../Services/FriendshipService';
 
 export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fetchUnreadMessages}) {
 
@@ -30,6 +31,8 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
   const [temporalMessage, setTemporalMessage] = useState(false);
   const [temporalMessageContent, setTemporalMessageContent] = useState('');
   const [generateReply, setGenerateReply] = useState(false);
+  const [isFriend, setIsFriend] = useState(true);
+  const [friendshipId, setFriendshipId] = useState('');
 
   function handleScroll() {
     const chatContainer = chatRef.current;
@@ -39,14 +42,6 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
     }
   }
 
-  function showMagicReplyButton(){
-    setMagicReplyButton(true);
-  }
-
-  function hideMagicReplyButton(){
-    setMagicReplyButton(false);
-  }
-  
   function scrollToBottom() {
     const chatContainer = chatRef.current;
     if (chatContainer) {
@@ -79,6 +74,27 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
     }
   }
 
+  const checkIsFriends = async () => {
+    const response = await getFriendshipId(receiverId);
+    if (response === 'NOT_FRIENDS') {
+      setIsFriend(true);
+    } 
+    else{
+      const response2 = await validateFriendship(receiverId);
+      if(!response2){
+        setIsFriend(false);
+      }
+      else{
+        setIsFriend(true);
+      }
+    }
+  }
+
+  const fetchFriendshipId = async () => {
+    const response = await getFriendshipId(receiverId);
+    setFriendshipId(response);
+  }
+
   const doMarkAsRead = async () => {
     await markAsRead(receiverId);
     fetchUnreadMessages();
@@ -99,10 +115,14 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
   useEffect(() => {
     doMarkAsRead();
     setMagicReplyButton(false);
+    setIsFriend(true);
   }, [receiverId]); 
   
   useEffect(() => {
     fetchReceiverInfo();
+    checkIsFriends();
+    fetchFriendshipId();
+    setIsFriend(true);
     const chatContainer = chatRef.current;
     if (chatContainer) {
       chatContainer.addEventListener("scroll", handleScroll);
@@ -127,13 +147,29 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
               return;
           }
           for (const lastMessage of newMessages) {
+
               if (lastMessage.action === 'messageService') {
+                if(lastMessage.type === 'direct'){
                   const isRelated = await checkIsRelated(lastMessage.chatId);
                   if (isRelated) {
                      fetchChatMessages();
                      doMarkAsRead();
                   }
+                }
               }
+
+              if(lastMessage.action === 'profileService'){
+                if(lastMessage.body === receiverId){
+                  fetchReceiverInfo();
+                }
+              }
+
+              if(lastMessage.action === 'friendshipService'){
+                if(lastMessage.friendshipId === friendshipId){
+                  checkIsFriends();
+                }
+              }
+              
           }
           setProcessedMessages((prevProcessedMessages) => [
               ...prevProcessedMessages,
@@ -145,6 +181,8 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
 
   useEffect(() => {
     fetchReceiverInfo();
+    checkIsFriends();
+    fetchFriendshipId();
   }, [receiverId]);
 
   useEffect(() => {
@@ -248,21 +286,27 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
         </div>}
         </div>
         <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3  border-t`} style={{display:'flex', alignItems:'center',columnGap:'1rem'}}>
-            <input 
-              type="text" 
-              value={typedMessage} 
-              onChange={(e) => setTypedMessage(e.target.value)} 
-              placeholder={generateReply ? "Generating reply..." : "Type a message"}
-              className={`${darkMode ? 'text-white' : 'bg-input text-black'} focus:border-none focus:outline-none w-full p-2 rounded-lg`} 
-              disabled={generateReply} 
-            />
-            {generateReply ? 
-            (<div>
-                <DotLoader size={40} color="#1311ff"/>
-            </div>) : 
-            (<div>
-                <span><i style={{cursor:'pointer'}} onClick={() => { handleSendMessage(); displayTemporalMessage();}} className="bi bi-send-fill text-2xl text-primary"></i></span>
-            </div>)}
+            {isFriend ? (<>
+              <input 
+                type="text" 
+                value={typedMessage} 
+                onChange={(e) => setTypedMessage(e.target.value)} 
+                placeholder={generateReply ? "Generating reply..." : "Type a message"}
+                className={`${darkMode ? 'text-white' : 'bg-input text-black'} focus:border-none focus:outline-none w-full p-2 rounded-lg`} 
+                disabled={generateReply} 
+              />
+              {generateReply ? 
+              (<div>
+                  <DotLoader size={40} color="#1311ff"/>
+              </div>) : 
+              (<div>
+                  <span><i style={{cursor:'pointer'}} onClick={() => { handleSendMessage(); displayTemporalMessage();}} className="bi bi-send-fill text-2xl text-primary"></i></span>
+              </div>)}
+            </>) : (
+              <div className="w-full mt-2">
+                <p className={`${darkMode ? 'text-gray-300' : 'text-black' } text-sm text-center`}>Looks like you're not connected. Please add this user as a friend to chat.</p>
+              </div>
+            )}
             </div>
         </div>
     </div>

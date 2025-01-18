@@ -1,8 +1,13 @@
 import {useState, useEffect} from 'react'
 import GlobalAlert from './GlobalAlert';
 import { fetchUserMetaDataById } from '../Services/ProfileService';
+import { useWebSocket } from '../Context/WebSocketContext';
 
 export default function FriendInfo({darkMode, receiverId}) {
+
+  const { messages } = useWebSocket();
+  const [processedMessages, setProcessedMessages] = useState([]);
+
   const [isFavorite, setIsFavorite] = useState(true);
   const [blockPopup, setBlockPopup] = useState(false);
   const [unfriendPopup, setUnfriendPopup] = useState(false);
@@ -22,7 +27,35 @@ export default function FriendInfo({darkMode, receiverId}) {
 
   useEffect(() => {
     fetchReceiverInfo();
-  }, []);   
+  }, []);
+  
+  useEffect(() => {
+        const handleMessages = async () => {
+            if (messages.length === 0) {
+                return;
+            }
+            const newMessages = messages.filter(
+                (message) => !processedMessages.includes(message.id)
+            );
+            if (newMessages.length === 0) {
+                return;
+            }
+            for (const lastMessage of newMessages) {
+  
+                if(lastMessage.action === 'profileService'){
+                  if(lastMessage.body === receiverId){
+                    fetchReceiverInfo();
+                  }
+                }
+                
+            }
+            setProcessedMessages((prevProcessedMessages) => [
+                ...prevProcessedMessages,
+                ...newMessages.map((message) => message.id),
+            ]);
+        };
+        handleMessages();
+    }, [messages, processedMessages]);
 
   function setToFavorite() {
     setIsFavorite(true);

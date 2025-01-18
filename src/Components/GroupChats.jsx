@@ -1,36 +1,131 @@
 import './Styles/Column2.css'
-import { useRef, useState} from 'react';
+import { useRef, useState, useEffect} from 'react';
 import './Styles/SignupElement.css'
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
+import GroupChatPreview from './GroupChatPreview';
+import { Skeleton } from "@/components/ui/skeleton";
+import { getAllGroups, getGroupInfo, createGroup, isGroupRelated } from '../Services/GroupsService';
+import { getAllFriends } from '../Services/FriendshipService';
+import { useWebSocket } from '../Context/WebSocketContext';
 
-export default function GroupChats({showGroupMessages, darkMode}) {
+export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
+
+    const { messages } = useWebSocket();
+    const [processedMessages, setProcessedMessages] = useState([]);
+
+    const [groups, setGroups] = useState([]);
+    const [friends, setFriends] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [loading2, setLoading2] = useState(true);
     const [addMembersMenu, setAddMembersMenu] = useState(false);
     const [finishCreateGroup, setFinishCreateGroup] = useState(false);
     const [groupChats, setGroupChats] = useState(true);
-    const [isAdded, setIsAdded] = useState(false);
     const [editPictureForm, setEditPictureForm] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const [cropFactor, setCropFactor] = useState(1);
-    const [cropedImage, setCropedImage] = useState(null);
     const fileInputRef = useRef(null);
-    const avatarEditorRef = useRef(null);    
+    const avatarEditorRef = useRef(null); 
+
+    const [groupSubject, setGroupSubject] = useState("");
+    const [groupDescription, setGroupDescription] = useState("");
+    const [cropedImage, setCropedImage] = useState("./src/assets/groupDefault.jpg");
+    const [addedFriends, setAddedFriends] = useState({});
 
     const defaultImage = "./src/assets/groupDefault.jpg";
+
+    useEffect(() => {
+        const handleMessages = async () => {
+            if (messages.length === 0) {
+                return;
+            }
+            const newMessages = messages.filter(message => !processedMessages.includes(message.id));
+            if (newMessages.length === 0) {
+                return; 
+            }
+            for (const lastMessage of newMessages) {
+                switch (lastMessage.action) {
+                    case 'groupService': {
+                        const isRelated = await isGroupRelated(lastMessage.groupId);
+                        if (isRelated) {
+                            fetchAllGroups();
+                        }
+                        break;
+                    }
+                    case 'messageService': {
+                        if(lastMessage.type === 'group'){
+                          const isRelated = await isGroupRelated(lastMessage.groupId);
+                          if (isRelated) {
+                            fetchAllGroups();
+                          }
+                        }                        
+                      break;
+                    }
+                    default:
+                        break;
+                }
+            }
+            setProcessedMessages(prevProcessedMessages => [
+                ...prevProcessedMessages,
+                ...newMessages.map(message => message.id),
+            ]);
+        };
+        handleMessages();
+    }, [messages, processedMessages]);     
+
+    const fetchAllGroups = async () => {
+        try{
+            const groupIds = await getAllGroups();
+            const groupPreviews = await Promise.all(
+                groupIds.map(async (groupId) => {
+                    const groupPreview = await getGroupInfo(groupId);
+                    return groupPreview;
+                })
+            );
+            setGroups(groupPreviews);
+        } 
+        finally{
+            setLoading(false);
+        }
+    }
+
+    const fetchAllFriends = async () => {
+        try{
+            setLoading2(true);
+            const friends = await getAllFriends();
+            setFriends(friends);
+        } finally{
+            setLoading2(false);
+        }
+    }
+
+    const createNewGroup = async () => {
+        const selectedFriendIds = Object.keys(addedFriends).filter((id) => addedFriends[id] === true);
+        await createGroup(groupSubject, cropedImage, groupDescription, selectedFriendIds);
+        setGroupSubject("");    
+        setGroupDescription("");
+        setAddedFriends({});
+        setCropedImage(null);
+    }
+
+    useEffect(() => {
+        fetchAllGroups();
+    }, []);
+    
+    const handleAddClick = (profileId) => {
+        setAddedFriends((prev) => ({ ...prev, [profileId]: true }));
+      };
+  
+      const handleRemoveClick = (profileId) => {
+        setAddedFriends((prev) => ({ ...prev, [profileId]: false }));
+      };
 
     function clearCropedImage() {
         setCropedImage(null);
     }
-
-    function handleAddClick() {
-        setIsAdded(true);
-      }
-      
-    function handleRemoveClick() {
-        setIsAdded(false);
-    }
       
     function showAddMembersMenu(){
+        fetchAllFriends();
         setAddMembersMenu(true);
         setGroupChats(false);
         setFinishCreateGroup(false);
@@ -90,8 +185,6 @@ export default function GroupChats({showGroupMessages, darkMode}) {
         }
     }
 
-    var user = "testUser";
-
   return (
     <div>
     <div>
@@ -107,34 +200,74 @@ export default function GroupChats({showGroupMessages, darkMode}) {
                 {addMembersMenu && <div>
                     <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>Add group members</h2>
                     <div className='group-op'>
-                    <div className="space-y-4">
-                        <div className="flex items-center justify-between border-border py-2">
-                        <div className="flex items-center">
-                            <img src="https://placehold.co/40x40" className="rounded-full mr-2 w-55 h-55" />
-                            <div>
-                                <p className={`${darkMode ? 'text-white':''} font-medium`}>{user}</p>
-                                <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} text-sm `}>About</p>
-                            </div>
-                        </div>
-                        <div className='btn-container'>
-                            <button
-                                  className={`px-3 py-1 mr-2 rounded text-primary-foreground ${isAdded ? "bg-blue-300" : "bg-primary"}`}
-                                onClick={handleAddClick}
-                                disabled={isAdded}
-                            >
-                                {isAdded ? "Added" : "Add"}
-                            </button>
-                            {isAdded &&
-                            <button
-                                className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} border-none px-3 py-1 rounded`}
-                                onClick={() => {
-                                    handleRemoveClick();
-                                  }}
-                            >
-                                Remove
-                            </button>}
-                        </div>
-                        </div>
+                    <div className="space-y-0">  
+                    {loading2 ? (
+                        <>
+                            {Array.from({ length: 6 }).map((_, index) => (
+                                <div key={index} className="flex items-center justify-between border-border py-2">
+                                    <div className="flex items-center">
+                                        <Skeleton className="rounded-full mr-2 w-10 h-10" />
+                                        <div>
+                                            <Skeleton className="h-4 w-[120px] mb-1" />
+                                            <Skeleton className="h-3 w-[180px]" />
+                                        </div>
+                                    </div>
+                                    <div className="btn-container flex">
+                                        <Skeleton className="px-3 py-2 w-[60px] rounded mr-2" />
+                                        <Skeleton className="px-3 py-2 w-[70px] rounded" />
+                                    </div>
+                                </div>
+                            ))}
+                        </>
+                    ) : (
+                        <>
+                            {friends?.map((friend) => {
+                                const isAdded = addedFriends?.[friend.profileId] || false;
+                                return (
+                                    <div key={friend.profileId} className="flex items-center justify-between border-border py-2">
+                                        <div className="flex items-center">
+                                            <img
+                                                src={friend.profilePicture}
+                                                className="rounded-full mr-2 w-10 h-10"
+                                                alt="Profile"
+                                            />
+                                            <div>
+                                                <p className={`${darkMode ? "text-white" : ""} font-medium`}>
+                                                    {friend.profileName}
+                                                </p>
+                                                <p className={`${darkMode ? "text-gray-400" : "text-muted-foreground"} text-sm`}>
+                                                    {friend.profileAbout}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="btn-container">
+                                            <button
+                                                className={`px-3 py-1 mr-2 rounded text-primary-foreground ${
+                                                    isAdded ? "bg-blue-300" : "bg-primary"
+                                                }`}
+                                                onClick={() => handleAddClick(friend.profileId)}
+                                                disabled={isAdded}
+                                            >
+                                                {isAdded ? "Added" : "Add"}
+                                            </button>
+                                            {isAdded && (
+                                                <button
+                                                    className={`${
+                                                        darkMode
+                                                            ? "bg-[#6a6b6d] text-white hover:bg-[#545454]"
+                                                            : "bg-muted text-muted-foreground hover:bg-gray-300"
+                                                    } border-none px-3 py-1 rounded`}
+                                                    onClick={() => handleRemoveClick(friend.profileId)}
+                                                >
+                                                    Remove
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </>
+                    )}
                     </div>
                     </div>
                     <div className="flex items-center justify-center">
@@ -182,29 +315,78 @@ export default function GroupChats({showGroupMessages, darkMode}) {
                     <input
                         type="text"
                         placeholder="Group subject"
+                        value={groupSubject}
+                        onChange={(e) => setGroupSubject(e.target.value)}
                         className={`${darkMode ? 'border-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'border-muted text-foreground placeholder:text-muted-foreground'} border-b  w-full py-2 mb-4 bg-transparent  focus:outline-none`}
                     />              
                     <input
                         type="text"
                         placeholder="Group description (optional)"
+                        value={groupDescription}
+                        onChange={(e) => setGroupDescription(e.target.value)}
                         className={`${darkMode ? 'border-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'border-muted text-foreground placeholder:text-muted-foreground'} border-b  w-full py-2 mb-4 bg-transparent  focus:outline-none`}
                     />
-                    <button onClick={() => {hideFinishCreateGroup(); clearCropedImage();}} className="bg-primary text-white absolute" style={{cursor: 'pointer', borderRadius:'50%', height:'54px', width:'54px', marginTop:'340px'}} >
+                    <button onClick={() => {hideFinishCreateGroup(); clearCropedImage(); createNewGroup();}} className="bg-primary text-white absolute" style={{cursor: 'pointer', borderRadius:'50%', height:'54px', width:'54px', marginTop:'340px'}} >
                         <i className="bi bi-check2"></i>
                     </button>
                     </div>           
                 </div>}
                 {groupChats && <div>
-                <div onClick={showGroupMessages} className="space-y-2" style={{cursor: 'pointer'}}>
-                    <div className={`${darkMode ? 'hover:bg-[#2d3243]' : 'hover:bg-muted'} flex items-center p-2 rounded`}>
-                        <img src="https://placehold.co/40x40" alt="User" className="rounded-full mr-2 w-18 h-18" />
-                        <div>
-                            <div className={`${darkMode ? 'text-white':''} font-medium`}>GroupName</div>
-                            <div className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} text-sm `}>User1: Lorem ipsum dolor sit amet.</div>
-                        </div>
-                        <span className={`${darkMode ? 'text-gray-400':''} ml-auto text-xs`}>13:14</span>
-                    </div>
-                </div>
+                    {loading ? (
+                            <div>
+                            {[...Array(6)].map((_, index) => (
+                              <div key={index} className="space-y-2">
+                                <div className={`flex items-center p-2 rounded`}>
+                                  <Skeleton className="h-12 w-12 rounded-full mr-2" />
+                                  <div className="flex-1 space-y-1">
+                                    <Skeleton className="h-4 w-[150px]" />
+                                    <Skeleton className="h-4 w-[200px]" />
+                                  </div>
+                                  <Skeleton className="h-4 w-16" />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                            groups
+                                .sort((a, b) => new Date(b.lastUpdate) - new Date(a.lastUpdate))
+                                .map((group) => {
+                                    const now = new Date();
+                                    const date = new Date(group.lastUpdate);
+                                    let formattedTime;
+
+                                    if (
+                                        now.getFullYear() === date.getFullYear() &&
+                                        now.getMonth() === date.getMonth() &&
+                                        now.getDate() === date.getDate()
+                                    ) {
+                                        formattedTime = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+                                    } else if (
+                                        now.getFullYear() === date.getFullYear() &&
+                                        now.getMonth() === date.getMonth() &&
+                                        now.getDate() - date.getDate() === 1
+                                    ) {
+                                        formattedTime = 'Yesterday';
+                                    } else {
+                                        formattedTime = `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
+                                    }
+
+                                    return (
+                                        <GroupChatPreview
+                                            key={group.groupId}
+                                            groupId={group.groupId}
+                                            groupName={group.groupName}
+                                            groupAvatar={group.groupIcon}
+                                            lastMessage={group.lastMessage}
+                                            lastMessageSender={group.lastMessageSender}
+                                            lastActiveTime={formattedTime}
+                                            showGroupMessages={showGroupMessages}
+                                            setGroupId={setGroupId}
+                                            darkMode={darkMode}
+                                        />
+                                    );
+                            })
+                        )}
                 </div>}
                 </div>
             </div>
