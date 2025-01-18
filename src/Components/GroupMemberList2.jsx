@@ -3,7 +3,7 @@ import GlobalAlert from './GlobalAlert';
 import { Skeleton } from "@/components/ui/skeleton";
 import { removeMembers } from '../Services/GroupsService';
 
-export default function GroupMemberList2({ darkMode, members, groupName, loading, creator, groupId }) {
+export default function GroupMemberList2({ darkMode, members, groupName, loading, creator, groupId, removedFromGroup }) {
 
   const [exitGroupPopup, setExitGroupPopup] = useState(false);
   const currentUserId = sessionStorage.getItem('userId');
@@ -76,6 +76,7 @@ export default function GroupMemberList2({ darkMode, members, groupName, loading
                 </p>
               </div>
               <button
+                disabled={removedFromGroup}
                 onClick={toggleExitGroupPopup}
                 className="ml-auto text-sm bg-red-400 text-white hover:bg-red-300 border-none"
               >
