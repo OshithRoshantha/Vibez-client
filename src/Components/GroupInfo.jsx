@@ -35,8 +35,10 @@ export default function GroupInfo({darkMode, groupId}) {
   const [creator, setCreator] = useState('');
 
   const checkAdminStatus = async () => {
-    const response = await checkAdmin(groupId);
-    setIsAmAdmin(response);
+    if(!removedFromGroup){
+      const response = await checkAdmin(groupId);
+      setIsAmAdmin(response);
+    }
   }
 
   const updateGroupInfo = async () => {
@@ -44,18 +46,20 @@ export default function GroupInfo({darkMode, groupId}) {
   }
 
   const fetchGroupInfo = async () => {
-    try{
-        const response = await getGroupInfo(groupId);
-        setName(response.groupName);
-        setDescp(response.groupDesc);
-        setMemberCount(response.memberIds.length);
-        setAvatar(response.groupIcon);
-        setCreator(response.creatorId);
-        const memberPromises = response.memberIds.map(userId => fetchUserMetaDataById(userId));
-        const memberData = await Promise.all(memberPromises);
-        setMembers(memberData);
-    } finally{
-      setLoading(false);
+    if(!removedFromGroup){
+      try{
+          const response = await getGroupInfo(groupId);
+          setName(response.groupName);
+          setDescp(response.groupDesc);
+          setMemberCount(response.memberIds.length);
+          setAvatar(response.groupIcon);
+          setCreator(response.creatorId);
+          const memberPromises = response.memberIds.map(userId => fetchUserMetaDataById(userId));
+          const memberData = await Promise.all(memberPromises);
+          setMembers(memberData);
+      } finally{
+        setLoading(false);
+      }
     }
   }  
 
@@ -216,8 +220,8 @@ export default function GroupInfo({darkMode, groupId}) {
                     autoFocus
                 />
             ) : (<h2 className={`${darkMode ? 'text-white' : 'text-foreground'} text-xl font-semibold mt-4`}>{name}</h2>)}
-            {!isEditingName && <i onClick={handleNameClick} className={`${darkMode ? 'text-white' : ''} absolute bi bi-pencil-fill`} style={{cursor:'pointer', marginTop:'10.3%', marginLeft:'25%'}}></i>} 
-            {isEditingName && <i onClick={handleNameBlur} className={`${darkMode ? 'text-white' : ''} absolute bi bi-check2`} style={{cursor:'pointer', fontSize:'125%', marginTop:'10.3%', marginLeft:'25%'}}></i>}
+            {!isEditingName && !removedFromGroup && <i onClick={handleNameClick} className={`${darkMode ? 'text-white' : ''} absolute bi bi-pencil-fill`} style={{cursor:'pointer', marginTop:'10.3%', marginLeft:'25%'}}></i>} 
+            {isEditingName && !removedFromGroup &&  <i onClick={handleNameBlur} className={`${darkMode ? 'text-white' : ''} absolute bi bi-check2`} style={{cursor:'pointer', fontSize:'125%', marginTop:'10.3%', marginLeft:'25%'}}></i>}
             </>
             )}
             {!isAmAdmin && <h2 className={`${darkMode ? 'text-white' : 'text-foreground'} text-xl font-semibold mt-4`}>{name}</h2>}
@@ -237,15 +241,15 @@ export default function GroupInfo({darkMode, groupId}) {
                     autoFocus
                 />
             ) : (<p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'}`}>{descp}</p>)}
-            {!isEditingDescp && <i onClick={handleDescpClick} className={`${darkMode ? 'text-white' : ''} absolute bi bi-pencil-fill`} style={{cursor:'pointer', marginTop:'13.7%', marginLeft:'25%'}}></i>} 
-            {isEditingDescp && <i onClick={handleDescpBlur} className={`${darkMode ? 'text-white' : ''} absolute bi bi-check2`}  style={{cursor:'pointer', fontSize:'125%', marginTop:'13.7%', marginLeft:'25%'}}></i>}
+            {!isEditingDescp && !removedFromGroup &&  <i onClick={handleDescpClick} className={`${darkMode ? 'text-white' : ''} absolute bi bi-pencil-fill`} style={{cursor:'pointer', marginTop:'13.7%', marginLeft:'25%'}}></i>} 
+            {isEditingDescp && !removedFromGroup &&  <i onClick={handleDescpBlur} className={`${darkMode ? 'text-white' : ''} absolute bi bi-check2`}  style={{cursor:'pointer', fontSize:'125%', marginTop:'13.7%', marginLeft:'25%'}}></i>}
               </>
             )}
           </div>
           <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-4`} style={{marginTop:'-5%'}}>{memberCount} members</h2>
           {isAmAdmin && <div>
             <div className="flex items-center mb-1">
-              <button onClick={showAddMemberMenu} className={`${darkMode ? 'bg-[#3b3c3e]' : 'bg-gray-300 text-gray-600 hover:bg-gray-200'} mr-2`} style={{borderRadius:'50%', width:'38px', height:'38px', display:'flex', justifyContent:'center', alignItems:'center', border:'none'}}>
+              <button disabled={removedFromGroup} onClick={showAddMemberMenu} className={`${darkMode ? 'bg-[#3b3c3e]' : 'bg-gray-300 text-gray-600 hover:bg-gray-200'} mr-2`} style={{borderRadius:'50%', width:'38px', height:'38px', display:'flex', justifyContent:'center', alignItems:'center', border:'none'}}>
                 <i className={`${darkMode ? 'text-white':''} bi bi-person-fill-add`}></i>
               </button>
               <span className={`${darkMode ? 'text-white' : 'text-base'}`}>Add member</span>
@@ -253,7 +257,7 @@ export default function GroupInfo({darkMode, groupId}) {
             <div className={`${darkMode ? 'border-gray-700' : 'border-border'} border-b  my-4`}></div>
             </div>}
           <div className={`w-full  ${isAmAdmin ? 'h-[25vh]' : 'h-[38vh]'}`} style={{overflowY:'auto', scrollbarWidth:'none'}}>
-            {isAmAdmin ? <GroupMemberList loading={loading} groupId={groupId} members={members} groupName={name} darkMode={darkMode}/> : <GroupMemberList2 loading={loading} creator={creator} groupId={groupId} members={members} groupName={name} darkMode={darkMode}/>}
+            {isAmAdmin ? <GroupMemberList removedFromGroup={removedFromGroup} loading={loading} groupId={groupId} members={members} groupName={name} darkMode={darkMode}/> : <GroupMemberList2 removedFromGroup={removedFromGroup} loading={loading} creator={creator} groupId={groupId} members={members} groupName={name} darkMode={darkMode}/>}
           </div>
         </div>
       </div>

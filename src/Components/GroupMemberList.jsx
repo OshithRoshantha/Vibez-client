@@ -3,7 +3,7 @@ import GlobalAlert from './GlobalAlert';
 import { Skeleton } from "@/components/ui/skeleton";
 import { removeMembers, deleteGroup } from '../Services/GroupsService';
 
-export default function GroupMemberList({darkMode, members, groupName, loading, groupId}) {
+export default function GroupMemberList({darkMode, members, groupName, loading, groupId, removedFromGroup}) {
 
   const userId = sessionStorage.getItem('userId');
   const [deleteGroupPopup, setDeleteGroupPopup] = useState(false);
@@ -95,6 +95,7 @@ export default function GroupMemberList({darkMode, members, groupName, loading, 
                     </p>
                   </div>
                   <button
+                    disabled={removedFromGroup}
                     onClick={() => toggleDeleteGroupPopup(member.userName)}
                     className="ml-auto text-sm bg-red-400 text-white hover:bg-red-300 border-none"
                   >
@@ -121,6 +122,7 @@ export default function GroupMemberList({darkMode, members, groupName, loading, 
                     </p>
                   </div>
                   <button
+                    disabled={removedFromGroup}
                     onClick={() => {setMemberId((prevIds) => [...prevIds, member.userId]); toggleRemoveMemberPopup(member.userName);}}
                     className={`${
                       darkMode
