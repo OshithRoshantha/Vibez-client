@@ -24,6 +24,7 @@ export default function GroupInfo({darkMode, groupId}) {
   const avatarEditorRef = useRef(null);
   const [isEditingDescp, setIsEditingDescp] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
+  const [removedFromGroup, setRemovedFromGroup] = useState(false);
 
   const [name, setName] = useState('');
   const [descp, setDescp] = useState('');
@@ -78,6 +79,9 @@ export default function GroupInfo({darkMode, groupId}) {
                   const isRelated = await isGroupRelated(lastMessage.groupId);
                   if (isRelated) {
                     fetchGroupInfo();
+                  }
+                  if (lastMessage.groupId === groupId && !isRelated) {
+                    setRemovedFromGroup(true);
                   }
                   break;
                 }
@@ -182,7 +186,7 @@ export default function GroupInfo({darkMode, groupId}) {
                                     <button onClick={handleCrop} className='border-none' style={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</button>
                                 </div>
         </div>}
-      <h2 className={`${darkMode ? 'text-white' : '' } text-lg font-semibold mb-4`}>Group info</h2>
+        {removedFromGroup ? (<><div className='bg-yellow-200 py-2 pl-4 mb-4' style={{borderRadius:'10px'}}><i className=" text-gray-600 bi bi-exclamation-triangle"></i>   You're no longer a member in this group.</div></>) : (<> <h2 className={`${darkMode ? 'text-white' : '' } text-lg font-semibold mb-4`}>Group info</h2></>)}
         <div className="bg-card p-6 w-full" style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7'}} >
           <div className="flex flex-col items-center mb-5" style={{marginTop:'-5%'}}>
             {isAmAdmin && 

@@ -81,7 +81,7 @@ export const sendMessage = async (groupId: string, messageToSend: string): Promi
     });   
 }
 
-export const createGroup = async (groupName: string, groupIcon: string, groupDescp: string, memberIds: string[]): Promise<void> => {
+export const createGroup = async (groupName: string, groupIcon: string, groupDesc: string, memberIds: string[]): Promise<void> => {
     return new Promise((resolve) => {
         const token = sessionStorage.getItem('token');
         const userId = sessionStorage.getItem('userId');
@@ -95,7 +95,7 @@ export const createGroup = async (groupName: string, groupIcon: string, groupDes
                     creatorId: userId,
                     groupName,
                     groupIcon,
-                    groupDescp,
+                    groupDesc,
                     memberIds
                 },
             };
