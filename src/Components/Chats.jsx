@@ -60,12 +60,23 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
                 return;
             }
             for (const lastMessage of newMessages) {
+
                 if (lastMessage.action === 'messageService') {
-                    const isRelated = await checkIsRelated(lastMessage.chatId);
-                    if (isRelated) {
-                        await Promise.all([fetchAllChats(), fetchFavouriteChats()]); 
+                    if(lastMessage.type === 'direct'){
+                        const isRelated = await checkIsRelated(lastMessage.chatId);
+                        if (isRelated) {
+                            await Promise.all([fetchAllChats(), fetchFavouriteChats()]); 
+                        }
                     }
                 }
+
+                if(lastMessage.action === 'profileService'){
+                    if(chats.some(chat => chat.friendId === lastMessage.body)){ 
+                        fetchAllChats();
+                        fetchFavouriteChats();
+                    }
+                }
+
             }
             setProcessedMessages((prevProcessedMessages) => [
                 ...prevProcessedMessages,

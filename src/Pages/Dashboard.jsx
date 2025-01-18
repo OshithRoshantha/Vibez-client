@@ -45,7 +45,9 @@ export default function Dashboard() {
     const [notifiacton, setNotification] = useState('');
     const [pendingRequests, setPendingRequests] = useState(0);
     const [unreadMessages, setUnreadMessages] = useState(0);
+
     const [receiverId, setReceiverId] = useState('');
+    const [groupId, setGroupId] = useState('');
     
     const texts = [
         "Stay connected with your circles",
@@ -154,11 +156,13 @@ export default function Dashboard() {
                     }
                 }
                 else if (lastMessage.action === 'messageService'){
-                    const isRelated = await checkIsRelated(lastMessage.chatId);
-                    if(isRelated){
-                        fetchUnreadMessages();
-                        if(lastMessage.sender !== sessionStorage.getItem('userId')){
-                            audioRef2.current.play();
+                    if(lastMessage.type === 'direct'){
+                        const isRelated = await checkIsRelated(lastMessage.chatId);
+                        if(isRelated){
+                            fetchUnreadMessages();
+                            if(lastMessage.sender !== sessionStorage.getItem('userId')){
+                                audioRef2.current.play();
+                            }
                         }
                     }
                 }
@@ -330,13 +334,13 @@ export default function Dashboard() {
                 </div>
             </div>
             {chatsMenu && <Chats setReceiverId={setReceiverId} darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
-            {groupsMenu && <GroupChats darkMode={darkMode} showGroupMessages={showGroupMessages}/>}
+            {groupsMenu && <GroupChats darkMode={darkMode} setGroupId={setGroupId} showGroupMessages={showGroupMessages}/>}
             {friendsMenu && <Friends setReceiverId={setReceiverId} darkMode={darkMode} showDirectMessages={showDirectMessages} setPendingRequests={setPendingRequests} fetchPendingRequests={fetchPendingRequests}/>}
             {marketplaceMenu && <Marketplace setReceiverId={setReceiverId} showDirectMessages={showDirectMessages}  darkMode={darkMode}/>}
             {settingsMenu && <Settings darkModeOn={darkModeOn} darkModeOff={darkModeOff} darkMode={darkMode}/>}
             {profileMenu && <Profile  darkMode={darkMode} setUserPicture={setUserPicture}/>}
             {friendInfoMenu && <FriendInfo receiverId={receiverId} darkMode={darkMode}/>}
-            {groupInfoMenu && <GroupInfo  darkMode={darkMode}/>}
+            {groupInfoMenu && <GroupInfo groupId={groupId} darkMode={darkMode}/>}
             <div className="flex-1 p-0 messages-column" style={{height:'100vh'}}>
                 {welcomeVideo &&
                 <div className="w-full flex flexflex-column items-center justify-center" style={{height:'100vh', backgroundImage: darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)', backgroundSize: 'cover'}}>
@@ -348,7 +352,7 @@ export default function Dashboard() {
                 </div>
                 }
                 {directMessages && <DirectChat fetchUnreadMessages={fetchUnreadMessages} receiverId={receiverId} darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
-                {groupMessages && <GroupChat darkMode={darkMode} showGroupInfoMenu={showGroupInfoMenu}/>}  
+                {groupMessages && <GroupChat darkMode={darkMode} groupId={groupId} showGroupInfoMenu={showGroupInfoMenu}/>}  
             </div>
         </div>
     </div>

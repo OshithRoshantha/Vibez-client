@@ -88,6 +88,16 @@ export const getFriendshipId = async (friendId: string) => {
     return response.data;
 };
 
+export const validateFriendship = async (friendId: string) => {
+    const userId = sessionStorage.getItem('userId');
+    const response = await axios.get(`http://localhost:8080/vibez/friends/isFriends/${userId}/${friendId}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+}
+
 export const isConnectedProfile = async (friendshipId: string) => {
     const userId = sessionStorage.getItem('userId');
     const response = await axios.get(`http://localhost:8080/vibez/friends/check/${userId}/${friendshipId}`, {
@@ -131,6 +141,16 @@ export const filterPendingRequests = async (friendshipId: string) => {
 export const filterAcceptedRequests = async (friendshipId: string) => {
     const userId = sessionStorage.getItem('userId');
     const response = await axios.get(`http://localhost:8080/vibez/friends/filterAccepteds/${userId}/${friendshipId}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+}
+
+export const getAllFriends = async () => {
+    const userId = sessionStorage.getItem('userId');
+    const response = await axios.get(`http://localhost:8080/vibez/friends/getAll/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
