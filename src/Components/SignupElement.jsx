@@ -217,7 +217,7 @@ export default function SignupElement() {
 
   const handleImageUpload = async () => {
     const blob = await fetch(cropedImage).then(res => res.blob());
-    const file = new File([blob], "cropped_image.png", { type: "image/png" });
+    const file = new File([blob], `user_${email}.png`, { type: "image/png" });
     return await uploadFile(file);
   }
 
