@@ -51,6 +51,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
   
   const markMessagesAsRead = async () => {
     await markGroupMessagesAsRead(groupId);
+    console.log('Messages marked as read');
     fetchUnreadGroupMessages();
   }
 
@@ -103,15 +104,15 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
     }, [messages, processedMessages]);
 
   useEffect(() => {
+    markMessagesAsRead();
     fetchGroupInfo();
     fetchChatMessages();
-    markMessagesAsRead();
   }, []);
 
   useEffect(() => {
+    markMessagesAsRead();
     fetchGroupInfo();
     fetchChatMessages();
-    markMessagesAsRead();
   }, [groupId]);
 
   function handleScroll() {
