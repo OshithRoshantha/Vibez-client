@@ -49,7 +49,6 @@ export default function SignupElement() {
   const [contactNumberError, setContactNumberError] = useState(false);
   const [passwordUnmatchError, setPasswordUnmatchError] = useState(false);
   const [disableContinueBtn, setDisableContinueBtn] = useState(true);
-  const [imgFile, setImgFile] = useState(null);
 
   const defaultImage = "./src/assets/userDefault.jpg";
 
@@ -119,7 +118,6 @@ export default function SignupElement() {
   function handleFileChange(event) {
     const file = event.target.files[0];
     if (file) {
-      setImgFile(file);
       const imageUrl = URL.createObjectURL(file);
       setSelectedImage(imageUrl);
       editPictureFormHandler();
@@ -218,9 +216,9 @@ export default function SignupElement() {
   }
 
   const handleImageUpload = async () => {
-    //const blob = await fetch(cropedImage).then(res => res.blob());
-    //const file = new File([blob], "cropped_image.png", { type: "image/png" });
-    return await uploadFile(imgFile);
+    const blob = await fetch(cropedImage).then(res => res.blob());
+    const file = new File([blob], "cropped_image.png", { type: "image/png" });
+    return await uploadFile(file);
   }
 
   const handleSignUp = async () => { 
