@@ -100,9 +100,9 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
 
     const handleImageUpload = async () => {
         const files = await Promise.all(
-            selectedImages.map(async (image, index) => {
+            selectedImages.map(async (image) => {
                 const blob = await fetch(image).then(res => res.blob());
-                return new File([blob], `marketplaceItem_${index}.png`, { type: "image/png" });
+                return new File([blob], `marketplaceItem_${title}.png`, { type: "image/png" });
             })
         );
         return await uploadMultipleFiles(files);
