@@ -7,6 +7,7 @@ import { getMarketplaceItems, addListing, getActiveListingCount, getMyListings, 
 import PreviewProduct from './PreviewProduct';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
+import { uploadMultipleFiles } from '../Services/s3Service';
 
 export default function Marketplace({darkMode, showDirectMessages, setReceiverId}) {
 
@@ -97,6 +98,17 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
     const handleLocationChange = (e) => setLocation(e.target.value);
     const toggleHideFromFriends = () => setHideFromFriends((prev) => !prev);
 
+    const handleImageUpload = async () => {
+        const files = await Promise.all(
+            selectedImages.map(async (image) => {
+                const blob = await fetch(image).then(res => res.blob());
+                return new File([blob], `marketplaceItem_${title}.png`, { type: "image/png" });
+            })
+        );
+        return await uploadMultipleFiles(files);
+    };
+    
+
     const createListing = async () => {
         const validationErrors = validateFields();
         if (Object.keys(validationErrors).length > 0) {
@@ -109,15 +121,14 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
             }
             return; 
         }
-
-        await addListing(title, price, description, selectedImages, location, hideFromFriends, category);
+        const uploadedImageUrls = await handleImageUpload();
+        await addListing(title, price, description, uploadedImageUrls, location, hideFromFriends, category);
         if (sellProductsRef.current) {
             sellProductsRef.current.scrollTo({
                 top: 0,
                 behavior: "smooth", 
             });
         }
-
         setTitle("");
         setPrice("");
         setCategory("");

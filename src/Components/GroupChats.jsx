@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getAllGroups, getGroupInfo, createGroup, isGroupRelated } from '../Services/GroupsService';
 import { getAllFriends } from '../Services/FriendshipService';
 import { useWebSocket } from '../Context/WebSocketContext';
+import { uploadFile } from '../Services/s3Service';
 
 export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
 
@@ -99,9 +100,16 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
         }
     }
 
+    const handleImageUpload = async () => {
+        const blob = await fetch(cropedImage).then(res => res.blob());
+        const file = new File([blob], `group_${groupSubject}.png`, { type: "image/png" });
+        return await uploadFile(file);
+    }
+
     const createNewGroup = async () => {
+        const uploadedImageUrl = await handleImageUpload();
         const selectedFriendIds = Object.keys(addedFriends).filter((id) => addedFriends[id] === true);
-        await createGroup(groupSubject, cropedImage, groupDescription, selectedFriendIds);
+        await createGroup(groupSubject, uploadedImageUrl, groupDescription, selectedFriendIds);
         setGroupSubject("");    
         setGroupDescription("");
         setAddedFriends({});
