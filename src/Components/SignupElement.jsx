@@ -20,6 +20,7 @@ import AvatarEditor from 'react-avatar-editor'
 import { ToastContainer, toast } from 'react-toastify';
 import { createAccount} from '../Services/ProfileService';
 import { checkAccount } from '../Services/AuthService';
+import { uploadImageToS3 } from '../Services/s3Service';
 
 export default function SignupElement() {
   const steps = ['Basic Information', 'Add Password', 'Personalize and Finalize'];
@@ -48,13 +49,12 @@ export default function SignupElement() {
   const [contactNumberError, setContactNumberError] = useState(false);
   const [passwordUnmatchError, setPasswordUnmatchError] = useState(false);
   const [disableContinueBtn, setDisableContinueBtn] = useState(true);
-  const [isCreated, setIsCreated] = useState(false);
 
   const defaultImage = "./src/assets/userDefault.jpg";
 
   function notify() {
     toast.success("Account create successfully!");
-}
+  }
 
   function validateFullName(name) {
     return /^[a-zA-Z\s]{3,}$/.test(name);
@@ -214,10 +214,17 @@ export default function SignupElement() {
       return prevActiveStep - 1;
     });
   }
-  
-  const handleSignUp = async () => { 
-    await createAccount(email, fullName, confirmPassword, cropedImage , about);
+
+  const handleImageUpload = async () => {
+    const blob = await fetch(cropedImage).then(res => res.blob());
+    const file = new File([blob], "cropped_image.png", { type: "image/png" });
+    return await uploadImageToS3(file);
   }
+
+  const handleSignUp = async () => { 
+    const uploadedImageUrl = await handleImageUpload();
+    await createAccount(email, fullName, confirmPassword, uploadedImageUrl, about);
+  };
 
   return (
     <div>
