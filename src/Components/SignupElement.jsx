@@ -20,7 +20,7 @@ import AvatarEditor from 'react-avatar-editor'
 import { ToastContainer, toast } from 'react-toastify';
 import { createAccount} from '../Services/ProfileService';
 import { checkAccount } from '../Services/AuthService';
-import { uploadImageToS3 } from '../Services/s3Service';
+import { uploadFile } from '../Services/s3Service';
 
 export default function SignupElement() {
   const steps = ['Basic Information', 'Add Password', 'Personalize and Finalize'];
@@ -49,6 +49,7 @@ export default function SignupElement() {
   const [contactNumberError, setContactNumberError] = useState(false);
   const [passwordUnmatchError, setPasswordUnmatchError] = useState(false);
   const [disableContinueBtn, setDisableContinueBtn] = useState(true);
+  const [imgFile, setImgFile] = useState(null);
 
   const defaultImage = "./src/assets/userDefault.jpg";
 
@@ -118,6 +119,7 @@ export default function SignupElement() {
   function handleFileChange(event) {
     const file = event.target.files[0];
     if (file) {
+      setImgFile(file);
       const imageUrl = URL.createObjectURL(file);
       setSelectedImage(imageUrl);
       editPictureFormHandler();
@@ -216,9 +218,9 @@ export default function SignupElement() {
   }
 
   const handleImageUpload = async () => {
-    const blob = await fetch(cropedImage).then(res => res.blob());
-    const file = new File([blob], "cropped_image.png", { type: "image/png" });
-    return await uploadImageToS3(file);
+    //const blob = await fetch(cropedImage).then(res => res.blob());
+    //const file = new File([blob], "cropped_image.png", { type: "image/png" });
+    return await uploadFile(imgFile);
   }
 
   const handleSignUp = async () => { 
