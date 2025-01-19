@@ -32,7 +32,6 @@ export default function Profile({darkMode, setUserPicture}) {
     }, []);    
 
     const handleImageUpload = async () => {
-        console.log(selectedImage);
         const blob = await fetch(selectedImage).then(res => res.blob());
         const file = new File([blob], `user_${email}.png`, { type: "image/png" });
         return await uploadFile(file);
