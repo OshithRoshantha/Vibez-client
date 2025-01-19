@@ -7,6 +7,7 @@ import Slider from '@mui/material/Slider';
 import { checkAdmin, getGroupInfo, updateGroup, isGroupRelated } from '../Services/GroupsService';
 import { fetchUserMetaDataById } from '../Services/ProfileService';
 import { useWebSocket } from '../Context/WebSocketContext';
+import { uploadFile } from '../Services/s3Service';
 
 export default function GroupInfo({darkMode, groupId}) {
 
@@ -41,8 +42,15 @@ export default function GroupInfo({darkMode, groupId}) {
     }
   }
 
+  const handleImageUpload = async () => {
+    const blob = await fetch(selectedImage).then(res => res.blob());
+    const file = new File([blob], `group_${groupId}.png`, { type: "image/png" });
+    return await uploadFile(file);
+  }
+
   const updateGroupInfo = async () => {
-    await updateGroup(groupId, name, cropedImage, descp);
+    const uploadedImageUrl = await handleImageUpload();
+    await updateGroup(groupId, name, uploadedImageUrl, descp);
   }
 
   const fetchGroupInfo = async () => {

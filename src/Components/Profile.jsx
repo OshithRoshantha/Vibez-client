@@ -3,6 +3,7 @@ import './Styles/Column2.css'
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
 import { fetchUserMetaData, updateUserMetaData } from '../Services/ProfileService';
+import { uploadFile } from '../Services/s3Service';
 
 export default function Profile({darkMode, setUserPicture}) {
     const [isEditingName, setIsEditingName] = useState(false);
@@ -16,6 +17,7 @@ export default function Profile({darkMode, setUserPicture}) {
     const avatarEditorRef = useRef(null);  
     const [name, setName] = useState('');
     const [about, setAbout] = useState('');
+    const [email, setEmail] = useState('');
     const [profilePicture, setProfilePicture] = useState('');
 
     useEffect(() => {
@@ -23,13 +25,21 @@ export default function Profile({darkMode, setUserPicture}) {
             const response = await fetchUserMetaData();
             setName(response.userName);
             setAbout(response.about);
+            setEmail(response.email);
             setProfilePicture(response.profilePicture);
         };
         fetchUser();
     }, []);    
 
+    const handleImageUpload = async () => {
+        const blob = await fetch(selectedImage).then(res => res.blob());
+        const file = new File([blob], `user_${email}.png`, { type: "image/png" });
+        return await uploadFile(file);
+    }
+        
     const updateUser = async () => {
-        await updateUserMetaData(name, about, cropedImage);
+        const uploadedImageUrl = await handleImageUpload();
+        await updateUserMetaData(name, about, uploadedImageUrl);
     }
 
     function handleNameClick() {

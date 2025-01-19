@@ -4,13 +4,13 @@ import { useState, useEffect, useRef } from "react";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
-import { getGroupInfo, isGroupRelated, getGroupMessages, sendMessage } from '../Services/GroupsService';
+import { getGroupInfo, isGroupRelated, getGroupMessages, sendMessage, markGroupMessagesAsRead } from '../Services/GroupsService';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
 import TemporalMessage from "./TemporalMessage";
 import CircularProgress from '@mui/material/CircularProgress';
 
-export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
+export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchUnreadGroupMessages}) {
 
   const { messages } = useWebSocket();
   const [processedMessages, setProcessedMessages] = useState([]);
@@ -47,7 +47,12 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
     finally{
       setChatsLoading(false);
     }
-  }  
+  }
+  
+  const markMessagesAsRead = async () => {
+    await markGroupMessagesAsRead(groupId);
+    fetchUnreadGroupMessages();
+  }
 
   const handleShowGroupInfoMenu = () => {
     if(!removedFromGroup){
@@ -81,6 +86,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
                             const isRelated = await isGroupRelated(lastMessage.groupId);
                             if (isRelated) {
                               fetchChatMessages();
+                              markMessagesAsRead();
                             }
                           }                        
                         break;
@@ -98,9 +104,16 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId }) {
     }, [messages, processedMessages]);
 
   useEffect(() => {
+    markMessagesAsRead();
     fetchGroupInfo();
     fetchChatMessages();
   }, []);
+
+  useEffect(() => {
+    markMessagesAsRead();
+    fetchGroupInfo();
+    fetchChatMessages();
+  }, [groupId]);
 
   function handleScroll() {
     const chatContainer = chatRef.current;
