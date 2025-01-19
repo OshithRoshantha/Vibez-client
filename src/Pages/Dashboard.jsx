@@ -18,6 +18,7 @@ import PopupNotifiter from '../Components/PopupNotifiter';
 import { useWebSocket } from '../Context/WebSocketContext';
 import { getConnectedProfileInfo, filterPendingRequests, filterAcceptedRequests, isConnectedProfile} from '../Services/FriendshipService';
 import { isProductListed, getProductDetails } from '../Services/MarketplaceService';
+import { getUnreadGroupMessages, isGroupRelated } from '../Services/GroupsService';
 
 export default function Dashboard() {
 
@@ -45,6 +46,7 @@ export default function Dashboard() {
     const [notifiacton, setNotification] = useState('');
     const [pendingRequests, setPendingRequests] = useState(0);
     const [unreadMessages, setUnreadMessages] = useState(0);
+    const [unreadGroupMessages, setUnreadGroupMessages] = useState(0);
 
     const [receiverId, setReceiverId] = useState('');
     const [groupId, setGroupId] = useState('');
@@ -76,6 +78,11 @@ export default function Dashboard() {
         const response = await getUnreadCount();
         setUnreadMessages(response);
     }
+
+    const fetchUnreadGroupMessages = async () => {
+        const response = await getUnreadGroupMessages();
+        setUnreadGroupMessages(response);
+    }
     
     useEffect(() => {
         async function DarkModePreference() {
@@ -98,6 +105,7 @@ export default function Dashboard() {
         fetchUser();
         fetchPendingRequests();
         fetchUnreadMessages();
+        fetchUnreadGroupMessages();
     }, []);
 
     useEffect(() => {
@@ -164,6 +172,15 @@ export default function Dashboard() {
                                 audioRef2.current.play();
                             }
                         }
+                    }
+                    else if(lastMessage.type === 'group'){
+                        const isRelated = await isGroupRelated(lastMessage.groupId);
+                        if (isRelated) {
+                            fetchUnreadGroupMessages();
+                            if(lastMessage.sender !== sessionStorage.getItem('userId')){
+                                audioRef2.current.play();
+                            }
+                        } 
                     }
                 }
             }
@@ -315,6 +332,9 @@ export default function Dashboard() {
                     <i className={`bi bi-chat-dots-fill text-2xl ${chatsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
                 </div>
                 <div onClick={showGroupsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:groupsMenu ? '6px solid blue': 'none'}}>
+                    {unreadGroupMessages > 0 && (
+                        <div className='text-white bg-danger ml-7 mb-3 h-5 w-5 rounded-full absolute' style={{display:'flex', justifyContent:'center', alignItems:'center'}}>{unreadGroupMessages}</div>
+                    )} 
                     <i className={`bi bi-wechat text-2xl ${groupsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
                 </div>
                 <div onClick={showFriendstMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:friendsMenu ? '6px solid blue': 'none'}}>      
@@ -352,7 +372,7 @@ export default function Dashboard() {
                 </div>
                 }
                 {directMessages && <DirectChat fetchUnreadMessages={fetchUnreadMessages} receiverId={receiverId} darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
-                {groupMessages && <GroupChat darkMode={darkMode} groupId={groupId} showGroupInfoMenu={showGroupInfoMenu}/>}  
+                {groupMessages && <GroupChat fetchUnreadGroupMessages={fetchUnreadGroupMessages}  darkMode={darkMode} groupId={groupId} showGroupInfoMenu={showGroupInfoMenu}/>}  
             </div>
         </div>
     </div>

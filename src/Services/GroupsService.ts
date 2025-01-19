@@ -59,6 +59,26 @@ export const getGroupMessages = async (groupId: string) => {
     return response.data;
 }
 
+export const markGroupMessagesAsRead = async (groupId: string) => {
+    const userId = sessionStorage.getItem('userId');
+    const response = await axios.get(`http://localhost:8080/vibez/message/markAsReadGroup/${userId}/${groupId}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+}
+
+export const getUnreadGroupMessages = async () => {
+    const userId = sessionStorage.getItem('userId');
+    const response = await axios.get(`http://localhost:8080/vibez/message/unreadGroup/${userId}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+}
+
 export const sendMessage = async (groupId: string, messageToSend: string): Promise<void> => {
     return new Promise((resolve) => {
         const token = sessionStorage.getItem('token');
