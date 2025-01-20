@@ -123,14 +123,6 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
     }
   }
 
-  function showMagicReplyButton(){
-    setMagicReplyButton(true);
-  }
-
-  function hideMagicReplyButton(){
-    setMagicReplyButton(false);
-  }
-
   function scrollToBottom() {
     const chatContainer = chatRef.current;
     if (chatContainer) {
