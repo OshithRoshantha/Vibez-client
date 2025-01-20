@@ -201,7 +201,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
             ) : (
               <div>
                 <div className="flex items-center">
-                  <img src={groupAvatar} alt="User Avatar" className="rounded-full mr-2" style={{height:'45px', width:'45px'}}/>
+                  <div className="rounded-full mr-2" style={{ height: '45px', width: '45px', background: `center / cover no-repeat url(${groupAvatar})` }}></div>
                   <div>
                     <span className={`${darkMode ? 'text-white' : 'text-black'} text-lg font-semibold`}>{groupName}</span>
                     <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} mt-0`} style={{ fontSize: '70%' }}>Click here for group info</p>
