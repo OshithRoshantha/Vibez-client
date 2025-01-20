@@ -1,6 +1,6 @@
 import './Styles/Column2.css'
-import { useState, useEffect } from 'react';
-import { getAllChats, getFavaouriteChats, getChatPreivew, checkIsRelated } from '../Services/ChatService';
+import { useState, useEffect, useRef } from 'react';
+import { getAllChats, getFavaouriteChats, getChatPreivew, checkIsRelated, searchChats } from '../Services/ChatService';
 import DirectChatPreview from './DirectChatPreview';
 import { useWebSocket } from '../Context/WebSocketContext';
 import { Skeleton } from "@/components/ui/skeleton";
@@ -15,6 +15,24 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
     const [loading, setLoading] = useState(true);
     const [loading2, setLoading2] = useState(true);
     const [showAll, setShowAll] = useState(true);
+    const inputRef = useRef(null);
+    const [searchKeyword, setSearchKeyword] = useState('');
+
+    const getSearchResults = async (value) => {
+        try {
+            const friendIds = await searchChats(value); 
+            const chatPreviews = await Promise.all(
+                friendIds.map(async (friendId) => {
+                    const chatPreview = await getChatPreivew(friendId);
+                    return chatPreview;
+                })
+            );
+            setChats(chatPreviews); 
+        }
+        finally {
+            setLoading(false);
+        }
+    }
 
     const fetchAllChats = async () => {
         try {
@@ -99,12 +117,33 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
         setShowAll(true);
     }
 
+    const handleSearchChange = async (e) => {
+        const value = e.target.value;
+        setSearchKeyword(value); 
+        if (value.length > 0) {
+            getSearchResults(value);
+        }
+        else{
+            fetchAllChats();
+        }
+    };
+
+    const handleIconClick = async () => {
+        if (searchKeyword !== '') {
+          setSearchKeyword(''); 
+          fetchAllChats();
+        }
+    };
+
   return (
     <div>
         <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 chats-column`} style={{backgroundColor: darkMode ? '#262729' : '', height:'100vh'}}>
                 <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Chats</h2>
-                <input type="text" placeholder="Search friends" className={`${darkMode ? 'bg-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'bg-gray-200'} w-full px-4 py-2 mb-4 focus:outline-none focus:border-none placeholder:text-gray-500  text-gray-500 `} style={{borderRadius:'20px'}} />
-                <i className={`${darkMode ? 'text-[#abacae]':'text-gray-500'} bi absolute text-2xl bi-search`} style={{marginLeft:'-3%', marginTop:'0.2%'}}></i>
+                <input ref={inputRef} value={searchKeyword} onChange={handleSearchChange} type="text" placeholder="Search chats by name" className={`${darkMode ? 'bg-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'bg-gray-200'} w-full px-4 py-2 mb-4 focus:outline-none focus:border-none placeholder:text-gray-500  text-gray-500 `} style={{borderRadius:'20px'}} />
+                <i className={`${darkMode ? 'text-[#abacae]' : 'text-gray-500'} bi cursor-pointer absolute text-2xl ${searchKeyword === '' ? 'bi-search' : 'bi-x-circle-fill'}`}
+                    style={{ marginLeft: '-3%', marginTop: '0.2%' }}
+                    onClick={handleIconClick}
+                ></i>
                 <div className="flex space-x-2 mb-4">
                     <button onClick={showAllChats} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`} >All</button>
                     <button onClick={showFavouriteChats} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}>Favorites</button>
