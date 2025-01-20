@@ -357,7 +357,7 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
             </div>}
             {forYouMenu && 
                 <div className='product-list'>
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-0 p-0 w-full"> 
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-5 p-0 w-full"> 
                     {loading ? (<>
                         {Array.from({ length: 6 }).map((_, index) => (
                             <div
