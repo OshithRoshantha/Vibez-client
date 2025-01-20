@@ -216,7 +216,7 @@ export default function GroupInfo({darkMode, groupId}) {
                 onChange={handleFileChange}
             />            
             {!isAmAdmin &&
-              <img src={avatar} className=" rounded-full flex items-center justify-center mb-1" style={{width:'150px', height:'150px', marginTop:'-5%', border: '1px solid rgb(104, 104, 104)'}}/>  
+              <div className="rounded-full flex items-center justify-center mb-1" style={{ width: '150px', height: '150px', marginTop: '-5%', background: `center / cover no-repeat url(${avatar})`, border: '1px solid rgb(104, 104, 104)' }}></div>  
             }
             {isAmAdmin && (
               <>

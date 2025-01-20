@@ -94,7 +94,7 @@ export default function FriendInfo({darkMode, receiverId}) {
       <h2 className={`${darkMode ? 'text-white' : '' } text-lg font-semibold mb-4`}>Friend info</h2>
         <div className="bg-card p-6 w-full" style={{marginTop:'12%', backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7'}} >
           <div className="flex flex-col items-center">
-            <img src={userAvatar} className=" rounded-full flex items-center justify-center mb-4" style={{width:'150px', height:'150px'}}/>
+            <div className="rounded-full flex items-center justify-center mb-4" style={{ width: '150px', height: '150px', background: `center / cover no-repeat url(${userAvatar})` }}></div>
             <h2 className={`${darkMode ? 'text-white' : 'text-foreground'} text-xl font-semibold`}>{userName}</h2>
             <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'}`}>{userEmail}</p>
             <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} text-sm`}>{userAbout}</p>
