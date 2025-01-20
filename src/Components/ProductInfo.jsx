@@ -122,10 +122,9 @@ export default function ProductInfo({expandingProductId, darkMode, showDirectMes
                         ))}
                     </div>
                     <h2 className={`${darkMode ? 'text-white':''} text-lg font-bold`}>{product.productTitle}</h2>
-                    <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} font-bold`}>LRK {product.price}</p>
+                    <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} font-bold`}>LRK {new Intl.NumberFormat().format(product.price)}</p>
                     <p className={`${darkMode ? 'text-white':''} text-sm`}>Send seller a message</p>
                     <button onClick={() => { handleSendMessage(); sendMessageToSeller(); }} className="bg-primary text-white  py-2 px-4 rounded-lg mt-2 mr-5">Send Message</button>
-                    <button className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} py-2 px-4 rounded-lg border-none`}>Share offer</button>
                     <h3 className={`${darkMode ? 'text-white':''} mt-4 font-semibold`}>Description</h3>
                     <p className={`${darkMode ? 'text-gray-300':'text-muted-foreground'} text-sm`}>{product.productDesc || 'Contact seller for details.'}</p>
                     <h3 className={`${darkMode ? 'text-white':''} mt-4 font-semibold`}>Condition</h3>

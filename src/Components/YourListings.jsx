@@ -47,7 +47,7 @@ export default function YourListings({productId, showEditListingMenu, darkMode, 
         <img src={productPhotos} alt="product-image" className="your-listning-img" />
         <div>
             <h2 className={`${darkMode ? 'text-white':''} text-sm font-semibold mt-2`}>{productTitle}</h2>
-            <p className="text-lg font-bold text-primary">LRK {price}</p>
+            <p className="text-lg font-bold text-primary">LRK {new Intl.NumberFormat().format(price)}</p>
             <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} text-sm`}>Listed on {listedDate}</p>
             <div className="flex space-x-2 mt-1">
                 <button onClick={handleEdit} className="bg-primary text-white hover:bg-secondary/80 px-2 py-1 rounded-lg text-sm"><i className="bi bi-pencil-square"></i>&nbsp;Edit listing</button>
