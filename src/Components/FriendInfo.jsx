@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react'
 import GlobalAlert from './GlobalAlert';
 import { fetchUserMetaDataById } from '../Services/ProfileService';
 import { useWebSocket } from '../Context/WebSocketContext';
+import { unFriend } from '../Services/FriendshipService';
 
 export default function FriendInfo({darkMode, receiverId}) {
 
@@ -73,6 +74,17 @@ export default function FriendInfo({darkMode, receiverId}) {
     }
   }
 
+  const handleUnfriend = async () => {
+    await unFriend(receiverId);
+    setUnfriendPopup(!unfriendPopup);
+  }
+
+  const handleBlock = async () => {
+    await unFriend(receiverId);
+    setBlockPopup(!blockPopup);
+  }
+
+
   function toggleBlockPopup(){
     setBlockPopup(!blockPopup);
   }
@@ -104,11 +116,11 @@ export default function FriendInfo({darkMode, receiverId}) {
                 <i className={`bi ${isFavorite ? 'bi-star' : 'bi-star-fill'}`}></i>&nbsp;&nbsp;
                 <span>{isFavorite ? 'Remove from favorites' : 'Add to favorites'}</span>        
               </li>
-              <li onClick={toggleBlockPopup} className={`${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200' } flex items-center py-2 px-3 rounded-lg text-destructive`} style={{cursor:'pointer'}}>
+              <li onClick={handleBlock} className={`${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200' } flex items-center py-2 px-3 rounded-lg text-destructive`} style={{cursor:'pointer'}}>
                 <i className="bi bi-ban"></i>&nbsp;&nbsp;
                 <span>Block {userName}</span>
               </li>
-              <li onClick={toggleUnfriendPopup} className={`${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200' } flex items-center py-2 px-3 rounded-lg text-destructive`}  style={{cursor:'pointer'}}>
+              <li onClick={handleUnfriend} className={`${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200' } flex items-center py-2 px-3 rounded-lg text-destructive`}  style={{cursor:'pointer'}}>
                 <i className="bi bi-hand-thumbs-down"></i>&nbsp;&nbsp;
                 <span>Unfriend {userName}</span>
               </li>
