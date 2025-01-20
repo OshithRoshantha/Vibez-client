@@ -235,7 +235,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
             ) : (
               <div>
                 <div className="flex items-center">
-                <img src={userAvatar} alt="User Avatar" className="rounded-full mr-2" style={{height:'45px'}}/>
+                <div className="rounded-full mr-2" style={{ height: '45px', width: '45px', background: `center / cover no-repeat url(${userAvatar})` }}></div>
                 <div>
                   <span className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold`}>{userName}</span>
                   <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} mt-0`}  style={{fontSize:'70%'}}>Click here for contact info</p>
