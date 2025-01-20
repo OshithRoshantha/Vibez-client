@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import GlobalAlert from './GlobalAlert';
 import { fetchUserMetaDataById } from '../Services/ProfileService';
 import { useWebSocket } from '../Context/WebSocketContext';
-import { unFriend } from '../Services/FriendshipService';
+import { unFriend, getFriendshipId } from '../Services/FriendshipService';
 
 export default function FriendInfo({darkMode, receiverId}) {
 
@@ -75,12 +75,14 @@ export default function FriendInfo({darkMode, receiverId}) {
   }
 
   const handleUnfriend = async () => {
-    await unFriend(receiverId);
+    const response = await getFriendshipId(receiverId);
+    await unFriend(response);
     setUnfriendPopup(!unfriendPopup);
   }
 
   const handleBlock = async () => {
-    await unFriend(receiverId);
+    const response = await getFriendshipId(receiverId);
+    await unFriend(response);
     setBlockPopup(!blockPopup);
   }
 
