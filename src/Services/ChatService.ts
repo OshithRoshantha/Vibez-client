@@ -107,3 +107,13 @@ export const checkIsUnreadChat = async (chatId: string) => {
     });
     return response.data;    
 }
+
+export const searchChats = async (keyword: string) => {
+    const userId = sessionStorage.getItem('userId');
+    const response = await axios.get(`http://localhost:8080/vibez/directChat/find/${userId}/${keyword}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+}
