@@ -123,14 +123,6 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
     }
   }
 
-  function showMagicReplyButton(){
-    setMagicReplyButton(true);
-  }
-
-  function hideMagicReplyButton(){
-    setMagicReplyButton(false);
-  }
-
   function scrollToBottom() {
     const chatContainer = chatRef.current;
     if (chatContainer) {
@@ -240,19 +232,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
               </div>
             )
           )}           
-          {temporalMessage && <TemporalMessage message={temporalMessageContent}/> } 
-          {magicReplyButton && <div style={{left: '64%', bottom: '13%'}} className="absolute cursor-pointer bg-white rounded-full">
-              <AnimatedGradientText>
-                <span
-                  className={cn(
-                    `inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent`,
-                  )}
-                >
-                  Magic Reply
-                </span>
-                <ChevronRight className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
-              </AnimatedGradientText>          
-          </div>}        
+          {temporalMessage && <TemporalMessage message={temporalMessageContent}/> }         
         </div>
         <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3 border-t`} style={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
           {removedFromGroup ? (<div className="w-full mt-2">
