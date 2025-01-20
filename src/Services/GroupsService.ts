@@ -224,3 +224,13 @@ export const deleteGroup = async (groupId: string): Promise<void> => {
         };
     });
 };
+
+export const searchGroups = async (keyword: string) => {
+    const userId = sessionStorage.getItem('userId');
+    const response = await axios.get(`http://localhost:8080/vibez/group/find/${userId}/${keyword}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+    return response.data;
+}

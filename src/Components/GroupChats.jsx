@@ -5,7 +5,7 @@ import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
 import GroupChatPreview from './GroupChatPreview';
 import { Skeleton } from "@/components/ui/skeleton";
-import { getAllGroups, getGroupInfo, createGroup, isGroupRelated } from '../Services/GroupsService';
+import { getAllGroups, getGroupInfo, createGroup, isGroupRelated, searchGroups } from '../Services/GroupsService';
 import { getAllFriends } from '../Services/FriendshipService';
 import { useWebSocket } from '../Context/WebSocketContext';
 import { uploadFile } from '../Services/s3Service';
@@ -27,6 +27,8 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
     const [cropFactor, setCropFactor] = useState(1);
     const fileInputRef = useRef(null);
     const avatarEditorRef = useRef(null); 
+    const inputRef = useRef(null);
+    const [searchKeyword, setSearchKeyword] = useState('');
 
     const [groupSubject, setGroupSubject] = useState("");
     const [groupDescription, setGroupDescription] = useState("");
@@ -192,14 +194,51 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
           editPictureFormHandler();
         }
     }
+    
+    const getSearchResults = async (value) => {
+        try{
+            const groupIds = await searchGroups(value);
+            const groupPreviews = await Promise.all(
+                groupIds.map(async (groupId) => {
+                    const groupPreview = await getGroupInfo(groupId);
+                    return groupPreview;
+                })
+            );
+            setGroups(groupPreviews);
+        } 
+        finally{
+            setLoading(false);
+        }
+    }    
+
+    const handleSearchChange = async (e) => {
+        const value = e.target.value;
+        setSearchKeyword(value); 
+        if (value.length > 0) {
+            getSearchResults(value);
+        }
+        else{
+            fetchAllGroups();
+        }
+    };
+
+    const handleIconClick = async () => {
+        if (searchKeyword !== '') {
+          setSearchKeyword(''); 
+          fetchAllGroups();
+        }
+    };
 
   return (
     <div>
     <div>
         <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 chats-column`} style={{backgroundColor: darkMode ? '#262729' : '', height:'100vh'}}>
                 <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Groups</h2>
-                <input type="text" placeholder="Search groups by name" className={`${darkMode ? 'bg-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'bg-gray-200'} w-full px-4 py-2 mb-4 focus:outline-none focus:border-none placeholder:text-gray-500  text-gray-500 `} style={{borderRadius:'20px'}} />
-                <i className={`${darkMode ? 'text-[#abacae]':'text-gray-500'} bi absolute text-2xl bi-search`} style={{marginLeft:'-3%', marginTop:'0.2%'}}></i>
+                <input ref={inputRef} value={searchKeyword} onChange={handleSearchChange} type="text" placeholder="Search groups by name" className={`${darkMode ? 'bg-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'bg-gray-200'} w-full px-4 py-2 mb-4 focus:outline-none focus:border-none placeholder:text-gray-500  text-gray-500 `} style={{borderRadius:'20px'}} />
+                <i className={`${darkMode ? 'text-[#abacae]' : 'text-gray-500'} bi cursor-pointer absolute text-2xl ${searchKeyword === '' ? 'bi-search' : 'bi-x-circle-fill'}`}
+                    style={{ marginLeft: '-3%', marginTop: '0.2%' }}
+                    onClick={handleIconClick}
+                ></i>
                 <div className="flex space-x-2 mb-4">
                     <button onClick={showGroupChats} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}>Your groups</button>
                     <button onClick={showAddMembersMenu} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}><i className="bi bi-plus-lg"></i></button>
