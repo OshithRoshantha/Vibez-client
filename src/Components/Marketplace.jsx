@@ -294,7 +294,7 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
                 <input
                     ref={inputRef}
                     type="text"
-                    placeholder="Search people by name or email"
+                    placeholder="What do you want to buy?"
                     value={searchKeyword}
                     onChange={handleSearchChange}
                     className={`${darkMode ? 'bg-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'bg-gray-200'} w-full px-4 py-2 mb-4 focus:outline-none focus:border-none placeholder:text-gray-500  text-gray-500 `}
