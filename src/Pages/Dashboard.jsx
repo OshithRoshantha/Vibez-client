@@ -10,7 +10,7 @@ import DirectChat from '@/Components/DirectChat';
 import GroupChat from '@/Components/GroupChat';
 import FriendInfo from '@/Components/FriendInfo';
 import GroupInfo from '@/Components/GroupInfo';
-import MorphingText from "@/components/ui/morphing-text";
+import MorphingText from "@/Components/ui/morphing-text";
 import mainLogo from '../assets/Icons/main-logo3.png'
 import { updateDarkMode, getdarkModePreference, fetchUserMetaData} from '../Services/ProfileService';
 import { getUnreadCount, checkIsRelated } from  '../Services/ChatService';
