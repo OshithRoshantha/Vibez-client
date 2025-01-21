@@ -8,10 +8,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
+} from "@/Components/ui/card"
+import { Input } from "@/Components/ui/input"
+import { Label } from "@/Components/ui/label"
+import { Button } from "@/Components/ui/button"
 import { GoogleLogin } from '@react-oauth/google';
 import LandingAnimation from '@/Components/LandingAnimation';
 import { useNavigate } from 'react-router-dom';
