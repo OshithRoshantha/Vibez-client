@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const API = '3.88.247.66:8080';
+
 export const createAccount = async (email: string, name: string, password: string, picture: string, about: string) => {
-    const response = await axios.post('http://localhost:8080/vibez/register', {
+    const response = await axios.post(`http://${API}/vibez/register`, {
         userName: name,
         email: email,
         password: password,
@@ -12,7 +14,7 @@ export const createAccount = async (email: string, name: string, password: strin
 }
 
 export const fetchUserId = async () => {
-    const response = await axios.get('http://localhost:8080/vibez/profile', {
+    const response = await axios.get(`http://${API}/vibez/profile`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -21,7 +23,7 @@ export const fetchUserId = async () => {
 }
 
 export const fetchUserMetaData = async () => {
-    const response = await axios.get('http://localhost:8080/vibez/profile', {
+    const response = await axios.get(`http://${API}/vibez/profile`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -30,7 +32,7 @@ export const fetchUserMetaData = async () => {
 }
 
 export const fetchUserMetaDataById = async (userId: string) => {
-    const response = await axios.get(`http://localhost:8080/vibez/profile/${userId}`, {
+    const response = await axios.get(`http://${API}/vibez/profile/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -40,7 +42,7 @@ export const fetchUserMetaDataById = async (userId: string) => {
 
 export const updateDarkMode = async (darkMode: boolean) => {
     await axios.put(
-        `http://localhost:8080/vibez/profile/darkmode/${sessionStorage.getItem('userId')}/${darkMode}`,
+        `http://${API}/vibez/profile/darkmode/${sessionStorage.getItem('userId')}/${darkMode}`,
         {},
         {
             headers: {
@@ -51,7 +53,7 @@ export const updateDarkMode = async (darkMode: boolean) => {
 }
 
 export const getdarkModePreference = async () => {
-    const response = await axios.get('http://localhost:8080/vibez/profile', {
+    const response = await axios.get(`http://${API}/vibez/profile`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -65,7 +67,7 @@ export const updateUserMetaData = async (userName: string, about: string, profil
         const token = sessionStorage.getItem('token');
         const userId = sessionStorage.getItem('userId');
 
-        const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
+        const socket = new WebSocket(`ws://${API}/vibez-websocket?token=${token}`);
 
         socket.onopen = () => {
             const message = {
@@ -84,7 +86,7 @@ export const updateUserMetaData = async (userName: string, about: string, profil
 };
 
 export const fetchPeopleMetaData = async (userId: string) => {
-    const response = await axios.get(`http://localhost:8080/vibez/profile/${userId}`, {
+    const response = await axios.get(`http://${API}/vibez/profile/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },

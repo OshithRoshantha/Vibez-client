@@ -1,8 +1,10 @@
 import axios from 'axios';
 
+const API = '3.88.247.66:8080';
+
 export const getMarketplaceItems  = async () => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://localhost:8080/vibez/product/findAll/${userId}`, {
+    const response = await axios.get(`http://${API}/vibez/product/findAll/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -11,7 +13,7 @@ export const getMarketplaceItems  = async () => {
 };
 
 export const getProductDetails = async (productId: string) => {
-    const response = await axios.get(`http://localhost:8080/vibez/product/find/${productId}`, {
+    const response = await axios.get(`http://${API}/vibez/product/find/${productId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -21,7 +23,7 @@ export const getProductDetails = async (productId: string) => {
 
 export const getActiveListingCount = async () => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://localhost:8080/vibez/product/count/${userId}`, {
+    const response = await axios.get(`http://${API}/vibez/product/count/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -30,7 +32,7 @@ export const getActiveListingCount = async () => {
 }
 
 export const isUserSeller = async (userId: string) => {
-    const response = await axios.get(`http://localhost:8080/vibez/product/isSeller/${userId}`, {
+    const response = await axios.get(`http://${API}/vibez/product/isSeller/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -40,7 +42,7 @@ export const isUserSeller = async (userId: string) => {
 
 export const getMyListings = async () => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://localhost:8080/vibez/product/my/${userId}`, {
+    const response = await axios.get(`http://${API}/vibez/product/my/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -49,7 +51,7 @@ export const getMyListings = async () => {
 }
 
 export const addClick = async (productId: string) => {
-    const response = await axios.put(`http://localhost:8080/vibez/product/addClick/${productId}`, {
+    const response = await axios.put(`http://${API}/vibez/product/addClick/${productId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -59,7 +61,7 @@ export const addClick = async (productId: string) => {
 
 export const getTotalClicks = async () => {
     const sellerId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://localhost:8080/vibez/product/totalClicks/${sellerId}`, {
+    const response = await axios.get(`http://${API}/vibez/product/totalClicks/${sellerId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -73,7 +75,7 @@ export const addListing = async (productTitle: string, price: string, productDes
         const sellerId = sessionStorage.getItem('userId');
         const productAction = 'ADD';
 
-        const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
+        const socket = new WebSocket(`ws://${API}/vibez-websocket?token=${token}`);
 
         socket.onopen = () => {
             const message = {
@@ -102,7 +104,7 @@ export const updateListing = async (productId: string, productTitle: string, pri
         const sellerId = sessionStorage.getItem('userId');
         const productAction = 'UPDATE';
 
-        const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
+        const socket = new WebSocket(`ws://${API}/vibez-websocket?token=${token}`);
 
         socket.onopen = () => {
             const message = {
@@ -133,7 +135,7 @@ export const deleteListing = async (productId: string): Promise<void> => {
         const token = sessionStorage.getItem('token');
         const productAction = 'REMOVE';
 
-        const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
+        const socket = new WebSocket(`ws://${API}/vibez-websocket?token=${token}`);
 
         socket.onopen = () => {
             const message = {
@@ -151,13 +153,13 @@ export const deleteListing = async (productId: string): Promise<void> => {
 
 export const searchProducts = async (keyword: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://localhost:8080/vibez/product/search/${userId}/${keyword}`);
+    const response = await axios.get(`http://${API}/vibez/product/search/${userId}/${keyword}`);
     return response.data;
 }
 
 export const isProductListed = async (productId: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://localhost:8080/vibez/product/isAdded/${productId}/${userId}`, {
+    const response = await axios.get(`http://${API}/vibez/product/isAdded/${productId}/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },

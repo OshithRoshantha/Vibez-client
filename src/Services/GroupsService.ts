@@ -1,8 +1,10 @@
 import axios from 'axios';
 
+const API = '3.88.247.66:8080';
+
 export const getAllGroups = async () => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://localhost:8080/vibez/allGroups/${userId}`, {
+    const response = await axios.get(`http://${API}/vibez/allGroups/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -11,7 +13,7 @@ export const getAllGroups = async () => {
 };
 
 export const getGroupInfo = async (groupId: string) => {
-    const response = await axios.get(`http://localhost:8080/vibez/group/info/${groupId}`, {
+    const response = await axios.get(`http://${API}/vibez/group/info/${groupId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -21,7 +23,7 @@ export const getGroupInfo = async (groupId: string) => {
 
 export const checkAdmin = async (groupId: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://localhost:8080/vibez/group/isAdmin/${groupId}/${userId}`, {
+    const response = await axios.get(`http://${API}/vibez/group/isAdmin/${groupId}/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -31,7 +33,7 @@ export const checkAdmin = async (groupId: string) => {
 
 export const groupAddList = async (groupId: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://localhost:8080/vibez/group/getAddList/${groupId}/${userId}`, {
+    const response = await axios.get(`http://${API}/vibez/group/getAddList/${groupId}/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -41,7 +43,7 @@ export const groupAddList = async (groupId: string) => {
 
 export const isGroupRelated = async (groupId: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://localhost:8080/vibez/group/isRelated/${groupId}/${userId}`, {
+    const response = await axios.get(`http://${API}/vibez/group/isRelated/${groupId}/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -51,7 +53,7 @@ export const isGroupRelated = async (groupId: string) => {
 
 export const getGroupMessages = async (groupId: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://localhost:8080/vibez/message/groupChat/${userId}/${groupId}`, {
+    const response = await axios.get(`http://${API}/vibez/message/groupChat/${userId}/${groupId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -64,7 +66,7 @@ export const markGroupMessagesAsRead = async (groupId: string) => {
     const token = sessionStorage.getItem('token');
     
     const response = await axios.put(
-        `http://localhost:8080/vibez/message/markAsReadGroup/${userId}/${groupId}`, 
+        `http://${API}/vibez/message/markAsReadGroup/${userId}/${groupId}`, 
         {},  
         {
             headers: {
@@ -77,7 +79,7 @@ export const markGroupMessagesAsRead = async (groupId: string) => {
 
 export const getUnreadGroupMessages = async () => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://localhost:8080/vibez/message/unreadGroup/${userId}`, {
+    const response = await axios.get(`http://${API}/vibez/message/unreadGroup/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -87,7 +89,7 @@ export const getUnreadGroupMessages = async () => {
 
 export const checkIsUnreadGroup = async (groupId: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://localhost:8080/vibez/messages/checkUnreadGroup/${groupId}/${userId}`, {
+    const response = await axios.get(`http://${API}/vibez/messages/checkUnreadGroup/${groupId}/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -100,7 +102,7 @@ export const sendMessage = async (groupId: string, messageToSend: string): Promi
         const token = sessionStorage.getItem('token');
         const senderId = sessionStorage.getItem('userId');
 
-        const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
+        const socket = new WebSocket(`ws://${API}/vibez-websocket?token=${token}`);
 
         socket.onopen = () => {
             const message = {
@@ -122,7 +124,7 @@ export const createGroup = async (groupName: string, groupIcon: string, groupDes
         const token = sessionStorage.getItem('token');
         const userId = sessionStorage.getItem('userId');
 
-        const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
+        const socket = new WebSocket(`ws://${API}/vibez-websocket?token=${token}`);
 
         socket.onopen = () => {
             const message = {
@@ -145,7 +147,7 @@ export const updateGroup = async (groupId: string, groupName: string, groupIcon:
     return new Promise((resolve) => {
         const token = sessionStorage.getItem('token');
 
-        const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
+        const socket = new WebSocket(`ws://${API}/vibez-websocket?token=${token}`);
 
         socket.onopen = () => {
             const message = {
@@ -167,7 +169,7 @@ export const addMembers = async (groupId: string, memberList: string[]): Promise
     return new Promise((resolve) => {
         const token = sessionStorage.getItem('token');
 
-        const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
+        const socket = new WebSocket(`ws://${API}/vibez-websocket?token=${token}`);
 
         socket.onopen = () => {
             const message = {
@@ -188,7 +190,7 @@ export const removeMembers = async (groupId: string, memberList: string[]): Prom
     return new Promise((resolve) => {
         const token = sessionStorage.getItem('token');
 
-        const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
+        const socket = new WebSocket(`ws://${API}/vibez-websocket?token=${token}`);
 
         socket.onopen = () => {
             const message = {
@@ -209,7 +211,7 @@ export const deleteGroup = async (groupId: string): Promise<void> => {
     return new Promise((resolve) => {
         const token = sessionStorage.getItem('token');
 
-        const socket = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
+        const socket = new WebSocket(`ws://${API}/vibez-websocket?token=${token}`);
 
         socket.onopen = () => {
             const message = {
@@ -227,7 +229,7 @@ export const deleteGroup = async (groupId: string): Promise<void> => {
 
 export const searchGroups = async (keyword: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://localhost:8080/vibez/group/find/${userId}/${keyword}`, {
+    const response = await axios.get(`http://${API}/vibez/group/find/${userId}/${keyword}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
