@@ -4,7 +4,7 @@ const API = '3.88.247.66:8080';
 const API2 = '3.88.247.66:5000';
 
 export const getSmartReply = async (chatHistory: string[]) => {
-    const response = await axios.post('http://${API2}/vibez/ai_reply', {
+    const response = await axios.post(`http://${API2}/vibez/ai_reply`, {
         chatHistory: chatHistory
     });
     return response.data.reply;
