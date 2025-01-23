@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = '3.88.247.66:8080';
+const API = import.meta.env.VITE_API;
 
 export const checkAccount = async (email : string) => {
     const response = await axios.get(`http://${API}/vibez/profile/isExist/${email}`);
