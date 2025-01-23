@@ -9,7 +9,6 @@ import {
 import './Styles/Column2.css'
 import { useState} from 'react';
 import GlobalAlert from './GlobalAlert';
-import { useNavigate } from 'react-router-dom';
 
 export default function Settings({darkModeOn, darkModeOff, darkMode}) {
     const [logoutMenu, setLogoutMenu] = useState(false);
@@ -18,7 +17,6 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
     const [deleteAllGroupChatsPopup, setDeleteAllGroupChatsPopup] = useState(false);
     const [selectProfilePrivacy, setSelectProfilePrivacy] = useState('My friends');
     const [selectAboutPrivacy, setSelectAboutPrivacy] = useState('My friends');
-    const navigate = useNavigate();
 
     const icon1 = darkMode ? './src/assets/Icons/icon1dark.png' : './src/assets/Icons/icon1.png';
     const icon2 = darkMode ? './src/assets/Icons/icon2dark.png' : './src/assets/Icons/icon2.png';
