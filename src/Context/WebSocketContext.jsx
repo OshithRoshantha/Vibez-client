@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 
 const WebSocketContext = createContext();
-const API = '3.88.247.66:8080';
+const API = import.meta.env.VITE_API;
 
 export const useWebSocket = () => useContext(WebSocketContext);
 

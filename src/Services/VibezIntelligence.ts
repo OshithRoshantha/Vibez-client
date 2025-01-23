@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API = '3.88.247.66:8080';
-const API2 = '3.88.247.66:5000';
+const API = import.meta.env.VITE_API;
+const API2 = import.meta.env.VITE_API2;
 
 export const getSmartReply = async (chatHistory: string[]) => {
     const response = await axios.post(`http://${API2}/vibez/ai_reply`, {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = '3.88.247.66:8080';
+const API = import.meta.env.VITE_API;
 
 export const createAccount = async (email: string, name: string, password: string, picture: string, about: string) => {
     const response = await axios.post(`http://${API}/vibez/register`, {
