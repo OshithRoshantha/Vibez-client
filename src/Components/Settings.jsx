@@ -9,7 +9,15 @@ import {
 import './Styles/Column2.css'
 import { useState} from 'react';
 import GlobalAlert from './GlobalAlert';
-import { useNavigate } from 'react-router-dom';
+import icon1Light from '@/assets/Icons/icon1.png';
+import icon1Dark from '@/assets/Icons/icon1dark.png';
+import icon2Light from '@/assets/Icons/icon2.png';
+import icon2Dark from '@/assets/Icons/icon2dark.png';
+import icon3Light from '@/assets/Icons/icon3.png';
+import icon3Dark from '@/assets/Icons/icon3dark.png';
+import icon4Light from '@/assets/Icons/icon4.png';
+import icon4Dark from '@/assets/Icons/icon4dark.png';
+
 
 export default function Settings({darkModeOn, darkModeOff, darkMode}) {
     const [logoutMenu, setLogoutMenu] = useState(false);
@@ -18,12 +26,11 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
     const [deleteAllGroupChatsPopup, setDeleteAllGroupChatsPopup] = useState(false);
     const [selectProfilePrivacy, setSelectProfilePrivacy] = useState('My friends');
     const [selectAboutPrivacy, setSelectAboutPrivacy] = useState('My friends');
-    const navigate = useNavigate();
 
-    const icon1 = darkMode ? './src/assets/Icons/icon1dark.png' : './src/assets/Icons/icon1.png';
-    const icon2 = darkMode ? './src/assets/Icons/icon2dark.png' : './src/assets/Icons/icon2.png';
-    const icon3 = darkMode ? './src/assets/Icons/icon3dark.png' : './src/assets/Icons/icon3.png';
-    const icon4 = darkMode ? './src/assets/Icons/icon4dark.png' : './src/assets/Icons/icon4.png';
+    const icon1 = darkMode ? icon1Dark : icon1Light;
+    const icon2 = darkMode ? icon2Dark : icon2Light;
+    const icon3 = darkMode ? icon3Dark : icon3Light;
+    const icon4 = darkMode ? icon4Dark : icon4Light;
 
     function handleProfilePrivacy(value) {
         setSelectProfilePrivacy(value);
