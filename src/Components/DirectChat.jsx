@@ -297,6 +297,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
             {showEmojiPicker && 
               <div className="absolute" style={{left: '39%', bottom: '11%'}}>
                 <EmojiPicker 
+                  skinTonesDisabled
                   theme={darkMode ? 'dark' : 'light'} 
                   onEmojiClick={handleEmojiClick} 
                 />

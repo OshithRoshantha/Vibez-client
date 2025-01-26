@@ -249,6 +249,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
             {showEmojiPicker && 
               <div className="absolute" style={{left: '39%', bottom: '11%'}}>
                 <EmojiPicker 
+                  skinTonesDisabled
                   theme={darkMode ? 'dark' : 'light'} 
                   onEmojiClick={handleEmojiClick} 
                 />
