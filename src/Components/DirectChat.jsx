@@ -12,8 +12,6 @@ import { getChatHistory, getSmartReply } from '../Services/VibezIntelligence';
 import TemporalMessage from "./TemporalMessage";
 import { DotLoader } from 'react-spinners';
 import { validateFriendship, getFriendshipId } from '../Services/FriendshipService';
-import { Picker } from 'emoji-mart';
-import 'emoji-mart/css/emoji-mart.css';
 
 export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fetchUnreadMessages}) {
 
@@ -296,6 +294,13 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
                 placeholder={generateReply ? "Generating reply..." : "Type a message"}
                 className={`${darkMode ? 'text-white' : 'bg-input text-black'} focus:border-none focus:outline-none w-full p-2 rounded-lg`} 
                 disabled={generateReply} 
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && typedMessage.trim() !== '') { 
+                    e.preventDefault(); 
+                    handleSendMessage();
+                    displayTemporalMessage(); 
+                  }
+                }}
               />
               {generateReply ? 
               (<div>
