@@ -221,8 +221,8 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
     }
   }, [message, temporalMessage]);
 
-  const handleEmojiClick = (event, emojiObject) => {
-    setTypedMessage(typedMessage + emojiObject.emoji);
+  const handleEmojiClick = (emojiData, event) => {
+    setTypedMessage(typedMessage + emojiData.emoji);
     setShowEmojiPicker(false);
   };
 
