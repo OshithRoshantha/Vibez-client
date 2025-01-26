@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 
 const WebSocketContext = createContext();
+const API = import.meta.env.VITE_API;
 
 export const useWebSocket = () => useContext(WebSocketContext);
 
@@ -11,7 +12,7 @@ export const WebSocketProvider = ({ children, isLoggedIn }) => {
   useEffect(() => {
     if (isLoggedIn) {
       const token = sessionStorage.getItem('token');
-      const ws = new WebSocket(`ws://localhost:8080/vibez-websocket?token=${token}`);
+      const ws = new WebSocket(`ws://${API}/vibez-websocket?token=${token}`);
 
       ws.onopen = () => {
         ws.send(JSON.stringify({ action: 'subscribe', topic: 'profileService' }));
