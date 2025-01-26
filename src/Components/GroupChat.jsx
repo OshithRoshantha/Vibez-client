@@ -30,6 +30,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
   const [temporalMessageContent, setTemporalMessageContent] = useState('');
   const [message, setMessage] = useState([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const inputRef = useRef(null);
 
   const fetchGroupInfo = async () => {
     try{
@@ -181,6 +182,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
   const handleEmojiClick = (emojiData, event) => {
     setTypedMessage(typedMessage + emojiData.emoji);
     setShowEmojiPicker(false);
+    inputRef.current.focus();
   };
 
   return (
@@ -258,7 +260,9 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
                 onClick={() => setShowEmojiPicker(!showEmojiPicker)} 
                 className="bi bi-emoji-smile text-2xl text-primary cursor-pointer"
               ></i>          
-            <input onKeyDown={(e) => {
+            <input 
+                ref={inputRef}
+                onKeyDown={(e) => {
                   if (e.key === 'Enter' && typedMessage.trim() !== '') { 
                     e.preventDefault(); 
                     handleSendMessage();

@@ -35,6 +35,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
   const [isFriend, setIsFriend] = useState(true);
   const [friendshipId, setFriendshipId] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const inputRef = useRef(null);
 
   function handleScroll() {
     const chatContainer = chatRef.current;
@@ -223,6 +224,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
   const handleEmojiClick = (emojiData, event) => {
     setTypedMessage(typedMessage + emojiData.emoji);
     setShowEmojiPicker(false);
+    inputRef.current.focus();
   };
 
   return (
@@ -307,6 +309,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
                 className="bi bi-emoji-smile text-2xl text-primary cursor-pointer"
               ></i>
               <input 
+                ref={inputRef}
                 type="text" 
                 value={typedMessage} 
                 onChange={(e) => setTypedMessage(e.target.value)} 
