@@ -12,6 +12,7 @@ import { getChatHistory, getSmartReply } from '../Services/VibezIntelligence';
 import TemporalMessage from "./TemporalMessage";
 import { DotLoader } from 'react-spinners';
 import { validateFriendship, getFriendshipId } from '../Services/FriendshipService';
+import EmojiPicker from 'emoji-picker-react';
 
 export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fetchUnreadMessages}) {
 
@@ -33,6 +34,8 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
   const [generateReply, setGenerateReply] = useState(false);
   const [isFriend, setIsFriend] = useState(true);
   const [friendshipId, setFriendshipId] = useState('');
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const inputRef = useRef(null);
 
   function handleScroll() {
     const chatContainer = chatRef.current;
@@ -218,6 +221,18 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
     }
   }, [message, temporalMessage]);
 
+  const handleEmojiClick = (emojiData, event) => {
+    setTypedMessage(typedMessage + emojiData.emoji);
+    setShowEmojiPicker(false);
+    inputRef.current.focus();
+  };
+
+  const handleEmojiPicker = () => {
+    if (!generateReply) {
+      setShowEmojiPicker(!showEmojiPicker);
+    }
+  };
+
   return (
     <div>
         <div className={`${darkMode ? 'bg-[#262729]' : 'bg-background' } min-h-screen flex flex-col`} >
@@ -287,13 +302,33 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
         </div>
         <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3  border-t`} style={{display:'flex', alignItems:'center',columnGap:'1rem'}}>
             {isFriend ? (<>
+            {showEmojiPicker && 
+              <div className="absolute" style={{left: '39%', bottom: '11%'}}>
+                <EmojiPicker 
+                  skinTonesDisabled
+                  theme={darkMode ? 'dark' : 'light'} 
+                  onEmojiClick={handleEmojiClick} 
+                />
+              </div>}
+              <i 
+                onClick={() => handleEmojiPicker()} 
+                className="bi bi-emoji-smile text-2xl text-primary cursor-pointer"
+              ></i>
               <input 
+                ref={inputRef}
                 type="text" 
                 value={typedMessage} 
                 onChange={(e) => setTypedMessage(e.target.value)} 
                 placeholder={generateReply ? "Generating reply..." : "Type a message"}
                 className={`${darkMode ? 'text-white' : 'bg-input text-black'} focus:border-none focus:outline-none w-full p-2 rounded-lg`} 
                 disabled={generateReply} 
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && typedMessage.trim() !== '') { 
+                    e.preventDefault(); 
+                    handleSendMessage();
+                    displayTemporalMessage(); 
+                  }
+                }}
               />
               {generateReply ? 
               (<div>
