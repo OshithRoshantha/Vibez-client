@@ -12,6 +12,7 @@ import { getChatHistory, getSmartReply } from '../Services/VibezIntelligence';
 import TemporalMessage from "./TemporalMessage";
 import { DotLoader } from 'react-spinners';
 import { validateFriendship, getFriendshipId } from '../Services/FriendshipService';
+import EmojiPicker from 'emoji-picker-react';
 
 export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fetchUnreadMessages}) {
 
@@ -33,6 +34,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
   const [generateReply, setGenerateReply] = useState(false);
   const [isFriend, setIsFriend] = useState(true);
   const [friendshipId, setFriendshipId] = useState('');
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   function handleScroll() {
     const chatContainer = chatRef.current;
@@ -287,6 +289,22 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
         </div>
         <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3  border-t`} style={{display:'flex', alignItems:'center',columnGap:'1rem'}}>
             {isFriend ? (<>
+            {showEmojiPicker && 
+              <div className="absolute" style={{left: '39%', bottom: '11%'}}>
+                <EmojiPicker 
+                  theme={darkMode ? 'dark' : 'light'} 
+                  onEmojiClick={(event, emojiObject) => {
+                    if (emojiObject && emojiObject.emoji) {
+                      setTypedMessage((prevMessage) => prevMessage + emojiObject.emoji);
+                    }
+                    setShowEmojiPicker(false);
+                  }} 
+                />
+              </div>}
+              <i 
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)} 
+                className="bi bi-emoji-smile text-2xl text-primary cursor-pointer"
+              ></i>
               <input 
                 type="text" 
                 value={typedMessage} 
