@@ -19,6 +19,8 @@ import { useWebSocket } from '../Context/WebSocketContext';
 import { getConnectedProfileInfo, filterPendingRequests, filterAcceptedRequests, isConnectedProfile} from '../Services/FriendshipService';
 import { isProductListed, getProductDetails } from '../Services/MarketplaceService';
 import { getUnreadGroupMessages, isGroupRelated } from '../Services/GroupsService';
+import mainDark from '@/assets/Wallpapers/dark.png';
+import mainLight from '@/assets/Wallpapers/light.png';
 
 export default function Dashboard() {
 
@@ -363,7 +365,7 @@ export default function Dashboard() {
             {groupInfoMenu && <GroupInfo groupId={groupId} darkMode={darkMode}/>}
             <div className="flex-1 p-0 messages-column" style={{height:'100vh'}}>
                 {welcomeVideo &&
-                <div className="w-full flex flexflex-column items-center justify-center" style={{height:'100vh', backgroundImage: darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)', backgroundSize: 'cover'}}>
+                <div className="w-full flex flexflex-column items-center justify-center" style={{height:'100vh', backgroundImage: `url(${darkMode ? mainDark : mainLight})`, backgroundSize: 'cover'}}>
                     <img src={mainLogo} className='absolute mt-[-35%] right-[4%]'  style={{width:'10%'}}/>
                     <MorphingText  texts={texts} className="text-primary dark:text-white right-[7%] absolute mt-[-8%] text-left"/>
                     <div className='text-primary mt-[60%]'>
