@@ -238,7 +238,18 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
           {removedFromGroup ? (<div className="w-full mt-2">
             <p className={`${darkMode ? 'text-gray-300' : 'text-black' } text-sm text-center`}>You can't send messages to this group beacuse you're no longer a member.</p>
           </div>) : (<>
-            <input value={typedMessage} onChange={(e) => setTypedMessage(e.target.value)} type="text" placeholder="Type a message" className={`${darkMode ? 'text-white' : 'bg-input text-black'} focus:border-none focus:outline-none w-full p-2 rounded-lg`} />
+            <input onKeyDown={(e) => {
+                  if (e.key === 'Enter' && typedMessage.trim() !== '') { 
+                    e.preventDefault(); 
+                    handleSendMessage();
+                    displayTemporalMessage(); 
+                  }
+                }} 
+                value={typedMessage} 
+                onChange={(e) => setTypedMessage(e.target.value)} 
+                type="text" placeholder="Type a message" 
+                className={`${darkMode ? 'text-white' : 'bg-input text-black'} focus:border-none focus:outline-none w-full p-2 rounded-lg`} 
+              />
             <span><i style={{ cursor: 'pointer' }} onClick={() => { handleSendMessage(); displayTemporalMessage();}} className="bi bi-send-fill text-2xl text-primary"></i></span>
           </>)}
         </div>
