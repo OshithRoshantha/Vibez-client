@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
 import TemporalMessage from "./TemporalMessage";
 import CircularProgress from '@mui/material/CircularProgress';
+import EmojiPicker from 'emoji-picker-react';
 
 export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchUnreadGroupMessages}) {
 
@@ -28,6 +29,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
   const [temporalMessage, setTemporalMessage] = useState(false);
   const [temporalMessageContent, setTemporalMessageContent] = useState('');
   const [message, setMessage] = useState([]);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const fetchGroupInfo = async () => {
     try{
@@ -176,6 +178,11 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
     }
   }, [message, temporalMessage]);
 
+  const handleEmojiClick = (emojiData, event) => {
+    setTypedMessage(typedMessage + emojiData.emoji);
+    setShowEmojiPicker(false);
+  };
+
   return (
     <div>
       <div className={`${darkMode ? 'bg-[#262729]' : 'bg-background'} min-h-screen flex flex-col`}>
@@ -237,7 +244,19 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
         <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3 border-t`} style={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
           {removedFromGroup ? (<div className="w-full mt-2">
             <p className={`${darkMode ? 'text-gray-300' : 'text-black' } text-sm text-center`}>You can't send messages to this group beacuse you're no longer a member.</p>
-          </div>) : (<>
+          </div>) : 
+          (<>
+            {showEmojiPicker && 
+              <div className="absolute" style={{left: '39%', bottom: '11%'}}>
+                <EmojiPicker 
+                  theme={darkMode ? 'dark' : 'light'} 
+                  onEmojiClick={handleEmojiClick} 
+                />
+              </div>}
+              <i 
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)} 
+                className="bi bi-emoji-smile text-2xl text-primary cursor-pointer"
+              ></i>          
             <input onKeyDown={(e) => {
                   if (e.key === 'Enter' && typedMessage.trim() !== '') { 
                     e.preventDefault(); 

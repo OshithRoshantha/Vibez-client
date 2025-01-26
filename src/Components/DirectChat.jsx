@@ -13,7 +13,6 @@ import TemporalMessage from "./TemporalMessage";
 import { DotLoader } from 'react-spinners';
 import { validateFriendship, getFriendshipId } from '../Services/FriendshipService';
 import EmojiPicker from 'emoji-picker-react';
-import { set } from "date-fns";
 
 export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fetchUnreadMessages}) {
 
