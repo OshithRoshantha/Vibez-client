@@ -227,6 +227,12 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
     inputRef.current.focus();
   };
 
+  const handleEmojiPicker = () => {
+    if (!generateReply) {
+      setShowEmojiPicker(!showEmojiPicker);
+    }
+  };
+
   return (
     <div>
         <div className={`${darkMode ? 'bg-[#262729]' : 'bg-background' } min-h-screen flex flex-col`} >
@@ -305,7 +311,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
                 />
               </div>}
               <i 
-                onClick={() => setShowEmojiPicker(!showEmojiPicker)} 
+                onClick={() => handleEmojiPicker()} 
                 className="bi bi-emoji-smile text-2xl text-primary cursor-pointer"
               ></i>
               <input 
