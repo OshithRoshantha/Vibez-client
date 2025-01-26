@@ -9,6 +9,7 @@ import {
 import './Styles/Column2.css'
 import { useState} from 'react';
 import GlobalAlert from './GlobalAlert';
+
 import icon1Light from '@/assets/Icons/icon1.png';
 import icon1Dark from '@/assets/Icons/icon1dark.png';
 import icon2Light from '@/assets/Icons/icon2.png';
@@ -17,7 +18,6 @@ import icon3Light from '@/assets/Icons/icon3.png';
 import icon3Dark from '@/assets/Icons/icon3dark.png';
 import icon4Light from '@/assets/Icons/icon4.png';
 import icon4Dark from '@/assets/Icons/icon4dark.png';
-
 
 export default function Settings({darkModeOn, darkModeOff, darkMode}) {
     const [logoutMenu, setLogoutMenu] = useState(false);
