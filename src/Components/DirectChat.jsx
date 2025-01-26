@@ -13,6 +13,7 @@ import TemporalMessage from "./TemporalMessage";
 import { DotLoader } from 'react-spinners';
 import { validateFriendship, getFriendshipId } from '../Services/FriendshipService';
 import EmojiPicker from 'emoji-picker-react';
+import { set } from "date-fns";
 
 export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fetchUnreadMessages}) {
 
@@ -220,6 +221,11 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
     }
   }, [message, temporalMessage]);
 
+  const handleEmojiClick = (event, emojiObject) => {
+    setTypedMessage(typedMessage + emojiObject.emoji);
+    setShowEmojiPicker(false);
+  };
+
   return (
     <div>
         <div className={`${darkMode ? 'bg-[#262729]' : 'bg-background' } min-h-screen flex flex-col`} >
@@ -293,12 +299,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
               <div className="absolute" style={{left: '39%', bottom: '11%'}}>
                 <EmojiPicker 
                   theme={darkMode ? 'dark' : 'light'} 
-                  onEmojiClick={(event, emojiObject) => {
-                    if (emojiObject && emojiObject.emoji) {
-                      setTypedMessage((prevMessage) => prevMessage + emojiObject.emoji);
-                    }
-                    setShowEmojiPicker(false);
-                  }} 
+                  onEmojiClick={handleEmojiClick} 
                 />
               </div>}
               <i 
