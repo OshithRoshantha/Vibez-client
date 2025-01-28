@@ -80,12 +80,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
             for (const lastMessage of newMessages) {
 
                 if (lastMessage.action === 'messageService') {
-                    if(lastMessage.type === 'direct'){
-                        const isRelated = await checkIsRelated(lastMessage.chatId);
-                        if (isRelated) {
-                            await Promise.all([fetchAllChats(), fetchFavouriteChats()]); 
-                        }
-                    }
+                    await Promise.all([fetchAllChats(), fetchFavouriteChats()]); 
                 }
 
                 if(lastMessage.action === 'profileService'){
