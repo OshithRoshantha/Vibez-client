@@ -8,9 +8,11 @@ export default function DirectChatPreview({chatId, showDirectMessages, darkMode,
     const [loading, setLoading] = useState(true);
 
     const handleChatClick = () => {
-        setReceiverId(friendId);
-        showDirectMessages();
-        setIsUnread(false);
+        if(friendName !== 'Account not exists'){
+            setReceiverId(friendId);
+            showDirectMessages();
+            setIsUnread(false);
+        }
     }
 
     const fetchIsUnread = async () => {
