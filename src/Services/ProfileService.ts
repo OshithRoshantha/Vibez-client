@@ -94,12 +94,13 @@ export const fetchPeopleMetaData = async (userId: string) => {
     return response.data;
 }
 
-export const deleteUser = async (email: string) => { //if return false, close popup
-    await axios.delete(`http://${API}/vibez/delete/${sessionStorage.getItem('userId')}/${email}`, {
+export const deleteUser = async (email: string) => { 
+    const response = await axios.delete(`http://${API}/vibez/delete/${sessionStorage.getItem('userId')}/${email}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
     });
+    return response.data;
 }
 
 export const deleteDirectChats = async () => {
