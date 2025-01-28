@@ -9,7 +9,7 @@ import {
 import './Styles/Column2.css'
 import { useState} from 'react';
 import GlobalAlert from './GlobalAlert';
-
+import {deleteUser, deleteDirectChats, deleteGroupChats} from '../Services/ProfileService';
 import icon1Light from '@/assets/Icons/icon1.png';
 import icon1Dark from '@/assets/Icons/icon1dark.png';
 import icon2Light from '@/assets/Icons/icon2.png';
@@ -26,7 +26,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
     const [deleteAllGroupChatsPopup, setDeleteAllGroupChatsPopup] = useState(false);
     const [selectProfilePrivacy, setSelectProfilePrivacy] = useState('My friends');
     const [selectAboutPrivacy, setSelectAboutPrivacy] = useState('My friends');
-
+    const [confirmEmail, setConfirmEmail] = useState('');
     const icon1 = darkMode ? icon1Dark : icon1Light;
     const icon2 = darkMode ? icon2Dark : icon2Light;
     const icon3 = darkMode ? icon3Dark : icon3Light;
@@ -69,10 +69,30 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
         window.location.href = '/';
     }
 
+    const deleteMyAccount = async () => {
+        const respose = await deleteUser(confirmEmail);
+        if(!respose){
+            hideConfirmAccountDeletion();
+        }
+        else{
+            handleLogOut();
+        }
+    }
+
+    const deleteAllChats = async () => {
+        await deleteDirectChats();
+        toggleDeleteAllChatsPopup();
+    }
+
+    const deleteAllGroupChats = async () => {
+        await deleteGroupChats();
+        toggleDeleteAllGroupChatsPopup();
+    }
+
   return (
     <div>
-        {deleteAllChatsPopup && <GlobalAlert darkMode={darkMode} text={`Delete All Chats?`} textOP={'This action will permanently delete all your chats.'} button1={'Cancel'} button2={'Delete all'} btn1Function={toggleDeleteAllChatsPopup} btn2Function={toggleDeleteAllChatsPopup}/>}
-        {deleteAllGroupChatsPopup && <GlobalAlert darkMode={darkMode} text={`Delete All Group Chats?`} textOP={'This action will permanently delete all your group chats.'} button1={'Cancel'} button2={'Delete all'} btn1Function={toggleDeleteAllGroupChatsPopup} btn2Function={toggleDeleteAllGroupChatsPopup}/>}
+        {deleteAllChatsPopup && <GlobalAlert darkMode={darkMode} text={`Delete All Chats?`} textOP={'This action will permanently delete all your chats.'} button1={'Cancel'} button2={'Delete all'} btn1Function={toggleDeleteAllChatsPopup} btn2Function={deleteAllChats}/>}
+        {deleteAllGroupChatsPopup && <GlobalAlert darkMode={darkMode} text={`Delete All Group Chats?`} textOP={'This action will permanently delete all your group chats.'} button1={'Cancel'} button2={'Delete all'} btn1Function={toggleDeleteAllGroupChatsPopup} btn2Function={deleteAllGroupChats}/>}
         {logoutMenu && <div>
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100'}}>
             <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'}  rounded-lg shadow-lg p-6 max-w-sm w-full`}>	
@@ -109,11 +129,11 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                 <div className="mt-4">
                 <label className={`${darkMode ? 'text-white' : ''} block text-sm`}>Enter your email address:</label>
                 <div className="flex items-center border border-border rounded mt-1">
-                <input type="text" className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-300' : 'placeholder:text-gray-500 bg-white text-black'}  py-2 border rounded-lg p-2 w-full`}  style={{ outline: '1px solid #c1c3c7'}} placeholder="Your email" />
+                <input type="text" value={confirmEmail} onChange={(e) => setConfirmEmail(e.target.value)} className={`${darkMode ? 'bg-[#262729] text-white placeholder:text-gray-300' : 'placeholder:text-gray-500 bg-white text-black'}  py-2 border rounded-lg p-2 w-full`}  style={{ outline: '1px solid #c1c3c7'}} placeholder="Your email" />
                 </div>
                 </div>
                 <div className="mt-4">
-                <button onClick={hideConfirmAccountDeletion} className="bg-destructive border-none text-destructive-foreground hover:bg-destructive/80 w-full p-2 rounded">Delete my account</button>
+                <button onClick={deleteMyAccount} className="bg-destructive border-none text-destructive-foreground hover:bg-destructive/80 w-full p-2 rounded">Delete my account</button>
                 </div>
                 <div className="mt-2">
                 <button onClick={hideConfirmAccountDeletion} className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} w-full p-2 rounded border-none`}>Log out instead</button>
