@@ -94,3 +94,35 @@ export const fetchPeopleMetaData = async (userId: string) => {
     return response.data;
 }
 
+export const deleteUser = async (email: string) => { //if return false, close popup
+    await axios.delete(`http://${API}/vibez/delete/${sessionStorage.getItem('userId')}/${email}`, {
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+    });
+}
+
+export const deleteDirectChats = async () => {
+    await axios.put(
+        `http://${API}/vibez/delete/directChats/${sessionStorage.getItem('userId')}`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+        }
+    );
+}
+
+export const deleteGroupChats = async () => {
+    await axios.put(
+        `http://${API}/vibez/delete/groupChats/${sessionStorage.getItem('userId')}`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+        }
+    );
+}
+
