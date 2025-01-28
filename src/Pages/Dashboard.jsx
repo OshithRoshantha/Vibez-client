@@ -132,8 +132,7 @@ export default function Dashboard() {
                         } 
 
                         else {
-                            const response = await isConnectedProfile(lastMessage.friendshipId);
-                            if (response && (lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED')) {
+                            if ((lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED')) {
                                 const profileInfo = await getConnectedProfileInfo(lastMessage.friendshipId);
                                 const filterResponse = await filterPendingRequests(lastMessage.friendshipId);
                                 const filterAccepted = await filterAcceptedRequests(lastMessage.friendshipId);
@@ -167,22 +166,16 @@ export default function Dashboard() {
                 }
                 else if (lastMessage.action === 'messageService'){
                     if(lastMessage.type === 'direct'){
-                        const isRelated = await checkIsRelated(lastMessage.chatId);
-                        if(isRelated){
-                            fetchUnreadMessages();
-                            if(lastMessage.sender !== sessionStorage.getItem('userId')){
-                                audioRef2.current.play();
-                            }
+                        fetchUnreadMessages();
+                        if(lastMessage.sender !== sessionStorage.getItem('userId')){
+                            audioRef2.current.play();
                         }
                     }
                     else if(lastMessage.type === 'group'){
-                        const isRelated = await isGroupRelated(lastMessage.groupId);
-                        if (isRelated) {
-                            fetchUnreadGroupMessages();
-                            if(lastMessage.sender !== sessionStorage.getItem('userId')){
-                                audioRef2.current.play();
-                            }
-                        } 
+                        fetchUnreadGroupMessages();
+                        if(lastMessage.sender !== sessionStorage.getItem('userId')){
+                            audioRef2.current.play();
+                        }
                     }
                 }
             }

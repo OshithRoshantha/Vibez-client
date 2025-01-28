@@ -42,7 +42,6 @@ export default function ProductInfo({expandingProductId, darkMode, showDirectMes
             for (const lastMessage of newMessages) {
                 switch (lastMessage.action) {
                     case 'marketplaceService': {
-                        console.log('Marketplace service message received');
                         fetchProductInfo();
                         break; 
                     }

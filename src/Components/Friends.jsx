@@ -115,20 +115,17 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                         }
 
                         else{
-                            const response = await isConnectedProfile(lastMessage.friendshipId);
-                            if (response) {
-                                if (lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED') {
-                                    if (!linkedProfiles.includes(lastMessage.friendshipId)) {
-                                        linkedProfiles.push(lastMessage.friendshipId);
-                                        sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
-                                    }
-                                    fetchPendingRequests();
-                                    fetchFriendships();
-                                } else if (lastMessage.status === 'UNFRIENDED') {
-                                    linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
+                            if (lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED') {
+                                if (!linkedProfiles.includes(lastMessage.friendshipId)) {
+                                    linkedProfiles.push(lastMessage.friendshipId);
                                     sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
-                                    fetchFriendships();
                                 }
+                                fetchPendingRequests();
+                                fetchFriendships();
+                            } else if (lastMessage.status === 'UNFRIENDED') {
+                                linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
+                                sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+                                fetchFriendships();
                             }
                         }
                         break;

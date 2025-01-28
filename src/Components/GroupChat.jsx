@@ -76,9 +76,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
                   switch (lastMessage.action) {
                       case 'groupService': {
                           const isRelated = await isGroupRelated(lastMessage.groupId);
-                          if (isRelated) {
-                              fetchGroupInfo();
-                          }
+                          fetchGroupInfo();
                           if (lastMessage.groupId === groupId && !isRelated) {
                               setRemovedFromGroup(true);
                           }
@@ -86,11 +84,8 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
                       }
                       case 'messageService': {
                           if(lastMessage.type === 'group'){
-                            const isRelated = await isGroupRelated(lastMessage.groupId);
-                            if (isRelated) {
-                              fetchChatMessages();
-                              markMessagesAsRead();
-                            }
+                            fetchChatMessages();
+                            markMessagesAsRead();
                           }                        
                         break;
                       }

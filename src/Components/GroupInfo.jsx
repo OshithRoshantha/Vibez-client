@@ -89,9 +89,7 @@ export default function GroupInfo({darkMode, groupId}) {
             switch (lastMessage.action) {
                 case 'groupService': {
                   const isRelated = await isGroupRelated(lastMessage.groupId);
-                  if (isRelated) {
-                    fetchGroupInfo();
-                  }
+                  fetchGroupInfo();
                   if (lastMessage.groupId === groupId && !isRelated) {
                     setRemovedFromGroup(true);
                   }
