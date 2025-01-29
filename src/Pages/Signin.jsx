@@ -79,6 +79,7 @@ export default function Signin({ onLogin }) {
             onLogin(true);
             setIncorrectPassword(false);
             sessionStorage.setItem('linkedProfiles', JSON.stringify([]));
+            sessionStorage.setItem('email', email);
             await fetchConnectedProfiles();
             navDashboard();
             setLoading(false);
@@ -105,6 +106,7 @@ export default function Signin({ onLogin }) {
         onLogin(true);
         handleSwipe();
         sessionStorage.setItem('linkedProfiles', JSON.stringify([]));
+        sessionStorage.setItem('email', email);
         await fetchConnectedProfiles();
         navDashboard();
         setLoading(false);

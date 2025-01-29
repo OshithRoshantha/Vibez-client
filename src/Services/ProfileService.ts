@@ -94,14 +94,26 @@ export const fetchPeopleMetaData = async (userId: string) => {
     return response.data;
 }
 
-export const deleteUser = async (email: string) => { 
-    const response = await axios.delete(`http://${API}/vibez/delete/${sessionStorage.getItem('userId')}/${email}`, {
-        headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        },
+export const deleteUser = async (email: string): Promise<void> => {
+    return new Promise((resolve) => {
+        const token = sessionStorage.getItem('token');
+        const userId = sessionStorage.getItem('userId');
+
+        const socket = new WebSocket(`ws://${API}/vibez-websocket?token=${token}`);
+
+        socket.onopen = () => {
+            const message = {
+                action: 'accountDelete',
+                body: {
+                    userId,
+                    email
+                },
+            };
+            socket.send(JSON.stringify(message));
+            resolve(); 
+        };
     });
-    return response.data;
-}
+};
 
 export const deleteDirectChats = async () => {
     await axios.put(

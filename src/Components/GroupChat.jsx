@@ -31,6 +31,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
   const [message, setMessage] = useState([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const inputRef = useRef(null);
+  const [customText, setCustomText] = useState('');
 
   const fetchGroupInfo = async () => {
     try{
@@ -76,24 +77,27 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
                   switch (lastMessage.action) {
                       case 'groupService': {
                           const isRelated = await isGroupRelated(lastMessage.groupId);
-                          if (isRelated) {
-                              fetchGroupInfo();
-                          }
+                          fetchGroupInfo();
                           if (lastMessage.groupId === groupId && !isRelated) {
+                              setCustomText("You can't send messages to this group beacuse you're no longer a member.");
                               setRemovedFromGroup(true);
                           }
                           break;
                       }
                       case 'messageService': {
                           if(lastMessage.type === 'group'){
-                            const isRelated = await isGroupRelated(lastMessage.groupId);
-                            if (isRelated) {
-                              fetchChatMessages();
-                              markMessagesAsRead();
-                            }
+                            fetchChatMessages();
+                            markMessagesAsRead();
                           }                        
                         break;
                       }
+                      case 'accountDelete':{
+                        if(lastMessage.typeOfAction == 'groupChat' && lastMessage.deletedGroups.includes(groupId)){
+                            setCustomText("You can't send messages to this group beacuse this group no longer available.");
+                            setRemovedFromGroup(true);
+                        }
+                        break;
+                    }
                       default:
                           break;
                   }
