@@ -88,8 +88,11 @@ export default function GroupInfo({darkMode, groupId}) {
         for (const lastMessage of newMessages) {
             switch (lastMessage.action) {
                 case 'groupService': {
-                  fetchGroupInfo();
-                  if (lastMessage.groupId === groupId) {
+                  const isRelated = await isGroupRelated(lastMessage.groupId);
+                  if (isRelated) {
+                    fetchGroupInfo();
+                  }
+                  if (lastMessage.groupId === groupId && !isRelated) {
                     setRemovedFromGroup(true);
                   }
                   break;
@@ -101,7 +104,7 @@ export default function GroupInfo({darkMode, groupId}) {
                   break;
                 }
                 case 'accountDelete': {
-                  if(lastMessage.groupIds.includes(groupId)){
+                  if(lastMessage.typeOfAction == 'groupChat' && lastMessage.groupIds.includes(groupId)){
                     fetchGroupInfo();
                   }
                   break;
