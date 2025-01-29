@@ -154,14 +154,11 @@ export default function Dashboard() {
                 }
                 else if (lastMessage.action === 'marketplaceService'){
                     if (lastMessage.productAction === 'ADDED'){
-                        const response = await isProductListed(lastMessage.body);
-                        if (response){
-                            const productDetails = await getProductDetails(lastMessage.body);
-                            setProfileImage(productDetails.productPhotos[0]);
-                            setProfileName('');
-                            setNotification(`Your new listing for ${productDetails.productTitle} has been created.`);
-                            setShowNotification(true);
-                        }
+                        const productDetails = await getProductDetails(lastMessage.body);
+                        setProfileImage(productDetails.productPhotos[0]);
+                        setProfileName('');
+                        setNotification(`Your new listing for ${productDetails.productTitle} has been created.`);
+                        setShowNotification(true);
                     }
                 }
                 else if (lastMessage.action === 'messageService'){
