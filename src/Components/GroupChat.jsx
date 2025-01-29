@@ -31,6 +31,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
   const [message, setMessage] = useState([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const inputRef = useRef(null);
+  const [customText, setCustomText] = useState('');
 
   const fetchGroupInfo = async () => {
     try{
@@ -78,6 +79,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
                           const isRelated = await isGroupRelated(lastMessage.groupId);
                           fetchGroupInfo();
                           if (lastMessage.groupId === groupId && !isRelated) {
+                              setCustomText("You can't send messages to this group beacuse you're no longer a member.");
                               setRemovedFromGroup(true);
                           }
                           break;
@@ -89,6 +91,13 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
                           }                        
                         break;
                       }
+                      case 'accountDelete':{
+                        if(lastMessage.typeOfAction == 'groupChat' && lastMessage.deletedGroups.includes(groupId)){
+                            setCustomText("You can't send messages to this group beacuse this group no longer available.");
+                            setRemovedFromGroup(true);
+                        }
+                        break;
+                    }
                       default:
                           break;
                   }
