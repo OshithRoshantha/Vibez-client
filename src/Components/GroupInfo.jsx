@@ -103,6 +103,12 @@ export default function GroupInfo({darkMode, groupId}) {
                   }
                   break;
                 }
+                case 'accountDelete': {
+                  if(lastMessage.typeOfAction == 'groupChat' && lastMessage.groupIds.includes(groupId) && !lastMessage.deletedGroups.includes(groupId)){
+                    fetchGroupInfo();
+                  }
+                  break;
+                }
                 default:
                   break;
             }

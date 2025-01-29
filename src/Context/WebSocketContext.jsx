@@ -12,14 +12,16 @@ export const WebSocketProvider = ({ children, isLoggedIn }) => {
   useEffect(() => {
     if (isLoggedIn) {
       const token = sessionStorage.getItem('token');
+      const userId = sessionStorage.getItem('userId');
       const ws = new WebSocket(`ws://${API}/vibez-websocket?token=${token}`);
 
       ws.onopen = () => {
-        ws.send(JSON.stringify({ action: 'subscribe', topic: 'profileService' }));
-        ws.send(JSON.stringify({ action: 'subscribe', topic: 'friendshipService' }));
-        ws.send(JSON.stringify({ action: 'subscribe', topic: 'marketplaceService' }));
-        ws.send(JSON.stringify({ action: 'subscribe', topic: 'messageService' }));
-        ws.send(JSON.stringify({ action: 'subscribe', topic: 'groupService' }));
+        ws.send(JSON.stringify({ action: 'subscribe', userId: userId, topic: 'profileService' }));
+        ws.send(JSON.stringify({ action: 'subscribe', userId: userId, topic: 'friendshipService' }));
+        ws.send(JSON.stringify({ action: 'subscribe', userId: userId, topic: 'marketplaceService' }));
+        ws.send(JSON.stringify({ action: 'subscribe', userId: userId, topic: 'messageService' }));
+        ws.send(JSON.stringify({ action: 'subscribe', userId: userId, topic: 'groupService' }));
+        ws.send(JSON.stringify({ action: 'subscribe', userId: userId, topic: 'accountDelete' }));
       };
 
       ws.onerror = (error) => {

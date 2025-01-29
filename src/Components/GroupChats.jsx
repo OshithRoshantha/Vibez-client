@@ -49,18 +49,12 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
             for (const lastMessage of newMessages) {
                 switch (lastMessage.action) {
                     case 'groupService': {
-                        const isRelated = await isGroupRelated(lastMessage.groupId);
-                        if (isRelated) {
-                            fetchAllGroups();
-                        }
+                        fetchAllGroups();
                         break;
                     }
                     case 'messageService': {
                         if(lastMessage.type === 'group'){
-                          const isRelated = await isGroupRelated(lastMessage.groupId);
-                          if (isRelated) {
                             fetchAllGroups();
-                          }
                         }                        
                       break;
                     }

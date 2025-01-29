@@ -80,12 +80,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
             for (const lastMessage of newMessages) {
 
                 if (lastMessage.action === 'messageService') {
-                    if(lastMessage.type === 'direct'){
-                        const isRelated = await checkIsRelated(lastMessage.chatId);
-                        if (isRelated) {
-                            await Promise.all([fetchAllChats(), fetchFavouriteChats()]); 
-                        }
-                    }
+                    await Promise.all([fetchAllChats(), fetchFavouriteChats()]); 
                 }
 
                 if(lastMessage.action === 'profileService'){
@@ -93,6 +88,11 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
                         fetchAllChats();
                         fetchFavouriteChats();
                     }
+                }
+
+                if(lastMessage.action === 'accountDelete' && lastMessage.typeOfAction === 'directChat'){
+                    fetchAllChats();
+                    fetchFavouriteChats();
                 }
 
             }
@@ -146,7 +146,6 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
                 ></i>
                 <div className="flex space-x-2 mb-4">
                     <button onClick={showAllChats} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`} >All</button>
-                    <button onClick={showFavouriteChats} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}>Favorites</button>
                 </div>
                 <div className='chat-list'>
                     {showAll ? (

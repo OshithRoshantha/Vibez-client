@@ -13,12 +13,12 @@ import GroupInfo from '@/Components/GroupInfo';
 import MorphingText from "@/Components/ui/morphing-text";
 import mainLogo from '../assets/Icons/main-logo3.png'
 import { updateDarkMode, getdarkModePreference, fetchUserMetaData} from '../Services/ProfileService';
-import { getUnreadCount, checkIsRelated } from  '../Services/ChatService';
+import { getUnreadCount } from  '../Services/ChatService';
 import PopupNotifiter from '../Components/PopupNotifiter';
 import { useWebSocket } from '../Context/WebSocketContext';
-import { getConnectedProfileInfo, filterPendingRequests, filterAcceptedRequests, isConnectedProfile} from '../Services/FriendshipService';
-import { isProductListed, getProductDetails } from '../Services/MarketplaceService';
-import { getUnreadGroupMessages, isGroupRelated } from '../Services/GroupsService';
+import { getConnectedProfileInfo, filterPendingRequests, filterAcceptedRequests } from '../Services/FriendshipService';
+import { getProductDetails } from '../Services/MarketplaceService';
+import { getUnreadGroupMessages } from '../Services/GroupsService';
 import mainDark from '@/assets/Wallpapers/dark.png';
 import mainLight from '@/assets/Wallpapers/light.png';
 
@@ -49,6 +49,7 @@ export default function Dashboard() {
     const [pendingRequests, setPendingRequests] = useState(0);
     const [unreadMessages, setUnreadMessages] = useState(0);
     const [unreadGroupMessages, setUnreadGroupMessages] = useState(0);
+    const [showSessionExipred, setShowSessionExipred] = useState(false);
 
     const [receiverId, setReceiverId] = useState('');
     const [groupId, setGroupId] = useState('');
@@ -132,8 +133,7 @@ export default function Dashboard() {
                         } 
 
                         else {
-                            const response = await isConnectedProfile(lastMessage.friendshipId);
-                            if (response && (lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED')) {
+                            if ((lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED')) {
                                 const profileInfo = await getConnectedProfileInfo(lastMessage.friendshipId);
                                 const filterResponse = await filterPendingRequests(lastMessage.friendshipId);
                                 const filterAccepted = await filterAcceptedRequests(lastMessage.friendshipId);
@@ -155,34 +155,25 @@ export default function Dashboard() {
                 }
                 else if (lastMessage.action === 'marketplaceService'){
                     if (lastMessage.productAction === 'ADDED'){
-                        const response = await isProductListed(lastMessage.body);
-                        if (response){
-                            const productDetails = await getProductDetails(lastMessage.body);
-                            setProfileImage(productDetails.productPhotos[0]);
-                            setProfileName('');
-                            setNotification(`Your new listing for ${productDetails.productTitle} has been created.`);
-                            setShowNotification(true);
-                        }
+                        const productDetails = await getProductDetails(lastMessage.body);
+                        setProfileImage(productDetails.productPhotos[0]);
+                        setProfileName('');
+                        setNotification(`Your new listing for ${productDetails.productTitle} has been created.`);
+                        setShowNotification(true);
                     }
                 }
                 else if (lastMessage.action === 'messageService'){
                     if(lastMessage.type === 'direct'){
-                        const isRelated = await checkIsRelated(lastMessage.chatId);
-                        if(isRelated){
-                            fetchUnreadMessages();
-                            if(lastMessage.sender !== sessionStorage.getItem('userId')){
-                                audioRef2.current.play();
-                            }
+                        fetchUnreadMessages();
+                        if(lastMessage.sender !== sessionStorage.getItem('userId')){
+                            audioRef2.current.play();
                         }
                     }
                     else if(lastMessage.type === 'group'){
-                        const isRelated = await isGroupRelated(lastMessage.groupId);
-                        if (isRelated) {
-                            fetchUnreadGroupMessages();
-                            if(lastMessage.sender !== sessionStorage.getItem('userId')){
-                                audioRef2.current.play();
-                            }
-                        } 
+                        fetchUnreadGroupMessages();
+                        if(lastMessage.sender !== sessionStorage.getItem('userId')){
+                            audioRef2.current.play();
+                        }
                     }
                 }
             }
@@ -318,8 +309,29 @@ export default function Dashboard() {
         }
       }, [showNotification]);
 
+    const handleLogOut = () => {
+        sessionStorage.clear();
+        window.location.href = '/';
+    }
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowSessionExipred(true);
+        }, 14 * 60 * 1000); 
+        return () => clearTimeout(timer);
+      }, []);
+
   return (
     <div className='dashboard-conatiner'>
+        {showSessionExipred && <>
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '999'}}>
+                <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} align-middle justify-center flex flex-col p-6 rounded-lg shadow-lg text-left`} style={{width: '400px'}}>
+                <h2 className="text-lg text-center font-semibold text-foreground">Your session has expired</h2>
+                <p className="text-muted-foreground text-center mb-4">Please log in again to continue.</p>
+                <button onClick={handleLogOut} className="border border-primary rounded-lg px-4 py-2 text-primary hover:bg-primary/10">Log in</button>
+                </div>
+            </div>
+        </>}
         <audio ref={audioRef} src="/assets/Tones/notification.mp3" />
         <audio ref={audioRef2} src="/assets/Tones/message.mp3" />
         {showNotification && <div>

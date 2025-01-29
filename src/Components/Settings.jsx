@@ -70,12 +70,12 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
     }
 
     const deleteMyAccount = async () => {
-        const respose = await deleteUser(confirmEmail);
-        if(!respose){
-            hideConfirmAccountDeletion();
+        if(sessionStorage.getItem('email') === confirmEmail){
+            await deleteUser(confirmEmail);
+            handleLogOut();
         }
         else{
-            handleLogOut();
+            hideConfirmAccountDeletion();
         }
     }
 
@@ -122,8 +122,9 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                     <span>Deleting your account will:</span>
                 </div>
                 <ul className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground' } list-disc list-inside mt-2`}>
-                    <li>Delete your Vibez account and informations</li>
-                    <li>Delete you from all Vibez groups</li>
+                    <li>Delete your Vibez account and informations.</li>
+                    <li>Delete you from all Vibez groups.</li>
+                    <li>Delete your all active listings.</li>
                 </ul>
                 </div>
                 <div className="mt-4">
