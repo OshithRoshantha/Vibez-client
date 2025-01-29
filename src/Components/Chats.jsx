@@ -90,6 +90,11 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
                     }
                 }
 
+                if(lastMessage.action === 'accountDelete'){
+                    fetchAllChats();
+                    fetchFavouriteChats();
+                }
+
             }
             setProcessedMessages((prevProcessedMessages) => [
                 ...prevProcessedMessages,
