@@ -100,6 +100,12 @@ export default function GroupInfo({darkMode, groupId}) {
                   }
                   break;
                 }
+                case 'accountDelete': {
+                  if(lastMessage.groupIds.includes(groupId)){
+                    fetchGroupInfo();
+                  }
+                  break;
+                }
                 default:
                   break;
             }
