@@ -3,13 +3,13 @@ import GlobalAlert from './GlobalAlert';
 import { fetchUserMetaDataById } from '../Services/ProfileService';
 import { useWebSocket } from '../Context/WebSocketContext';
 import { unFriend, getFriendshipId } from '../Services/FriendshipService';
+import { deleteDirectChat } from '../Services/ProfileService';
 
 export default function FriendInfo({darkMode, receiverId}) {
 
   const { messages } = useWebSocket();
   const [processedMessages, setProcessedMessages] = useState([]);
 
-  const [isFavorite, setIsFavorite] = useState(true);
   const [blockPopup, setBlockPopup] = useState(false);
   const [unfriendPopup, setUnfriendPopup] = useState(false);
   const [chatDeletePopup, setChatDeletePopup] = useState(false);
@@ -29,6 +29,11 @@ export default function FriendInfo({darkMode, receiverId}) {
   useEffect(() => {
     fetchReceiverInfo();
   }, []);
+
+  const deleteChat = async () => {
+    await deleteDirectChat(receiverId);
+    setChatDeletePopup(!chatDeletePopup);
+  }
   
   useEffect(() => {
         const handleMessages = async () => {
@@ -57,22 +62,6 @@ export default function FriendInfo({darkMode, receiverId}) {
         };
         handleMessages();
     }, [messages, processedMessages]);
-
-  function setToFavorite() {
-    setIsFavorite(true);
-  }
-
-  function unsetFromFavorite() {
-    setIsFavorite(false);
-  }
-
-  function toggleFavorite(){
-    if(isFavorite){
-      unsetFromFavorite();
-    } else {
-      setToFavorite();
-    }
-  }
 
   const handleUnfriend = async () => {
     const response = await getFriendshipId(receiverId);
@@ -103,7 +92,7 @@ export default function FriendInfo({darkMode, receiverId}) {
     <div>
       {blockPopup && <GlobalAlert darkMode={darkMode} text={`Block ${userName}?`} textOP={'Blocked contacts will no longer be able to send you messages.'} button1={'Cancel'} button2={'Block'} btn1Function={toggleBlockPopup} btn2Function={toggleBlockPopup}/>}
       {unfriendPopup && <GlobalAlert darkMode={darkMode} text={`Remove ${userName}?`} textOP={'Removing this contact will remove them from your friends list.'} button1={'Cancel'} button2={'Remove'} btn1Function={toggleUnfriendPopup} btn2Function={toggleUnfriendPopup} />}
-      {chatDeletePopup && <GlobalAlert darkMode={darkMode} text={`Delete this chat?`} textOP={''} button1={'Cancel'} button2={'Delete chat'} btn1Function={toggleChatDeletePopup} btn2Function={toggleChatDeletePopup} />}
+      {chatDeletePopup && <GlobalAlert darkMode={darkMode} text={`Delete this chat?`} textOP={''} button1={'Cancel'} button2={'Delete chat'} btn1Function={toggleChatDeletePopup} btn2Function={deleteChat} />}
       <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}   p-4 info-column`} style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7', height:'100vh'}}>
       <h2 className={`${darkMode ? 'text-white' : '' } text-lg font-semibold mb-4`}>Friend info</h2>
         <div className="bg-card p-6 w-full" style={{marginTop:'12%', backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7'}} >
