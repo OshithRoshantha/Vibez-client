@@ -275,6 +275,12 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
                         }
                         break;  
                     }
+                    case 'accountDelete':{
+                        if (lastMessage.typeOfAction === 'marketplace') {
+                            fetchMarketplaceItems();
+                        }
+                        break;
+                    }
                     default:
                         break;
                 }
