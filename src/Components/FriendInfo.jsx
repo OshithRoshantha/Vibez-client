@@ -114,10 +114,6 @@ export default function FriendInfo({darkMode, receiverId}) {
             <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} text-sm`}>{userAbout}</p>
           </div>
             <ul className="space-y-2" style={{marginTop:'10%'}} >
-              <li className={`${darkMode ? 'text-white hover:bg-gray-700' : 'text-black hover:bg-gray-200' } flex items-center py-2 px-3 rounded-lg`} onClick={toggleFavorite} style={{cursor:'pointer'}}>
-                <i className={`bi ${isFavorite ? 'bi-star' : 'bi-star-fill'}`}></i>&nbsp;&nbsp;
-                <span>{isFavorite ? 'Remove from favorites' : 'Add to favorites'}</span>        
-              </li>
               <li onClick={handleBlock} className={`${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200' } flex items-center py-2 px-3 rounded-lg text-destructive`} style={{cursor:'pointer'}}>
                 <i className="bi bi-ban"></i>&nbsp;&nbsp;
                 <span>Block {userName}</span>
