@@ -122,7 +122,6 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                                 }
                                 fetchPendingRequests();
                                 fetchFriendships();
-                                getSearchedResults(searchKeyword);
                             } else if (lastMessage.status === 'UNFRIENDED') {
                                 linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
                                 sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
