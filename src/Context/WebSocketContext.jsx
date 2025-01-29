@@ -21,6 +21,7 @@ export const WebSocketProvider = ({ children, isLoggedIn }) => {
         ws.send(JSON.stringify({ action: 'subscribe', userId: userId, topic: 'marketplaceService' }));
         ws.send(JSON.stringify({ action: 'subscribe', userId: userId, topic: 'messageService' }));
         ws.send(JSON.stringify({ action: 'subscribe', userId: userId, topic: 'groupService' }));
+        ws.send(JSON.stringify({ action: 'subscribe', userId: userId, topic: 'accountDelete' }));
       };
 
       ws.onerror = (error) => {
