@@ -70,7 +70,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
     }
 
     const deleteMyAccount = async () => {
-        if(true){
+        if(sessionStorage.getItem('email') === confirmEmail){
             await deleteUser(confirmEmail);
             handleLogOut();
         }
