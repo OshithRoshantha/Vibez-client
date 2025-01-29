@@ -70,12 +70,12 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
     }
 
     const deleteMyAccount = async () => {
-        const respose = await deleteUser(confirmEmail);
-        if(!respose){
-            hideConfirmAccountDeletion();
+        if(true){
+            await deleteUser(confirmEmail);
+            handleLogOut();
         }
         else{
-            handleLogOut();
+            hideConfirmAccountDeletion();
         }
     }
 
