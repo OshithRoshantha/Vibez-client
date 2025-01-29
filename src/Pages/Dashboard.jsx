@@ -13,12 +13,12 @@ import GroupInfo from '@/Components/GroupInfo';
 import MorphingText from "@/Components/ui/morphing-text";
 import mainLogo from '../assets/Icons/main-logo3.png'
 import { updateDarkMode, getdarkModePreference, fetchUserMetaData} from '../Services/ProfileService';
-import { getUnreadCount, checkIsRelated } from  '../Services/ChatService';
+import { getUnreadCount } from  '../Services/ChatService';
 import PopupNotifiter from '../Components/PopupNotifiter';
 import { useWebSocket } from '../Context/WebSocketContext';
-import { getConnectedProfileInfo, filterPendingRequests, filterAcceptedRequests, isConnectedProfile} from '../Services/FriendshipService';
-import { isProductListed, getProductDetails } from '../Services/MarketplaceService';
-import { getUnreadGroupMessages, isGroupRelated } from '../Services/GroupsService';
+import { getConnectedProfileInfo, filterPendingRequests, filterAcceptedRequests } from '../Services/FriendshipService';
+import { getProductDetails } from '../Services/MarketplaceService';
+import { getUnreadGroupMessages } from '../Services/GroupsService';
 import mainDark from '@/assets/Wallpapers/dark.png';
 import mainLight from '@/assets/Wallpapers/light.png';
 
