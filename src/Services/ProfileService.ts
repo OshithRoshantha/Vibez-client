@@ -127,6 +127,18 @@ export const deleteDirectChats = async () => {
     );
 }
 
+export const deleteDirectChat = async (chatId: string) => {
+    await axios.put(
+        `http://${API}/vibez/delete/chat/${chatId}/${sessionStorage.getItem('userId')}`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+        }
+    );
+}
+
 export const deleteGroupChats = async () => {
     await axios.put(
         `http://${API}/vibez/delete/groupChats/${sessionStorage.getItem('userId')}`,
