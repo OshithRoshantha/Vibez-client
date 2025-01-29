@@ -140,6 +140,12 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                         }
                         break;
                     }
+                    case 'accountDelete':{
+                        if(lastMessage.typeOfAction === 'friendship'){
+                            fetchFriendships();
+                        }
+                        break;
+                    }
                     default:
                         break;
                 }
