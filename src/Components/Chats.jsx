@@ -90,7 +90,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
                     }
                 }
 
-                if(lastMessage.action === 'accountDelete'){
+                if(lastMessage.action === 'accountDelete' && lastMessage.typeOfAction === 'directChat'){
                     fetchAllChats();
                     fetchFavouriteChats();
                 }
