@@ -341,7 +341,7 @@ export default function Dashboard() {
         </div>}
         <div className="flex h-screen bg-background text-foreground" style={{display:'flex', flexDirection: isMobile ? 'column-reverse' : 'row'}}>
             <div className={isMobile ? `${darkMode ? 'border-gray-600 border-t border-border' : ''} flex items-center gap-x-7 justify-center align-middle w-full bg-background border-t border-border button-column` : `${darkMode ? 'border-gray-600 border-r border-border' : ''} flex flex-col h-screen bg-background border-r border-border button-column`} style={{backgroundColor: darkMode ? '#262729' : '', width: isMobile ? '100vw' : '', height: isMobile ? '10vh' : ''}}>
-                <div onClick={showChatsMenu} className={`flex items-center justify-center ${isMobile ? 'mt-0':'mt-4'}`} style={{cursor: 'pointer', borderLeft: !isMobile && groupsMenu ? '6px solid blue' : 'none'}}>
+                <div onClick={showChatsMenu} className={`flex items-center justify-center ${isMobile ? 'mt-0':'mt-4'}`} style={{cursor: 'pointer', borderLeft: !isMobile && chatsMenu ? '6px solid blue' : 'none'}}>
                     {unreadMessages > 0 && (
                         <div className='text-white bg-danger ml-7 mb-3 h-5 w-5 rounded-full absolute' style={{display:'flex', justifyContent:'center', alignItems:'center'}}>{unreadMessages}</div>
                     )} 
@@ -353,16 +353,16 @@ export default function Dashboard() {
                     )} 
                     <i className={`bi bi-wechat ${isMobile ? 'text-3xl' : 'text-2xl'} ${groupsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
                 </div>
-                <div onClick={showFriendstMenu} className={`flex items-center justify-center ${isMobile ? 'mt-0':'mt-4'}`} style={{cursor: 'pointer', borderLeft: !isMobile && groupsMenu ? '6px solid blue' : 'none'}}>      
+                <div onClick={showFriendstMenu} className={`flex items-center justify-center ${isMobile ? 'mt-0':'mt-4'}`} style={{cursor: 'pointer', borderLeft: !isMobile && friendsMenu ? '6px solid blue' : 'none'}}>      
                     {pendingRequests > 0 && (
                         <div className='text-white bg-danger ml-7 mb-3 h-5 w-5 rounded-full absolute' style={{display:'flex', justifyContent:'center', alignItems:'center'}}>{pendingRequests}</div>
                     )}                    
                     <i className={`bi bi-people ${isMobile ? 'text-3xl' : 'text-2xl'} ${friendsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
                 </div>
-                <div onClick={showMarketplaceMenu} className={`flex items-center justify-center ${isMobile ? 'mt-0':'mt-4'}`} style={{cursor: 'pointer', borderLeft: !isMobile && groupsMenu ? '6px solid blue' : 'none'}}>
+                <div onClick={showMarketplaceMenu} className={`flex items-center justify-center ${isMobile ? 'mt-0':'mt-4'}`} style={{cursor: 'pointer', borderLeft: !isMobile && marketplaceMenu ? '6px solid blue' : 'none'}}>
                     <i className={`bi bi-shop-window ${isMobile ? 'text-3xl' : 'text-2xl'} ${marketplaceMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
                 </div>
-                <div onClick={showSettingsMenu} className={`flex items-center justify-center ${isMobile ? 'mt-0':'mt-4'}`} style={{cursor: 'pointer', borderLeft: !isMobile && groupsMenu ? '6px solid blue' : 'none'}}>
+                <div onClick={showSettingsMenu} className={`flex items-center justify-center ${isMobile ? 'mt-0':'mt-4'}`} style={{cursor: 'pointer', borderLeft: !isMobile && settingsMenu ? '6px solid blue' : 'none'}}>
                     <i className={`bi bi-gear ${isMobile ? 'text-3xl' : 'text-2xl'} ${settingsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
                 </div>
                 <div onClick={showProfileMenu} className={`flex items-center justify-center ${isMobile ? 'mt-2 mb-2':'mt-auto mb-4'}`} style={{cursor: 'pointer'}}>
