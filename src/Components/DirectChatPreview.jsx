@@ -3,7 +3,7 @@ import { checkIsUnreadChat} from '../Services/ChatService';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useIsMobile } from '../hooks/useIsMobile';
 
-export default function DirectChatPreview({chatId, showDirectMessages, darkMode, friendId, friendName, lastMessage, lastActiveTime, lastMessageSender, friendAvatar, setReceiverId}) {
+export default function DirectChatPreview({chatId, showDirectMessages, darkMode, friendId, friendName, lastMessage, lastActiveTime, lastMessageSender, friendAvatar, setReceiverId, setShowMobileRight}) {
 
     const isMobile = useIsMobile();
     const [isUnread, setIsUnread] = useState(false);
@@ -12,8 +12,12 @@ export default function DirectChatPreview({chatId, showDirectMessages, darkMode,
     const handleChatClick = () => {
         if(friendName !== 'No longer available') {
             setReceiverId(friendId);
-            showDirectMessages();
             setIsUnread(false);
+            if(isMobile) {
+                setShowMobileRight(true);
+            }else{
+                showDirectMessages();
+            }
         }
     }
 

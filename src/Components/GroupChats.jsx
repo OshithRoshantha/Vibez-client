@@ -11,7 +11,7 @@ import { useWebSocket } from '../Context/WebSocketContext';
 import { uploadFile } from '../Services/s3Service';
 import { useIsMobile } from '../hooks/useIsMobile';
 
-export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
+export default function GroupChats({showGroupMessages, darkMode, setGroupId, setShowMobileRight}) {
 
     const isMobile = useIsMobile();
     const { messages } = useWebSocket();
@@ -426,6 +426,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
                                             showGroupMessages={showGroupMessages}
                                             setGroupId={setGroupId}
                                             darkMode={darkMode}
+                                            setShowMobileRight={setShowMobileRight}
                                         />
                                     );
                             })

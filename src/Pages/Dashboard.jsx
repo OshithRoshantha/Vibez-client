@@ -52,6 +52,7 @@ export default function Dashboard() {
     const [unreadMessages, setUnreadMessages] = useState(0);
     const [unreadGroupMessages, setUnreadGroupMessages] = useState(0);
     const [showSessionExipred, setShowSessionExipred] = useState(false);
+    const [showMobileRight, setShowMobileRight] = useState(false);
 
     const [receiverId, setReceiverId] = useState('');
     const [groupId, setGroupId] = useState('');
@@ -327,10 +328,10 @@ export default function Dashboard() {
     <div className='dashboard-conatiner'>
         {showSessionExipred && <>
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '999'}}>
-                <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} align-middle justify-center flex flex-col p-6 rounded-lg shadow-lg text-left`} style={{width: '400px'}}>
+                <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} align-middle justify-center flex flex-col p-6 rounded-lg shadow-lg text-left ${isMobile ? 'w-80' : ''}`}>
                 <h2 className={`${darkMode ? 'text-white':'text-black'} text-lg text-center font-semibold text-foreground`}>Your session has expired</h2>
                 <p className={`${darkMode ? 'text-gray-300' : 'text-muted-foreground'} text-center mb-4`}>Please log in again to continue.</p>
-                <button onClick={handleLogOut} className="border border-primary rounded-lg px-4 py-2 text-primary hover:bg-primary/10">Log in</button>
+                <button onClick={handleLogOut} className="border border-primary rounded-lg px-4 py-2 text-white bg-primary">Log in</button>
                 </div>
             </div>
         </>}
@@ -369,8 +370,8 @@ export default function Dashboard() {
                     <div className={`${profileMenu ? 'border border-primary border-3' : ''} rounded-full`} style={{ height: '60px', width: '60px', background: `center / cover no-repeat url(${userPicture})` }}></div>
                 </div>
             </div>
-            {chatsMenu && <Chats setReceiverId={setReceiverId} darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
-            {groupsMenu && <GroupChats darkMode={darkMode} setGroupId={setGroupId} showGroupMessages={showGroupMessages}/>}
+            {chatsMenu && <Chats setShowMobileRight={setShowMobileRight} setReceiverId={setReceiverId} darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
+            {groupsMenu && <GroupChats setShowMobileRight={setShowMobileRight} darkMode={darkMode} setGroupId={setGroupId} showGroupMessages={showGroupMessages}/>}
             {friendsMenu && <Friends setReceiverId={setReceiverId} darkMode={darkMode} showDirectMessages={showDirectMessages} setPendingRequests={setPendingRequests} fetchPendingRequests={fetchPendingRequests}/>}
             {marketplaceMenu && <Marketplace setReceiverId={setReceiverId} showDirectMessages={showDirectMessages}  darkMode={darkMode}/>}
             {settingsMenu && <Settings darkModeOn={darkModeOn} darkModeOff={darkModeOff} darkMode={darkMode}/>}
@@ -390,6 +391,11 @@ export default function Dashboard() {
                 }
                 {directMessages && <DirectChat fetchUnreadMessages={fetchUnreadMessages} receiverId={receiverId} darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
                 {groupMessages && <GroupChat fetchUnreadGroupMessages={fetchUnreadGroupMessages}  darkMode={darkMode} groupId={groupId} showGroupInfoMenu={showGroupInfoMenu}/>}  
+            </div>
+            </>}
+            {showMobileRight && <>
+            <div style={{width:'100%', height:'100%',backgroundColor:'red', position:'absolute'}}>
+                    
             </div>
             </>}
         </div>
