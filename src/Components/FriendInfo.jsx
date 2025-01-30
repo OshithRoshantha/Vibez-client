@@ -6,7 +6,7 @@ import { unFriend, getFriendshipId } from '../Services/FriendshipService';
 import { deleteDirectChat } from '../Services/ProfileService';
 import { useIsMobile } from '../hooks/useIsMobile';
 
-export default function FriendInfo({darkMode, receiverId}) {
+export default function FriendInfo({darkMode, receiverId, setShowMobileRight}) {
 
   const isMobile = useIsMobile();
   const { messages } = useWebSocket();
@@ -90,13 +90,18 @@ export default function FriendInfo({darkMode, receiverId}) {
     setChatDeletePopup(!chatDeletePopup);
   }
 
+  const handleBackButton = () => {
+    setShowMobileRight(true);
+  }
+
   return (
     <div>
-      {blockPopup && <GlobalAlert darkMode={darkMode} text={`Block ${userName}?`} textOP={'Blocked contacts will no longer be able to send you messages.'} button1={'Cancel'} button2={'Block'} btn1Function={toggleBlockPopup} btn2Function={toggleBlockPopup}/>}
-      {unfriendPopup && <GlobalAlert darkMode={darkMode} text={`Remove ${userName}?`} textOP={'Removing this contact will remove them from your friends list.'} button1={'Cancel'} button2={'Remove'} btn1Function={toggleUnfriendPopup} btn2Function={toggleUnfriendPopup} />}
+      {blockPopup && <GlobalAlert darkMode={darkMode} text={`Block ${userName}?`} textOP={'Blocked contacts will no longer be able to send you messages.'} button1={'Cancel'} button2={'Block'} btn1Function={toggleBlockPopup} btn2Function={handleBlock}/>}
+      {unfriendPopup && <GlobalAlert darkMode={darkMode} text={`Remove ${userName}?`} textOP={'Removing this contact will remove them from your friends list.'} button1={'Cancel'} button2={'Remove'} btn1Function={toggleUnfriendPopup} btn2Function={handleUnfriend} />}
       {chatDeletePopup && <GlobalAlert darkMode={darkMode} text={`Delete this chat?`} textOP={''} button1={'Cancel'} button2={'Delete chat'} btn1Function={toggleChatDeletePopup} btn2Function={deleteChat} />}
       <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  ${isMobile ? '':'p-4'} info-column`} style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7', height:'100vh', width: isMobile ? '100%' : '', paddingTop: isMobile ? '40%' : ''}}>
       <h2 className={`${darkMode ? 'text-white' : '' } text-lg font-semibold mb-4`} style={{marginLeft: isMobile ? '12%':''}}>Friend info</h2>
+      {isMobile && <p onClick={handleBackButton} className="text-primary font-medium text-lg cursor-pointer right-10 top-10 absolute">Back</p>}
         <div className="bg-card p-6 w-full" style={{marginTop:'12%', backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7'}} >
           <div className="flex flex-col items-center">
             <div className="rounded-full flex items-center justify-center mb-4" style={{ width: '150px', height: '150px', background: `center / cover no-repeat url(${userAvatar})` }}></div>
@@ -105,11 +110,11 @@ export default function FriendInfo({darkMode, receiverId}) {
             <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} text-sm`}>{userAbout}</p>
           </div>
             <ul className="space-y-2" style={{marginTop:'10%'}} >
-              <li onClick={handleBlock} className={`${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200' } flex items-center py-2 px-3 rounded-lg text-destructive`} style={{cursor:'pointer'}}>
+              <li onClick={toggleBlockPopup} className={`${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200' } flex items-center py-2 px-3 rounded-lg text-destructive`} style={{cursor:'pointer'}}>
                 <i className="bi bi-ban"></i>&nbsp;&nbsp;
                 <span>Block {userName}</span>
               </li>
-              <li onClick={handleUnfriend} className={`${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200' } flex items-center py-2 px-3 rounded-lg text-destructive`}  style={{cursor:'pointer'}}>
+              <li onClick={toggleUnfriendPopup} className={`${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200' } flex items-center py-2 px-3 rounded-lg text-destructive`}  style={{cursor:'pointer'}}>
                 <i className="bi bi-hand-thumbs-down"></i>&nbsp;&nbsp;
                 <span>Unfriend {userName}</span>
               </li>
