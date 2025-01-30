@@ -1,9 +1,6 @@
 import GroupReceiveMessage from "./GroupReceiveMessage";
 import GroupSendMessage from "./GroupSendMessage";
 import { useState, useEffect, useRef } from "react";
-import { ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
-import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 import { getGroupInfo, isGroupRelated, getGroupMessages, sendMessage, markGroupMessagesAsRead } from '../Services/GroupsService';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
