@@ -42,6 +42,7 @@ export default function PreviewAcceptedRequests({darkMode, friendshipId, profile
         setReceiverId(friendId);
         if(isMobile){
             setShowMobileRight(true);
+            showDirectMessages();
         }
         else{
             showDirectMessages();

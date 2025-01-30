@@ -340,6 +340,7 @@ export default function Dashboard() {
         {showNotification && <div>
             <PopupNotifiter darkMode={darkMode} notifiacton={notifiacton} profileImage={profileImage} profileName={profileName}/>
         </div>}
+        {!showMobileRight && <>
         <div className="flex h-screen bg-background text-foreground" style={{display:'flex', flexDirection: isMobile ? 'column-reverse' : 'row'}}>
             <div className={isMobile ? `${darkMode ? 'border-gray-600 border-t border-border' : ''} flex items-center gap-x-7 justify-center align-middle w-full bg-background border-t border-border button-column` : `${darkMode ? 'border-gray-600 border-r border-border' : ''} flex flex-col h-screen bg-background border-r border-border button-column`} style={{backgroundColor: darkMode ? '#262729' : '', width: isMobile ? '100vw' : '', height: isMobile ? '10vh' : ''}}>
                 <div onClick={showChatsMenu} className={`flex items-center justify-center ${isMobile ? 'mt-0':'mt-4'}`} style={{cursor: 'pointer', borderLeft: !isMobile && chatsMenu ? '6px solid blue' : 'none'}}>
@@ -393,12 +394,12 @@ export default function Dashboard() {
                 {groupMessages && <GroupChat fetchUnreadGroupMessages={fetchUnreadGroupMessages}  darkMode={darkMode} groupId={groupId} showGroupInfoMenu={showGroupInfoMenu}/>}  
             </div>
             </>}
-            {showMobileRight && <>
-            <div style={{width:'100%', height:'100%',backgroundColor:'red', position:'absolute'}}>
-                    
-            </div>
-            </>}
         </div>
+        </>}
+        {showMobileRight && <>
+            {directMessages && <DirectChat fetchUnreadMessages={fetchUnreadMessages} receiverId={receiverId} darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
+            {groupMessages && <GroupChat setGroupsMenu={setGroupsMenu} setShowMobileRight={setShowMobileRight} fetchUnreadGroupMessages={fetchUnreadGroupMessages}  darkMode={darkMode} groupId={groupId} showGroupInfoMenu={showGroupInfoMenu}/>}  
+        </>}
     </div>
 )
 }

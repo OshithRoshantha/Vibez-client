@@ -70,6 +70,7 @@ export default function ProductInfo({expandingProductId, darkMode, showDirectMes
         setReceiverId(product.sellerId);
         if(isMobile){
           setShowMobileRight(true);
+          showDirectMessages();
         }
         else{
           showDirectMessages();

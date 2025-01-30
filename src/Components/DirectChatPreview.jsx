@@ -15,6 +15,7 @@ export default function DirectChatPreview({chatId, showDirectMessages, darkMode,
             setIsUnread(false);
             if(isMobile) {
                 setShowMobileRight(true);
+                showDirectMessages();
             }else{
                 showDirectMessages();
             }
