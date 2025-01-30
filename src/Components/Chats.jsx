@@ -143,7 +143,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
                 <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Chats</h2>
                 <input ref={inputRef} value={searchKeyword} onChange={handleSearchChange} type="text" placeholder="Search chats by name" className={`${darkMode ? 'bg-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'bg-gray-200'} w-full px-4 py-2 mb-4 focus:outline-none focus:border-none placeholder:text-gray-500  text-gray-500 `} style={{borderRadius:'20px'}} />
                 <i className={`${darkMode ? 'text-[#abacae]' : 'text-gray-500'} bi cursor-pointer absolute text-2xl ${searchKeyword === '' ? 'bi-search' : 'bi-x-circle-fill'}`}
-                    style={{ marginLeft: '-3%', marginTop: '0.2%' }}
+                    style={{ marginLeft: isMobile ? '-10%' : '-3%', marginTop: isMobile ? '0.5%': '0.2%' }}
                     onClick={handleIconClick}
                 ></i>
                 <div className="flex space-x-2 mb-4">
