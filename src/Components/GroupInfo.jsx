@@ -211,7 +211,7 @@ export default function GroupInfo({darkMode, groupId, setShowMobileRight, showGr
                                     <button onClick={handleCrop} className='border-none' style={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</button>
                                 </div>
         </div>}
-        {removedFromGroup ? (<><div className='bg-yellow-200 py-2 pl-4 mb-4' style={{borderRadius:'10px'}}><i className=" text-gray-600 bi bi-exclamation-triangle"></i>   You're no longer a member in this group.</div></>) : (<> <h2 className={`${darkMode ? 'text-white' : '' } text-lg font-semibold  mb-4`} style={{marginLeft: isMobile ? '12%':''}}>Group info</h2></>)}
+        {removedFromGroup ? (<><div className={`bg-yellow-200 py-2 pl-4 mb-4`} style={{borderRadius:'10px'}}><i className=" text-gray-600 bi bi-exclamation-triangle"></i>   You're no longer a member in this group.</div></>) : (<> <h2 className={`${darkMode ? 'text-white' : '' } text-lg font-semibold  mb-4`} style={{marginLeft: isMobile ? '12%':''}}>Group info</h2></>)}
         {isMobile && <p onClick={handleBackButton} className="text-primary font-medium text-lg cursor-pointer right-10 top-10 absolute">Back</p>}
         <div className="bg-card p-6 w-full" style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7'}} >
           <div className="flex flex-col items-center mb-5" style={{marginTop:'-5%'}}>
