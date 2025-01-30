@@ -98,10 +98,10 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
         {deleteAllGroupChatsPopup && <GlobalAlert darkMode={darkMode} text={`Delete All Group Chats?`} textOP={'This action will permanently delete all your group chats.'} button1={'Cancel'} button2={'Delete all'} btn1Function={toggleDeleteAllGroupChatsPopup} btn2Function={deleteAllGroupChats}/>}
         {logoutMenu && <div>
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100'}}>
-            <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'}  rounded-lg shadow-lg p-6 max-w-sm w-full`}>	
+            <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'}  rounded-lg shadow-lg p-6 max-w-sm ${isMobile ? '' : 'w-full'}`}>	
                 <h2 className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold`}>Confirm Logout</h2>
                 <p className={`${darkMode ? 'text-gray-300' : 'text-muted-foreground'} mt-0`}>Are you sure you want to log out?</p>
-                <div className="flex justify-between mt-4">
+                <div className={`flex justify-between mt-4 ${isMobile ? 'flex-col gap-y-2':''}`}>
                 <button style={{cursor:'pointer'}} onClick={hideLogoutMenu} className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} border-none px-4 py-2 rounded`}>
                     Stay logged in
                 </button>
@@ -114,7 +114,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
         </div>}
         {confirmAccountDeletion && <div>
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100'}}>
-            <div className={`${darkMode ? 'bg-[#262729]' : 'bg-card text-card-foreground'} rounded-lg shadow-lg p-6 w-96`}>
+            <div className={`${darkMode ? 'bg-[#262729]' : 'bg-card text-card-foreground'} rounded-lg shadow-lg p-6 ${isMobile ? 'w-80' : 'w-96'}`}>
                 <div className={`${darkMode ? 'text-white':''} flex justify-between items-center`}>
                     <h2 className="text-lg font-semibold">Delete my account</h2>
                     <i onClick={hideConfirmAccountDeletion} className="bi bi-arrow-left-circle-fill text-2xl" style={{cursor:'pointer'}}></i>
