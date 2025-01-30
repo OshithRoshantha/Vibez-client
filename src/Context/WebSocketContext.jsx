@@ -43,6 +43,16 @@ export const WebSocketProvider = ({ children, isLoggedIn }) => {
     }
   }, [isLoggedIn]);
 
+  useEffect(() => {
+    if (socket) {
+      const timer = setTimeout(() => {
+        socket.close(); 
+      }, 20 * 60 * 1000); 
+
+      return () => clearTimeout(timer);
+    }
+  }, [socket]);
+
   return (
     <WebSocketContext.Provider value={{ socket, messages }}>
       {children}

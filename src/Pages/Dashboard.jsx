@@ -320,7 +320,7 @@ export default function Dashboard() {
     useEffect(() => {
         const timer = setTimeout(() => {
             setShowSessionExipred(true);
-        }, 14 * 60 * 1000); 
+        }, 20 * 60 * 1000); 
         return () => clearTimeout(timer);
       }, []);
 
