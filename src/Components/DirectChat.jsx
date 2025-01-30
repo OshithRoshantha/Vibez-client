@@ -15,7 +15,7 @@ import { validateFriendship, getFriendshipId } from '../Services/FriendshipServi
 import EmojiPicker from 'emoji-picker-react';
 import { useIsMobile } from '../hooks/useIsMobile';
 
-export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fetchUnreadMessages, setChatsMenu, setShowMobileRight}) {
+export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, darkMode, receiverId, fetchUnreadMessages, setChatsMenu, setShowMobileRight}) {
 
   const isMobile = useIsMobile();
   const chatRef = useRef(null);
@@ -233,6 +233,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
   const handleBackButton = () => {
     setShowMobileRight(false);
     setChatsMenu(true);
+    setMarketplaceMenu(false);
   }
 
   const handleFriendInfo = () => {
