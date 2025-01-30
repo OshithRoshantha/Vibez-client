@@ -193,6 +193,16 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
     setGroupsMenu(true);
   }
 
+  const handleGroupInfo = () => {
+    if(isMobile){
+      handleShowGroupInfoMenu();
+      setShowMobileRight(false);
+    }
+    else{
+      handleShowGroupInfoMenu();
+    }
+  }
+
   return (
     <div>
       <div className={`${darkMode ? 'bg-[#262729]' : 'bg-background'} min-h-screen flex flex-col`}>
@@ -209,7 +219,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
               </div>
             ) : (
               <div>
-                <div onClick={handleShowGroupInfoMenu} style={{ cursor: 'pointer'}}  className="flex items-center">
+                <div onClick={handleGroupInfo} style={{ cursor: 'pointer'}}  className="flex items-center">
                   <div className="rounded-full mr-2" style={{ height: '45px', width: '45px', background: `center / cover no-repeat url(${groupAvatar})` }}></div>
                   <div>
                     <span className={`${darkMode ? 'text-white' : 'text-black'} text-lg font-semibold`}>
