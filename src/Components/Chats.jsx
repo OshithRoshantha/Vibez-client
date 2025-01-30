@@ -5,6 +5,8 @@ import DirectChatPreview from './DirectChatPreview';
 import { useWebSocket } from '../Context/WebSocketContext';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useIsMobile } from '../hooks/useIsMobile';
+import PreviewAcceptedRequests from './PreviewAcceptedRequests';
+import { getConnectedProfileInfo, filterPendingRequests } from '../Services/FriendshipService';
 
 export default function Chats({showDirectMessages, darkMode, setReceiverId, setShowMobileRight}) {
 
@@ -14,11 +16,14 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
 
     const [chats, setChats] = useState([]);
     const [favouriteChats, setFavouriteChats] = useState([]);
+    const [acceptedProfiles, setAcceptedProfiles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [loading2, setLoading2] = useState(true);
+    const [loading3, setLoading3] = useState(true);
     const [showAll, setShowAll] = useState(true);
     const inputRef = useRef(null);
     const [searchKeyword, setSearchKeyword] = useState('');
+    const [showFriends, setShowFriends] = useState(false);
 
     const getSearchResults = async (value) => {
         try {
@@ -35,6 +40,37 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
             setLoading(false);
         }
     }
+
+    const fetchFriendships = async () => {
+            setLoading3(true);
+            setAcceptedProfiles([]);
+            const linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles')) || [];
+            if (linkedProfiles.length === 0) {
+                setLoading3(false);
+                return;
+            }
+            const profilesPromises = linkedProfiles.map(async (friendshipId) => {
+                const profileInfo = await getConnectedProfileInfo(friendshipId);
+                const response = await filterPendingRequests(friendshipId);
+                return { profileInfo, response };
+            });
+        
+            try {
+                const results = await Promise.all(profilesPromises);
+                const accepted = [];
+                results.forEach(({ profileInfo, response }) => {
+                    if (profileInfo.status === "ACCEPTED") {
+                        if (!accepted.some(profile => profile.profileId === profileInfo.profileId)) {
+                            accepted.push(profileInfo);
+                        }
+                    }
+                });
+                setAcceptedProfiles(accepted);
+            } finally {
+                setLoading3(false);
+            }
+    };
+        
 
     const fetchAllChats = async () => {
         try {
@@ -137,6 +173,12 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
         }
     };
 
+    const addChat = async () => {
+        setShowFriends(true);
+        setShowAll(false);
+        fetchFriendships();
+    }
+
   return (
     <div>
         <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 chats-column`} style={{backgroundColor: darkMode ? '#262729' : '', height: isMobile ? '90vh' : '100vh', width: isMobile ? '100vw' : ''}}>
@@ -148,8 +190,28 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
                 ></i>
                 <div className="flex space-x-2 mb-4">
                     <button onClick={showAllChats} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`} >All</button>
+                    <button onClick={addChat} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}><i className="bi bi-plus-lg"></i></button>
                 </div>
                 <div className='chat-list'>
+                    {showFriends && <>
+                        {
+                            acceptedProfiles.map(profile => (
+                                <PreviewAcceptedRequests
+                                    key={profile.friendshipId} 
+                                    darkMode={darkMode}
+                                    friendshipId={profile.friendshipId}
+                                    profileName={profile.profileName}
+                                    profilePicture={profile.profilePicture}
+                                    profileAbout={profile.profileAbout}
+                                    fetchFriendships={fetchFriendships}
+                                    showDirectMessages={showDirectMessages}
+                                    setReceiverId={setReceiverId}
+                                    friendId={profile.profileId} 
+                                    setShowMobileRight={setShowMobileRight}
+                                />
+                            ))
+                        }                     
+                    </>}
                     {showAll ? (
                         loading ? (
                             <div>
