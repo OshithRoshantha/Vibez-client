@@ -6,7 +6,7 @@ import { unFriend, getFriendshipId } from '../Services/FriendshipService';
 import { deleteDirectChat } from '../Services/ProfileService';
 import { useIsMobile } from '../hooks/useIsMobile';
 
-export default function FriendInfo({darkMode, receiverId, setShowMobileRight}) {
+export default function FriendInfo({darkMode, receiverId, setShowMobileRight, showChatsMenu}) {
 
   const isMobile = useIsMobile();
   const { messages } = useWebSocket();
@@ -92,6 +92,7 @@ export default function FriendInfo({darkMode, receiverId, setShowMobileRight}) {
 
   const handleBackButton = () => {
     setShowMobileRight(true);
+    showChatsMenu();
   }
 
   return (
