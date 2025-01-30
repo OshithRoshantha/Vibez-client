@@ -397,7 +397,7 @@ export default function Dashboard() {
         </div>
         </>}
         {showMobileRight && <>
-            {directMessages && <DirectChat setChatsMenu={setChatsMenu} setShowMobileRight={setShowMobileRight} fetchUnreadMessages={fetchUnreadMessages} receiverId={receiverId} darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
+            {directMessages && <DirectChat setMarketplaceMenu={setMarketplaceMenu} setChatsMenu={setChatsMenu} setShowMobileRight={setShowMobileRight} fetchUnreadMessages={fetchUnreadMessages} receiverId={receiverId} darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
             {groupMessages && <GroupChat setGroupsMenu={setGroupsMenu} setShowMobileRight={setShowMobileRight} fetchUnreadGroupMessages={fetchUnreadGroupMessages}  darkMode={darkMode} groupId={groupId} showGroupInfoMenu={showGroupInfoMenu}/>}  
         </>}
     </div>
