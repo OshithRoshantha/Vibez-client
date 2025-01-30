@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import { sendFriendRequest, getFriendshipStatus, getFriendshipId, acceptFriendRequest } from '../Services/FriendshipService';
 import { Skeleton } from "@/components/ui/skeleton";
+import { useIsMobile } from '../hooks/useIsMobile';
 
-export default function SearchResult({ darkMode, profileName, profileAbout, profileImage, profileId, showDirectMessages, setReceiverId }) {
+export default function SearchResult({ darkMode, profileName, profileAbout, profileImage, profileId, showDirectMessages, setReceiverId, setShowMobileRight }) {
+  
+  const isMobile = useIsMobile();
   const [friendshipStatus, setFriendshipStatus] = useState('');
   const [friendshipId, setFriendshipId] = useState('');
   const [loading, setLoading] = useState(true); 
@@ -19,7 +22,12 @@ export default function SearchResult({ darkMode, profileName, profileAbout, prof
 
   const sendMessage = () => {
     setReceiverId(profileId);
-    showDirectMessages();
+    if(isMobile){
+      setShowMobileRight(true);
+    }
+    else{
+      showDirectMessages();
+    }
   };
 
   useEffect(() => {

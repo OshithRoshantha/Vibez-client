@@ -372,8 +372,8 @@ export default function Dashboard() {
             </div>
             {chatsMenu && <Chats setShowMobileRight={setShowMobileRight} setReceiverId={setReceiverId} darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
             {groupsMenu && <GroupChats setShowMobileRight={setShowMobileRight} darkMode={darkMode} setGroupId={setGroupId} showGroupMessages={showGroupMessages}/>}
-            {friendsMenu && <Friends setReceiverId={setReceiverId} darkMode={darkMode} showDirectMessages={showDirectMessages} setPendingRequests={setPendingRequests} fetchPendingRequests={fetchPendingRequests}/>}
-            {marketplaceMenu && <Marketplace setReceiverId={setReceiverId} showDirectMessages={showDirectMessages}  darkMode={darkMode}/>}
+            {friendsMenu && <Friends setShowMobileRight={setShowMobileRight} setReceiverId={setReceiverId} darkMode={darkMode} showDirectMessages={showDirectMessages} setPendingRequests={setPendingRequests} fetchPendingRequests={fetchPendingRequests}/>}
+            {marketplaceMenu && <Marketplace setShowMobileRight={setShowMobileRight} setReceiverId={setReceiverId} showDirectMessages={showDirectMessages}  darkMode={darkMode}/>}
             {settingsMenu && <Settings darkModeOn={darkModeOn} darkModeOff={darkModeOff} darkMode={darkMode}/>}
             {profileMenu && <Profile  darkMode={darkMode} setUserPicture={setUserPicture}/>}
             {friendInfoMenu && <FriendInfo receiverId={receiverId} darkMode={darkMode}/>}

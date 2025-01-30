@@ -10,7 +10,7 @@ import { useWebSocket } from '../Context/WebSocketContext';
 import { uploadMultipleFiles } from '../Services/s3Service';
 import { useIsMobile } from '../hooks/useIsMobile';
 
-export default function Marketplace({darkMode, showDirectMessages, setReceiverId}) {
+export default function Marketplace({darkMode, showDirectMessages, setReceiverId, setShowMobileRight}) {
 
     const isMobile = useIsMobile();
     const { messages } = useWebSocket();
@@ -543,7 +543,7 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
             </div>}
             {editListingMenu && <div className='sell-products' ref={sellProductsRef}><EditListing autoScroll={autoScroll} darkMode={darkMode} editingProductId={editingProductId} showYourListningMenu={showYourListningMenu}/></div>}
             {productInfo && <div>
-                    <ProductInfo darkMode={darkMode} setReceiverId={setReceiverId} showDirectMessages={showDirectMessages} expandingProductId={expandingProductId}/>      
+                    <ProductInfo darkMode={darkMode} setReceiverId={setReceiverId} setShowMobileRight={setShowMobileRight} showDirectMessages={showDirectMessages} expandingProductId={expandingProductId}/>      
             </div>}
             </div>
     </div>
