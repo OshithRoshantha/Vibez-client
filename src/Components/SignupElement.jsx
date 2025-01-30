@@ -272,7 +272,7 @@ export default function SignupElement() {
               >
                 <TextField id="outlined-basic" label="Full Name" helperText={fullNameError ? 'Full name must be at least 3 characters long.' : ''} value={fullName} onChange={handleFullNameChange} error={fullNameError} variant="outlined" placeholder="John Doe" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} /><br />
                 <TextField id="outlined-email" label="Email Address" helperText={emailError ? 'Please enter a valid email address.' : (emailExistError ? 'Account with this email already exists. Please try to sign in.' : '')} value={email} onChange={handleEmailChange} error={emailError || emailExistError} variant="outlined" placeholder="john@example.com" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} />
-                <div style={{width: isMobile ? '85%' : ''}}>
+                <div style={{width: isMobile ? '83%' : ''}}>
                 <ContactField setContactNumberError={setContactNumberError} setContact={setContact}/>
                 </div>
               </Box>
@@ -284,7 +284,7 @@ export default function SignupElement() {
             <div className='field-box2'>
               <Box
                 component="form"
-                sx={{ '& > :not(style)': { m: 1, width: '70%', marginLeft: '10%' } }}
+                sx={{ '& > :not(style)': { m: 1, width: isMobile ? '100%': '70%', marginLeft: isMobile ? '-6%' : '10%' } }}
                 noValidate
                 autoComplete="off"
               >
@@ -386,8 +386,8 @@ export default function SignupElement() {
                     <Button onClick={handleCrop} sx={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</Button>
                   </div>
                 </div>}
-              <div className='about-input'>
-                <TextField id="outlined-basic userAbout" value={about} onChange={handleAboutChange} label="About" variant="outlined" placeholder="Can't talk, Vibez only." InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' ,width:'180%'} }} />
+              <div className='about-input' style={{width: isMobile ? '100%' : '', marginLeft: isMobile ? '0%' : ''}}>
+                <TextField id="outlined-basic userAbout" value={about} onChange={handleAboutChange} label="About" variant="outlined" placeholder="Can't talk, Vibez only." InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' , width: isMobile ? '140%' : '180%'} }} />
               </div>
             </div>
           </div>}
