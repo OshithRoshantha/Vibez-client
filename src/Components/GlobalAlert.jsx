@@ -1,9 +1,13 @@
 import React from 'react'
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function GlobalAlert({text,textOP,button1,button2,btn1Function,btn2Function,darkMode}) {
-  return (
+  
+    const isMobile = useIsMobile();
+
+    return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100'}}>
-        <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} p-6 rounded-lg shadow-lg text-left`}>
+        <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} p-6 rounded-lg shadow-lg text-left ${isMobile ? 'w-80' : ''}`}>
             <h2 className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold mb-1`} >
             {text}
             </h2>
