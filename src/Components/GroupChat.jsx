@@ -1,18 +1,17 @@
 import GroupReceiveMessage from "./GroupReceiveMessage";
 import GroupSendMessage from "./GroupSendMessage";
 import { useState, useEffect, useRef } from "react";
-import { ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
-import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 import { getGroupInfo, isGroupRelated, getGroupMessages, sendMessage, markGroupMessagesAsRead } from '../Services/GroupsService';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
 import TemporalMessage from "./TemporalMessage";
 import CircularProgress from '@mui/material/CircularProgress';
 import EmojiPicker from 'emoji-picker-react';
+import { useIsMobile } from '../hooks/useIsMobile';
 
-export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchUnreadGroupMessages}) {
+export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchUnreadGroupMessages, setShowMobileRight, setGroupsMenu}) {
 
+  const isMobile = useIsMobile();
   const { messages } = useWebSocket();
   const [processedMessages, setProcessedMessages] = useState([]);
 
@@ -189,10 +188,25 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
     inputRef.current.focus();
   };
 
+  const handleBackButton = () => {
+    setShowMobileRight(false);
+    setGroupsMenu(true);
+  }
+
+  const handleGroupInfo = () => {
+    if(isMobile){
+      handleShowGroupInfoMenu();
+      setShowMobileRight(false);
+    }
+    else{
+      handleShowGroupInfoMenu();
+    }
+  }
+
   return (
     <div>
       <div className={`${darkMode ? 'bg-[#262729]' : 'bg-background'} min-h-screen flex flex-col`}>
-        <div onClick={handleShowGroupInfoMenu} style={{ cursor: 'pointer' }} className={`${darkMode ? 'border-gray-600' : 'border-border'} flex items-center px-4 py-3 border-b`}>
+        <div className={`${darkMode ? 'border-gray-600' : 'border-border'} flex items-center px-4 py-3 border-b`}>
         {loading ? (
               <div>
                 <div className="flex items-center">
@@ -205,18 +219,21 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
               </div>
             ) : (
               <div>
-                <div className="flex items-center">
+                <div onClick={handleGroupInfo} style={{ cursor: 'pointer'}}  className="flex items-center">
                   <div className="rounded-full mr-2" style={{ height: '45px', width: '45px', background: `center / cover no-repeat url(${groupAvatar})` }}></div>
                   <div>
-                    <span className={`${darkMode ? 'text-white' : 'text-black'} text-lg font-semibold`}>{groupName}</span>
+                    <span className={`${darkMode ? 'text-white' : 'text-black'} text-lg font-semibold`}>
+                      {isMobile && groupName.length > 25 ? `${groupName.substring(0, 25)}...` : groupName}
+                    </span>
                     <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} mt-0`} style={{ fontSize: '70%' }}>Click here for group info</p>
                   </div>
                 </div>
               </div>
             ) }
+            {isMobile && <p onClick={handleBackButton} className="text-primary font-medium text-lg cursor-pointer right-6 absolute">Back</p>}
         </div>
-        <div className="p-4" ref={chatRef} style={{ height: '78vh', overflowY: 'auto', scrollbarWidth: 'none', backgroundImage: chatWallpaper, backgroundSize: 'cover' }}>
-          {showScrollButton && <i onClick={scrollToBottom} className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} cursor-pointer absolute bi bi-arrow-down-circle-fill text-4xl text-primary`} style={{ left: '67%' }}></i>}
+        <div className="p-4" ref={chatRef} style={{ height: isMobile ? '82vh' : '78vh', overflowY: 'auto', scrollbarWidth: 'none', backgroundImage: chatWallpaper, backgroundSize: 'cover' }}>
+          {showScrollButton && !isMobile && <i onClick={scrollToBottom} className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} cursor-pointer absolute bi bi-arrow-down-circle-fill text-4xl text-primary`} style={{ left: '67%' }}></i>}
           {chatsLoading ? (
             <div className="text-center">
               <CircularProgress size="30px"/>       
@@ -248,7 +265,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
           {temporalMessage && <TemporalMessage message={temporalMessageContent}/> }         
         </div>
         <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3 border-t`} style={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
-          {removedFromGroup ? (<div className="w-full mt-2">
+          {removedFromGroup ? (<div className={`${isMobile ? '': 'w-full mt-2'}`}>
             <p className={`${darkMode ? 'text-gray-300' : 'text-black' } text-sm text-center`}>You can't send messages to this group beacuse you're no longer a member.</p>
           </div>) : 
           (<>
@@ -260,10 +277,11 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
                   onEmojiClick={handleEmojiClick} 
                 />
               </div>}
+              {!isMobile &&
               <i 
                 onClick={() => setShowEmojiPicker(!showEmojiPicker)} 
                 className="bi bi-emoji-smile text-2xl text-primary cursor-pointer"
-              ></i>          
+              ></i>}      
             <input 
                 ref={inputRef}
                 onKeyDown={(e) => {

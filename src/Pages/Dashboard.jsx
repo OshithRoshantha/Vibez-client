@@ -21,9 +21,11 @@ import { getProductDetails } from '../Services/MarketplaceService';
 import { getUnreadGroupMessages } from '../Services/GroupsService';
 import mainDark from '@/assets/Wallpapers/dark.png';
 import mainLight from '@/assets/Wallpapers/light.png';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function Dashboard() {
 
+    const isMobile = useIsMobile();
     const { messages } = useWebSocket();
     const [processedMessages, setProcessedMessages] = useState([]);
     
@@ -50,6 +52,7 @@ export default function Dashboard() {
     const [unreadMessages, setUnreadMessages] = useState(0);
     const [unreadGroupMessages, setUnreadGroupMessages] = useState(0);
     const [showSessionExipred, setShowSessionExipred] = useState(false);
+    const [showMobileRight, setShowMobileRight] = useState(false);
 
     const [receiverId, setReceiverId] = useState('');
     const [groupId, setGroupId] = useState('');
@@ -317,7 +320,7 @@ export default function Dashboard() {
     useEffect(() => {
         const timer = setTimeout(() => {
             setShowSessionExipred(true);
-        }, 14 * 60 * 1000); 
+        }, 20 * 60 * 1000); 
         return () => clearTimeout(timer);
       }, []);
 
@@ -325,10 +328,10 @@ export default function Dashboard() {
     <div className='dashboard-conatiner'>
         {showSessionExipred && <>
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '999'}}>
-                <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} align-middle justify-center flex flex-col p-6 rounded-lg shadow-lg text-left`} style={{width: '400px'}}>
-                <h2 className="text-lg text-center font-semibold text-foreground">Your session has expired</h2>
-                <p className="text-muted-foreground text-center mb-4">Please log in again to continue.</p>
-                <button onClick={handleLogOut} className="border border-primary rounded-lg px-4 py-2 text-primary hover:bg-primary/10">Log in</button>
+                <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} align-middle justify-center flex flex-col p-6 rounded-lg shadow-lg text-left ${isMobile ? 'w-80' : ''}`}>
+                <h2 className={`${darkMode ? 'text-white':'text-black'} text-lg text-center font-semibold text-foreground`}>Your session has expired</h2>
+                <p className={`${darkMode ? 'text-gray-300' : 'text-muted-foreground'} text-center mb-4`}>Please log in again to continue.</p>
+                <button onClick={handleLogOut} className="border border-primary rounded-lg px-4 py-2 text-white bg-primary">Log in</button>
                 </div>
             </div>
         </>}
@@ -337,44 +340,46 @@ export default function Dashboard() {
         {showNotification && <div>
             <PopupNotifiter darkMode={darkMode} notifiacton={notifiacton} profileImage={profileImage} profileName={profileName}/>
         </div>}
-        <div className="flex h-screen bg-background text-foreground">
-            <div className={`${darkMode ? 'border-gray-600 border-r border-border':''}  flex flex-col h-screen bg-background border-r border-border button-column`}  style={{backgroundColor: darkMode ? '#262729' : ''}}>
-                <div onClick={showChatsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:chatsMenu ? '6px solid blue': 'none'}}>
+        {!showMobileRight && <>
+        <div className="flex h-screen bg-background text-foreground" style={{display:'flex', flexDirection: isMobile ? 'column-reverse' : 'row'}}>
+            <div className={isMobile ? `${darkMode ? 'border-gray-600 border-t border-border' : ''} flex items-center gap-x-7 justify-center align-middle w-full bg-background border-t border-border button-column` : `${darkMode ? 'border-gray-600 border-r border-border' : ''} flex flex-col h-screen bg-background border-r border-border button-column`} style={{backgroundColor: darkMode ? '#262729' : '', width: isMobile ? '100vw' : '', height: isMobile ? '10vh' : ''}}>
+                <div onClick={showChatsMenu} className={`flex items-center justify-center ${isMobile ? 'mt-0':'mt-4'}`} style={{cursor: 'pointer', borderLeft: !isMobile && chatsMenu ? '6px solid blue' : 'none'}}>
                     {unreadMessages > 0 && (
                         <div className='text-white bg-danger ml-7 mb-3 h-5 w-5 rounded-full absolute' style={{display:'flex', justifyContent:'center', alignItems:'center'}}>{unreadMessages}</div>
                     )} 
-                    <i className={`bi bi-chat-dots-fill text-2xl ${chatsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
+                    <i className={`bi bi-chat-dots-fill ${isMobile ? 'text-3xl' : 'text-2xl'}  ${chatsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
                 </div>
-                <div onClick={showGroupsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:groupsMenu ? '6px solid blue': 'none'}}>
+                <div onClick={showGroupsMenu} className={`flex items-center justify-center ${isMobile ? 'mt-0':'mt-4'}`} style={{cursor: 'pointer', borderLeft: !isMobile && groupsMenu ? '6px solid blue' : 'none'}}>
                     {unreadGroupMessages > 0 && (
                         <div className='text-white bg-danger ml-7 mb-3 h-5 w-5 rounded-full absolute' style={{display:'flex', justifyContent:'center', alignItems:'center'}}>{unreadGroupMessages}</div>
                     )} 
-                    <i className={`bi bi-wechat text-2xl ${groupsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
+                    <i className={`bi bi-wechat ${isMobile ? 'text-3xl' : 'text-2xl'} ${groupsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
                 </div>
-                <div onClick={showFriendstMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:friendsMenu ? '6px solid blue': 'none'}}>      
+                <div onClick={showFriendstMenu} className={`flex items-center justify-center ${isMobile ? 'mt-0':'mt-4'}`} style={{cursor: 'pointer', borderLeft: !isMobile && friendsMenu ? '6px solid blue' : 'none'}}>      
                     {pendingRequests > 0 && (
                         <div className='text-white bg-danger ml-7 mb-3 h-5 w-5 rounded-full absolute' style={{display:'flex', justifyContent:'center', alignItems:'center'}}>{pendingRequests}</div>
                     )}                    
-                    <i className={`bi bi-people text-2xl ${friendsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
+                    <i className={`bi bi-people ${isMobile ? 'text-3xl' : 'text-2xl'} ${friendsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
                 </div>
-                <div onClick={showMarketplaceMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:marketplaceMenu ? '6px solid blue': 'none'}}>
-                    <i className={`bi bi-shop-window text-2xl ${marketplaceMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
+                <div onClick={showMarketplaceMenu} className={`flex items-center justify-center ${isMobile ? 'mt-0':'mt-4'}`} style={{cursor: 'pointer', borderLeft: !isMobile && marketplaceMenu ? '6px solid blue' : 'none'}}>
+                    <i className={`bi bi-shop-window ${isMobile ? 'text-3xl' : 'text-2xl'} ${marketplaceMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
                 </div>
-                <div onClick={showSettingsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:settingsMenu ? '6px solid blue': 'none'}}>
-                    <i className={`bi bi-gear text-2xl ${settingsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
+                <div onClick={showSettingsMenu} className={`flex items-center justify-center ${isMobile ? 'mt-0':'mt-4'}`} style={{cursor: 'pointer', borderLeft: !isMobile && settingsMenu ? '6px solid blue' : 'none'}}>
+                    <i className={`bi bi-gear ${isMobile ? 'text-3xl' : 'text-2xl'} ${settingsMenu ? 'text-primary' : darkMode ? 'text-white' : 'text-black'}`}></i>
                 </div>
-                <div onClick={showProfileMenu} className="flex items-center justify-center mt-auto mb-4" style={{cursor: 'pointer'}}>
+                <div onClick={showProfileMenu} className={`flex items-center justify-center ${isMobile ? 'mt-2 mb-2':'mt-auto mb-4'}`} style={{cursor: 'pointer'}}>
                     <div className={`${profileMenu ? 'border border-primary border-3' : ''} rounded-full`} style={{ height: '60px', width: '60px', background: `center / cover no-repeat url(${userPicture})` }}></div>
                 </div>
             </div>
-            {chatsMenu && <Chats setReceiverId={setReceiverId} darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
-            {groupsMenu && <GroupChats darkMode={darkMode} setGroupId={setGroupId} showGroupMessages={showGroupMessages}/>}
-            {friendsMenu && <Friends setReceiverId={setReceiverId} darkMode={darkMode} showDirectMessages={showDirectMessages} setPendingRequests={setPendingRequests} fetchPendingRequests={fetchPendingRequests}/>}
-            {marketplaceMenu && <Marketplace setReceiverId={setReceiverId} showDirectMessages={showDirectMessages}  darkMode={darkMode}/>}
+            {chatsMenu && <Chats setShowMobileRight={setShowMobileRight} setReceiverId={setReceiverId} darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
+            {groupsMenu && <GroupChats setShowMobileRight={setShowMobileRight} darkMode={darkMode} setGroupId={setGroupId} showGroupMessages={showGroupMessages}/>}
+            {friendsMenu && <Friends setShowMobileRight={setShowMobileRight} setReceiverId={setReceiverId} darkMode={darkMode} showDirectMessages={showDirectMessages} setPendingRequests={setPendingRequests} fetchPendingRequests={fetchPendingRequests}/>}
+            {marketplaceMenu && <Marketplace setShowMobileRight={setShowMobileRight} setReceiverId={setReceiverId} showDirectMessages={showDirectMessages}  darkMode={darkMode}/>}
             {settingsMenu && <Settings darkModeOn={darkModeOn} darkModeOff={darkModeOff} darkMode={darkMode}/>}
             {profileMenu && <Profile  darkMode={darkMode} setUserPicture={setUserPicture}/>}
-            {friendInfoMenu && <FriendInfo receiverId={receiverId} darkMode={darkMode}/>}
-            {groupInfoMenu && <GroupInfo groupId={groupId} darkMode={darkMode}/>}
+            {friendInfoMenu && <FriendInfo showChatsMenu={showChatsMenu} setShowMobileRight={setShowMobileRight} receiverId={receiverId} darkMode={darkMode}/>}
+            {groupInfoMenu && <GroupInfo showGroupsMenu={showGroupsMenu} setShowMobileRight={setShowMobileRight} groupId={groupId} darkMode={darkMode}/>}  
+            {!isMobile && <>
             <div className="flex-1 p-0 messages-column" style={{height:'100vh'}}>
                 {welcomeVideo &&
                 <div className="w-full flex flexflex-column items-center justify-center" style={{height:'100vh', backgroundImage: `url(${darkMode ? mainDark : mainLight})`, backgroundSize: 'cover'}}>
@@ -388,7 +393,13 @@ export default function Dashboard() {
                 {directMessages && <DirectChat fetchUnreadMessages={fetchUnreadMessages} receiverId={receiverId} darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
                 {groupMessages && <GroupChat fetchUnreadGroupMessages={fetchUnreadGroupMessages}  darkMode={darkMode} groupId={groupId} showGroupInfoMenu={showGroupInfoMenu}/>}  
             </div>
+            </>}
         </div>
+        </>}
+        {showMobileRight && <>
+            {directMessages && <DirectChat setMarketplaceMenu={setMarketplaceMenu} setChatsMenu={setChatsMenu} setShowMobileRight={setShowMobileRight} fetchUnreadMessages={fetchUnreadMessages} receiverId={receiverId} darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
+            {groupMessages && <GroupChat setGroupsMenu={setGroupsMenu} setShowMobileRight={setShowMobileRight} fetchUnreadGroupMessages={fetchUnreadGroupMessages}  darkMode={darkMode} groupId={groupId} showGroupInfoMenu={showGroupInfoMenu}/>}  
+        </>}
     </div>
 )
 }

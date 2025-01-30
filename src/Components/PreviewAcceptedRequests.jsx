@@ -5,9 +5,11 @@ import {
 } from "@/components/ui/popover";
 import { unFriend } from '../Services/FriendshipService';
 import { useState } from 'react';
+import { useIsMobile } from '../hooks/useIsMobile';
 
-export default function PreviewAcceptedRequests({darkMode, friendshipId, profileName, profilePicture, profileAbout, fetchFriendships, showDirectMessages, setReceiverId, friendId}) {
+export default function PreviewAcceptedRequests({darkMode, friendshipId, profileName, profilePicture, profileAbout, fetchFriendships, showDirectMessages, setReceiverId, friendId, setShowMobileRight}) {
   
+    const isMobile = useIsMobile();
     const [isUnfriended, setIsUnfriended] = useState(false);
     const [blockPopup, setBlockPopup] = useState(false);
     const [unfriendPopup, setUnfriendPopup] = useState(false);
@@ -38,7 +40,13 @@ export default function PreviewAcceptedRequests({darkMode, friendshipId, profile
 
     const handleSendMessage = () => {
         setReceiverId(friendId);
-        showDirectMessages();
+        if(isMobile){
+            setShowMobileRight(true);
+            showDirectMessages();
+        }
+        else{
+            showDirectMessages();
+        }
     }
 
     return (
@@ -87,7 +95,10 @@ export default function PreviewAcceptedRequests({darkMode, friendshipId, profile
                     <div className="flex items-center">
                         <img src={profilePicture} className="rounded-full mr-2" style={{ height: '45px' }} />
                         <div>
-                        <p className={`${darkMode ? 'text-white' : ''} font-medium`}>{profileName}</p>
+                        <p className={`${darkMode ? 'text-white' : ''} font-medium`}>
+                        {profileName}{'   '}
+                        {profileName === 'VIBEZ' && <i className="ml-1 bi bi-patch-check-fill text-primary"></i>}
+                        </p>
                         <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} text-sm`}>{profileAbout}</p>
                         </div>
                     </div>
@@ -107,7 +118,7 @@ export default function PreviewAcceptedRequests({darkMode, friendshipId, profile
                         <PopoverContent
                             style={{
                             width: '220px',
-                            marginRight: '200px',
+                            marginRight: isMobile ? '30px' : '200px',
                             height: '105px',
                             backgroundColor: darkMode ? '#262729' : '',
                             

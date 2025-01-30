@@ -8,9 +8,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
 import { isConnectedProfile } from '../Services/FriendshipService';
 import PreviewAcceptedRequests from './PreviewAcceptedRequests';
+import { useIsMobile } from '../hooks/useIsMobile';
 
-export default function Friends({darkMode, setPendingRequests, fetchPendingRequests, showDirectMessages, setReceiverId}) {
+export default function Friends({darkMode, setPendingRequests, fetchPendingRequests, showDirectMessages, setReceiverId, setShowMobileRight}) {
 
+    const isMobile = useIsMobile();
     const { messages } = useWebSocket();
     const [processedMessages, setProcessedMessages] = useState([]);
 
@@ -212,7 +214,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
         <div>
             <div
                 className={`${darkMode ? 'border-gray-600 border-r border-border' : 'border-r border-border'}  p-4 friends-column`}
-                style={{ backgroundColor: darkMode ? '#262729' : '', height: '100vh' }}
+                style={{ backgroundColor: darkMode ? '#262729' : '', height: isMobile ? '90vh' : '100vh' , width: isMobile ? '100vw' : ''}}
             >
                 <h2 className={`${darkMode ? 'text-white' : 'text-black'} text-lg font-semibold column-header`}>Friends</h2>
                 <input
@@ -230,7 +232,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                         } bi cursor-pointer absolute text-2xl ${
                         searchKeyword === '' ? 'bi-search' : 'bi-x-circle-fill'
                         }`}
-                        style={{ marginLeft: '-3%', marginTop: '0.2%' }}
+                        style={{ marginLeft: isMobile ? '-10%' : '-3%', marginTop: isMobile ? '0.5%': '0.2%' }}
                         onClick={handleIconClick}
                 ></i>
                 <div className="flex space-x-2 mb-4">
@@ -329,6 +331,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                                         profileId={result.userId}
                                         showDirectMessages={showDirectMessages}
                                         setReceiverId={setReceiverId}
+                                        setShowMobileRight={setShowMobileRight}
                                         />
                                     ))
                                 )}
@@ -382,6 +385,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                                         showDirectMessages={showDirectMessages}
                                         setReceiverId={setReceiverId}
                                         friendId={profile.profileId} 
+                                        setShowMobileRight={setShowMobileRight}
                                     />
                                 ))
                                 }                            
