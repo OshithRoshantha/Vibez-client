@@ -233,7 +233,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
             {isMobile && <p onClick={handleBackButton} className="text-primary font-medium text-lg cursor-pointer right-6 absolute">Back</p>}
         </div>
         <div className="p-4" ref={chatRef} style={{ height: isMobile ? '82vh' : '78vh', overflowY: 'auto', scrollbarWidth: 'none', backgroundImage: chatWallpaper, backgroundSize: 'cover' }}>
-          {showScrollButton && <i onClick={scrollToBottom} className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} cursor-pointer absolute bi bi-arrow-down-circle-fill text-4xl text-primary`} style={{ left: '67%' }}></i>}
+          {showScrollButton && !isMobile && <i onClick={scrollToBottom} className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} cursor-pointer absolute bi bi-arrow-down-circle-fill text-4xl text-primary`} style={{ left: '67%' }}></i>}
           {chatsLoading ? (
             <div className="text-center">
               <CircularProgress size="30px"/>       
