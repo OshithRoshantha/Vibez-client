@@ -115,7 +115,7 @@ export default function PreviewAcceptedRequests({darkMode, friendshipId, profile
                         <PopoverContent
                             style={{
                             width: '220px',
-                            marginRight: '200px',
+                            marginRight: isMobile ? '30px' : '200px',
                             height: '105px',
                             backgroundColor: darkMode ? '#262729' : '',
                             
