@@ -369,7 +369,7 @@ export default function SignupElement() {
                 style={{ display: 'none' }}
                 onChange={handleFileChange}
               />
-              {editPictureForm && <div className='edit-picture-form'>
+              {editPictureForm && <div className='edit-picture-form' style={{width: isMobile ? '85%' : ''}}>
                   <AvatarEditor
                     ref={avatarEditorRef}
                     image={selectedImage}
