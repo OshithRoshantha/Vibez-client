@@ -10,7 +10,7 @@ import { isConnectedProfile } from '../Services/FriendshipService';
 import PreviewAcceptedRequests from './PreviewAcceptedRequests';
 import { useIsMobile } from '../hooks/useIsMobile';
 
-export default function Friends({darkMode, setPendingRequests, fetchPendingRequests, showDirectMessages, setReceiverId}) {
+export default function Friends({darkMode, setPendingRequests, fetchPendingRequests, showDirectMessages, setReceiverId, setShowMobileRight}) {
 
     const isMobile = useIsMobile();
     const { messages } = useWebSocket();
@@ -331,6 +331,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                                         profileId={result.userId}
                                         showDirectMessages={showDirectMessages}
                                         setReceiverId={setReceiverId}
+                                        setShowMobileRight={setShowMobileRight}
                                         />
                                     ))
                                 )}
@@ -384,6 +385,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                                         showDirectMessages={showDirectMessages}
                                         setReceiverId={setReceiverId}
                                         friendId={profile.profileId} 
+                                        setShowMobileRight={setShowMobileRight}
                                     />
                                 ))
                                 }                            

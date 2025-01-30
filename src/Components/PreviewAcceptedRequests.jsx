@@ -5,9 +5,11 @@ import {
 } from "@/components/ui/popover";
 import { unFriend } from '../Services/FriendshipService';
 import { useState } from 'react';
+import { useIsMobile } from '../hooks/useIsMobile';
 
-export default function PreviewAcceptedRequests({darkMode, friendshipId, profileName, profilePicture, profileAbout, fetchFriendships, showDirectMessages, setReceiverId, friendId}) {
+export default function PreviewAcceptedRequests({darkMode, friendshipId, profileName, profilePicture, profileAbout, fetchFriendships, showDirectMessages, setReceiverId, friendId, setShowMobileRight}) {
   
+    const isMobile = useIsMobile();
     const [isUnfriended, setIsUnfriended] = useState(false);
     const [blockPopup, setBlockPopup] = useState(false);
     const [unfriendPopup, setUnfriendPopup] = useState(false);
@@ -38,7 +40,12 @@ export default function PreviewAcceptedRequests({darkMode, friendshipId, profile
 
     const handleSendMessage = () => {
         setReceiverId(friendId);
-        showDirectMessages();
+        if(isMobile){
+            setShowMobileRight(true);
+        }
+        else{
+            showDirectMessages();
+        }
     }
 
     return (

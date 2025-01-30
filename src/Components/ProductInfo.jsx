@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
 import { sendMessage } from '../Services/ChatService';
+import { useIsMobile } from '../hooks/useIsMobile';
 
-export default function ProductInfo({expandingProductId, darkMode, showDirectMessages, setReceiverId}) {
+export default function ProductInfo({expandingProductId, darkMode, showDirectMessages, setReceiverId, setShowMobileRight}) {
 
+  const isMobile = useIsMobile();
   const { messages } = useWebSocket();
   const [processedMessages, setProcessedMessages] = useState([]);
 
@@ -66,7 +68,12 @@ export default function ProductInfo({expandingProductId, darkMode, showDirectMes
     
     const handleSendMessage = () => {
         setReceiverId(product.sellerId);
-        showDirectMessages();
+        if(isMobile){
+          setShowMobileRight(true);
+        }
+        else{
+          showDirectMessages();
+        }
     }
 
     const sendMessageToSeller = async () => {
