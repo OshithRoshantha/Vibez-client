@@ -235,6 +235,16 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
     setChatsMenu(true);
   }
 
+  const handleFriendInfo = () => {
+    if(isMobile){
+      showFriendInfoMenu();
+      setShowMobileRight(false);
+    }
+    else{
+      showFriendInfoMenu();
+    }
+  }
+
   return (
     <div>
         <div className={`${darkMode ? 'bg-[#262729]' : 'bg-background' } min-h-screen flex flex-col`} >
@@ -251,7 +261,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
               </div>
             ) : (
               <div>
-                <div onClick={showFriendInfoMenu} style={{cursor:'pointer'}} className="flex items-center">
+                <div onClick={handleFriendInfo} style={{cursor:'pointer'}} className="flex items-center">
                 <div className="rounded-full mr-2" style={{ height: '45px', width: '45px', background: `center / cover no-repeat url(${userAvatar})` }}></div>
                 <div>
                   <span className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold`}>{userName}</span>
@@ -292,7 +302,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
             )
           )}  
         {temporalMessage && <TemporalMessage message={temporalMessageContent}/> }    
-        {magicReplyButton && 
+        {!magicReplyButton && 
         <div style={{position:'absolute', bottom: isMobile ? '12%' : '14%', width: isMobile ? '88%' : '59%', display:'flex', justifyContent:'center', alignItems:'center'}}>
           dfdf
         <div onClick={fetchSmartReply} className="absolute cursor-pointer bg-white rounded-full">
@@ -317,10 +327,11 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
                   onEmojiClick={handleEmojiClick} 
                 />
               </div>}
+              {!isMobile &&
               <i 
                 onClick={() => handleEmojiPicker()} 
                 className="bi bi-emoji-smile text-2xl text-primary cursor-pointer"
-              ></i>
+              ></i>}
               <input 
                 ref={inputRef}
                 type="text" 
@@ -345,7 +356,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
                   <span><i style={{cursor:'pointer'}} onClick={() => { handleSendMessage(); displayTemporalMessage();}} className="bi bi-send-fill text-2xl text-primary"></i></span>
               </div>)}
             </>) : (
-              <div className="w-full mt-2">
+              <div className={`${isMobile ? '': 'w-full mt-2'}`}>
                 <p className={`${darkMode ? 'text-gray-300' : 'text-black' } text-sm text-center`}>Looks like you're not connected. Please add this user as a friend to chat.</p>
               </div>
             )}
