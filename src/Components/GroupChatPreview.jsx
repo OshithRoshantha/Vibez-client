@@ -3,7 +3,7 @@ import { checkIsUnreadGroup } from '../Services/GroupsService';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useIsMobile } from '../hooks/useIsMobile';
 
-export default function GroupChatPreview({darkMode, groupId, showGroupMessages, groupName, groupAvatar, lastMessageSender, lastActiveTime, lastMessage, setGroupId}) {
+export default function GroupChatPreview({darkMode, groupId, showGroupMessages, groupName, groupAvatar, lastMessageSender, lastActiveTime, lastMessage, setGroupId, setShowMobileRight}) {
   
   const isMobile = useIsMobile();
   const [isUnread, setIsUnread] = useState(false);
@@ -11,8 +11,13 @@ export default function GroupChatPreview({darkMode, groupId, showGroupMessages, 
 
   const handleGroupClick = () => {
     setGroupId(groupId);
-    showGroupMessages();
     setIsUnread(false);
+    if(isMobile) {
+        setShowMobileRight(true);
+    }
+    else{
+      showGroupMessages();
+    }
   }
 
   

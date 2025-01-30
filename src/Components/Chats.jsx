@@ -6,7 +6,7 @@ import { useWebSocket } from '../Context/WebSocketContext';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useIsMobile } from '../hooks/useIsMobile';
 
-export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
+export default function Chats({showDirectMessages, darkMode, setReceiverId, setShowMobileRight}) {
 
     const isMobile = useIsMobile();
     const { messages } = useWebSocket();
@@ -203,6 +203,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
                                             setReceiverId={setReceiverId}
                                             darkMode={darkMode}
                                             chatId={chat.chatId}
+                                            setShowMobileRight={setShowMobileRight}
                                         />
                                     );
                                 })
