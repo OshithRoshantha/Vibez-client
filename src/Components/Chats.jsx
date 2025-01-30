@@ -153,6 +153,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
 
     const showAllChats = () => {
         setShowAll(true);
+        setShowFriends(false);
     }
 
     const handleSearchChange = async (e) => {
@@ -193,25 +194,51 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
                     <button onClick={addChat} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}><i className="bi bi-plus-lg"></i></button>
                 </div>
                 <div className='chat-list'>
-                    {showFriends && <>
-                        {
+                {showFriends && (
+                        <>
+                        {loading3 ? (
+                            <>
+                                <div className="mb-3" style={{ display: 'flex', alignItems: 'center', columnGap: '10px' }}>
+                                <Skeleton className="h-12 w-12 rounded-full" />
+                                <div className="space-y-2">
+                                    <Skeleton className="h-4 w-[250px]" />
+                                    <Skeleton className="h-4 w-[200px]" />
+                                </div>
+                                </div>
+                                <div className="mb-3" style={{ display: 'flex', alignItems: 'center', columnGap: '10px' }}>
+                                <Skeleton className="h-12 w-12 rounded-full" />
+                                <div className="space-y-2">
+                                    <Skeleton className="h-4 w-[250px]" />
+                                    <Skeleton className="h-4 w-[200px]" />
+                                </div>
+                                </div>
+                                <div className="mb-3" style={{ display: 'flex', alignItems: 'center', columnGap: '10px' }}>
+                                <Skeleton className="h-12 w-12 rounded-full" />
+                                <div className="space-y-2">
+                                    <Skeleton className="h-4 w-[250px]" />
+                                    <Skeleton className="h-4 w-[200px]" />
+                                </div>
+                                </div>
+                            </>
+                            ) : (
                             acceptedProfiles.map(profile => (
                                 <PreviewAcceptedRequests
-                                    key={profile.friendshipId} 
-                                    darkMode={darkMode}
-                                    friendshipId={profile.friendshipId}
-                                    profileName={profile.profileName}
-                                    profilePicture={profile.profilePicture}
-                                    profileAbout={profile.profileAbout}
-                                    fetchFriendships={fetchFriendships}
-                                    showDirectMessages={showDirectMessages}
-                                    setReceiverId={setReceiverId}
-                                    friendId={profile.profileId} 
-                                    setShowMobileRight={setShowMobileRight}
+                                key={profile.friendshipId}
+                                darkMode={darkMode}
+                                friendshipId={profile.friendshipId}
+                                profileName={profile.profileName}
+                                profilePicture={profile.profilePicture}
+                                profileAbout={profile.profileAbout}
+                                fetchFriendships={fetchFriendships}
+                                showDirectMessages={showDirectMessages}
+                                setReceiverId={setReceiverId}
+                                friendId={profile.profileId}
+                                setShowMobileRight={setShowMobileRight}
                                 />
                             ))
-                        }                     
-                    </>}
+                            )}
+                        </>
+                        )}
                     {showAll ? (
                         loading ? (
                             <div>
