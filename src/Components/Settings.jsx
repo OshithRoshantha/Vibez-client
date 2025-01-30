@@ -249,7 +249,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                         </AccordionItem>
                     </Accordion>
             </ul>
-            <div className="flex justify-between mb-12 absolute bottom-0" style={{width: '29%'}}>
+            <div className={`flex justify-between ${isMobile ? 'mt-20' : 'mb-12 bottom-0'} absolute`} style={{width: isMobile ? '88%' : '29%'}}>
                 <button onClick={showLogoutMenu} className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-gray-300 hover:bg-gray-400'} border-none px-4 py-2 rounded-lg w-full`}>Log out</button>
             </div>
         </div>
