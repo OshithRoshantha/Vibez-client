@@ -314,7 +314,7 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
                     } bi cursor-pointer absolute text-2xl ${
                     searchKeyword === '' ? 'bi-search' : 'bi-x-circle-fill'
                     }`}
-                    style={{ marginLeft: '-3%', marginTop: '0.2%' }}
+                    style={{ marginLeft: isMobile ? '-10%' : '-3%', marginTop: isMobile ? '0.5%': '0.2%' }}
                     onClick={handleIconClick}
                 ></i>
                 <div className="flex space-x-2 mb-4">
