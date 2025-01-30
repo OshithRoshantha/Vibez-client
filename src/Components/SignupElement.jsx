@@ -21,6 +21,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { createAccount} from '../Services/ProfileService';
 import { checkAccount } from '../Services/AuthService';
 import { uploadFile } from '../Services/s3Service';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function SignupElement() {
   const steps = ['Basic Information', 'Add Password', 'Personalize and Finalize'];
@@ -49,6 +50,7 @@ export default function SignupElement() {
   const [contactNumberError, setContactNumberError] = useState(false);
   const [passwordUnmatchError, setPasswordUnmatchError] = useState(false);
   const [disableContinueBtn, setDisableContinueBtn] = useState(true);
+  const isMobile = useIsMobile();
 
   const defaultImage = "./src/assets/userDefault.jpg";
 
@@ -227,7 +229,7 @@ export default function SignupElement() {
   };
 
   return (
-    <div>
+    <div style={{width: isMobile ? '100%' : ''}}>
       <ToastContainer
         position="top-center"
         autoClose={1200}
@@ -241,7 +243,7 @@ export default function SignupElement() {
         theme="light"
       />
       <Card className='stepper-body'>
-        <Box sx={{ width: '100%', paddingX: '3%', paddingY: '2.5%' }}>
+        <Box sx={{ width: '100%', paddingX: '3%', paddingY: '2.5%'}}>
           <Stepper activeStep={activeStep}>
             {steps.map((label, index) => {
               const stepProps = {};
@@ -251,7 +253,7 @@ export default function SignupElement() {
               }
               return (
                 <Step key={label} {...stepProps}>
-                  <StepLabel {...labelProps}>{label}</StepLabel>
+                  <StepLabel {...labelProps}>{!isMobile && label}</StepLabel>
                 </Step>
               );
             })}
@@ -261,16 +263,18 @@ export default function SignupElement() {
       <div className='stepper-content'>
         {activeStep === 0 && (
           <div className='field-container'>
-            <div className='field-box'>
+            <div className='field-box' style={{marginLeft: isMobile ? '0%' : ''}}>
               <Box
                 component="form"
-                sx={{ '& > :not(style)': { m: 1, width: '120%', marginLeft: '-20%' } }}
+                sx={{ '& > :not(style)': { m: 1, width: isMobile ? '100%' : '120%', marginLeft: isMobile ? '0%': '-20%' }}}
                 noValidate
                 autoComplete="off"
               >
                 <TextField id="outlined-basic" label="Full Name" helperText={fullNameError ? 'Full name must be at least 3 characters long.' : ''} value={fullName} onChange={handleFullNameChange} error={fullNameError} variant="outlined" placeholder="John Doe" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} /><br />
                 <TextField id="outlined-email" label="Email Address" helperText={emailError ? 'Please enter a valid email address.' : (emailExistError ? 'Account with this email already exists. Please try to sign in.' : '')} value={email} onChange={handleEmailChange} error={emailError || emailExistError} variant="outlined" placeholder="john@example.com" InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white' } }} />
+                <div style={{width: isMobile ? '85%' : ''}}>
                 <ContactField setContactNumberError={setContactNumberError} setContact={setContact}/>
+                </div>
               </Box>
             </div>
           </div>

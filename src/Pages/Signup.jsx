@@ -26,7 +26,7 @@ export default function Signup() {
         </div>
         </>}
       </div>
-      <div className='signup-container' style={{backgroundColor: isMobile ? '#F5F5F5' : '', width: isMobile ? '80%' : ''}}>
+      <div className='signup-container' style={{width: isMobile ? '80%' : ''}}>
         <SignupElement/>
       </div>
     </div>
