@@ -377,7 +377,7 @@ export default function Dashboard() {
             {marketplaceMenu && <Marketplace setShowMobileRight={setShowMobileRight} setReceiverId={setReceiverId} showDirectMessages={showDirectMessages}  darkMode={darkMode}/>}
             {settingsMenu && <Settings darkModeOn={darkModeOn} darkModeOff={darkModeOff} darkMode={darkMode}/>}
             {profileMenu && <Profile  darkMode={darkMode} setUserPicture={setUserPicture}/>}
-            {friendInfoMenu && <FriendInfo receiverId={receiverId} darkMode={darkMode}/>}
+            {friendInfoMenu && <FriendInfo setShowMobileRight={setShowMobileRight} receiverId={receiverId} darkMode={darkMode}/>}
             {groupInfoMenu && <GroupInfo groupId={groupId} darkMode={darkMode}/>}  
             {!isMobile && <>
             <div className="flex-1 p-0 messages-column" style={{height:'100vh'}}>
