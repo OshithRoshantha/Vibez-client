@@ -10,7 +10,7 @@ import { useWebSocket } from '../Context/WebSocketContext';
 import { uploadFile } from '../Services/s3Service';
 import { useIsMobile } from '../hooks/useIsMobile';
 
-export default function GroupInfo({darkMode, groupId, setShowMobileRight}) {
+export default function GroupInfo({darkMode, groupId, setShowMobileRight, showGroupsMenu}) {
 
   const isMobile = useIsMobile();
   const { messages } = useWebSocket();
@@ -187,6 +187,7 @@ export default function GroupInfo({darkMode, groupId, setShowMobileRight}) {
 
   const handleBackButton = () => {
     setShowMobileRight(true);
+    showGroupsMenu();
   }  
 
   return (
