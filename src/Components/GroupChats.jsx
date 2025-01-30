@@ -276,7 +276,8 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
                                             />
                                             <div>
                                                 <p className={`${darkMode ? "text-white" : ""} font-medium`}>
-                                                    {friend.profileName}
+                                                    {friend.profileName}{'   '}
+                                                    {friend.profileName === 'VIBEZ' && <i className="ml-1 bi bi-patch-check-fill text-primary"></i>}
                                                 </p>
                                                 <p className={`${darkMode ? "text-gray-400" : "text-muted-foreground"} text-sm`}>
                                                     {friend.profileAbout}
@@ -286,10 +287,10 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
                                         <div className="btn-container">
                                             <button
                                                 className={`px-3 py-1 mr-2 rounded text-primary-foreground ${
-                                                    isAdded ? "bg-blue-300" : "bg-primary"
+                                                    isAdded || friend.profileName === 'VIBEZ' ? "bg-blue-300" : "bg-primary"
                                                 }`}
                                                 onClick={() => handleAddClick(friend.profileId)}
-                                                disabled={isAdded}
+                                                disabled={isAdded || friend.profileName === 'VIBEZ'}
                                             >
                                                 {isAdded ? "Added" : "Add"}
                                             </button>

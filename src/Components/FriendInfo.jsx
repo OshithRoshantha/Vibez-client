@@ -106,7 +106,10 @@ export default function FriendInfo({darkMode, receiverId, setShowMobileRight, sh
         <div className="bg-card p-6 w-full" style={{marginTop:'12%', backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7'}} >
           <div className="flex flex-col items-center">
             <div className="rounded-full flex items-center justify-center mb-4" style={{ width: '150px', height: '150px', background: `center / cover no-repeat url(${userAvatar})` }}></div>
-            <h2 className={`${darkMode ? 'text-white' : 'text-foreground'} text-xl font-semibold`}>{userName}</h2>
+            <h2 className={`${darkMode ? 'text-white' : 'text-foreground'} text-xl font-semibold`}>
+            {userName}{'   '}
+            {userName === 'VIBEZ' && <i className="ml-1 bi bi-patch-check-fill text-primary"></i>}
+            </h2>
             <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'}`}>{userEmail}</p>
             <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} text-sm`}>{userAbout}</p>
           </div>

@@ -95,7 +95,10 @@ export default function PreviewAcceptedRequests({darkMode, friendshipId, profile
                     <div className="flex items-center">
                         <img src={profilePicture} className="rounded-full mr-2" style={{ height: '45px' }} />
                         <div>
-                        <p className={`${darkMode ? 'text-white' : ''} font-medium`}>{profileName}</p>
+                        <p className={`${darkMode ? 'text-white' : ''} font-medium`}>
+                        {profileName}{'   '}
+                        {profileName === 'VIBEZ' && <i className="ml-1 bi bi-patch-check-fill text-primary"></i>}
+                        </p>
                         <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'} text-sm`}>{profileAbout}</p>
                         </div>
                     </div>

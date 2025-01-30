@@ -264,7 +264,10 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
                 <div onClick={handleFriendInfo} style={{cursor:'pointer'}} className="flex items-center">
                 <div className="rounded-full mr-2" style={{ height: '45px', width: '45px', background: `center / cover no-repeat url(${userAvatar})` }}></div>
                 <div>
-                  <span className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold`}>{userName}</span>
+                  <span className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold`}>
+                  {userName}{'   '}
+                  {userName === 'VIBEZ' && <i className="ml-1 bi bi-patch-check-fill text-primary"></i>}
+                  </span>
                   <p className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} mt-0`}  style={{fontSize:'70%'}}>Click here for contact info</p>
                 </div>
                 </div>
