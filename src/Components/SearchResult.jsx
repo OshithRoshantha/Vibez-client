@@ -24,6 +24,7 @@ export default function SearchResult({ darkMode, profileName, profileAbout, prof
     setReceiverId(profileId);
     if(isMobile){
       setShowMobileRight(true);
+      showDirectMessages();
     }
     else{
       showDirectMessages();
