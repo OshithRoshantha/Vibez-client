@@ -255,7 +255,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
           {temporalMessage && <TemporalMessage message={temporalMessageContent}/> }         
         </div>
         <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3 border-t`} style={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
-          {removedFromGroup ? (<div className="w-full mt-2">
+          {removedFromGroup ? (<div className={`${isMobile ? '': 'w-full mt-2'}`}>
             <p className={`${darkMode ? 'text-gray-300' : 'text-black' } text-sm text-center`}>You can't send messages to this group beacuse you're no longer a member.</p>
           </div>) : 
           (<>
