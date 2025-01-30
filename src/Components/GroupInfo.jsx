@@ -241,8 +241,8 @@ export default function GroupInfo({darkMode, groupId, setShowMobileRight}) {
                     autoFocus
                 />
             ) : (<h2 className={`${darkMode ? 'text-white' : 'text-foreground'} text-xl font-semibold mt-4`}>{name}</h2>)}
-            {!isEditingName && !removedFromGroup && <i onClick={handleNameClick} className={`${darkMode ? 'text-white' : ''} absolute bi bi-pencil-fill`} style={{cursor:'pointer', marginTop:'10.3%', marginLeft:'25%'}}></i>} 
-            {isEditingName && !removedFromGroup &&  <i onClick={handleNameBlur} className={`${darkMode ? 'text-white' : ''} absolute bi bi-check2`} style={{cursor:'pointer', fontSize:'125%', marginTop:'10.3%', marginLeft:'25%'}}></i>}
+            {!isEditingName && !removedFromGroup && <i onClick={handleNameClick} className={`${darkMode ? 'text-white' : ''} absolute bi bi-pencil-fill`} style={{cursor:'pointer', marginTop: isMobile ? '42%' :'10.3%', marginLeft: isMobile? '70%' : '25%'}}></i>} 
+            {isEditingName && !removedFromGroup &&  <i onClick={handleNameBlur} className={`${darkMode ? 'text-white' : ''} absolute bi bi-check2`} style={{cursor:'pointer', fontSize:'125%', marginTop: isMobile ? '42%' :'10.3%', marginLeft: isMobile? '70%' : '25%'}}></i>}
             </>
             )}
             {!isAmAdmin && <h2 className={`${darkMode ? 'text-white' : 'text-foreground'} text-xl font-semibold mt-4`}>{name}</h2>}
@@ -262,8 +262,8 @@ export default function GroupInfo({darkMode, groupId, setShowMobileRight}) {
                     autoFocus
                 />
             ) : (<p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'}`}>{descp}</p>)}
-            {!isEditingDescp && !removedFromGroup &&  <i onClick={handleDescpClick} className={`${darkMode ? 'text-white' : ''} absolute bi bi-pencil-fill`} style={{cursor:'pointer', marginTop:'13.7%', marginLeft:'25%'}}></i>} 
-            {isEditingDescp && !removedFromGroup &&  <i onClick={handleDescpBlur} className={`${darkMode ? 'text-white' : ''} absolute bi bi-check2`}  style={{cursor:'pointer', fontSize:'125%', marginTop:'13.7%', marginLeft:'25%'}}></i>}
+            {!isEditingDescp && !removedFromGroup &&  <i onClick={handleDescpClick} className={`${darkMode ? 'text-white' : ''} absolute bi bi-pencil-fill`} style={{cursor:'pointer', marginTop: isMobile ? '54%' :'13.7%', marginLeft: isMobile? '70%' : '25%'}}></i>} 
+            {isEditingDescp && !removedFromGroup &&  <i onClick={handleDescpBlur} className={`${darkMode ? 'text-white' : ''} absolute bi bi-check2`}  style={{cursor:'pointer', fontSize:'125%', marginTop: isMobile ? '54%' :'13.7%', marginLeft: isMobile? '70%' : '25%'}}></i>}
               </>
             )}
           </div>
