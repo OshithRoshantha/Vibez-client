@@ -328,8 +328,8 @@ export default function Dashboard() {
         {showSessionExipred && <>
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '999'}}>
                 <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} align-middle justify-center flex flex-col p-6 rounded-lg shadow-lg text-left`} style={{width: '400px'}}>
-                <h2 className="text-lg text-center font-semibold text-foreground">Your session has expired</h2>
-                <p className="text-muted-foreground text-center mb-4">Please log in again to continue.</p>
+                <h2 className={`${darkMode ? 'text-white':'text-black'} text-lg text-center font-semibold text-foreground`}>Your session has expired</h2>
+                <p className={`${darkMode ? 'text-gray-300' : 'text-muted-foreground'} text-center mb-4`}>Please log in again to continue.</p>
                 <button onClick={handleLogOut} className="border border-primary rounded-lg px-4 py-2 text-primary hover:bg-primary/10">Log in</button>
                 </div>
             </div>
