@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import { sendFriendRequest, getFriendshipStatus, getFriendshipId, acceptFriendRequest } from '../Services/FriendshipService';
 import { Skeleton } from "@/components/ui/skeleton";
+import { useIsMobile } from '../hooks/useIsMobile';
 
-export default function SearchResult({ darkMode, profileName, profileAbout, profileImage, profileId, showDirectMessages, setReceiverId }) {
+export default function SearchResult({ darkMode, profileName, profileAbout, profileImage, profileId, showDirectMessages, setReceiverId, setShowMobileRight }) {
+  
+  const isMobile = useIsMobile();
   const [friendshipStatus, setFriendshipStatus] = useState('');
   const [friendshipId, setFriendshipId] = useState('');
   const [loading, setLoading] = useState(true); 
@@ -19,7 +22,13 @@ export default function SearchResult({ darkMode, profileName, profileAbout, prof
 
   const sendMessage = () => {
     setReceiverId(profileId);
-    showDirectMessages();
+    if(isMobile){
+      setShowMobileRight(true);
+      showDirectMessages();
+    }
+    else{
+      showDirectMessages();
+    }
   };
 
   useEffect(() => {
@@ -65,7 +74,10 @@ export default function SearchResult({ darkMode, profileName, profileAbout, prof
       <div className="flex items-center">
         <img className="w-12 h-12 rounded-full mr-4" src={profileImage} alt="User Profile Picture" />
         <div>
-          <h2 className={`${darkMode ? 'text-white' : ''}`}>{profileName}</h2>
+          <h2 className={`${darkMode ? 'text-white' : ''}`}>
+          {profileName}{'   '}
+          {profileName === 'VIBEZ' && <i className="ml-1 bi bi-patch-check-fill text-primary"></i>}            
+          </h2>
           <p className={`${darkMode ? 'text-gray-400' : 'text-muted-foreground'}`}>{profileAbout}</p>
         </div>
       </div>

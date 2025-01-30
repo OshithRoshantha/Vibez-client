@@ -2,8 +2,11 @@ import { useState, useEffect } from 'react';
 import { groupAddList } from '../Services/GroupsService';
 import { Skeleton } from '@/components/ui/skeleton';
 import { addMembers } from '../Services/GroupsService';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function GroupAddMembers({ showAddMemberMenu, darkMode, groupId }) {
+
+  const isMobile = useIsMobile();
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [addingMemberIds, setAddingMemberIds] = useState([]);
@@ -40,7 +43,7 @@ export default function GroupAddMembers({ showAddMemberMenu, darkMode, groupId }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-      <div className={`${darkMode ? 'bg-[#262729]' : 'bg-card'} rounded-lg shadow-lg w-full max-w-md`}>
+      <div className={`${darkMode ? 'bg-[#262729]' : 'bg-card'} rounded-lg shadow-lg  ${isMobile ? 'w-80' : 'w-full'} max-w-md`}>
         <div className={`${darkMode ? 'text-white border-gray-700' : 'border-border'} px-4 flex py-3 border-b justify-between items-center`}>
           <h2 className="text-lg font-semibold">Add members</h2>
           <i onClick={showAddMemberMenu} className="bi bi-arrow-left-circle-fill text-2xl" style={{ cursor: 'pointer' }}></i>

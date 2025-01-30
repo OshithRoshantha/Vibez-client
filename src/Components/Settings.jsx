@@ -18,8 +18,11 @@ import icon3Light from '@/assets/Icons/icon3.png';
 import icon3Dark from '@/assets/Icons/icon3dark.png';
 import icon4Light from '@/assets/Icons/icon4.png';
 import icon4Dark from '@/assets/Icons/icon4dark.png';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function Settings({darkModeOn, darkModeOff, darkMode}) {
+
+    const isMobile = useIsMobile();
     const [logoutMenu, setLogoutMenu] = useState(false);
     const [confirmAccountDeletion, setConfirmAccountDeletion] = useState(false);
     const [deleteAllChatsPopup, setDeleteAllChatsPopup] = useState(false);
@@ -95,10 +98,10 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
         {deleteAllGroupChatsPopup && <GlobalAlert darkMode={darkMode} text={`Delete All Group Chats?`} textOP={'This action will permanently delete all your group chats.'} button1={'Cancel'} button2={'Delete all'} btn1Function={toggleDeleteAllGroupChatsPopup} btn2Function={deleteAllGroupChats}/>}
         {logoutMenu && <div>
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100'}}>
-            <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'}  rounded-lg shadow-lg p-6 max-w-sm w-full`}>	
+            <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'}  rounded-lg shadow-lg p-6 max-w-sm ${isMobile ? '' : 'w-full'}`}>	
                 <h2 className={`${darkMode ? 'text-white':'text-black'} text-lg font-semibold`}>Confirm Logout</h2>
                 <p className={`${darkMode ? 'text-gray-300' : 'text-muted-foreground'} mt-0`}>Are you sure you want to log out?</p>
-                <div className="flex justify-between mt-4">
+                <div className={`flex justify-between mt-4 ${isMobile ? 'flex-col gap-y-2':''}`}>
                 <button style={{cursor:'pointer'}} onClick={hideLogoutMenu} className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-muted text-muted-foreground hover:bg-gray-300'} border-none px-4 py-2 rounded`}>
                     Stay logged in
                 </button>
@@ -111,7 +114,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
         </div>}
         {confirmAccountDeletion && <div>
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '100'}}>
-            <div className={`${darkMode ? 'bg-[#262729]' : 'bg-card text-card-foreground'} rounded-lg shadow-lg p-6 w-96`}>
+            <div className={`${darkMode ? 'bg-[#262729]' : 'bg-card text-card-foreground'} rounded-lg shadow-lg p-6 ${isMobile ? 'w-80' : 'w-96'}`}>
                 <div className={`${darkMode ? 'text-white':''} flex justify-between items-center`}>
                     <h2 className="text-lg font-semibold">Delete my account</h2>
                     <i onClick={hideConfirmAccountDeletion} className="bi bi-arrow-left-circle-fill text-2xl" style={{cursor:'pointer'}}></i>
@@ -142,7 +145,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
             </div>
             </div>
         </div>}
-        <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 settings-column`} style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7', height:'100vh'}}>
+        <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 settings-column`} style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7', height: isMobile ? '90vh' : '100vh', width: isMobile ? '100vw' : ''}}>
             <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Settings & Privacy</h2>
             <ul className="space-y-2 mt-5">
             <Accordion type="single" collapsible>
@@ -246,7 +249,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
                         </AccordionItem>
                     </Accordion>
             </ul>
-            <div className="flex justify-between mb-12 absolute bottom-0" style={{width: '29%'}}>
+            <div className={`flex justify-between ${isMobile ? 'mt-20' : 'mb-12 bottom-0'} absolute`} style={{width: isMobile ? '88%' : '29%'}}>
                 <button onClick={showLogoutMenu} className={`${darkMode ? 'bg-[#6a6b6d] text-white hover:bg-[#545454]':'bg-gray-300 hover:bg-gray-400'} border-none px-4 py-2 rounded-lg w-full`}>Log out</button>
             </div>
         </div>

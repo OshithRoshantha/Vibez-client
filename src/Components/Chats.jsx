@@ -1,22 +1,29 @@
 import './Styles/Column2.css'
 import { useState, useEffect, useRef } from 'react';
-import { getAllChats, getFavaouriteChats, getChatPreivew, checkIsRelated, searchChats } from '../Services/ChatService';
+import { getAllChats, getFavaouriteChats, getChatPreivew, searchChats } from '../Services/ChatService';
 import DirectChatPreview from './DirectChatPreview';
 import { useWebSocket } from '../Context/WebSocketContext';
 import { Skeleton } from "@/components/ui/skeleton";
+import { useIsMobile } from '../hooks/useIsMobile';
+import PreviewAcceptedRequests from './PreviewAcceptedRequests';
+import { getConnectedProfileInfo, filterPendingRequests } from '../Services/FriendshipService';
 
-export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
+export default function Chats({showDirectMessages, darkMode, setReceiverId, setShowMobileRight}) {
 
+    const isMobile = useIsMobile();
     const { messages } = useWebSocket();
     const [processedMessages, setProcessedMessages] = useState([]);
 
     const [chats, setChats] = useState([]);
     const [favouriteChats, setFavouriteChats] = useState([]);
+    const [acceptedProfiles, setAcceptedProfiles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [loading2, setLoading2] = useState(true);
+    const [loading3, setLoading3] = useState(true);
     const [showAll, setShowAll] = useState(true);
     const inputRef = useRef(null);
     const [searchKeyword, setSearchKeyword] = useState('');
+    const [showFriends, setShowFriends] = useState(false);
 
     const getSearchResults = async (value) => {
         try {
@@ -33,6 +40,37 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
             setLoading(false);
         }
     }
+
+    const fetchFriendships = async () => {
+            setLoading3(true);
+            setAcceptedProfiles([]);
+            const linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles')) || [];
+            if (linkedProfiles.length === 0) {
+                setLoading3(false);
+                return;
+            }
+            const profilesPromises = linkedProfiles.map(async (friendshipId) => {
+                const profileInfo = await getConnectedProfileInfo(friendshipId);
+                const response = await filterPendingRequests(friendshipId);
+                return { profileInfo, response };
+            });
+        
+            try {
+                const results = await Promise.all(profilesPromises);
+                const accepted = [];
+                results.forEach(({ profileInfo, response }) => {
+                    if (profileInfo.status === "ACCEPTED") {
+                        if (!accepted.some(profile => profile.profileId === profileInfo.profileId)) {
+                            accepted.push(profileInfo);
+                        }
+                    }
+                });
+                setAcceptedProfiles(accepted);
+            } finally {
+                setLoading3(false);
+            }
+    };
+        
 
     const fetchAllChats = async () => {
         try {
@@ -115,6 +153,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
 
     const showAllChats = () => {
         setShowAll(true);
+        setShowFriends(false);
     }
 
     const handleSearchChange = async (e) => {
@@ -135,19 +174,71 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
         }
     };
 
+    const addChat = async () => {
+        setShowFriends(true);
+        setShowAll(false);
+        fetchFriendships();
+    }
+
   return (
     <div>
-        <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 chats-column`} style={{backgroundColor: darkMode ? '#262729' : '', height:'100vh'}}>
+        <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 chats-column`} style={{backgroundColor: darkMode ? '#262729' : '', height: isMobile ? '90vh' : '100vh', width: isMobile ? '100vw' : ''}}>
                 <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Chats</h2>
                 <input ref={inputRef} value={searchKeyword} onChange={handleSearchChange} type="text" placeholder="Search chats by name" className={`${darkMode ? 'bg-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'bg-gray-200'} w-full px-4 py-2 mb-4 focus:outline-none focus:border-none placeholder:text-gray-500  text-gray-500 `} style={{borderRadius:'20px'}} />
                 <i className={`${darkMode ? 'text-[#abacae]' : 'text-gray-500'} bi cursor-pointer absolute text-2xl ${searchKeyword === '' ? 'bi-search' : 'bi-x-circle-fill'}`}
-                    style={{ marginLeft: '-3%', marginTop: '0.2%' }}
+                    style={{ marginLeft: isMobile ? '-10%' : '-3%', marginTop: isMobile ? '0.5%': '0.2%' }}
                     onClick={handleIconClick}
                 ></i>
                 <div className="flex space-x-2 mb-4">
                     <button onClick={showAllChats} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`} >All</button>
+                    <button onClick={addChat} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}><i className="bi bi-plus-lg"></i></button>
                 </div>
                 <div className='chat-list'>
+                {showFriends && (
+                        <>
+                        {loading3 ? (
+                            <>
+                                <div className="mb-3" style={{ display: 'flex', alignItems: 'center', columnGap: '10px' }}>
+                                <Skeleton className="h-12 w-12 rounded-full" />
+                                <div className="space-y-2">
+                                    <Skeleton className="h-4 w-[250px]" />
+                                    <Skeleton className="h-4 w-[200px]" />
+                                </div>
+                                </div>
+                                <div className="mb-3" style={{ display: 'flex', alignItems: 'center', columnGap: '10px' }}>
+                                <Skeleton className="h-12 w-12 rounded-full" />
+                                <div className="space-y-2">
+                                    <Skeleton className="h-4 w-[250px]" />
+                                    <Skeleton className="h-4 w-[200px]" />
+                                </div>
+                                </div>
+                                <div className="mb-3" style={{ display: 'flex', alignItems: 'center', columnGap: '10px' }}>
+                                <Skeleton className="h-12 w-12 rounded-full" />
+                                <div className="space-y-2">
+                                    <Skeleton className="h-4 w-[250px]" />
+                                    <Skeleton className="h-4 w-[200px]" />
+                                </div>
+                                </div>
+                            </>
+                            ) : (
+                            acceptedProfiles.map(profile => (
+                                <PreviewAcceptedRequests
+                                key={profile.friendshipId}
+                                darkMode={darkMode}
+                                friendshipId={profile.friendshipId}
+                                profileName={profile.profileName}
+                                profilePicture={profile.profilePicture}
+                                profileAbout={profile.profileAbout}
+                                fetchFriendships={fetchFriendships}
+                                showDirectMessages={showDirectMessages}
+                                setReceiverId={setReceiverId}
+                                friendId={profile.profileId}
+                                setShowMobileRight={setShowMobileRight}
+                                />
+                            ))
+                            )}
+                        </>
+                        )}
                     {showAll ? (
                         loading ? (
                             <div>
@@ -201,6 +292,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
                                             setReceiverId={setReceiverId}
                                             darkMode={darkMode}
                                             chatId={chat.chatId}
+                                            setShowMobileRight={setShowMobileRight}
                                         />
                                     );
                                 })
