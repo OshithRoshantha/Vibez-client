@@ -293,7 +293,7 @@ export default function DirectChat({showFriendInfoMenu, darkMode, receiverId, fe
           )}  
         {temporalMessage && <TemporalMessage message={temporalMessageContent}/> }    
         {magicReplyButton && 
-        <div style={{position:'absolute', bottom: isMobile ? '12%' : '14%', width: isMobile ? '88%' : '55%', display:'flex', justifyContent:'center', alignItems:'center'}}>
+        <div style={{position:'absolute', bottom: isMobile ? '12%' : '14%', width: isMobile ? '88%' : '59%', display:'flex', justifyContent:'center', alignItems:'center'}}>
           dfdf
         <div onClick={fetchSmartReply} className="absolute cursor-pointer bg-white rounded-full">
           <AnimatedGradientText>
