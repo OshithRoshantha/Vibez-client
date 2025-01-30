@@ -25,9 +25,11 @@ import { ThreeDots} from 'react-loader-spinner';
 import { checkAccount, directLoginAuth, googleLoginAuth} from '../Services/AuthService';
 import { fetchUserId } from '../Services/ProfileService';
 import { getConnectedProfile } from '../Services/FriendshipService';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function Signin({ onLogin }) {
 
+  const isMobile = useIsMobile();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [emailNotFound, setEmailNotFound] = useState(false);
