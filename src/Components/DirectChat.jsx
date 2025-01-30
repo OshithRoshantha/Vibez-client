@@ -24,7 +24,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
 
   const [showScrollButton, setShowScrollButton] = useState(false);
   const chatWallpaper = darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)';
-  const [magicReplyButton, setMagicReplyButton] = useState(false);
+  const [magicReplyButton, setMagicReplyButton] = useState(true);
   const [userName, setUserName] = useState('');
   const [userAvatar, setUserAvatar] = useState('');
   const [loading, setLoading] = useState(true);
@@ -119,7 +119,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
 
   useEffect(() => {
     doMarkAsRead();
-    setMagicReplyButton(false);
+   // setMagicReplyButton(false);
     setIsFriend(true);
   }, [receiverId]); 
   
