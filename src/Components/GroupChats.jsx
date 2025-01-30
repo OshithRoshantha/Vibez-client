@@ -320,7 +320,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
                     </div>
                 </div>}
                 {finishCreateGroup && <div style={{backgroundColor: darkMode ? '#262729' : ''}}>	
-                    {editPictureForm && <div className={`bg-white edit-picture-form2 shadow-lg`}>
+                    {editPictureForm && <div className={`bg-white edit-picture-form2 shadow-lg`} style={{width: isMobile ? '85%' : ''}}>
                                 <AvatarEditor
                                     ref={avatarEditorRef}
                                     image={selectedImage}

@@ -194,7 +194,7 @@ export default function GroupInfo({darkMode, groupId, setShowMobileRight, showGr
 <div>
       {addMemberMenu && <GroupAddMembers darkMode={darkMode} groupId={groupId} showAddMemberMenu={showAddMemberMenu}/>}
       <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'} ${isMobile ? '':'p-4'} info-column`} style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7', width: isMobile ? '100%' : '', paddingTop: isMobile ? '40%' : ''}}>
-        {editPictureForm && <div className='edit-picture-form2 shadow-lg bg-white' style={{marginTop:'8%'}}>
+        {editPictureForm && <div className='edit-picture-form2 shadow-lg bg-white' style={{width: isMobile ? '85%' : '', marginTop: isMobile ? '25%':'8%', marginLeft: isMobile ? '7.5%' : ''}}>
                                 <AvatarEditor
                                     ref={avatarEditorRef}
                                     image={selectedImage}
