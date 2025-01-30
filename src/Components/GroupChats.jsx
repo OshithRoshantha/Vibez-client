@@ -9,9 +9,11 @@ import { getAllGroups, getGroupInfo, createGroup, isGroupRelated, searchGroups }
 import { getAllFriends } from '../Services/FriendshipService';
 import { useWebSocket } from '../Context/WebSocketContext';
 import { uploadFile } from '../Services/s3Service';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
 
+    const isMobile = useIsMobile();
     const { messages } = useWebSocket();
     const [processedMessages, setProcessedMessages] = useState([]);
 
@@ -226,7 +228,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId}) {
   return (
     <div>
     <div>
-        <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 chats-column`} style={{backgroundColor: darkMode ? '#262729' : '', height:'100vh'}}>
+        <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 chats-column`} style={{backgroundColor: darkMode ? '#262729' : '', height:'100vh', width: isMobile ? '100vw' : ''}}>
                 <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Groups</h2>
                 <input ref={inputRef} value={searchKeyword} onChange={handleSearchChange} type="text" placeholder="Search groups by name" className={`${darkMode ? 'bg-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'bg-gray-200'} w-full px-4 py-2 mb-4 focus:outline-none focus:border-none placeholder:text-gray-500  text-gray-500 `} style={{borderRadius:'20px'}} />
                 <i className={`${darkMode ? 'text-[#abacae]' : 'text-gray-500'} bi cursor-pointer absolute text-2xl ${searchKeyword === '' ? 'bi-search' : 'bi-x-circle-fill'}`}

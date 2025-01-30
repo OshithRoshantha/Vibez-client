@@ -4,8 +4,11 @@ import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
 import { fetchUserMetaData, updateUserMetaData } from '../Services/ProfileService';
 import { uploadFile } from '../Services/s3Service';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function Profile({darkMode, setUserPicture}) {
+    
+    const isMobile = useIsMobile();
     const [isEditingName, setIsEditingName] = useState(false);
     const [isEditingAbout, setIsEditingAbout] = useState(false);
     const [profilePicHover, setProfilePicHover] = useState(false);
@@ -100,7 +103,7 @@ export default function Profile({darkMode, setUserPicture}) {
       
   return (
     <div>
-        <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 chats-column`} style={{backgroundColor: darkMode ? '#262729' : '', height:'100vh'}}>
+        <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 chats-column`} style={{backgroundColor: darkMode ? '#262729' : '', height:'100vh', width: isMobile ? '100vw' : ''}}>
                 {editPictureForm && <div className='edit-picture-form2 shadow-lg bg-white' style={{marginTop:'8%'}}>
                                 <AvatarEditor
                                     ref={avatarEditorRef}

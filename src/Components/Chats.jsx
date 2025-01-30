@@ -1,12 +1,14 @@
 import './Styles/Column2.css'
 import { useState, useEffect, useRef } from 'react';
-import { getAllChats, getFavaouriteChats, getChatPreivew, checkIsRelated, searchChats } from '../Services/ChatService';
+import { getAllChats, getFavaouriteChats, getChatPreivew, searchChats } from '../Services/ChatService';
 import DirectChatPreview from './DirectChatPreview';
 import { useWebSocket } from '../Context/WebSocketContext';
 import { Skeleton } from "@/components/ui/skeleton";
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
 
+    const isMobile = useIsMobile();
     const { messages } = useWebSocket();
     const [processedMessages, setProcessedMessages] = useState([]);
 
@@ -137,7 +139,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId}) {
 
   return (
     <div>
-        <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 chats-column`} style={{backgroundColor: darkMode ? '#262729' : '', height:'100vh'}}>
+        <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 chats-column`} style={{backgroundColor: darkMode ? '#262729' : '', height:'100vh', width: isMobile ? '100vw' : ''}}>
                 <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Chats</h2>
                 <input ref={inputRef} value={searchKeyword} onChange={handleSearchChange} type="text" placeholder="Search chats by name" className={`${darkMode ? 'bg-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'bg-gray-200'} w-full px-4 py-2 mb-4 focus:outline-none focus:border-none placeholder:text-gray-500  text-gray-500 `} style={{borderRadius:'20px'}} />
                 <i className={`${darkMode ? 'text-[#abacae]' : 'text-gray-500'} bi cursor-pointer absolute text-2xl ${searchKeyword === '' ? 'bi-search' : 'bi-x-circle-fill'}`}
