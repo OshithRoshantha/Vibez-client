@@ -21,9 +21,11 @@ import { getProductDetails } from '../Services/MarketplaceService';
 import { getUnreadGroupMessages } from '../Services/GroupsService';
 import mainDark from '@/assets/Wallpapers/dark.png';
 import mainLight from '@/assets/Wallpapers/light.png';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function Dashboard() {
 
+    const isMobile = useIsMobile();
     const { messages } = useWebSocket();
     const [processedMessages, setProcessedMessages] = useState([]);
     
@@ -338,6 +340,7 @@ export default function Dashboard() {
             <PopupNotifiter darkMode={darkMode} notifiacton={notifiacton} profileImage={profileImage} profileName={profileName}/>
         </div>}
         <div className="flex h-screen bg-background text-foreground">
+            {!isMobile && <>
             <div className={`${darkMode ? 'border-gray-600 border-r border-border':''}  flex flex-col h-screen bg-background border-r border-border button-column`}  style={{backgroundColor: darkMode ? '#262729' : ''}}>
                 <div onClick={showChatsMenu} className="flex items-center justify-center mt-4" style={{cursor: 'pointer', borderLeft:chatsMenu ? '6px solid blue': 'none'}}>
                     {unreadMessages > 0 && (
@@ -367,6 +370,7 @@ export default function Dashboard() {
                     <div className={`${profileMenu ? 'border border-primary border-3' : ''} rounded-full`} style={{ height: '60px', width: '60px', background: `center / cover no-repeat url(${userPicture})` }}></div>
                 </div>
             </div>
+            </>}
             {chatsMenu && <Chats setReceiverId={setReceiverId} darkMode={darkMode} showDirectMessages={showDirectMessages}/>}
             {groupsMenu && <GroupChats darkMode={darkMode} setGroupId={setGroupId} showGroupMessages={showGroupMessages}/>}
             {friendsMenu && <Friends setReceiverId={setReceiverId} darkMode={darkMode} showDirectMessages={showDirectMessages} setPendingRequests={setPendingRequests} fetchPendingRequests={fetchPendingRequests}/>}
@@ -375,6 +379,7 @@ export default function Dashboard() {
             {profileMenu && <Profile  darkMode={darkMode} setUserPicture={setUserPicture}/>}
             {friendInfoMenu && <FriendInfo receiverId={receiverId} darkMode={darkMode}/>}
             {groupInfoMenu && <GroupInfo groupId={groupId} darkMode={darkMode}/>}
+            {!isMobile && <>
             <div className="flex-1 p-0 messages-column" style={{height:'100vh'}}>
                 {welcomeVideo &&
                 <div className="w-full flex flexflex-column items-center justify-center" style={{height:'100vh', backgroundImage: `url(${darkMode ? mainDark : mainLight})`, backgroundSize: 'cover'}}>
@@ -388,6 +393,7 @@ export default function Dashboard() {
                 {directMessages && <DirectChat fetchUnreadMessages={fetchUnreadMessages} receiverId={receiverId} darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
                 {groupMessages && <GroupChat fetchUnreadGroupMessages={fetchUnreadGroupMessages}  darkMode={darkMode} groupId={groupId} showGroupInfoMenu={showGroupInfoMenu}/>}  
             </div>
+            </>}
         </div>
     </div>
 )

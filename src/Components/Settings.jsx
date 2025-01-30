@@ -18,8 +18,11 @@ import icon3Light from '@/assets/Icons/icon3.png';
 import icon3Dark from '@/assets/Icons/icon3dark.png';
 import icon4Light from '@/assets/Icons/icon4.png';
 import icon4Dark from '@/assets/Icons/icon4dark.png';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function Settings({darkModeOn, darkModeOff, darkMode}) {
+
+    const isMobile = useIsMobile();
     const [logoutMenu, setLogoutMenu] = useState(false);
     const [confirmAccountDeletion, setConfirmAccountDeletion] = useState(false);
     const [deleteAllChatsPopup, setDeleteAllChatsPopup] = useState(false);
@@ -142,7 +145,7 @@ export default function Settings({darkModeOn, darkModeOff, darkMode}) {
             </div>
             </div>
         </div>}
-        <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 settings-column`} style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7', height:'100vh'}}>
+        <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 settings-column`} style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7', height:'100vh', width: isMobile ? '100vw' : ''}}>
             <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Settings & Privacy</h2>
             <ul className="space-y-2 mt-5">
             <Accordion type="single" collapsible>

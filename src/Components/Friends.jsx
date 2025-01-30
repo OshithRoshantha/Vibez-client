@@ -8,9 +8,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
 import { isConnectedProfile } from '../Services/FriendshipService';
 import PreviewAcceptedRequests from './PreviewAcceptedRequests';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function Friends({darkMode, setPendingRequests, fetchPendingRequests, showDirectMessages, setReceiverId}) {
 
+    const isMobile = useIsMobile();
     const { messages } = useWebSocket();
     const [processedMessages, setProcessedMessages] = useState([]);
 
@@ -212,7 +214,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
         <div>
             <div
                 className={`${darkMode ? 'border-gray-600 border-r border-border' : 'border-r border-border'}  p-4 friends-column`}
-                style={{ backgroundColor: darkMode ? '#262729' : '', height: '100vh' }}
+                style={{ backgroundColor: darkMode ? '#262729' : '', height: '100vh' , width: isMobile ? '100vw' : ''}}
             >
                 <h2 className={`${darkMode ? 'text-white' : 'text-black'} text-lg font-semibold column-header`}>Friends</h2>
                 <input

@@ -8,9 +8,11 @@ import PreviewProduct from './PreviewProduct';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
 import { uploadMultipleFiles } from '../Services/s3Service';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function Marketplace({darkMode, showDirectMessages, setReceiverId}) {
 
+    const isMobile = useIsMobile();
     const { messages } = useWebSocket();
     const [processedMessages, setProcessedMessages] = useState([]);
 
@@ -295,7 +297,7 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
 
   return (
     <div>
-        <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 chats-column`} style={{backgroundColor: darkMode ? '#262729' : '', height:'100vh'}}>
+        <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  p-4 chats-column`} style={{backgroundColor: darkMode ? '#262729' : '', height:'100vh', width: isMobile ? '100vw' : ''}}>
             <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Marketplace</h2>
                 <input
                     ref={inputRef}
