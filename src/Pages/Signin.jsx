@@ -38,6 +38,7 @@ export default function Signin({ onLogin }) {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const [swiped, setSwiped] = useState(false);
+  const [notice, setNotice] = useState(true);
 
   function handleClickShowPassword() {
     setShowPassword(!showPassword);
@@ -132,6 +133,22 @@ export default function Signin({ onLogin }) {
 
   return (
     <div className={`main-container ${swiped ? 'swiped' : ''}`}>
+        {notice && <div>
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '9999'}}>
+            <div className={`p-6 rounded-lg shadow-lg bg-yellow-500 text-left ${isMobile ? 'w-80' : ''}`}>
+                <i onClick={() => setNotice(false)} className="bi text-3xl bi-x-circle-fill cursor-pointer absolute" style={{marginLeft:'22%'}}></i>
+                <h2 className='font-bold mb-2'>VIBEZ Beta Pre-Release Notice</h2>
+                <p className='text-sm'>Thank you for joining the VIBEZ Beta Test! 🎉<br></br><br></br> As this is an early release, you may experience:</p>
+                <ul className='ml-8 mb-2 text-sm' style={{ listStyleType: 'disc'}}>
+                    <li>Responsive issues on different devices</li>
+                    <li>Service failures or unexpected downtimes</li>
+                    <li>Performance slowdowns and increased loading times</li>
+                    <li>Bugs or glitches while using certain features</li>
+                </ul>
+                <p className='text-sm'>If you come across any bugs, errors, or unexpected behavior,<br></br> please report them to <b>oedirisuriya@gmail.com</b></p>
+            </div>
+            </div>
+        </div>}
         {!isMobile && <>
             <div className='left-side'>
                 <img src={mainLogo} className='main-logo' alt='Main Logo'/>
