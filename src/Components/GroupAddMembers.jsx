@@ -73,6 +73,7 @@ export default function GroupAddMembers({ showAddMemberMenu, darkMode, groupId }
                       className="mr-2"
                       style={{ cursor: 'pointer', width: '15px', height: '15px' }}
                       onChange={(e) => handleCheckboxChange(e, member.userId)}
+                      disabled={member.userName === 'VIBEZ'}
                     />
                     <img src={member.profilePicture} className="w-8 h-8 rounded-full mx-2" alt="Member" />
                     <div>
