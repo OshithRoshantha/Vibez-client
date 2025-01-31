@@ -136,9 +136,9 @@ export default function Signin({ onLogin }) {
         {notice && <div>
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '9999'}}>
             <div className={`p-6 rounded-lg shadow-lg bg-yellow-500 text-left ${isMobile ? 'w-80' : ''}`}>
-                <i onClick={() => setNotice(false)} className="bi text-3xl bi-x-circle-fill cursor-pointer absolute" style={{marginLeft:'22%'}}></i>
+                <i onClick={() => setNotice(false)} className="bi text-3xl bi-x-circle-fill cursor-pointer absolute" style={{marginLeft: isMobile ? '70%' : '22%', marginTop: isMobile ? '-8%':''}}></i>
                 <h2 className='font-bold mb-2'>VIBEZ Beta Pre-Release Notice</h2>
-                <p className='text-sm'>Thank you for joining the VIBEZ Beta Test! 🎉<br></br><br></br> As this is an early release, you may experience:</p>
+                <p className='text-sm'>Thank you for joining the VIBEZ Beta Test! ❤️<br></br> As this is an early release, you may experience:</p>
                 <ul className='ml-8 mb-2 text-sm' style={{ listStyleType: 'disc'}}>
                     <li>Responsive issues on different devices</li>
                     <li>Service failures or unexpected downtimes</li>
