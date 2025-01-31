@@ -154,8 +154,8 @@ export default function Profile({darkMode, setUserPicture}) {
                     {name}
                     </h2>
                     )}
-                    {!isEditingName && <i onClick={handleNameClick} className={`${darkMode ? 'text-white':''} absolute bi bi-pencil-fill`} style={{marginLeft:'24%', cursor:'pointer'}}></i>} 
-                    {isEditingName && <i onClick={() => { handleNameBlur(); updateUser();}} className={`${darkMode ? 'text-white':''} absolute bi bi-check2`} style={{marginLeft:'24%', cursor:'pointer', fontSize:'125%'}}></i>}  
+                    {!isEditingName && <i onClick={handleNameClick} className={`${darkMode ? 'text-white':''} absolute bi bi-pencil-fill`} style={{marginLeft: isMobile ? '70%' : '24%', cursor:'pointer'}}></i>} 
+                    {isEditingName && <i onClick={() => { handleNameBlur(); updateUser();}} className={`${darkMode ? 'text-white':''} absolute bi bi-check2`} style={{marginLeft: isMobile ? '70%' : '24%', cursor:'pointer', fontSize:'125%'}}></i>}  
                     </div>
                     <span className={`${darkMode ? 'text-gray-400':'text-muted-foreground'} text-sm mt-2`} > This is not your username or PIN. This name will be visible to your Vibez contacts. </span>
                 </div>
@@ -177,8 +177,8 @@ export default function Profile({darkMode, setUserPicture}) {
                     {about}
                     </p>
                     )}
-                    {!isEditingAbout && <i onClick={handleAboutClick} className={`${darkMode ? 'text-white':''} absolute bi bi-pencil-fill`} style={{marginLeft:'24%', cursor:'pointer'}}></i>}
-                    {isEditingAbout && <i onClick={() => { handleAboutBlur(); updateUser();}} className={`${darkMode ? 'text-white':''} absolute bi bi-check2`} style={{marginLeft:'24%', cursor:'pointer', fontSize:'125%'}}></i>}
+                    {!isEditingAbout && <i onClick={handleAboutClick} className={`${darkMode ? 'text-white':''} absolute bi bi-pencil-fill`} style={{marginLeft: isMobile ? '70%' : '24%', cursor:'pointer'}}></i>}
+                    {isEditingAbout && <i onClick={() => { handleAboutBlur(); updateUser();}} className={`${darkMode ? 'text-white':''} absolute bi bi-check2`} style={{marginLeft: isMobile ? '70%' : '24%', cursor:'pointer', fontSize:'125%'}}></i>}
                     </div>
                 </div>
                 </div>
