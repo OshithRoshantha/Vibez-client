@@ -187,13 +187,14 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
     }
     
     useEffect(() => {
-        fetchMarketplaceItems();
         fetchActiveListingCount();
         fetchTotalClicks();
         fetchMyListings();
     }, [productList]);
 
-
+    useEffect(() => {
+        fetchMarketplaceItems();
+    }, []);
 
     function handleFileChange(event) {
         const files = Array.from(event.target.files); 

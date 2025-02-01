@@ -157,7 +157,7 @@ export default function Dashboard() {
                         }
                 }
                 else if (lastMessage.action === 'marketplaceService'){
-                    if (lastMessage.productAction === 'ADDED'){
+                    if (lastMessage.productAction === 'ADDED' && lastMessage.sellerId === sessionStorage.getItem('userId')){
                         const productDetails = await getProductDetails(lastMessage.body);
                         setProfileImage(productDetails.productPhotos[0]);
                         setProfileName('');
