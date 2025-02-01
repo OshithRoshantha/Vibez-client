@@ -44,8 +44,10 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
 
   const fetchChatMessages = async () => {
     try{
+      setChatsLoading(true);
       const response = await getGroupMessages(groupId);
       setMessage(response);
+      console.log(response);
     }
     finally{
       setChatsLoading(false);
@@ -84,7 +86,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
                           break;
                       }
                       case 'messageService': {
-                          if(lastMessage.type === 'group'){
+                          if(lastMessage.type === 'group' && lastMessage.groupId === groupId){
                             if (lastMessage.sender === sessionStorage.getItem('userId')) {lastMessage.payload.isSendByMe = true;} 
                             else {lastMessage.payload.isSendByMe = false;} 
                             setMessage(prevMessage => [...prevMessage, lastMessage.payload]);
@@ -254,7 +256,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
                     key={index}
                     time={message.timestamp}
                     message={message.message}
-                    senderName={message.senderName}
+                    senderName={message.sender}
                   />
                 )
               )
