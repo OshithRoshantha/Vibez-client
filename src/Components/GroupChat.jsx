@@ -88,7 +88,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
                       case 'messageService': {
                           if(lastMessage.type === 'group' && lastMessage.groupId === groupId){
                             if (lastMessage.sender === sessionStorage.getItem('userId')) {lastMessage.payload.isSendByMe = true;} 
-                            else {lastMessage.payload.isSendByMe = false;} 
+                            else {lastMessage.payload.isSendByMe = false; lastMessage.payload.sender = lastMessage.payload.senderName;} 
                             setMessage(prevMessage => [...prevMessage, lastMessage.payload]);
                             markMessagesAsRead();
                           }                        
