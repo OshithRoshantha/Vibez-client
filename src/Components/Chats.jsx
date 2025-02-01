@@ -118,19 +118,17 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
             for (const lastMessage of newMessages) {
 
                 if (lastMessage.action === 'messageService') {
-                    await Promise.all([fetchAllChats(), fetchFavouriteChats()]); 
+                    await Promise.all([fetchAllChats()]); 
                 }
 
                 if(lastMessage.action === 'profileService'){
                     if(chats.some(chat => chat.friendId === lastMessage.body)){ 
                         fetchAllChats();
-                        fetchFavouriteChats();
                     }
                 }
 
                 if(lastMessage.action === 'accountDelete' && lastMessage.typeOfAction === 'directChat'){
                     fetchAllChats();
-                    fetchFavouriteChats();
                 }
 
             }

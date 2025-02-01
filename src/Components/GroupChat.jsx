@@ -1,7 +1,7 @@
 import GroupReceiveMessage from "./GroupReceiveMessage";
 import GroupSendMessage from "./GroupSendMessage";
 import { useState, useEffect, useRef } from "react";
-import { getGroupInfo, getGroupMessages, markGroupMessagesAsRead } from '../Services/GroupsService';
+import { getGroupInfo, getGroupMessages, markGroupMessagesAsRead, isGroupRelated } from '../Services/GroupsService';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
 import TemporalMessage from "./TemporalMessage";
@@ -76,7 +76,8 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
                   switch (lastMessage.action) {
                       case 'groupService': {
                           fetchGroupInfo();
-                          if (lastMessage.groupId === groupId) {
+                          const isRelated = await isGroupRelated(lastMessage.groupId);
+                          if (lastMessage.groupId === groupId && !isRelated) {
                               setCustomText("You can't send messages to this group beacuse you're no longer a member.");
                               setRemovedFromGroup(true);
                           }
@@ -84,7 +85,9 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
                       }
                       case 'messageService': {
                           if(lastMessage.type === 'group'){
-                            fetchChatMessages();
+                            if (lastMessage.sender === sessionStorage.getItem('userId')) {lastMessage.payload.isSendByMe = true;} 
+                            else {lastMessage.payload.isSendByMe = false;} 
+                            setMessage(prevMessage => [...prevMessage, lastMessage.payload]);
                             markMessagesAsRead();
                           }                        
                         break;
@@ -251,7 +254,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
                     key={index}
                     time={message.timestamp}
                     message={message.message}
-                    senderName={message.sender}
+                    senderName={message.senderName}
                   />
                 )
               )
