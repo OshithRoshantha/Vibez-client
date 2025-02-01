@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { groupAddList } from '../Services/GroupsService';
 import { Skeleton } from '@/components/ui/skeleton';
-import { addMembers } from '../Services/GroupsService';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { useWebSocket } from '../Context/WebSocketContext';
 
 export default function GroupAddMembers({ showAddMemberMenu, darkMode, groupId }) {
 
   const isMobile = useIsMobile();
+  const { addMembers } = useWebSocket();
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [addingMemberIds, setAddingMemberIds] = useState([]);
