@@ -5,7 +5,7 @@ import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
 import GroupChatPreview from './GroupChatPreview';
 import { Skeleton } from "@/components/ui/skeleton";
-import { getAllGroups, getGroupInfo, createGroup, isGroupRelated, searchGroups } from '../Services/GroupsService';
+import { getAllGroups, getGroupInfo, searchGroups } from '../Services/GroupsService';
 import { getAllFriends } from '../Services/FriendshipService';
 import { useWebSocket } from '../Context/WebSocketContext';
 import { uploadFile } from '../Services/s3Service';
@@ -14,7 +14,7 @@ import { useIsMobile } from '../hooks/useIsMobile';
 export default function GroupChats({showGroupMessages, darkMode, setGroupId, setShowMobileRight}) {
 
     const isMobile = useIsMobile();
-    const { messages } = useWebSocket();
+    const { messages, createGroup } = useWebSocket();
     const [processedMessages, setProcessedMessages] = useState([]);
 
     const [groups, setGroups] = useState([]);

@@ -1,7 +1,7 @@
 import GroupReceiveMessage from "./GroupReceiveMessage";
 import GroupSendMessage from "./GroupSendMessage";
 import { useState, useEffect, useRef } from "react";
-import { getGroupInfo, isGroupRelated, getGroupMessages, sendMessage, markGroupMessagesAsRead } from '../Services/GroupsService';
+import { getGroupInfo, getGroupMessages, markGroupMessagesAsRead } from '../Services/GroupsService';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
 import TemporalMessage from "./TemporalMessage";
@@ -12,7 +12,7 @@ import { useIsMobile } from '../hooks/useIsMobile';
 export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchUnreadGroupMessages, setShowMobileRight, setGroupsMenu}) {
 
   const isMobile = useIsMobile();
-  const { messages } = useWebSocket();
+  const { messages, sendGroupMessage } = useWebSocket();
   const [processedMessages, setProcessedMessages] = useState([]);
 
   const chatRef = useRef(null);
@@ -75,9 +75,8 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
               for (const lastMessage of newMessages) {
                   switch (lastMessage.action) {
                       case 'groupService': {
-                          const isRelated = await isGroupRelated(lastMessage.groupId);
                           fetchGroupInfo();
-                          if (lastMessage.groupId === groupId && !isRelated) {
+                          if (lastMessage.groupId === groupId) {
                               setCustomText("You can't send messages to this group beacuse you're no longer a member.");
                               setRemovedFromGroup(true);
                           }
@@ -154,7 +153,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
   }, []); 
 
   const handleSendMessage = async () => {
-    await sendMessage(groupId, typedMessage);
+    await sendGroupMessage(groupId, typedMessage);
     setTemporalMessageContent(typedMessage);
     setTypedMessage('');
   }
