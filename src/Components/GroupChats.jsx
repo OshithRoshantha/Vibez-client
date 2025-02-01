@@ -80,7 +80,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
                                         ? {
                                             ...group,
                                             lastMessage: lastMessage.payload.message,
-                                            lastMessageSender: lastMessage.payload.sender === sessionStorage.getItem('userId') ? 'Me' : lastMessage.payload.senderName, 
+                                            lastMessageSender: lastMessage.payload.senderName === sessionStorage.getItem('userId') ? 'Me' : lastMessage.payload.senderName, 
                                             lastUpdate: convertToISOTimestamp(lastMessage.payload.timestamp) 
                                           }
                                         : group

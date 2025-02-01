@@ -154,7 +154,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
           }
           for (const lastMessage of newMessages) {
               if (lastMessage.action === 'messageService') {
-                if (lastMessage.type === 'direct' && lastMessage.sender === receiverId) {
+                if (lastMessage.type === 'direct') {
                 if(lastMessage.sender === receiverId){lastMessage.payload.isSendByMe = false;}
                 else {lastMessage.payload.isSendByMe = true;}
                 setMessage(prevMessage => [...prevMessage, lastMessage.payload]);
