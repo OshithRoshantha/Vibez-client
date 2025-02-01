@@ -134,18 +134,12 @@ export default function Signin({ onLogin }) {
   return (
     <div className={`main-container ${swiped ? 'swiped' : ''}`}>
         {notice && <div>
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '9999'}}>
-            <div className={`p-6 rounded-lg shadow-lg bg-yellow-500 text-left ${isMobile ? 'w-80' : ''}`}>
-                <i onClick={() => setNotice(false)} className="bi text-3xl bi-x-circle-fill cursor-pointer absolute" style={{marginLeft: isMobile ? '70%' : '22%', marginTop: isMobile ? '-8%':''}}></i>
-                <h2 className='font-bold mb-2'>VIBEZ Beta Pre-Release Notice</h2>
-                <p className='text-sm'>Thank you for joining the VIBEZ Beta Test! ❤️<br></br> As this is an early release, you may experience:</p>
-                <ul className='ml-8 mb-2 text-sm' style={{ listStyleType: 'disc'}}>
-                    <li>Responsive issues on different devices</li>
-                    <li>Service failures or unexpected downtimes</li>
-                    <li>Performance slowdowns and increased loading times</li>
-                    <li>Bugs or glitches while using certain features</li>
-                </ul>
-                <p className='text-sm'>If you come across any bugs, errors, or unexpected behavior,<br></br> please report them to <b>oedirisuriya@gmail.com</b></p>
+            <div className={`fixed inset-0 flex ${isMobile ? 'items-end' : 'items-start'} justify-center bg-black bg-opacity-50`} style={{ zIndex: '9999' }}>
+            <div className={`p-0 py-1 shadow-lg bg-yellow-600 top-0 text-center w-full`}>
+                <div className={`flex ${isMobile ? 'flex-col-reverse p-3' : 'flex-row'} items-center justify-between`}>
+                <p className="flex-1"><b>Beta Mode:</b> Since VIBEZ services are on testing, this may lead to system and server failures. Report issues to <b>oedirisuriya@gmail.com</b>. Thank you for your understanding and support!</p>
+                <i onClick={() => setNotice(false)} className={`bi bi-x-circle-fill cursor-pointer ${isMobile ? 'mb-2  text-3xl' : 'mr-10  text-2xl'}`}></i>
+                </div>
             </div>
             </div>
         </div>}
