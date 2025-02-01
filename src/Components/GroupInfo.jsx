@@ -4,7 +4,7 @@ import GroupMemberList2 from './GroupMemberList2';
 import GroupAddMembers from './GroupAddMembers';
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
-import { checkAdmin, getGroupInfo } from '../Services/GroupsService';
+import { checkAdmin, getGroupInfo, isGroupRelated } from '../Services/GroupsService';
 import { fetchUserMetaDataById } from '../Services/ProfileService';
 import { useWebSocket } from '../Context/WebSocketContext';
 import { uploadFile } from '../Services/s3Service';
@@ -90,8 +90,9 @@ export default function GroupInfo({darkMode, groupId, setShowMobileRight, showGr
         for (const lastMessage of newMessages) {
             switch (lastMessage.action) {
                 case 'groupService': {
-                    fetchGroupInfo();
-                  if (lastMessage.groupId === groupId) {
+                  fetchGroupInfo();
+                  const isRelated = await isGroupRelated(lastMessage.groupId);
+                  if (lastMessage.groupId === groupId && !isRelated) {
                     setRemovedFromGroup(true);
                   }
                   break;

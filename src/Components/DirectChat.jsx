@@ -71,6 +71,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
 
   const fetchChatMessages = async () => {
     try{
+      setChatsLoading(true);
       const response = await getChatMessages(receiverId);
       setMessage(response);
     }
@@ -152,10 +153,13 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
               return;
           }
           for (const lastMessage of newMessages) {
-
               if (lastMessage.action === 'messageService') {
-                fetchChatMessages();
+                if (lastMessage.type === 'direct'){
+                if(lastMessage.sender === receiverId){lastMessage.payload.isSendByMe = false;}
+                else {lastMessage.payload.isSendByMe = true;}
+                setMessage(prevMessage => [...prevMessage, lastMessage.payload]);
                 doMarkAsRead();
+                }
               }
 
               if(lastMessage.action === 'profileService'){
