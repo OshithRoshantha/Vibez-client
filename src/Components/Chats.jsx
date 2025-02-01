@@ -118,7 +118,23 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
             for (const lastMessage of newMessages) {
 
                 if (lastMessage.action === 'messageService') {
-                    await Promise.all([fetchAllChats()]); 
+                    const hasMatchingChat = chats.some(chat => chat.chatId === lastMessage.chatId);
+                    if (hasMatchingChat) {
+                      setChats(prevChats => 
+                        prevChats.map(chat => 
+                          chat.chatId === lastMessage.chatId
+                            ? {
+                                ...chat,
+                                lastMessage: lastMessage.payload.message,
+                                lastMessageSender: lastMessage.payload.sender === sessionStorage.getItem('userId') ? 'Me' : lastMessage.payload.senderName,
+                                lastActiveTime: lastMessage.payload.time
+                              }
+                            : chat
+                        )
+                      );
+                    } else {
+                      fetchAllChats(); 
+                    }
                 }
 
                 if(lastMessage.action === 'profileService'){
