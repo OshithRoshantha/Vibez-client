@@ -7,7 +7,7 @@ export default function DirectChatPreview({chatId, showDirectMessages, darkMode,
 
     const isMobile = useIsMobile();
     const [isUnread, setIsUnread] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const handleChatClick = () => {
         if(friendName !== 'No longer available') {
