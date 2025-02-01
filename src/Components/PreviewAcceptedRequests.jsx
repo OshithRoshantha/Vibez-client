@@ -3,13 +3,14 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { unFriend } from '../Services/FriendshipService';
 import { useState } from 'react';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { useWebSocket } from "../Context/WebSocketContext";
 
 export default function PreviewAcceptedRequests({darkMode, friendshipId, profileName, profilePicture, profileAbout, fetchFriendships, showDirectMessages, setReceiverId, friendId, setShowMobileRight}) {
   
     const isMobile = useIsMobile();
+    const { unFriend } = useWebSocket();
     const [isUnfriended, setIsUnfriended] = useState(false);
     const [blockPopup, setBlockPopup] = useState(false);
     const [unfriendPopup, setUnfriendPopup] = useState(false);

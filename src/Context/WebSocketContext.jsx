@@ -16,7 +16,6 @@ export const WebSocketProvider = ({ children, isLoggedIn }) => {
       const ws = new WebSocket(`ws://${API}/vibez-websocket?token=${token}`);
 
       ws.onopen = () => {
-        // Subscribe to all topics
         ws.send(JSON.stringify({ action: 'subscribe', userId, topic: 'profileService' }));
         ws.send(JSON.stringify({ action: 'subscribe', userId, topic: 'friendshipService' }));
         ws.send(JSON.stringify({ action: 'subscribe', userId, topic: 'marketplaceService' }));
