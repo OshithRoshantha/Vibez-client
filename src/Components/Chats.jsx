@@ -102,7 +102,22 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
         finally {
             setLoading2(false);
         }
-    };    
+    };  
+    
+    const convertToISOTimestamp = (time) => {
+        const [hours, minutes] = time.split(':').map(Number); 
+        const now = new Date(); 
+        const newDate = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          hours,
+          minutes,
+          now.getSeconds(),
+          now.getMilliseconds()
+        );
+        return newDate.toISOString(); 
+      };
     
    useEffect(() => {
         const handleMessages = async () => {
@@ -127,7 +142,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
                                 ...chat,
                                 lastMessage: lastMessage.payload.message,
                                 lastMessageSender: lastMessage.payload.sender === sessionStorage.getItem('userId') ? 'Me' : lastMessage.payload.senderName,
-                                lastActiveTime: lastMessage.payload.time
+                                lastActiveTime: convertToISOTimestamp(lastMessage.payload.timestamp)
                               }
                             : chat
                         )
