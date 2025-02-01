@@ -39,6 +39,21 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
 
     const defaultImage = "./src/assets/groupDefault.jpg";
 
+    const convertToISOTimestamp = (time) => {
+        const [hours, minutes] = time.split(':').map(Number); 
+        const now = new Date(); 
+        const newDate = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          hours,
+          minutes,
+          now.getSeconds(),
+          now.getMilliseconds()
+        );
+        return newDate.toISOString(); 
+    };
+
     useEffect(() => {
         const handleMessages = async () => {
             if (messages.length === 0) {
@@ -56,7 +71,25 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
                     }
                     case 'messageService': {
                         if(lastMessage.type === 'group'){
-                            fetchAllGroups();
+                            if (lastMessage.action === 'messageService') {
+                                const hasMatchingGroup = groups.some(group => group.groupId === lastMessage.groupId);
+                                if (hasMatchingGroup) {
+                                  setGroups(prevGroups => 
+                                    prevGroups.map(group => 
+                                      group.groupId === lastMessage.groupId
+                                        ? {
+                                            ...group,
+                                            lastMessage: lastMessage.payload.message,
+                                            lastMessageSender: lastMessage.payload.sender === sessionStorage.getItem('userId') ? 'Me' : lastMessage.payload.senderName, 
+                                            lastUpdate: convertToISOTimestamp(lastMessage.payload.timestamp) 
+                                          }
+                                        : group
+                                    )
+                                  );
+                                } else {
+                                  fetchAllGroups(); 
+                                }
+                              }
                         }                        
                       break;
                     }
