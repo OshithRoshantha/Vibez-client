@@ -2,13 +2,15 @@ import { useRef, useState, useEffect} from 'react';
 import './Styles/Column2.css'
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
-import { fetchUserMetaData, updateUserMetaData } from '../Services/ProfileService';
+import { fetchUserMetaData } from '../Services/ProfileService';
 import { uploadFile } from '../Services/s3Service';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { useWebSocket } from '../Context/WebSocketContext';
 
 export default function Profile({darkMode, setUserPicture}) {
     
     const isMobile = useIsMobile();
+    const { updateUserMetaData } = useWebSocket();
     const [isEditingName, setIsEditingName] = useState(false);
     const [isEditingAbout, setIsEditingAbout] = useState(false);
     const [profilePicHover, setProfilePicHover] = useState(false);

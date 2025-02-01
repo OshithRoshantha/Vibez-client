@@ -1,9 +1,11 @@
 import './Styles/Column2.css'
 import { useState, useEffect } from 'react';
-import { getProductDetails, updateListing } from  '../Services/MarketplaceService';
+import { getProductDetails } from  '../Services/MarketplaceService';
+import { useWebSocket } from '../Context/WebSocketContext';
 
 export default function EditListing({showYourListningMenu, darkMode, editingProductId, autoScroll}) {
 
+    const { updateListing } = useWebSocket();
     const [title, setTitle] = useState("");
     const [price, setPrice] = useState("");
     const [category, setCategory] = useState("");

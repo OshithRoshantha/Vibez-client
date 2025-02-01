@@ -61,30 +61,6 @@ export const getdarkModePreference = async () => {
     return response.data.darkMode;   
 }
 
-
-export const updateUserMetaData = async (userName: string, about: string, profilePicture: string): Promise<void> => {
-    return new Promise((resolve) => {
-        const token = sessionStorage.getItem('token');
-        const userId = sessionStorage.getItem('userId');
-
-        const socket = new WebSocket(`ws://${API}/vibez-websocket?token=${token}`);
-
-        socket.onopen = () => {
-            const message = {
-                action: 'profileService',
-                body: {
-                    userId,
-                    userName,
-                    about,
-                    profilePicture,
-                },
-            };
-            socket.send(JSON.stringify(message));
-            resolve(); 
-        };
-    });
-};
-
 export const fetchPeopleMetaData = async (userId: string) => {
     const response = await axios.get(`http://${API}/vibez/profile/${userId}`, {
         headers: {
@@ -93,27 +69,6 @@ export const fetchPeopleMetaData = async (userId: string) => {
     });
     return response.data;
 }
-
-export const deleteUser = async (email: string): Promise<void> => {
-    return new Promise((resolve) => {
-        const token = sessionStorage.getItem('token');
-        const userId = sessionStorage.getItem('userId');
-
-        const socket = new WebSocket(`ws://${API}/vibez-websocket?token=${token}`);
-
-        socket.onopen = () => {
-            const message = {
-                action: 'accountDelete',
-                body: {
-                    userId,
-                    email
-                },
-            };
-            socket.send(JSON.stringify(message));
-            resolve(); 
-        };
-    });
-};
 
 export const deleteDirectChats = async () => {
     await axios.put(
