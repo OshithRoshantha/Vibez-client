@@ -123,6 +123,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
     markMessagesAsRead();
     fetchGroupInfo();
     fetchChatMessages();
+    setRemovedFromGroup(false);
   }, [groupId]);
 
   function handleScroll() {
