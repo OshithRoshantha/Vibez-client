@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
-import { sendFriendRequest, getFriendshipStatus, getFriendshipId, acceptFriendRequest } from '../Services/FriendshipService';
+import { getFriendshipStatus, getFriendshipId } from '../Services/FriendshipService';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useIsMobile } from '../hooks/useIsMobile';
+import { useWebSocket } from '../Context/WebSocketContext';
 
 export default function SearchResult({ darkMode, profileName, profileAbout, profileImage, profileId, showDirectMessages, setReceiverId, setShowMobileRight }) {
   
   const isMobile = useIsMobile();
+  const { sendFriendRequest, acceptFriendRequest } = useWebSocket();
   const [friendshipStatus, setFriendshipStatus] = useState('');
   const [friendshipId, setFriendshipId] = useState('');
   const [loading, setLoading] = useState(true); 

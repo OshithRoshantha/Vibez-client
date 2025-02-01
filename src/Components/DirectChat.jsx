@@ -7,7 +7,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { fetchUserMetaDataById } from '../Services/ProfileService';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
-import { getChatMessages, sendMessage, markAsRead } from '../Services/ChatService';
+import { getChatMessages, markAsRead } from '../Services/ChatService';
 import { getChatHistory, getSmartReply } from '../Services/VibezIntelligence';
 import TemporalMessage from "./TemporalMessage";
 import { DotLoader } from 'react-spinners';
@@ -19,7 +19,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
 
   const isMobile = useIsMobile();
   const chatRef = useRef(null);
-  const { messages } = useWebSocket();
+  const { messages, sendPrivateMessage } = useWebSocket();
   const [processedMessages, setProcessedMessages] = useState([]);
 
   const [showScrollButton, setShowScrollButton] = useState(false);
@@ -197,7 +197,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
   }, [message]);
 
   const handleSendMessage = async () => {
-    await sendMessage(receiverId, typedMessage);
+    await sendPrivateMessage(receiverId, typedMessage);
     setTemporalMessageContent(typedMessage);
     setTypedMessage('');
   }

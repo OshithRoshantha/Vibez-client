@@ -3,13 +3,12 @@ import { getProductDetails, isUserSeller, addClick } from  '../Services/Marketpl
 import { useState, useEffect } from 'react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
-import { sendMessage } from '../Services/ChatService';
 import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function ProductInfo({expandingProductId, darkMode, showDirectMessages, setReceiverId, setShowMobileRight}) {
 
   const isMobile = useIsMobile();
-  const { messages } = useWebSocket();
+  const { messages, sendPrivateMessage } = useWebSocket();
   const [processedMessages, setProcessedMessages] = useState([]);
 
   const [product, setProduct] = useState(null); 
@@ -79,7 +78,7 @@ export default function ProductInfo({expandingProductId, darkMode, showDirectMes
 
     const sendMessageToSeller = async () => {
       const typedMessage = `I'm interested in the ${product.productTitle} listed by you at LKR ${product.price}. Is it still available?`;
-      await sendMessage(product.sellerId, typedMessage);
+      await sendPrivateMessage(product.sellerId, typedMessage);
     }
 
   return (
