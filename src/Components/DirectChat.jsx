@@ -25,7 +25,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
 
   const [showScrollButton, setShowScrollButton] = useState(false);
   const chatWallpaper = darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)';
-  const [magicReplyButton, setMagicReplyButton] = useState(true);
+  const [magicReplyButton, setMagicReplyButton] = useState(false);
   const [userName, setUserName] = useState('');
   const [userAvatar, setUserAvatar] = useState('');
   const [loading, setLoading] = useState(true);
@@ -191,17 +191,12 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
 
   useEffect(() => {
     fetchChatMessages();
-    if (message.length == 0){
-      //setMagicReplyButton(false);
-    }
   }, [receiverId]);
 
   useEffect(() => {
     if (message.length > 0) {
       setTemporalMessage(false);
-    }
-    else{
-      //setMagicReplyButton(false);
+      setMagicReplyButton(true);
     }
   }, [message]);
 
@@ -317,7 +312,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
         {temporalMessage && <TemporalMessage message={temporalMessageContent}/> }    
         {magicReplyButton && 
         <div style={{position:'absolute', bottom: isMobile ? '12%' : '17%', width: isMobile ? '88%' : '59%', display:'flex', justifyContent:'center', alignItems:'center'}}>
-      <div onClick={fetchSmartReply} className="absolute cursor-pointer bg-transparent rounded-full">
+        <div onClick={fetchSmartReply} className="absolute cursor-pointer bg-white rounded-full">
         <AnimatedGradientText>
           <span
             className={`inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:200%_100%] bg-clip-text text-transparent`}
