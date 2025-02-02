@@ -3,12 +3,13 @@ import SendMessage from "./SendMessage";
 import { useState, useEffect, useRef } from "react";
 import { ChevronRight } from "lucide-react";
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
+import { NeonGradientCard } from "@/components/ui/neon-gradient-card";
 import CircularProgress from '@mui/material/CircularProgress';
 import { fetchUserMetaDataById } from '../Services/ProfileService';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
-import { getChatMessages, sendMessage, markAsRead } from '../Services/ChatService';
-import { getChatHistory, getSmartReply } from '../Services/VibezIntelligence';
+import { getChatMessages, markAsRead } from '../Services/ChatService';
+import { getSmartReply } from '../Services/VibezIntelligence';
 import TemporalMessage from "./TemporalMessage";
 import { DotLoader } from 'react-spinners';
 import { validateFriendship, getFriendshipId } from '../Services/FriendshipService';
@@ -19,12 +20,12 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
 
   const isMobile = useIsMobile();
   const chatRef = useRef(null);
-  const { messages } = useWebSocket();
+  const { messages, sendPrivateMessage } = useWebSocket();
   const [processedMessages, setProcessedMessages] = useState([]);
 
   const [showScrollButton, setShowScrollButton] = useState(false);
   const chatWallpaper = darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)';
-  const [magicReplyButton, setMagicReplyButton] = useState(true);
+  const [magicReplyButton, setMagicReplyButton] = useState(false);
   const [userName, setUserName] = useState('');
   const [userAvatar, setUserAvatar] = useState('');
   const [loading, setLoading] = useState(true);
@@ -71,6 +72,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
 
   const fetchChatMessages = async () => {
     try{
+      setChatsLoading(true);
       const response = await getChatMessages(receiverId);
       setMessage(response);
     }
@@ -108,9 +110,9 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
   const fetchSmartReply = async () => {
     try{
       setGenerateReply(true);
-      const chatHistory = await getChatHistory(receiverId);
-      const response = await getSmartReply(chatHistory);
-      setTypedMessage(response);
+      const response = await getSmartReply(receiverId);
+      setTypedMessage(response.reply);
+      inputRef.current.focus();
     }
     finally{
       setGenerateReply(false);
@@ -119,7 +121,6 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
 
   useEffect(() => {
     doMarkAsRead();
-   // setMagicReplyButton(false);
     setIsFriend(true);
   }, [receiverId]); 
   
@@ -152,10 +153,13 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
               return;
           }
           for (const lastMessage of newMessages) {
-
               if (lastMessage.action === 'messageService') {
-                fetchChatMessages();
+                if (lastMessage.type === 'direct' && (lastMessage.sender === receiverId || lastMessage.sender === sessionStorage.getItem('userId')) ) {
+                if(lastMessage.sender === receiverId){lastMessage.payload.isSendByMe = false;}
+                else {lastMessage.payload.isSendByMe = true;}
+                setMessage(prevMessage => [...prevMessage, lastMessage.payload]);
                 doMarkAsRead();
+                }
               }
 
               if(lastMessage.action === 'profileService'){
@@ -197,7 +201,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
   }, [message]);
 
   const handleSendMessage = async () => {
-    await sendMessage(receiverId, typedMessage);
+    await sendPrivateMessage(receiverId, typedMessage);
     setTemporalMessageContent(typedMessage);
     setTypedMessage('');
   }
@@ -306,18 +310,16 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
             )
           )}  
         {temporalMessage && <TemporalMessage message={temporalMessageContent}/> }    
-        {!magicReplyButton && 
-        <div style={{position:'absolute', bottom: isMobile ? '12%' : '14%', width: isMobile ? '88%' : '59%', display:'flex', justifyContent:'center', alignItems:'center'}}>
-          dfdf
+        {magicReplyButton && 
+        <div style={{position:'absolute', bottom: isMobile ? '12%' : '17%', width: isMobile ? '88%' : '59%', display:'flex', justifyContent:'center', alignItems:'center'}}>
         <div onClick={fetchSmartReply} className="absolute cursor-pointer bg-white rounded-full">
-          <AnimatedGradientText>
-            <span
-              className={`inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:200%_100%] bg-clip-text text-transparent`}
-            >
-              Magic Reply
-            </span>
-            <ChevronRight className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
-          </AnimatedGradientText>          
+        <AnimatedGradientText>
+          <span
+            className={`inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:200%_100%] bg-clip-text text-transparent`}
+          >
+           <b>Magic Reply 🪄</b> 
+          </span>
+        </AnimatedGradientText>           
         </div>
         </div>}
         </div>

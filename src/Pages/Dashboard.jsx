@@ -157,7 +157,7 @@ export default function Dashboard() {
                         }
                 }
                 else if (lastMessage.action === 'marketplaceService'){
-                    if (lastMessage.productAction === 'ADDED'){
+                    if (lastMessage.productAction === 'ADDED' && lastMessage.sellerId === sessionStorage.getItem('userId')){
                         const productDetails = await getProductDetails(lastMessage.body);
                         setProfileImage(productDetails.productPhotos[0]);
                         setProfileName('');
@@ -327,7 +327,7 @@ export default function Dashboard() {
   return (
     <div className='dashboard-conatiner'>
         {showSessionExipred && <>
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '999'}}>
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" style={{zIndex: '9999999'}}>
                 <div className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} align-middle justify-center flex flex-col p-6 rounded-lg shadow-lg text-left ${isMobile ? 'w-80' : ''}`}>
                 <h2 className={`${darkMode ? 'text-white':'text-black'} text-lg text-center font-semibold text-foreground`}>Your session has expired</h2>
                 <p className={`${darkMode ? 'text-gray-300' : 'text-muted-foreground'} text-center mb-4`}>Please log in again to continue.</p>

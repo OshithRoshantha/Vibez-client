@@ -61,7 +61,8 @@ export default {
   			'marquee-vertical': 'marquee-vertical var(--duration) linear infinite',
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out',
-  			gradient: 'gradient 8s linear infinite'
+  			gradient: 'gradient 8s linear infinite',
+  			'background-position-spin': 'background-position-spin 3000ms infinite alternate'
   		},
   		keyframes: {
   			orbit: {
@@ -107,6 +108,14 @@ export default {
   			gradient: {
   				to: {
   					backgroundPosition: 'var(--bg-size) 0'
+  				}
+  			},
+  			'background-position-spin': {
+  				'0%': {
+  					backgroundPosition: 'top center'
+  				},
+  				'100%': {
+  					backgroundPosition: 'bottom center'
   				}
   			}
   		}

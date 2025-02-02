@@ -38,6 +38,7 @@ export default function Signin({ onLogin }) {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const [swiped, setSwiped] = useState(false);
+  const [notice, setNotice] = useState(true);
 
   function handleClickShowPassword() {
     setShowPassword(!showPassword);
@@ -132,6 +133,16 @@ export default function Signin({ onLogin }) {
 
   return (
     <div className={`main-container ${swiped ? 'swiped' : ''}`}>
+        {notice && <div>
+            <div className={`fixed inset-0 flex ${isMobile ? 'items-end' : 'items-start'} justify-center bg-black bg-opacity-50`} style={{ zIndex: '9999' }}>
+            <div className={`p-0 py-1 shadow-lg bg-yellow-600 top-0 text-center w-full`}>
+                <div className={`flex ${isMobile ? 'flex-col-reverse p-3' : 'flex-row'} items-center justify-between`}>
+                <p className="flex-1"><b>Beta Mode:</b> Since VIBEZ services are on testing, this may lead to system and server failures. Report issues to <b>oedirisuriya@gmail.com</b>. Thank you for your understanding and support!</p>
+                <i onClick={() => setNotice(false)} className={`bi bi-x-circle-fill cursor-pointer ${isMobile ? 'mb-2  text-3xl' : 'mr-10  text-2xl'}`}></i>
+                </div>
+            </div>
+            </div>
+        </div>}
         {!isMobile && <>
             <div className='left-side'>
                 <img src={mainLogo} className='main-logo' alt='Main Logo'/>

@@ -1,9 +1,10 @@
-import { acceptFriendRequest } from '../Services/FriendshipService'
 import { useState } from 'react'
+import { useWebSocket } from '../Context/WebSocketContext';
 
 export default function PreviewPendingRequests({darkMode, friendshipId, profileId, profileName, profilePicture, status, profileAbout}) {
 
   const [isAccepted, setIsAccepted] = useState(true);
+  const { acceptFriendRequest } = useWebSocket();
   
   const approveFriendRequest = async () => {
     await acceptFriendRequest(friendshipId);

@@ -52,28 +52,6 @@ export const getChatMessages = async (reciverId: string) => {
     return response.data;
 }
 
-export const sendMessage = async (receiverId: string, messageToSend: string): Promise<void> => {
-    return new Promise((resolve) => {
-        const token = sessionStorage.getItem('token');
-        const senderId = sessionStorage.getItem('userId');
-
-        const socket = new WebSocket(`ws://${API}/vibez-websocket?token=${token}`);
-
-        socket.onopen = () => {
-            const message = {
-                action: 'messageService',
-                body: {
-                    senderId,
-                    receiverId,
-                    message: messageToSend,
-                },
-            };
-        socket.send(JSON.stringify(message));
-        resolve(); 
-        };
-    });   
-}
-
 export const markAsRead = async (receiverId: string) => {
     const userId = sessionStorage.getItem('userId');
     const token = sessionStorage.getItem('token');

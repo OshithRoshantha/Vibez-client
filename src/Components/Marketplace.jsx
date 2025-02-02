@@ -3,7 +3,7 @@ import './Styles/Column2.css'
 import ProductInfo from './ProductInfo';
 import YourListings from './YourListings';
 import EditListing from './EditListing';
-import { getMarketplaceItems, addListing, getActiveListingCount, getMyListings, isUserSeller, getTotalClicks, searchProducts} from  '../Services/MarketplaceService';
+import { getMarketplaceItems, getActiveListingCount, getMyListings, isUserSeller, getTotalClicks, searchProducts} from  '../Services/MarketplaceService';
 import PreviewProduct from './PreviewProduct';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
@@ -13,7 +13,7 @@ import { useIsMobile } from '../hooks/useIsMobile';
 export default function Marketplace({darkMode, showDirectMessages, setReceiverId, setShowMobileRight}) {
 
     const isMobile = useIsMobile();
-    const { messages } = useWebSocket();
+    const { messages, addListing } = useWebSocket();
     const [processedMessages, setProcessedMessages] = useState([]);
 
     const [productList, setProductList] = useState([]);
@@ -187,13 +187,14 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
     }
     
     useEffect(() => {
-        fetchMarketplaceItems();
         fetchActiveListingCount();
         fetchTotalClicks();
         fetchMyListings();
     }, [productList]);
 
-
+    useEffect(() => {
+        fetchMarketplaceItems();
+    }, []);
 
     function handleFileChange(event) {
         const files = Array.from(event.target.files); 

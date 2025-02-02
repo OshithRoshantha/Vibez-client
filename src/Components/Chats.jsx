@@ -102,7 +102,22 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
         finally {
             setLoading2(false);
         }
-    };    
+    };  
+    
+    const convertToISOTimestamp = (time) => {
+        const [hours, minutes] = time.split(':').map(Number); 
+        const now = new Date(); 
+        const newDate = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          hours,
+          minutes,
+          now.getSeconds(),
+          now.getMilliseconds()
+        );
+        return newDate.toISOString(); 
+      };
     
    useEffect(() => {
         const handleMessages = async () => {
@@ -118,19 +133,33 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
             for (const lastMessage of newMessages) {
 
                 if (lastMessage.action === 'messageService') {
-                    await Promise.all([fetchAllChats(), fetchFavouriteChats()]); 
+                    const hasMatchingChat = chats.some(chat => chat.chatId === lastMessage.chatId);
+                    if (hasMatchingChat) {
+                      setChats(prevChats => 
+                        prevChats.map(chat => 
+                          chat.chatId === lastMessage.chatId
+                            ? {
+                                ...chat,
+                                lastMessage: lastMessage.payload.message,
+                                lastMessageSender: lastMessage.payload.sender === sessionStorage.getItem('userId') ? 'Me' : lastMessage.payload.senderName,
+                                lastActiveTime: convertToISOTimestamp(lastMessage.payload.timestamp)
+                              }
+                            : chat
+                        )
+                      );
+                    } else {
+                      fetchAllChats(); 
+                    }
                 }
 
                 if(lastMessage.action === 'profileService'){
                     if(chats.some(chat => chat.friendId === lastMessage.body)){ 
                         fetchAllChats();
-                        fetchFavouriteChats();
                     }
                 }
 
                 if(lastMessage.action === 'accountDelete' && lastMessage.typeOfAction === 'directChat'){
                     fetchAllChats();
-                    fetchFavouriteChats();
                 }
 
             }

@@ -2,14 +2,14 @@ import {useState, useEffect} from 'react'
 import GlobalAlert from './GlobalAlert';
 import { fetchUserMetaDataById } from '../Services/ProfileService';
 import { useWebSocket } from '../Context/WebSocketContext';
-import { unFriend, getFriendshipId } from '../Services/FriendshipService';
+import { getFriendshipId } from '../Services/FriendshipService';
 import { deleteDirectChat } from '../Services/ProfileService';
 import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function FriendInfo({darkMode, receiverId, setShowMobileRight, showChatsMenu}) {
 
   const isMobile = useIsMobile();
-  const { messages } = useWebSocket();
+  const { messages, unFriend } = useWebSocket();
   const [processedMessages, setProcessedMessages] = useState([]);
 
   const [blockPopup, setBlockPopup] = useState(false);
