@@ -1,9 +1,7 @@
 import ReceiveMessage from "./ReceiveMessage";
 import SendMessage from "./SendMessage";
 import { useState, useEffect, useRef } from "react";
-import { ChevronRight } from "lucide-react";
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
-import { NeonGradientCard } from "@/components/ui/neon-gradient-card";
 import CircularProgress from '@mui/material/CircularProgress';
 import { fetchUserMetaDataById } from '../Services/ProfileService';
 import { Skeleton } from "@/components/ui/skeleton";
@@ -23,6 +21,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
   const { messages, sendPrivateMessage } = useWebSocket();
   const [processedMessages, setProcessedMessages] = useState([]);
 
+  const [isBeta, setIsBeta] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const chatWallpaper = darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)';
   const [magicReplyButton, setMagicReplyButton] = useState(false);
@@ -129,6 +128,11 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
     checkIsFriends();
     fetchFriendshipId();
     setIsFriend(true);
+
+    if (sessionStorage.getItem('userId') === '679babbb1945b9025f11568c') {
+      setIsBeta(true);
+    }
+
     const chatContainer = chatRef.current;
     if (chatContainer) {
       chatContainer.addEventListener("scroll", handleScroll);
@@ -310,7 +314,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
             )
           )}  
         {temporalMessage && <TemporalMessage message={temporalMessageContent}/> }    
-        {magicReplyButton && 
+        {magicReplyButton && isBeta && 
         <div style={{position:'absolute', bottom: isMobile ? '12%' : '17%', width: isMobile ? '88%' : '59%', display:'flex', justifyContent:'center', alignItems:'center'}}>
         <div onClick={fetchSmartReply} className="absolute cursor-pointer bg-white rounded-full">
         <AnimatedGradientText>
