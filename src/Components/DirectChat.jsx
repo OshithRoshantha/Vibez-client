@@ -3,6 +3,7 @@ import SendMessage from "./SendMessage";
 import { useState, useEffect, useRef } from "react";
 import { ChevronRight } from "lucide-react";
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
+import { NeonGradientCard } from "@/components/ui/neon-gradient-card";
 import CircularProgress from '@mui/material/CircularProgress';
 import { fetchUserMetaDataById } from '../Services/ProfileService';
 import { Skeleton } from "@/components/ui/skeleton";
@@ -110,7 +111,8 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
     try{
       setGenerateReply(true);
       const response = await getSmartReply(receiverId);
-      setTypedMessage(response);
+      setTypedMessage(response.reply);
+      inputRef.current.focus();
     }
     finally{
       setGenerateReply(false);
@@ -190,7 +192,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
   useEffect(() => {
     fetchChatMessages();
     if (message.length == 0){
-      setMagicReplyButton(false);
+      //setMagicReplyButton(false);
     }
   }, [receiverId]);
 
@@ -199,7 +201,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
       setTemporalMessage(false);
     }
     else{
-      setMagicReplyButton(false);
+      //setMagicReplyButton(false);
     }
   }, [message]);
 
@@ -314,17 +316,15 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
           )}  
         {temporalMessage && <TemporalMessage message={temporalMessageContent}/> }    
         {magicReplyButton && 
-        <div style={{position:'absolute', bottom: isMobile ? '12%' : '14%', width: isMobile ? '88%' : '59%', display:'flex', justifyContent:'center', alignItems:'center'}}>
-          dfdf
-        <div onClick={fetchSmartReply} className="absolute cursor-pointer bg-white rounded-full">
-          <AnimatedGradientText>
-            <span
-              className={`inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:200%_100%] bg-clip-text text-transparent`}
-            >
-              Magic Reply
-            </span>
-            <ChevronRight className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
-          </AnimatedGradientText>          
+        <div style={{position:'absolute', bottom: isMobile ? '12%' : '17%', width: isMobile ? '88%' : '59%', display:'flex', justifyContent:'center', alignItems:'center'}}>
+      <div onClick={fetchSmartReply} className="absolute cursor-pointer bg-transparent rounded-full">
+        <AnimatedGradientText>
+          <span
+            className={`inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:200%_100%] bg-clip-text text-transparent`}
+          >
+           <b>Magic Reply 🪄</b> 
+          </span>
+        </AnimatedGradientText>           
         </div>
         </div>}
         </div>

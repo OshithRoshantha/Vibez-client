@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-const API = import.meta.env.VITE_API;
 const API2 = import.meta.env.VITE_API2;
 
 export const getSmartReply = async (receiverId: string) => {
