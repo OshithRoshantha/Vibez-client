@@ -5,7 +5,7 @@ import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
 import GroupChatPreview from './GroupChatPreview';
 import { Skeleton } from "@/components/ui/skeleton";
-import { getAllGroups, getGroupInfo, createGroup, isGroupRelated, searchGroups } from '../Services/GroupsService';
+import { getAllGroups, getGroupInfo, searchGroups } from '../Services/GroupsService';
 import { getAllFriends } from '../Services/FriendshipService';
 import { useWebSocket } from '../Context/WebSocketContext';
 import { uploadFile } from '../Services/s3Service';
@@ -14,7 +14,7 @@ import { useIsMobile } from '../hooks/useIsMobile';
 export default function GroupChats({showGroupMessages, darkMode, setGroupId, setShowMobileRight}) {
 
     const isMobile = useIsMobile();
-    const { messages } = useWebSocket();
+    const { messages, createGroup } = useWebSocket();
     const [processedMessages, setProcessedMessages] = useState([]);
 
     const [groups, setGroups] = useState([]);
@@ -39,6 +39,21 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
 
     const defaultImage = "./src/assets/groupDefault.jpg";
 
+    const convertToISOTimestamp = (time) => {
+        const [hours, minutes] = time.split(':').map(Number); 
+        const now = new Date(); 
+        const newDate = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          hours,
+          minutes,
+          now.getSeconds(),
+          now.getMilliseconds()
+        );
+        return newDate.toISOString(); 
+    };
+
     useEffect(() => {
         const handleMessages = async () => {
             if (messages.length === 0) {
@@ -56,7 +71,25 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
                     }
                     case 'messageService': {
                         if(lastMessage.type === 'group'){
-                            fetchAllGroups();
+                            if (lastMessage.action === 'messageService') {
+                                const hasMatchingGroup = groups.some(group => group.groupId === lastMessage.groupId);
+                                if (hasMatchingGroup) {
+                                  setGroups(prevGroups => 
+                                    prevGroups.map(group => 
+                                      group.groupId === lastMessage.groupId
+                                        ? {
+                                            ...group,
+                                            lastMessage: lastMessage.payload.message,
+                                            lastMessageSender: lastMessage.payload.sender === sessionStorage.getItem('userId') ? 'Me' : lastMessage.payload.senderName, 
+                                            lastUpdate: convertToISOTimestamp(lastMessage.payload.timestamp) 
+                                          }
+                                        : group
+                                    )
+                                  );
+                                } else {
+                                  fetchAllGroups(); 
+                                }
+                              }
                         }                        
                       break;
                     }

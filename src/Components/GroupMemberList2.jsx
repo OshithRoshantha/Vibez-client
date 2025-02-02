@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import GlobalAlert from './GlobalAlert';
 import { Skeleton } from "@/components/ui/skeleton";
-import { removeMembers } from '../Services/GroupsService';
+import { useWebSocket } from '../Context/WebSocketContext';
 
 export default function GroupMemberList2({ darkMode, members, groupName, loading, creator, groupId, removedFromGroup }) {
 
   const [exitGroupPopup, setExitGroupPopup] = useState(false);
   const currentUserId = sessionStorage.getItem('userId');
+  const { removeMembers } = useWebSocket();
 
   function toggleExitGroupPopup() {
     setExitGroupPopup(!exitGroupPopup);

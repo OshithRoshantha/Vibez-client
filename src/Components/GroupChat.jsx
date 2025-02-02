@@ -1,7 +1,7 @@
 import GroupReceiveMessage from "./GroupReceiveMessage";
 import GroupSendMessage from "./GroupSendMessage";
 import { useState, useEffect, useRef } from "react";
-import { getGroupInfo, isGroupRelated, getGroupMessages, sendMessage, markGroupMessagesAsRead } from '../Services/GroupsService';
+import { getGroupInfo, getGroupMessages, markGroupMessagesAsRead, isGroupRelated } from '../Services/GroupsService';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
 import TemporalMessage from "./TemporalMessage";
@@ -12,7 +12,7 @@ import { useIsMobile } from '../hooks/useIsMobile';
 export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchUnreadGroupMessages, setShowMobileRight, setGroupsMenu}) {
 
   const isMobile = useIsMobile();
-  const { messages } = useWebSocket();
+  const { messages, sendGroupMessage } = useWebSocket();
   const [processedMessages, setProcessedMessages] = useState([]);
 
   const chatRef = useRef(null);
@@ -44,8 +44,10 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
 
   const fetchChatMessages = async () => {
     try{
+      setChatsLoading(true);
       const response = await getGroupMessages(groupId);
       setMessage(response);
+      console.log(response);
     }
     finally{
       setChatsLoading(false);
@@ -75,8 +77,8 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
               for (const lastMessage of newMessages) {
                   switch (lastMessage.action) {
                       case 'groupService': {
-                          const isRelated = await isGroupRelated(lastMessage.groupId);
                           fetchGroupInfo();
+                          const isRelated = await isGroupRelated(lastMessage.groupId);
                           if (lastMessage.groupId === groupId && !isRelated) {
                               setCustomText("You can't send messages to this group beacuse you're no longer a member.");
                               setRemovedFromGroup(true);
@@ -84,8 +86,10 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
                           break;
                       }
                       case 'messageService': {
-                          if(lastMessage.type === 'group'){
-                            fetchChatMessages();
+                          if(lastMessage.type === 'group' && lastMessage.groupId === groupId){
+                            if (lastMessage.sender === sessionStorage.getItem('userId')) {lastMessage.payload.isSendByMe = true;} 
+                            else {lastMessage.payload.isSendByMe = false; lastMessage.payload.sender = lastMessage.payload.senderName;} 
+                            setMessage(prevMessage => [...prevMessage, lastMessage.payload]);
                             markMessagesAsRead();
                           }                        
                         break;
@@ -119,6 +123,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
     markMessagesAsRead();
     fetchGroupInfo();
     fetchChatMessages();
+    setRemovedFromGroup(false);
   }, [groupId]);
 
   function handleScroll() {
@@ -154,7 +159,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
   }, []); 
 
   const handleSendMessage = async () => {
-    await sendMessage(groupId, typedMessage);
+    await sendGroupMessage(groupId, typedMessage);
     setTemporalMessageContent(typedMessage);
     setTypedMessage('');
   }

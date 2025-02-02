@@ -1,9 +1,11 @@
 import './Styles/Column2.css'
 import { useState} from 'react';
-import { deleteListing } from  '../Services/MarketplaceService';
+import { useWebSocket } from '../Context/WebSocketContext';
 
 export default function YourListings({productId, showEditListingMenu, darkMode, productTitle, productPhotos, price, listedDate, setEditingProductId}) {
+  
   const [deleteMenu, setDeleteMenu] = useState(false);
+  const { deleteListing } = useWebSocket();
 
   function showDeleteMenu() {
       setDeleteMenu(true);

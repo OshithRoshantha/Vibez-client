@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import GlobalAlert from './GlobalAlert';
 import { Skeleton } from "@/components/ui/skeleton";
-import { removeMembers, deleteGroup } from '../Services/GroupsService';
+import { useWebSocket } from '../Context/WebSocketContext';
 
 export default function GroupMemberList({darkMode, members, groupName, loading, groupId, removedFromGroup}) {
 
@@ -10,6 +10,7 @@ export default function GroupMemberList({darkMode, members, groupName, loading, 
   const [removeMemberPopup, setRemoveMemberPopup] = useState(false);
   const [member, setMember] = useState('');
   const [memberId, setMemberId] = useState([]);
+  const { removeMembers, deleteGroup } = useWebSocket();
 
   const removeMemberFromGroup = async () => {
     await removeMembers(groupId, memberId);
