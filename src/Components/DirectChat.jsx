@@ -8,7 +8,7 @@ import { fetchUserMetaDataById } from '../Services/ProfileService';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
 import { getChatMessages, markAsRead } from '../Services/ChatService';
-import { getChatHistory, getSmartReply } from '../Services/VibezIntelligence';
+import { getSmartReply } from '../Services/VibezIntelligence';
 import TemporalMessage from "./TemporalMessage";
 import { DotLoader } from 'react-spinners';
 import { validateFriendship, getFriendshipId } from '../Services/FriendshipService';
@@ -109,8 +109,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
   const fetchSmartReply = async () => {
     try{
       setGenerateReply(true);
-      const chatHistory = await getChatHistory(receiverId);
-      const response = await getSmartReply(chatHistory);
+      const response = await getSmartReply(receiverId);
       setTypedMessage(response);
     }
     finally{
@@ -120,7 +119,6 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
 
   useEffect(() => {
     doMarkAsRead();
-   // setMagicReplyButton(false);
     setIsFriend(true);
   }, [receiverId]); 
   
@@ -191,12 +189,17 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
 
   useEffect(() => {
     fetchChatMessages();
+    if (message.length == 0){
+      setMagicReplyButton(false);
+    }
   }, [receiverId]);
 
   useEffect(() => {
     if (message.length > 0) {
       setTemporalMessage(false);
-      setMagicReplyButton(true);
+    }
+    else{
+      setMagicReplyButton(false);
     }
   }, [message]);
 
@@ -310,7 +313,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
             )
           )}  
         {temporalMessage && <TemporalMessage message={temporalMessageContent}/> }    
-        {!magicReplyButton && 
+        {magicReplyButton && 
         <div style={{position:'absolute', bottom: isMobile ? '12%' : '14%', width: isMobile ? '88%' : '59%', display:'flex', justifyContent:'center', alignItems:'center'}}>
           dfdf
         <div onClick={fetchSmartReply} className="absolute cursor-pointer bg-white rounded-full">
