@@ -25,13 +25,13 @@ import { useIsMobile } from '../hooks/useIsMobile';
 import { useGlobalStore } from '../States/UseStore';
 import { getAllChats, getChatPreivew } from '../Services/ChatService';
 import { getAllGroups, getGroupInfo } from '../Services/GroupsService';
-
+import { isConnectedProfile } from '../Services/FriendshipService';
 
 export default function Dashboard() {
 
     const isMobile = useIsMobile();
     const { messages } = useWebSocket();
-    const { directChats, setDirectChats, setLoadingDirectChats, groupChats, setGroupChats, setLoadingGroupChats } = useGlobalStore();
+    const { directChats, setDirectChats, setLoadingDirectChats, groupChats, setGroupChats, setLoadingGroupChats, setPendingProfiles, setAcceptedProfiles, setLoadingFriendships } = useGlobalStore();
     const [processedMessages, setProcessedMessages] = useState([]);
     
     const audioRef = useRef(null);
@@ -119,6 +119,7 @@ export default function Dashboard() {
         fetchUnreadGroupMessages();
         fetchAllChats();
         fetchAllGroups();
+        fetchFriendships();
     }, []);
 
     useEffect(() => {
@@ -141,7 +142,6 @@ export default function Dashboard() {
                                 ...newMessages.map(message => message.id),
                             ]);
                         } 
-
                         else {
                             if ((lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED')) {
                                 const profileInfo = await getConnectedProfileInfo(lastMessage.friendshipId);
@@ -161,6 +161,29 @@ export default function Dashboard() {
                                 }
                             }
                         
+                        }
+                        if ((lastMessage.status === 'UNFRIENDED' || lastMessage.status === 'BLOCKED') && linkedProfiles.includes(lastMessage.friendshipId)) {
+                            linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
+                            sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+                            fetchFriendships();
+                            setProcessedMessages(prevProcessedMessages => [
+                                ...prevProcessedMessages,
+                                ...newMessages.map(message => message.id),
+                            ]);
+                        }
+                        else{
+                            if (lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED') {
+                                if (!linkedProfiles.includes(lastMessage.friendshipId)) {
+                                    linkedProfiles.push(lastMessage.friendshipId);
+                                    sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+                                }
+                                fetchPendingRequests();
+                                fetchFriendships();
+                            } else if (lastMessage.status === 'UNFRIENDED') {
+                                linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
+                                sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
+                                fetchFriendships();
+                            }
                         }
                 }
                 else if (lastMessage.action === 'marketplaceService'){
@@ -225,10 +248,21 @@ export default function Dashboard() {
                     if(directChats.some(chat => chat.friendId === lastMessage.body)){ 
                         fetchAllChats();
                     }
+                    for (const friendshipId of linkedProfiles) {
+                        const isFriend = await isConnectedProfile(friendshipId);
+                        if (isFriend) {
+                            fetchFriendships();
+                        }
+                    }                    
                 }
-                else if(lastMessage.action === 'accountDelete' && lastMessage.typeOfAction === 'directChat'){
-                    fetchAllChats();
-                }
+                else if(lastMessage.action === 'accountDelete' ){
+                    if(lastMessage.typeOfAction === 'directChat'){
+                        fetchAllChats();
+                    }
+                    if(lastMessage.typeOfAction === 'friendship'){
+                        fetchFriendships();
+                    } 
+                }               
             }
             setProcessedMessages(prevProcessedMessages => [
                 ...prevProcessedMessages,
@@ -267,6 +301,47 @@ export default function Dashboard() {
         } 
         finally{
             setLoadingGroupChats(false);
+        }
+    };
+
+    const fetchFriendships = async () => {
+        setLoadingFriendships(true);
+        setPendingProfiles([]);
+        setAcceptedProfiles([]);
+    
+        const linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles')) || [];
+        if (linkedProfiles.length === 0) {
+            setLoadingFriendships(false);
+            return;
+        }
+        const profilesPromises = linkedProfiles.map(async (friendshipId) => {
+            const profileInfo = await getConnectedProfileInfo(friendshipId);
+            const response = await filterPendingRequests(friendshipId);
+            return { profileInfo, response };
+        });
+    
+        try {
+            const results = await Promise.all(profilesPromises);
+    
+            const pending = [];
+            const accepted = [];
+    
+            results.forEach(({ profileInfo, response }) => {
+                if (response && profileInfo.status === "PENDING") {
+                    if (!pending.some(profile => profile.profileId === profileInfo.profileId)) {
+                        pending.push(profileInfo);
+                    }
+                }
+                if (profileInfo.status === "ACCEPTED") {
+                    if (!accepted.some(profile => profile.profileId === profileInfo.profileId)) {
+                        accepted.push(profileInfo);
+                    }
+                }
+            });
+            setPendingProfiles(pending);
+            setAcceptedProfiles(accepted);
+        } finally {
+            setLoadingFriendships(false);
         }
     };
 

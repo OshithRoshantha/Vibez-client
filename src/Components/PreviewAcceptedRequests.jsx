@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { useWebSocket } from "../Context/WebSocketContext";
 
-export default function PreviewAcceptedRequests({darkMode, friendshipId, profileName, profilePicture, profileAbout, fetchFriendships, showDirectMessages, setReceiverId, friendId, setShowMobileRight}) {
+export default function PreviewAcceptedRequests({darkMode, friendshipId, profileName, profilePicture, profileAbout, showDirectMessages, setReceiverId, friendId, setShowMobileRight}) {
   
     const isMobile = useIsMobile();
     const { unFriend } = useWebSocket();
@@ -19,7 +19,6 @@ export default function PreviewAcceptedRequests({darkMode, friendshipId, profile
         let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles'));
         linkedProfiles = linkedProfiles.filter(profile => profile !== friendshipId);
         sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
-        fetchFriendships();
         await unFriend(friendshipId);
         setIsUnfriended(true);
         setUnfriendPopup(false);

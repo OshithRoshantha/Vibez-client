@@ -7,6 +7,9 @@ export function GlobalProvider({ children }) {
   const [loadingDirectChats, setLoadingDirectChats] = useState(true);
   const [groupChats, setGroupChats] = useState([]);
   const [loadingGroupChats, setLoadingGroupChats] = useState(true);
+  const [pendingProfiles, setPendingProfiles] = useState([]);
+  const [acceptedProfiles, setAcceptedProfiles] = useState([]);
+  const [loadingFriendships, setLoadingFriendships] = useState(true);
 
   const value = {
     directChats,
@@ -17,6 +20,12 @@ export function GlobalProvider({ children }) {
     setGroupChats,
     loadingGroupChats,
     setLoadingGroupChats,
+    pendingProfiles,
+    setPendingProfiles,
+    acceptedProfiles,
+    setAcceptedProfiles,
+    loadingFriendships,
+    setLoadingFriendships,
   };
 
   return (
