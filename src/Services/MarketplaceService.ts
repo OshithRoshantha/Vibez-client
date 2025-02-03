@@ -4,7 +4,7 @@ const API = import.meta.env.VITE_API;
 
 export const getMarketplaceItems  = async () => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://${API}/vibez/product/findAll/${userId}`, {
+    const response = await axios.get(`https://${API}/product/findAll/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -13,7 +13,7 @@ export const getMarketplaceItems  = async () => {
 };
 
 export const getProductDetails = async (productId: string) => {
-    const response = await axios.get(`http://${API}/vibez/product/find/${productId}`, {
+    const response = await axios.get(`https://${API}/product/find/${productId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -23,7 +23,7 @@ export const getProductDetails = async (productId: string) => {
 
 export const getActiveListingCount = async () => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://${API}/vibez/product/count/${userId}`, {
+    const response = await axios.get(`https://${API}/product/count/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -32,7 +32,7 @@ export const getActiveListingCount = async () => {
 }
 
 export const isUserSeller = async (userId: string) => {
-    const response = await axios.get(`http://${API}/vibez/product/isSeller/${userId}`, {
+    const response = await axios.get(`https://${API}/product/isSeller/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -42,7 +42,7 @@ export const isUserSeller = async (userId: string) => {
 
 export const getMyListings = async () => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://${API}/vibez/product/my/${userId}`, {
+    const response = await axios.get(`https://${API}/product/my/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -51,7 +51,7 @@ export const getMyListings = async () => {
 }
 
 export const addClick = async (productId: string) => {
-    const response = await axios.put(`http://${API}/vibez/product/addClick/${productId}`, {
+    const response = await axios.put(`https://${API}/product/addClick/${productId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -61,7 +61,7 @@ export const addClick = async (productId: string) => {
 
 export const getTotalClicks = async () => {
     const sellerId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://${API}/vibez/product/totalClicks/${sellerId}`, {
+    const response = await axios.get(`https://${API}/product/totalClicks/${sellerId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -71,13 +71,13 @@ export const getTotalClicks = async () => {
 
 export const searchProducts = async (keyword: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://${API}/vibez/product/search/${userId}/${keyword}`);
+    const response = await axios.get(`https://${API}/product/search/${userId}/${keyword}`);
     return response.data;
 }
 
 export const isProductListed = async (productId: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://${API}/vibez/product/isAdded/${productId}/${userId}`, {
+    const response = await axios.get(`https://${API}/product/isAdded/${productId}/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
