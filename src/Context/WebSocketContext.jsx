@@ -41,7 +41,7 @@ export const WebSocketProvider = ({ children, isLoggedIn }) => {
 
   useEffect(() => {
     if (socket) {
-      const timer = setTimeout(() => socket.close(), 20 * 60 * 1000);
+      const timer = setTimeout(() => socket.close(), 18 * 60 * 1000);
       return () => clearTimeout(timer);
     }
   }, [socket]);
