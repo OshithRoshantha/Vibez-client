@@ -353,7 +353,7 @@ export default function SignupElement() {
           </div>
         )}
         {activeStep === 2 && <div>
-            <div className="field-box3" style={{backgroundColor:'red'}}>
+            <div className="field-box3">
               <div className='profile-pic' onClick={uploadImg}   
               style={{
                 backgroundImage: cropedImage ? `url(${cropedImage})` : `url(${defaultImage})`, 
@@ -386,7 +386,7 @@ export default function SignupElement() {
                     <Button onClick={handleCrop} sx={{width:'20%',borderRadius: '20px',backgroundColor: '#0d6efd',color: 'white'}}>Crop</Button>
                   </div>
                 </div>}
-              <div className='mt-4' style={{width: isMobile ? '100%' : '55%', backgroundColor:'blue'}}>
+              <div className='mt-4' style={{width: isMobile ? '100%' : '55%'}}>
                 <TextField id="outlined-basic " value={about} onChange={handleAboutChange} label="About" variant="outlined" placeholder="Can't talk, Vibez only." InputProps={{ sx: { borderRadius: '20px', backgroundColor: 'white'} }} style={{ width: '100%' }}/>
               </div>
             </div>
