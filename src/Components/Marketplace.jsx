@@ -9,6 +9,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
 import { uploadMultipleFiles } from '../Services/s3Service';
 import { useIsMobile } from '../hooks/useIsMobile';
+import errDark from '@/assets/Icons/listingErdark.png';
+import errLight from '@/assets/Icons/listingEr.png';
 
 export default function Marketplace({darkMode, showDirectMessages, setReceiverId, setShowMobileRight}) {
 
@@ -44,8 +46,6 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
     const [totalClicks, setTotalClicks] = useState(0);
     const inputRef = useRef(null);
     const [searchKeyword, setSearchKeyword] = useState('');
-
-    const err = darkMode ? './src/assets/Icons/listingErdark.png' : './src/assets/Icons/listingEr.png';
 
     const handleSearchChange = async (e) => {
         const value = e.target.value;
@@ -515,7 +515,7 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
                             <img
                                 aria-hidden="true"
                                 alt="document-icon"
-                                src={err}
+                                src={`${darkMode ? errDark : errLight}`}
                                 style={{ height: '125px', width: '125px' }}
                             />
                             <h2 className={`${darkMode ? 'text-white' : ''} mt-2 text-lg font-semibold`}>
