@@ -302,7 +302,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
                 className={`${darkMode ? 'text-white' : 'bg-input text-black'} focus:border-none focus:outline-none w-full p-2 rounded-lg`} 
               />
             <span><i style={{ cursor: 'pointer' }} onClick={() => { 
-                    if (!chatsLoading) {
+                    if (!chatsLoading && typedMessage.length > 0) {
                         handleSendMessage(); 
                         displayTemporalMessage();
                     }

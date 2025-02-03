@@ -365,7 +365,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
               </div>) : 
               (<div>
                   <span><i style={{cursor:'pointer'}} onClick={() => { 
-                    if (!chatsLoading) {
+                    if (!chatsLoading && typedMessage.length > 0) {
                         handleSendMessage(); 
                         displayTemporalMessage();
                     }
