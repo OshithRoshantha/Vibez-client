@@ -27,7 +27,6 @@
     height: 66vh;
     overflow-y: auto;
     scrollbar-width: none;
-    background-color: red;
 }
 
 .friends-list{
@@ -35,7 +34,6 @@
     height: 61vh;
     overflow-y: auto;
     scrollbar-width: none; 
-    background-color: red;
 }
 
 .group-op{
