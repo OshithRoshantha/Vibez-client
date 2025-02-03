@@ -364,7 +364,12 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
                   <DotLoader size={40} color="#1311ff"/>
               </div>) : 
               (<div>
-                  <span><i style={{cursor:'pointer'}} onClick={() => { handleSendMessage(); displayTemporalMessage();}} className="bi bi-send-fill text-2xl text-primary"></i></span>
+                  <span><i style={{cursor:'pointer'}} onClick={() => { 
+                    if (!chatsLoading) {
+                        handleSendMessage(); 
+                        displayTemporalMessage();
+                    }
+                  }} className={`bi bi-send-fill text-2xl ${chatsLoading ? 'text-blue-200' : 'text-primary'} `}></i></span>
               </div>)}
             </>) : (
               <div className={`${isMobile ? '': 'w-full mt-2'}`}>
