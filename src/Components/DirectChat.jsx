@@ -316,8 +316,8 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
           )}  
         {temporalMessage && <TemporalMessage message={temporalMessageContent}/> }    
         {magicReplyButton && isBeta && 
-        <div style={{position:'absolute', bottom: isMobile ? '12%' : '17%', width: isMobile ? '88%' : '59%', display:'flex', justifyContent:'center', alignItems:'center'}}>
-        <div onClick={fetchSmartReply} className="absolute cursor-pointer bg-white rounded-full">
+        <div style={{position:'absolute', bottom: isMobile ? '15%' : '17%', width: isMobile ? '88%' : '59%', display:'flex', justifyContent:'center', alignItems:'center'}}>
+        <div onClick={fetchSmartReply} className="absolute cursor-pointer rounded-full">
         <AnimatedGradientText>
           <span
             className={`inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:200%_100%] bg-clip-text text-transparent`}
