@@ -100,10 +100,10 @@ export default function FriendInfo({darkMode, receiverId, setShowMobileRight, sh
       {blockPopup && <GlobalAlert darkMode={darkMode} text={`Block ${userName}?`} textOP={'Blocked contacts will no longer be able to send you messages.'} button1={'Cancel'} button2={'Block'} btn1Function={toggleBlockPopup} btn2Function={handleBlock}/>}
       {unfriendPopup && <GlobalAlert darkMode={darkMode} text={`Remove ${userName}?`} textOP={'Removing this contact will remove them from your friends list.'} button1={'Cancel'} button2={'Remove'} btn1Function={toggleUnfriendPopup} btn2Function={handleUnfriend} />}
       {chatDeletePopup && <GlobalAlert darkMode={darkMode} text={`Delete this chat?`} textOP={''} button1={'Cancel'} button2={'Delete chat'} btn1Function={toggleChatDeletePopup} btn2Function={deleteChat} />}
-      <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  ${isMobile ? '':'p-4'} info-column`} style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7', height:'100vh', width: isMobile ? '100%' : '', paddingTop: isMobile ? '40%' : ''}}>
+      <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'}  ${isMobile ? '':'p-4'} info-column`} style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7', height:'100vh', width: isMobile ? '100%' : '', paddingTop: isMobile ? '30%' : ''}}>
       <h2 className={`${darkMode ? 'text-white' : '' } text-lg font-semibold mb-4`} style={{marginLeft: isMobile ? '12%':''}}>Friend info</h2>
       {isMobile && <p onClick={handleBackButton} className="text-primary font-medium text-lg cursor-pointer right-10 top-10 absolute">Back</p>}
-        <div className="bg-card p-6 w-full" style={{marginTop:'12%', backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7'}} >
+        <div className="bg-card p-6 w-full" style={{marginTop: isMobile ? '':'12%', backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7'}} >
           <div className="flex flex-col items-center">
             <div className="rounded-full flex items-center justify-center mb-4" style={{ width: '150px', height: '150px', background: `center / cover no-repeat url(${userAvatar})` }}></div>
             <h2 className={`${darkMode ? 'text-white' : 'text-foreground'} text-xl font-semibold`}>

@@ -191,7 +191,7 @@ export default function GroupInfo({darkMode, groupId, setShowMobileRight, showGr
   return (
 <div>
       {addMemberMenu && <GroupAddMembers darkMode={darkMode} groupId={groupId} showAddMemberMenu={showAddMemberMenu}/>}
-      <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'} ${isMobile ? '':'p-4'} info-column`} style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7', width: isMobile ? '100%' : '', paddingTop: isMobile ? '40%' : ''}}>
+      <div className={`${darkMode ? 'border-gray-600 border-r border-border':'border-r border-border'} ${isMobile ? '':'p-4'} info-column`} style={{backgroundColor: darkMode ? '#1c1c1c' : '#f2f3f7', width: isMobile ? '100%' : '', paddingTop: isMobile ? '30%' : ''}}>
         {editPictureForm && <div className='edit-picture-form2 shadow-lg bg-white' style={{width: isMobile ? '85%' : '', marginTop: isMobile ? '25%':'8%', marginLeft: isMobile ? '7.5%' : ''}}>
                                 <AvatarEditor
                                     ref={avatarEditorRef}
@@ -276,7 +276,7 @@ export default function GroupInfo({darkMode, groupId, setShowMobileRight, showGr
             </div>
             <div className={`${darkMode ? 'border-gray-700' : 'border-border'} border-b  my-4`}></div>
             </div>}
-          <div className={`w-full  ${isAmAdmin ? 'h-[25vh]' : 'h-[38vh]'}`} style={{overflowY:'auto', scrollbarWidth:'none'}}>
+          <div className={`w-full ${isAmAdmin ? (isMobile ? 'h-[15vh]' : 'h-[25vh]') : (isMobile ? 'h-[28vh]' : 'h-[38vh]')}`} style={{overflowY:'auto', scrollbarWidth:'none'}}>
             {isAmAdmin ? <GroupMemberList removedFromGroup={removedFromGroup} loading={loading} groupId={groupId} members={members} groupName={name} darkMode={darkMode}/> : <GroupMemberList2 removedFromGroup={removedFromGroup} loading={loading} creator={creator} groupId={groupId} members={members} groupName={name} darkMode={darkMode}/>}
           </div>
         </div>

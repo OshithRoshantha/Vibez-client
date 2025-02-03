@@ -1,9 +1,7 @@
 import ReceiveMessage from "./ReceiveMessage";
 import SendMessage from "./SendMessage";
 import { useState, useEffect, useRef } from "react";
-import { ChevronRight } from "lucide-react";
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
-import { NeonGradientCard } from "@/components/ui/neon-gradient-card";
 import CircularProgress from '@mui/material/CircularProgress';
 import { fetchUserMetaDataById } from '../Services/ProfileService';
 import { Skeleton } from "@/components/ui/skeleton";
@@ -15,6 +13,8 @@ import { DotLoader } from 'react-spinners';
 import { validateFriendship, getFriendshipId } from '../Services/FriendshipService';
 import EmojiPicker from 'emoji-picker-react';
 import { useIsMobile } from '../hooks/useIsMobile';
+import mainDark from '@/assets/Wallpapers/dark.png';
+import mainLight from '@/assets/Wallpapers/light.png';
 
 export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, darkMode, receiverId, fetchUnreadMessages, setChatsMenu, setShowMobileRight}) {
 
@@ -23,8 +23,8 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
   const { messages, sendPrivateMessage } = useWebSocket();
   const [processedMessages, setProcessedMessages] = useState([]);
 
+  const [isBeta, setIsBeta] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
-  const chatWallpaper = darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)';
   const [magicReplyButton, setMagicReplyButton] = useState(false);
   const [userName, setUserName] = useState('');
   const [userAvatar, setUserAvatar] = useState('');
@@ -129,6 +129,11 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
     checkIsFriends();
     fetchFriendshipId();
     setIsFriend(true);
+
+    if (sessionStorage.getItem('userId') === '679babbb1945b9025f11568c') {
+      setIsBeta(true);
+    }
+
     const chatContainer = chatRef.current;
     if (chatContainer) {
       chatContainer.addEventListener("scroll", handleScroll);
@@ -253,7 +258,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
   return (
     <div>
         <div className={`${darkMode ? 'bg-[#262729]' : 'bg-background' } min-h-screen flex flex-col`} >
-        <div className={`${darkMode ? 'border-gray-600' : 'border-border'} flex items-center px-4 py-3 border-b`}>
+        <div className={`${darkMode ? 'border-gray-600' : 'border-border'} flex items-center px-4 py-3 border-b`} style={{ height: isMobile ? '10vh' : ''}}>
             {loading ? (
               <div>
                 <div className="flex items-center">
@@ -280,7 +285,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
             ) }
             {isMobile && <p onClick={handleBackButton} className="text-primary font-medium text-lg cursor-pointer right-6 absolute">Back</p>}
         </div>
-        <div className="p-4" ref={chatRef} style={{height: isMobile ? '82vh' : '78vh', overflowY:'auto', scrollbarWidth:'none', backgroundImage: chatWallpaper, backgroundSize: 'cover'}}>
+        <div className="p-4" ref={chatRef} style={{height: isMobile ? '80vh' : '78vh', overflowY:'auto', scrollbarWidth:'none', backgroundImage: `url(${darkMode ? mainDark : mainLight})`, backgroundSize: 'cover'}}>
         {showScrollButton && !isMobile && <i onClick={scrollToBottom} className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} cursor-pointer absolute bi bi-arrow-down-circle-fill text-4xl text-primary`} style={{left: '67%'}}></i>}
           {chatsLoading ? (
             <div className="text-center">
@@ -310,9 +315,9 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
             )
           )}  
         {temporalMessage && <TemporalMessage message={temporalMessageContent}/> }    
-        {magicReplyButton && 
-        <div style={{position:'absolute', bottom: isMobile ? '12%' : '17%', width: isMobile ? '88%' : '59%', display:'flex', justifyContent:'center', alignItems:'center'}}>
-        <div onClick={fetchSmartReply} className="absolute cursor-pointer bg-white rounded-full">
+        {magicReplyButton && isBeta && 
+        <div style={{position:'absolute', bottom: isMobile ? '15%' : '17%', width: isMobile ? '88%' : '59%', display:'flex', justifyContent:'center', alignItems:'center'}}>
+        <div onClick={fetchSmartReply} className="absolute cursor-pointer rounded-full">
         <AnimatedGradientText>
           <span
             className={`inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:200%_100%] bg-clip-text text-transparent`}
@@ -323,7 +328,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
         </div>
         </div>}
         </div>
-        <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3  border-t`} style={{display:'flex', alignItems:'center',columnGap:'1rem'}}>
+        <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3  border-t`} style={{display:'flex', alignItems:'center',columnGap:'1rem', height: isMobile ? '10vh':''}}>
             {isFriend ? (<>
             {showEmojiPicker && 
               <div className="absolute" style={{left: '39%', bottom: '11%'}}>
@@ -359,7 +364,12 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
                   <DotLoader size={40} color="#1311ff"/>
               </div>) : 
               (<div>
-                  <span><i style={{cursor:'pointer'}} onClick={() => { handleSendMessage(); displayTemporalMessage();}} className="bi bi-send-fill text-2xl text-primary"></i></span>
+                  <span><i style={{cursor:'pointer'}} onClick={() => { 
+                    if (!chatsLoading && typedMessage.length > 0) {
+                        handleSendMessage(); 
+                        displayTemporalMessage();
+                    }
+                  }} className={`bi bi-send-fill text-2xl ${chatsLoading ? 'text-blue-200' : 'text-primary'} `}></i></span>
               </div>)}
             </>) : (
               <div className={`${isMobile ? '': 'w-full mt-2'}`}>

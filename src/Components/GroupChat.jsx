@@ -8,6 +8,8 @@ import TemporalMessage from "./TemporalMessage";
 import CircularProgress from '@mui/material/CircularProgress';
 import EmojiPicker from 'emoji-picker-react';
 import { useIsMobile } from '../hooks/useIsMobile';
+import mainDark from '@/assets/Wallpapers/dark.png';
+import mainLight from '@/assets/Wallpapers/light.png';
 
 export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchUnreadGroupMessages, setShowMobileRight, setGroupsMenu}) {
 
@@ -21,7 +23,6 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
   const [loading, setLoading] = useState(true);
   const [chatsLoading, setChatsLoading] = useState(true);
   const [showScrollButton, setShowScrollButton] = useState(false);
-  const chatWallpaper = darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)';
   const [magicReplyButton, setMagicReplyButton] = useState(false);
   const [removedFromGroup, setRemovedFromGroup] = useState(false);
   const [typedMessage, setTypedMessage] = useState('');
@@ -47,7 +48,6 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
       setChatsLoading(true);
       const response = await getGroupMessages(groupId);
       setMessage(response);
-      console.log(response);
     }
     finally{
       setChatsLoading(false);
@@ -211,7 +211,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
   return (
     <div>
       <div className={`${darkMode ? 'bg-[#262729]' : 'bg-background'} min-h-screen flex flex-col`}>
-        <div className={`${darkMode ? 'border-gray-600' : 'border-border'} flex items-center px-4 py-3 border-b`}>
+        <div className={`${darkMode ? 'border-gray-600' : 'border-border'} flex items-center px-4 py-3 border-b`} style={{ height: isMobile ? '10vh' : ''}}>
         {loading ? (
               <div>
                 <div className="flex items-center">
@@ -237,7 +237,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
             ) }
             {isMobile && <p onClick={handleBackButton} className="text-primary font-medium text-lg cursor-pointer right-6 absolute">Back</p>}
         </div>
-        <div className="p-4" ref={chatRef} style={{ height: isMobile ? '82vh' : '78vh', overflowY: 'auto', scrollbarWidth: 'none', backgroundImage: chatWallpaper, backgroundSize: 'cover' }}>
+        <div className="p-4" ref={chatRef} style={{ height: isMobile ? '80vh' : '78vh', overflowY: 'auto', scrollbarWidth: 'none', backgroundImage: `url(${darkMode ? mainDark : mainLight})`, backgroundSize: 'cover' }}>
           {showScrollButton && !isMobile && <i onClick={scrollToBottom} className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} cursor-pointer absolute bi bi-arrow-down-circle-fill text-4xl text-primary`} style={{ left: '67%' }}></i>}
           {chatsLoading ? (
             <div className="text-center">
@@ -269,7 +269,7 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
           )}           
           {temporalMessage && <TemporalMessage message={temporalMessageContent}/> }         
         </div>
-        <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3 border-t`} style={{ display: 'flex', alignItems: 'center', columnGap: '1rem' }}>
+        <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3 border-t`} style={{ display: 'flex', alignItems: 'center', columnGap: '1rem' , height: isMobile ? '10vh':''}}>
           {removedFromGroup ? (<div className={`${isMobile ? '': 'w-full mt-2'}`}>
             <p className={`${darkMode ? 'text-gray-300' : 'text-black' } text-sm text-center`}>You can't send messages to this group beacuse you're no longer a member.</p>
           </div>) : 
@@ -301,7 +301,12 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
                 type="text" placeholder="Type a message" 
                 className={`${darkMode ? 'text-white' : 'bg-input text-black'} focus:border-none focus:outline-none w-full p-2 rounded-lg`} 
               />
-            <span><i style={{ cursor: 'pointer' }} onClick={() => { handleSendMessage(); displayTemporalMessage();}} className="bi bi-send-fill text-2xl text-primary"></i></span>
+            <span><i style={{ cursor: 'pointer' }} onClick={() => { 
+                    if (!chatsLoading && typedMessage.length > 0) {
+                        handleSendMessage(); 
+                        displayTemporalMessage();
+                    }
+                }}  className={`bi bi-send-fill text-2xl ${chatsLoading ? 'text-blue-200' : 'text-primary'} `}></i></span>
           </>)}
         </div>
       </div>

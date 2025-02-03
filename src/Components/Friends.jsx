@@ -252,7 +252,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                 {friendRequests && loading && ( 
                     <div>
                     <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{pendingProfiles.length} Pending requests</h2>
-                    <div className="friends-list skeleton-container">
+                    <div className="friends-list skeleton-container" style={{height: isMobile ? '53vh' : ''}} >
                         <div className='mb-3' style={{display:'flex', alignItems:'center', columnGap:'10px'}}>
                             <Skeleton className="h-12 w-12 rounded-full" />
                             <div className="space-y-2">
@@ -280,7 +280,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                 {friendRequests && !loading && (
                     <div>
                         <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{pendingProfiles.length} Pending requests</h2>
-                        <div className="friends-list">
+                        <div className="friends-list" style={{height: isMobile ? '53vh' : ''}}>
                             <div className="space-y-4">
                                 {
                                 pendingProfiles.map(profile => (
@@ -304,7 +304,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                 {showResults && (
                     <div>
                         <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>People</h2>
-                        <div className="friends-list">
+                        <div className="friends-list" style={{height: isMobile ? '53vh' : ''}}>
                             <div className="space-y-4">
                                 {isResultsEmpty && (
                                     <div className="flex flex-col items-center justify-center" style={{ marginTop: '20%' }}>
@@ -342,7 +342,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                 {yourFriends && loading && ( 
                     <div>
                     <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{acceptedProfiles.length} friends</h2>
-                    <div className="friends-list skeleton-container">
+                    <div className="friends-list skeleton-container" style={{height: isMobile ? '53vh' : ''}}>
                         <div className='mb-3' style={{display:'flex', alignItems:'center', columnGap:'10px'}}>
                             <Skeleton className="h-12 w-12 rounded-full" />
                             <div className="space-y-2">
@@ -370,7 +370,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                 {yourFriends && !loading && (
                     <div>
                         <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{acceptedProfiles.length} friends</h2>
-                        <div className="friends-list">
+                        <div className="friends-list" style={{height: isMobile ? '53vh' : ''}}>
                             <div className="space-y-4">
                                {
                                 acceptedProfiles.map(profile => (
