@@ -1,6 +1,6 @@
 import './Styles/Column2.css'
 import { useState, useEffect, useRef } from 'react';
-import { getAllChats, getChatPreivew, searchChats } from '../Services/ChatService';
+import { getChatPreivew, searchChats } from '../Services/ChatService';
 import DirectChatPreview from './DirectChatPreview';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useIsMobile } from '../hooks/useIsMobile';

@@ -31,7 +31,7 @@ export default function Dashboard() {
 
     const isMobile = useIsMobile();
     const { messages } = useWebSocket();
-    const { directChats, setDirectChats, setLoadingDirectChats, groupChats, setGroupChats, setLoadingGroupChats, setPendingProfiles, setAcceptedProfiles, setLoadingFriendships } = useGlobalStore();
+    const { setName, setEmail, setAbout, setProfilePicture, directChats, setDirectChats, setLoadingDirectChats, groupChats, setGroupChats, setLoadingGroupChats, setPendingProfiles, setAcceptedProfiles, setLoadingFriendships } = useGlobalStore();
     const [processedMessages, setProcessedMessages] = useState([]);
     
     const audioRef = useRef(null);
@@ -111,6 +111,10 @@ export default function Dashboard() {
             const response = await fetchUserMetaData();
             if (userPicture === 'url')
                 setUserPicture(response.profilePicture);
+            setName(response.userName);
+            setAbout(response.about);
+            setEmail(response.email);
+            setProfilePicture(response.profilePicture);
         };
         fetchDarkModePreference();
         fetchUser();
@@ -120,6 +124,7 @@ export default function Dashboard() {
         fetchAllChats();
         fetchAllGroups();
         fetchFriendships();
+        fetchUser();
     }, []);
 
     useEffect(() => {
@@ -270,7 +275,7 @@ export default function Dashboard() {
             ]);
         };
         handleMessages();
-    }, [messages, processedMessages]); 
+    }, [messages, processedMessages]);
     
     const fetchAllChats = async () => {
         try {
