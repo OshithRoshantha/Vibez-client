@@ -342,7 +342,7 @@ export default function Dashboard() {
         </div>}
         {!showMobileRight && <>
         <div className="flex h-screen bg-background text-foreground" style={{display:'flex', flexDirection: isMobile ? 'column-reverse' : 'row'}}>
-            <div className={isMobile ? `${darkMode ? 'border-gray-600 border-t border-border' : ''} flex items-center gap-x-7 justify-center align-middle w-full bg-background border-t border-border button-column` : `${darkMode ? 'border-gray-600 border-r border-border' : ''} flex flex-col h-screen bg-background border-r border-border button-column`} style={{backgroundColor: darkMode ? '#262729' : '', width: isMobile ? '100vw' : '', height: isMobile ? '10vh' : ''}}>
+            <div className={isMobile ? `${darkMode ? 'border-gray-600 border-t border-border' : ''} flex items-center gap-x-7 justify-center align-middle w-full bg-background border-t border-border button-column` : `${darkMode ? 'border-gray-600 border-r border-border' : ''} flex flex-col h-screen bg-background border-r border-border button-column`} style={{backgroundColor: darkMode ? '#262729' : '', width: isMobile ? '100vw' : '', height: isMobile ? '50vh' : ''}}>
                 <div onClick={showChatsMenu} className={`flex items-center justify-center ${isMobile ? 'mt-0':'mt-4'}`} style={{cursor: 'pointer', borderLeft: !isMobile && chatsMenu ? '6px solid blue' : 'none'}}>
                     {unreadMessages > 0 && (
                         <div className='text-white bg-danger ml-7 mb-3 h-5 w-5 rounded-full absolute' style={{display:'flex', justifyContent:'center', alignItems:'center'}}>{unreadMessages}</div>

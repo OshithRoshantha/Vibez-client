@@ -83,7 +83,7 @@ export default function ProductInfo({expandingProductId, darkMode, showDirectMes
 
   return (
     <div>
-        <div className="bg-card text-card-foreground w-full p-4 pt-2 mt-1 product-info"  style={{backgroundColor: darkMode ? '#262729' : ''}}>
+        <div className="bg-card text-card-foreground w-full p-4 pt-2 mt-1 product-info"  style={{backgroundColor: darkMode ? '#262729' : '', height: isMobile ? '55vh' : ''}}>
                 {loading && <>  
                 <div>       
                     <div className="grid grid-cols-3 gap-1 mb-4">

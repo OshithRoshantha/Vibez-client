@@ -324,7 +324,7 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
                     <button onClick={showForYouMenu} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}>For you</button>
                 </div>
             {showResults && <div className='product-list'>
-                <div className='product-list'>
+                <div className='product-list' style={{height: isMobile ? '55vh' : ''}}>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-0 p-0 w-full"> 
                         {loadingResults && <>
                             {Array.from({ length: 6 }).map((_, index) => (
@@ -365,7 +365,7 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
                 </div>                         
             </div>}
             {forYouMenu && 
-                <div className='product-list'>
+                <div className='product-list' style={{height: isMobile ? '55vh' : ''}}>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-5 p-0 w-full"> 
                     {loading ? (<>
                         {Array.from({ length: 6 }).map((_, index) => (
@@ -404,7 +404,7 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
                 </div>
             }
             {sellMenu && 
-            <div className='sell-products' ref={sellProductsRef}>
+            <div className='sell-products' ref={sellProductsRef}  style={{height: isMobile ? '55vh' : ''}}>
                 <div className="p-6 pt-1 bg-card text-card-foreground" style={{backgroundColor: darkMode ? '#262729' : ''}}>
                 <h2 className={`${darkMode ? 'text-white':''} text-lg font-semibold mb-2`}>Overview</h2>
                 <div className="grid grid-cols-2 gap-x-4 gap-y-0 mb-6">
@@ -508,7 +508,7 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
                     </p>
                 </div>            
             </div>}
-            {yourListningMenu && <div className='product-list'>
+            {yourListningMenu && <div className='product-list'  style={{height: isMobile ? '55vh' : ''}}>
                 {myListings.length === 0 ? (
                     <div> 
                         <div className="flex flex-col items-center justify-center" style={{ marginTop: '15%', padding: '0 5%' }}>

@@ -222,7 +222,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
                     <button onClick={showAllChats} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`} >All</button>
                     <button onClick={addChat} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}><i className="bi bi-plus-lg"></i></button>
                 </div>
-                <div className='chat-list'>
+                <div className='chat-list' style={{height: isMobile ? '59vh' : ''}}>
                 {showFriends && (
                         <>
                         {loading3 ? (
