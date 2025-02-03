@@ -35,6 +35,7 @@
     height: 61vh;
     overflow-y: auto;
     scrollbar-width: none; 
+    background-color: red;
 }
 
 .group-op{
