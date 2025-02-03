@@ -343,15 +343,22 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
                                     </div>
                                 );
                             })}
+                            {isMobile && 
+                            <div className="flex items-center justify-center">
+                            <button onClick={showFinishCreateGroup} className="bg-primary text-white " style={{cursor: 'pointer', borderRadius:'50%', height:'54px', width:'54px', marginTop:'80px'}} >
+                                <i className="bi bi-arrow-right"></i>
+                            </button>
+                            </div>}
                         </>
                     )}
                     </div>
                     </div>
+                    {!isMobile && 
                     <div className="flex items-center justify-center">
                     <button onClick={showFinishCreateGroup} className="bg-primary text-white absolute" style={{cursor: 'pointer', borderRadius:'50%', height:'54px', width:'54px', marginTop:'80px'}} >
                         <i className="bi bi-arrow-right"></i>
                     </button>
-                    </div>
+                    </div>}
                 </div>}
                 {finishCreateGroup && <div style={{backgroundColor: darkMode ? '#262729' : ''}}>	
                     {editPictureForm && <div className={`bg-white edit-picture-form2 shadow-lg`} style={{width: isMobile ? '85%' : ''}}>
@@ -403,7 +410,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
                         onChange={(e) => setGroupDescription(e.target.value)}
                         className={`${darkMode ? 'border-[#3c3d3f] placeholder:text-[#abacae] text-white' : 'border-muted text-foreground placeholder:text-muted-foreground'} border-b  w-full py-2 mb-4 bg-transparent  focus:outline-none`}
                     />
-                    <button onClick={() => {hideFinishCreateGroup(); clearCropedImage(); createNewGroup();}} className="bg-primary text-white absolute" style={{cursor: 'pointer', borderRadius:'50%', height:'54px', width:'54px', marginTop:'340px'}} >
+                    <button onClick={() => {hideFinishCreateGroup(); clearCropedImage(); createNewGroup();}} className="bg-primary text-white" style={{position: isMobile ? '':'absolute', cursor: 'pointer', borderRadius:'50%', height:'54px', width:'54px', marginTop: isMobile ? '' :'340px'}} >
                         <i className="bi bi-check2"></i>
                     </button>
                     </div>           
