@@ -210,7 +210,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
                     <div className="space-y-0">  
                     {loading2 ? (
                         <>
-                            {Array.from({ length: 6 }).map((_, index) => (
+                            {Array.from({ length: 4 }).map((_, index) => (
                                 <div key={index} className="flex items-center justify-between border-border py-2">
                                     <div className="flex items-center">
                                         <Skeleton className="rounded-full mr-2 w-10 h-10" />
@@ -349,7 +349,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
                 {groupChatsMenu && <div>
                     {loadingGroupChats ? (
                             <div>
-                            {[...Array(6)].map((_, index) => (
+                            {[...Array(4)].map((_, index) => (
                               <div key={index} className="space-y-2">
                                 <div className={`flex items-center p-2 rounded`}>
                                   <Skeleton className="h-12 w-12 rounded-full mr-2" />

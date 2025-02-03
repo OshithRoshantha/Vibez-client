@@ -7,7 +7,7 @@ export default function GroupChatPreview({darkMode, groupId, showGroupMessages, 
   
   const isMobile = useIsMobile();
   const [isUnread, setIsUnread] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const handleGroupClick = () => {
     setGroupId(groupId);
