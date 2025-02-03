@@ -1,6 +1,6 @@
 import './Styles/Column2.css'
 import { useState, useEffect, useRef } from 'react';
-import { getAllChats, getFavaouriteChats, getChatPreivew, searchChats } from '../Services/ChatService';
+import { getAllChats, getChatPreivew, searchChats } from '../Services/ChatService';
 import DirectChatPreview from './DirectChatPreview';
 import { useWebSocket } from '../Context/WebSocketContext';
 import { Skeleton } from "@/components/ui/skeleton";
@@ -82,27 +82,13 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
                 })
             );
             setChats(chatPreviews); 
+
+
         }
         finally {
             setLoading(false);
         }
     };
-
-    const fetchFavouriteChats = async () => {
-        try {
-            const friendIds = await getFavaouriteChats(); 
-            const chatPreviews = await Promise.all(
-                friendIds.map(async (friendId) => {
-                    const chatPreview = await getChatPreivew(friendId);
-                    return chatPreview;
-                })
-            );
-            setFavouriteChats(chatPreviews); 
-        }
-        finally {
-            setLoading2(false);
-        }
-    };  
     
     const convertToISOTimestamp = (time) => {
         const [hours, minutes] = time.split(':').map(Number); 
@@ -131,7 +117,6 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
                 return;
             }
             for (const lastMessage of newMessages) {
-
                 if (lastMessage.action === 'messageService') {
                     const hasMatchingChat = chats.some(chat => chat.chatId === lastMessage.chatId);
                     if (hasMatchingChat) {
@@ -173,12 +158,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
     
     useEffect(() => {
         fetchAllChats();
-        fetchFavouriteChats();
     }, []);
-
-    const showFavouriteChats = () => {
-        setShowAll(false);
-    }
 
     const showAllChats = () => {
         setShowAll(true);
@@ -324,7 +304,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
                                             setShowMobileRight={setShowMobileRight}
                                         />
                                     );
-                                })
+                            })
                         )
                     ) : (
                         loading2 ? (
