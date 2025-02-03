@@ -17,7 +17,7 @@ import { getUnreadCount } from  '../Services/ChatService';
 import PopupNotifiter from '../Components/PopupNotifiter';
 import { useWebSocket } from '../Context/WebSocketContext';
 import { getConnectedProfileInfo, filterPendingRequests, filterAcceptedRequests } from '../Services/FriendshipService';
-import { getProductDetails } from '../Services/MarketplaceService';
+import { getProductDetails,  getMarketplaceItems, isUserSeller} from '../Services/MarketplaceService';
 import { getUnreadGroupMessages } from '../Services/GroupsService';
 import mainDark from '@/assets/Wallpapers/dark.png';
 import mainLight from '@/assets/Wallpapers/light.png';
@@ -31,7 +31,7 @@ export default function Dashboard() {
 
     const isMobile = useIsMobile();
     const { messages } = useWebSocket();
-    const { setName, setEmail, setAbout, setProfilePicture, directChats, setDirectChats, setLoadingDirectChats, groupChats, setGroupChats, setLoadingGroupChats, setPendingProfiles, setAcceptedProfiles, setLoadingFriendships } = useGlobalStore();
+    const { setProductList, setLoadingProducts, setName, setEmail, setAbout, setProfilePicture, directChats, setDirectChats, setLoadingDirectChats, groupChats, setGroupChats, setLoadingGroupChats, setPendingProfiles, setAcceptedProfiles, setLoadingFriendships } = useGlobalStore();
     const [processedMessages, setProcessedMessages] = useState([]);
     
     const audioRef = useRef(null);
@@ -124,6 +124,7 @@ export default function Dashboard() {
         fetchAllChats();
         fetchAllGroups();
         fetchFriendships();
+        fetchMarketplaceItems();
         fetchUser();
     }, []);
 
@@ -199,6 +200,7 @@ export default function Dashboard() {
                         setNotification(`Your new listing for ${productDetails.productTitle} has been created.`);
                         setShowNotification(true);
                     }
+                    fetchMarketplaceItems();
                 }
                 else if (lastMessage.action === 'messageService'){
                     if(lastMessage.type === 'direct'){
@@ -258,7 +260,11 @@ export default function Dashboard() {
                         if (isFriend) {
                             fetchFriendships();
                         }
-                    }                    
+                    }
+                    const response = await isUserSeller(lastMessage.body);
+                    if(response){
+                        fetchMarketplaceItems();
+                    }                                        
                 }
                 else if(lastMessage.action === 'accountDelete' ){
                     if(lastMessage.typeOfAction === 'directChat'){
@@ -267,6 +273,9 @@ export default function Dashboard() {
                     if(lastMessage.typeOfAction === 'friendship'){
                         fetchFriendships();
                     } 
+                    if (lastMessage.typeOfAction === 'marketplace') {
+                        fetchMarketplaceItems();
+                    }
                 }               
             }
             setProcessedMessages(prevProcessedMessages => [
@@ -277,6 +286,15 @@ export default function Dashboard() {
         handleMessages();
     }, [messages, processedMessages]);
     
+    const fetchMarketplaceItems = async () => {
+        try{
+            const response = await getMarketplaceItems();
+            setProductList(response);
+        } finally {
+            setLoadingProducts(false);
+        }
+    };
+
     const fetchAllChats = async () => {
         try {
             const friendIds = await getAllChats(); 
