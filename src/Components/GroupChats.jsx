@@ -1,5 +1,5 @@
 import './Styles/Column2.css'
-import { useRef, useState, useEffect} from 'react';
+import { useRef, useState } from 'react';
 import './Styles/SignupElement.css'
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
@@ -10,12 +10,13 @@ import { getAllFriends } from '../Services/FriendshipService';
 import { useWebSocket } from '../Context/WebSocketContext';
 import { uploadFile } from '../Services/s3Service';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { useGlobalStore } from '../States/UseStore';
 
 export default function GroupChats({showGroupMessages, darkMode, setGroupId, setShowMobileRight}) {
 
     const isMobile = useIsMobile();
-    const { messages, createGroup } = useWebSocket();
-    const [processedMessages, setProcessedMessages] = useState([]);
+    const { createGroup } = useWebSocket();
+    const { groupChats, setGroupChats, loadingGroupChats } = useGlobalStore();
 
     const [groups, setGroups] = useState([]);
     const [friends, setFriends] = useState([]);
@@ -23,7 +24,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
     const [loading2, setLoading2] = useState(true);
     const [addMembersMenu, setAddMembersMenu] = useState(false);
     const [finishCreateGroup, setFinishCreateGroup] = useState(false);
-    const [groupChats, setGroupChats] = useState(true);
+    const [groupChatsMenu, setGroupChatsMenu] = useState(true);
     const [editPictureForm, setEditPictureForm] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const [cropFactor, setCropFactor] = useState(1);
@@ -38,72 +39,6 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
     const [addedFriends, setAddedFriends] = useState({});
 
     const defaultImage = "./src/assets/groupDefault.jpg";
-
-    const convertToISOTimestamp = (time) => {
-        const [hours, minutes] = time.split(':').map(Number); 
-        const now = new Date(); 
-        const newDate = new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate(),
-          hours,
-          minutes,
-          now.getSeconds(),
-          now.getMilliseconds()
-        );
-        return newDate.toISOString(); 
-    };
-
-    useEffect(() => {
-        const handleMessages = async () => {
-            if (messages.length === 0) {
-                return;
-            }
-            const newMessages = messages.filter(message => !processedMessages.includes(message.id));
-            if (newMessages.length === 0) {
-                return; 
-            }
-            for (const lastMessage of newMessages) {
-                switch (lastMessage.action) {
-                    case 'groupService': {
-                        fetchAllGroups();
-                        break;
-                    }
-                    case 'messageService': {
-                        if(lastMessage.type === 'group'){
-                            if (lastMessage.action === 'messageService') {
-                                const hasMatchingGroup = groups.some(group => group.groupId === lastMessage.groupId);
-                                if (hasMatchingGroup) {
-                                  setGroups(prevGroups => 
-                                    prevGroups.map(group => 
-                                      group.groupId === lastMessage.groupId
-                                        ? {
-                                            ...group,
-                                            lastMessage: lastMessage.payload.message,
-                                            lastMessageSender: lastMessage.payload.sender === sessionStorage.getItem('userId') ? 'Me' : lastMessage.payload.senderName, 
-                                            lastUpdate: convertToISOTimestamp(lastMessage.payload.timestamp) 
-                                          }
-                                        : group
-                                    )
-                                  );
-                                } else {
-                                  fetchAllGroups(); 
-                                }
-                              }
-                        }                        
-                      break;
-                    }
-                    default:
-                        break;
-                }
-            }
-            setProcessedMessages(prevProcessedMessages => [
-                ...prevProcessedMessages,
-                ...newMessages.map(message => message.id),
-            ]);
-        };
-        handleMessages();
-    }, [messages, processedMessages]);     
 
     const fetchAllGroups = async () => {
         try{
@@ -146,10 +81,6 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
         setAddedFriends({});
         setCropedImage(null);
     }
-
-    useEffect(() => {
-        fetchAllGroups();
-    }, []);
     
     const handleAddClick = (profileId) => {
         setAddedFriends((prev) => ({ ...prev, [profileId]: true }));
@@ -166,17 +97,17 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
     function showAddMembersMenu(){
         fetchAllFriends();
         setAddMembersMenu(true);
-        setGroupChats(false);
+        setGroupChatsMenu(false);
         setFinishCreateGroup(false);
     }
 
     function hideAddMembersMenu(){
         setAddMembersMenu(false);
-        setGroupChats(true);
+        setGroupChatsMenu(true);
     }
 
     function showGroupChats(){
-        setGroupChats(true);
+        setGroupChatsMenu(true);
         setAddMembersMenu(false);
         setFinishCreateGroup(false);
     }
@@ -184,12 +115,12 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
     function showFinishCreateGroup(){
         setFinishCreateGroup(true);
         setAddMembersMenu(false);
-        setGroupChats(false);
+        setGroupChatsMenu(false);
     }
 
     function hideFinishCreateGroup(){
         setFinishCreateGroup(false);
-        setGroupChats(true);
+        setGroupChatsMenu(true);
         setAddMembersMenu(false);
     }
 
@@ -415,8 +346,8 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
                     </button>
                     </div>           
                 </div>}
-                {groupChats && <div>
-                    {loading ? (
+                {groupChatsMenu && <div>
+                    {loadingGroupChats ? (
                             <div>
                             {[...Array(6)].map((_, index) => (
                               <div key={index} className="space-y-2">
@@ -432,7 +363,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
                             ))}
                           </div>
                         ) : (
-                            groups
+                            groupChats
                                 .sort((a, b) => new Date(b.lastUpdate) - new Date(a.lastUpdate))
                                 .map((group) => {
                                     const now = new Date();
