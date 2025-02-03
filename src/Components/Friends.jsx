@@ -1,24 +1,24 @@
 import { useState, useRef, useEffect } from 'react';
 import './Styles/Column2.css';
-import { searchPeople, getConnectedProfileInfo, filterPendingRequests } from '../Services/FriendshipService';
+import { searchPeople } from '../Services/FriendshipService';
 import { fetchPeopleMetaData } from '../Services/ProfileService';
 import SearchResult from './SearchResult';
 import PreviewPendingRequests from './PreviewPendingRequests';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
-import { isConnectedProfile } from '../Services/FriendshipService';
 import PreviewAcceptedRequests from './PreviewAcceptedRequests';
 import { useIsMobile } from '../hooks/useIsMobile';
 import errDark from '@/assets/Icons/searchErdark.png';
 import errLight from '@/assets/Icons/searchEr.png';
+import { useGlobalStore } from '../States/UseStore';
 
-export default function Friends({darkMode, setPendingRequests, fetchPendingRequests, showDirectMessages, setReceiverId, setShowMobileRight}) {
+export default function Friends({darkMode, setPendingRequests, showDirectMessages, setReceiverId, setShowMobileRight}) {
 
     const isMobile = useIsMobile();
     const { messages } = useWebSocket();
     const [processedMessages, setProcessedMessages] = useState([]);
+    const { pendingProfiles, acceptedProfiles, loadingFriendships } = useGlobalStore();
 
-    const [loading, setLoading] = useState(true);
     const [friendRequests, setFriendRequests] = useState(true);
     const [yourFriends, setYourFriends] = useState(false);
     const inputRef = useRef(null);
@@ -26,8 +26,6 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
     const [searchKeyword, setSearchKeyword] = useState('');
     const [results, setResults] = useState([]);
     const [isResultsEmpty, setIsResultsEmpty] = useState(false);
-    const [pendingProfiles, setPendingProfiles] = useState([]);
-    const [acceptedProfiles, setAcceptedProfiles] = useState([]);
     const prevPendingCountRef = useRef(0);
 
     const handleIconClick = () => {
@@ -37,52 +35,6 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
           setYourFriends(true);
         }
     };
-
-    const fetchFriendships = async () => {
-        setLoading(true);
-        setPendingProfiles([]);
-        setAcceptedProfiles([]);
-    
-        const linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles')) || [];
-        if (linkedProfiles.length === 0) {
-            setLoading(false);
-            return;
-        }
-        const profilesPromises = linkedProfiles.map(async (friendshipId) => {
-            const profileInfo = await getConnectedProfileInfo(friendshipId);
-            const response = await filterPendingRequests(friendshipId);
-            return { profileInfo, response };
-        });
-    
-        try {
-            const results = await Promise.all(profilesPromises);
-    
-            const pending = [];
-            const accepted = [];
-    
-            results.forEach(({ profileInfo, response }) => {
-                if (response && profileInfo.status === "PENDING") {
-                    if (!pending.some(profile => profile.profileId === profileInfo.profileId)) {
-                        pending.push(profileInfo);
-                    }
-                }
-                if (profileInfo.status === "ACCEPTED") {
-                    if (!accepted.some(profile => profile.profileId === profileInfo.profileId)) {
-                        accepted.push(profileInfo);
-                    }
-                }
-            });
-            setPendingProfiles(pending);
-            setAcceptedProfiles(accepted);
-        } finally {
-            setLoading(false);
-        }
-    };
-    
-
-    useEffect(() => {
-        fetchFriendships();
-    }, []);
 
     useEffect(() => {
         const currentPendingCount = pendingProfiles.length;
@@ -102,55 +54,16 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
             if (newMessages.length === 0) {
                 return; 
             }
-            let linkedProfiles = JSON.parse(sessionStorage.getItem('linkedProfiles')) || [];
             for (const lastMessage of newMessages) {
                 switch (lastMessage.action) {
                     case 'friendshipService': {
-                        if ((lastMessage.status === 'UNFRIENDED' || lastMessage.status === 'BLOCKED') && linkedProfiles.includes(lastMessage.friendshipId)) {
-                            linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
-                            sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
-                            fetchFriendships();
-                            setProcessedMessages(prevProcessedMessages => [
-                                ...prevProcessedMessages,
-                                ...newMessages.map(message => message.id),
-                            ]);
-                        }
-
-                        else{
-                            if (lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED') {
-                                if (!linkedProfiles.includes(lastMessage.friendshipId)) {
-                                    linkedProfiles.push(lastMessage.friendshipId);
-                                    sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
-                                }
-                                fetchPendingRequests();
-                                fetchFriendships();
-                                if(lastMessage.status === 'ACCEPTED' && showResults) {
-                                    setShowResults(false);
-                                    setYourFriends(true);
-                                }
-                            } else if (lastMessage.status === 'UNFRIENDED') {
-                                linkedProfiles = linkedProfiles.filter(profile => profile !== lastMessage.friendshipId);
-                                sessionStorage.setItem('linkedProfiles', JSON.stringify(linkedProfiles));
-                                fetchFriendships();
+                        if (lastMessage.status === 'PENDING' || lastMessage.status === 'ACCEPTED') {
+                            if(lastMessage.status === 'ACCEPTED' && showResults) {
+                                setShowResults(false);
+                                setYourFriends(true);
                             }
-                        }
-                        break;
-                        
-                    }
-                    case 'profileService': {
-                        for (const friendshipId of linkedProfiles) {
-                            const isFriend = await isConnectedProfile(friendshipId);
-                            if (isFriend) {
-                                fetchFriendships();
-                            }
-                        }
-                        break;
-                    }
-                    case 'accountDelete':{
-                        if(lastMessage.typeOfAction === 'friendship'){
-                            fetchFriendships();
-                        }
-                        break;
+                        } 
+                        break;      
                     }
                     default:
                         break;
@@ -164,7 +77,6 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
         handleMessages();
     }, [messages, processedMessages]); 
     
-
 
     function hideFriendRequests() {
         setFriendRequests(true);
@@ -249,7 +161,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                         Friend Requests
                     </button>
                 </div>
-                {friendRequests && loading && ( 
+                {friendRequests && loadingFriendships && ( 
                     <div>
                     <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{pendingProfiles.length} Pending requests</h2>
                     <div className="friends-list skeleton-container" style={{height: isMobile ? '53vh' : ''}} >
@@ -277,7 +189,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                     </div>
                     </div>                    
                 )}
-                {friendRequests && !loading && (
+                {friendRequests && !loadingFriendships && (
                     <div>
                         <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{pendingProfiles.length} Pending requests</h2>
                         <div className="friends-list" style={{height: isMobile ? '53vh' : ''}}>
@@ -339,7 +251,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                         </div>
                     </div>
                 )}
-                {yourFriends && loading && ( 
+                {yourFriends && loadingFriendships && ( 
                     <div>
                     <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{acceptedProfiles.length} friends</h2>
                     <div className="friends-list skeleton-container" style={{height: isMobile ? '53vh' : ''}}>
@@ -367,7 +279,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                     </div>
                     </div>                    
                 )}
-                {yourFriends && !loading && (
+                {yourFriends && !loadingFriendships && (
                     <div>
                         <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>{acceptedProfiles.length} friends</h2>
                         <div className="friends-list" style={{height: isMobile ? '53vh' : ''}}>
@@ -381,7 +293,6 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                                         profileName={profile.profileName}
                                         profilePicture={profile.profilePicture}
                                         profileAbout={profile.profileAbout}
-                                        fetchFriendships={fetchFriendships}
                                         showDirectMessages={showDirectMessages}
                                         setReceiverId={setReceiverId}
                                         friendId={profile.profileId} 
