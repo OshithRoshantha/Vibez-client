@@ -48,7 +48,6 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
       setChatsLoading(true);
       const response = await getGroupMessages(groupId);
       setMessage(response);
-      console.log(response);
     }
     finally{
       setChatsLoading(false);
