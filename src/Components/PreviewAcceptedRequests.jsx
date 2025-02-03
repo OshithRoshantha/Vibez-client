@@ -104,14 +104,14 @@ export default function PreviewAcceptedRequests({darkMode, friendshipId, profile
                         </div>
                     </div>
 
-                    <div className="btn-container">
-                        <div className="ml-mr-4 btns">
+                    <div className="flex items-center">
+                        <div className="text-2xl mr-3 cursor-pointer">
                         <i onClick={handleSendMessage} className="bi bi-chat-fill text-primary"></i>
                         </div>
 
                         <Popover>
                         <PopoverTrigger asChild>
-                            <div className="btns">
+                            <div className="text-2xl">
                             <i className={`${darkMode ? 'text-white' : ''} bi bi-three-dots-vertical`}></i>
                             </div>
                         </PopoverTrigger>

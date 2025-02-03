@@ -289,7 +289,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
                                         </div>
                                     </div>
                                     <div className="btn-container flex">
-                                        <Skeleton className="px-3 py-2 w-[60px] rounded mr-2" />
+                                        
                                         <Skeleton className="px-3 py-2 w-[70px] rounded" />
                                     </div>
                                 </div>

@@ -124,7 +124,7 @@ export default function Profile({darkMode, setUserPicture}) {
                                 </div>
                 </div>}
                 <h2 className={`${darkMode ? 'text-white' :'text-black'} text-lg font-semibold column-header`}>Profile</h2>
-                <div className="flex flex-col items-center p-6 bg-background text-foreground" style={{marginTop:'17%', paddingBottom:'31%', backgroundColor: darkMode ? '#262729' : ''}}>
+                <div className="flex flex-col items-center p-6 bg-background text-foreground" style={{marginTop:'17%', paddingBottom: isMobile ? '' : '31%', backgroundColor: darkMode ? 'red' : '', height: isMobile ? '70vh':''}}>
                 <div onClick={uploadImg} onMouseEnter={showProfilePicHover} onMouseLeave={hideProfilePicHover} style={{cursor:'pointer', backgroundImage: cropedImage ? `url(${cropedImage})` : `url(${profilePicture})`, backgroundSize: 'cover', backgroundPosition: 'center', border: '1px solid rgb(104, 104, 104)',}} className="profile-pic w-40 h-40 rounded-full  text-center">
                     {profilePicHover && <div>
                         <span className='camera-icon'><i className="bi bi-camera-fill"></i></span>CHANGE PROFILE PICTURE    
