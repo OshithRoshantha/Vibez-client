@@ -176,7 +176,7 @@ export default function Signin({ onLogin }) {
                                 <GoogleLogin
                                     shape="pill"
                                     theme="outline"
-                                    width={282}
+                                    width="100%"
                                     onSuccess={credentialResponse => {
                                         handleGoogleLogin(credentialResponse);
                                     }}

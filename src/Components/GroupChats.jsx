@@ -272,7 +272,7 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
                     <button onClick={showGroupChats} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}>Your groups</button>
                     <button onClick={showAddMembersMenu} className={`${darkMode ? 'bg-[#223b51] text-[#59abff] hover:bg-[#184e88]':'bg-gray-300 text-gray-600  hover:bg-gray-200'} px-4 py-2 rounded-full border-none`}><i className="bi bi-plus-lg"></i></button>
                 </div>
-                <div className='chat-list'>
+                <div className='chat-list'style={{height: isMobile ? '59vh' : ''}}>
                 {addMembersMenu && <div>
                     <h2 className={`${darkMode ? 'text-white' : ''} text-lg font-semibold mb-2`}>Add group members</h2>
                     <div className='group-op'>
