@@ -156,8 +156,13 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
     }
     
     const fetchSearchResults = async () => {
-        const response = await searchProducts(searchKeyword);
-        setResultsList(response);
+        try{
+            const response = await searchProducts(searchKeyword);
+            setResultsList(response);
+            console.log(response);
+        } finally{
+            setLoadingResults(false);
+        }
     }
 
     const fetchActiveListingCount = async () => {
