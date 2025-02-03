@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useRef } from 'react';
 
 const WebSocketContext = createContext();
 const API = import.meta.env.VITE_API;
@@ -8,49 +8,97 @@ export const useWebSocket = () => useContext(WebSocketContext);
 export const WebSocketProvider = ({ children, isLoggedIn }) => {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [reconnectTrigger, setReconnectTrigger] = useState(0);
+  const reconnectAttempts = useRef(0);
+  const wsRef = useRef(null);
+  const reconnectTimerRef = useRef(null);
+  const pendingMessages = useRef([]); 
+  const isConnecting = useRef(false);
+
+  const connectWebSocket = () => {
+    if (!isLoggedIn) return;
+
+    const token = sessionStorage.getItem('token');
+    const userId = sessionStorage.getItem('userId');
+    isConnecting.current = true;
+    
+    const ws = new WebSocket(`wss://${API}/vibez-websocket?token=${token}`);
+    wsRef.current = ws;
+
+    ws.onopen = () => {
+      isConnecting.current = false;
+      reconnectAttempts.current = 0;
+      
+      ws.send(JSON.stringify({ action: 'subscribe', userId, topic: 'profileService' }));
+      ws.send(JSON.stringify({ action: 'subscribe', userId, topic: 'friendshipService' }));
+      ws.send(JSON.stringify({ action: 'subscribe', userId, topic: 'marketplaceService' }));
+      ws.send(JSON.stringify({ action: 'subscribe', userId, topic: 'messageService' }));
+      ws.send(JSON.stringify({ action: 'subscribe', userId, topic: 'groupService' }));
+      ws.send(JSON.stringify({ action: 'subscribe', userId, topic: 'accountDelete' }));
+
+      if (pendingMessages.current.length > 0) {
+        pendingMessages.current.forEach(msg => {
+          ws.send(JSON.stringify(msg));
+        });
+        pendingMessages.current = [];
+      }
+    };
+
+    ws.onerror = (error) => {
+      console.error("WebSocket Error: ", error);
+      isConnecting.current = false;
+    };
+
+    ws.onmessage = (event) => {
+      const incomingMessage = JSON.parse(event.data);
+      setMessages((prevMessages) => [...prevMessages, incomingMessage]);
+    };
+
+    ws.onclose = (e) => {
+      console.log('WebSocket closed:', e.code, e.reason);
+      isConnecting.current = false;
+      if (isLoggedIn) {
+        const nextDelay = Math.min(1000 * Math.pow(2, reconnectAttempts.current), 30000);
+        reconnectAttempts.current += 1;
+        console.log(`Reconnecting in ${nextDelay}ms...`);
+        reconnectTimerRef.current = setTimeout(() => {
+          setReconnectTrigger(prev => prev + 1);
+        }, nextDelay);
+      }
+    };
+
+    setSocket(ws);
+  };
 
   useEffect(() => {
-    if (isLoggedIn) {
-      const token = sessionStorage.getItem('token');
-      const userId = sessionStorage.getItem('userId');
-      const ws = new WebSocket(`wss://${API}/vibez-websocket?token=${token}`);
-
-      ws.onopen = () => {
-        ws.send(JSON.stringify({ action: 'subscribe', userId, topic: 'profileService' }));
-        ws.send(JSON.stringify({ action: 'subscribe', userId, topic: 'friendshipService' }));
-        ws.send(JSON.stringify({ action: 'subscribe', userId, topic: 'marketplaceService' }));
-        ws.send(JSON.stringify({ action: 'subscribe', userId, topic: 'messageService' }));
-        ws.send(JSON.stringify({ action: 'subscribe', userId, topic: 'groupService' }));
-        ws.send(JSON.stringify({ action: 'subscribe', userId, topic: 'accountDelete' }));
-      };
-
-      ws.onerror = (error) => {
-        console.error("WebSocket Error: ", error);
-      };
-
-      ws.onmessage = (event) => {
-        const incomingMessage = JSON.parse(event.data);
-        setMessages((prevMessages) => [...prevMessages, incomingMessage]);
-      };
-
-      setSocket(ws);
-
-      return () => ws.close();
-    }
-  }, [isLoggedIn]);
-
-  useEffect(() => {
-    if (socket) {
-      const timer = setTimeout(() => socket.close(), 18 * 60 * 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [socket]);
+    connectWebSocket();
+    return () => {
+      if (wsRef.current) {
+        wsRef.current.close();
+        wsRef.current = null;
+      }
+      if (reconnectTimerRef.current) {
+        clearTimeout(reconnectTimerRef.current);
+        reconnectTimerRef.current = null;
+      }
+      pendingMessages.current = [];
+      reconnectAttempts.current = 0;
+    };
+  }, [isLoggedIn, reconnectTrigger]);
 
   const send = (action, body) => {
+    const message = { action, body };
+    
     if (socket?.readyState === WebSocket.OPEN) {
-      socket.send(JSON.stringify({ action, body }));
+      socket.send(JSON.stringify(message));
     } else {
-      console.error("WebSocket not connected");
+      console.log("Queuing message for later delivery:", message);
+      pendingMessages.current.push(message);
+      
+      if (!isConnecting.current) {
+        console.log("Triggering immediate reconnect...");
+        setReconnectTrigger(prev => prev + 1);
+      }
     }
   };
 
