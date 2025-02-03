@@ -17,7 +17,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
     const [favouriteChats, setFavouriteChats] = useState([]);
     const [acceptedProfiles, setAcceptedProfiles] = useState([]);
     const [isFetched, setIsFetched] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [loading2, setLoading2] = useState(true);
     const [loading3, setLoading3] = useState(true);
     const [showAll, setShowAll] = useState(true);
@@ -31,6 +31,8 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
 
     const getSearchResults = async (value) => {
         try {
+            setLoading(true);
+            setChats([]); 
             const friendIds = await searchChats(value); 
             const chatPreviews = await Promise.all(
                 friendIds.map(async (friendId) => {
@@ -182,7 +184,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
                         </>
                         )}
                     {showAll ? (
-                        loadingDirectChats && isFetched ? (
+                        loadingDirectChats || loading ? (
                             <div>
                             {[...Array(6)].map((_, index) => (
                               <div key={index} className="space-y-2">
@@ -198,7 +200,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
                             ))}
                           </div>
                         ) : (
-                            directChats
+                            (searchKeyword === '' ? directChats : chats)
                                 .sort((a, b) => new Date(b.lastActiveTime) - new Date(a.lastActiveTime))
                                 .map((chat) => {
                                     const now = new Date();
