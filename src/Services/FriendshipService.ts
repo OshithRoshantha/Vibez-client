@@ -4,12 +4,12 @@ const API = import.meta.env.VITE_API;
 
 export const searchPeople = async (keyword: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://${API}/vibez/search/${userId}/${keyword}`);
+    const response = await axios.get(`https://${API}/search/${userId}/${keyword}`);
     return response.data;
 }
 
 export const getFriendshipStatus = async (friendshipId: string) => {
-    const response = await axios.get(`http://${API}/vibez/friends/getStatus/${friendshipId}`, {
+    const response = await axios.get(`https://${API}/friends/getStatus/${friendshipId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -19,7 +19,7 @@ export const getFriendshipStatus = async (friendshipId: string) => {
 
 export const getFriendshipId = async (friendId: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://${API}/vibez/friends/${userId}/${friendId}`, {
+    const response = await axios.get(`https://${API}/friends/${userId}/${friendId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -29,7 +29,7 @@ export const getFriendshipId = async (friendId: string) => {
 
 export const validateFriendship = async (friendId: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://${API}/vibez/friends/isFriends/${userId}/${friendId}`, {
+    const response = await axios.get(`https://${API}/friends/isFriends/${userId}/${friendId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -39,7 +39,7 @@ export const validateFriendship = async (friendId: string) => {
 
 export const isConnectedProfile = async (friendshipId: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://${API}/vibez/friends/check/${userId}/${friendshipId}`, {
+    const response = await axios.get(`https://${API}/friends/check/${userId}/${friendshipId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -49,7 +49,7 @@ export const isConnectedProfile = async (friendshipId: string) => {
 
 export const getConnectedProfile = async () => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://${API}/vibez/friends/linked/${userId}`, {
+    const response = await axios.get(`https://${API}/friends/linked/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -59,7 +59,7 @@ export const getConnectedProfile = async () => {
 
 export const getConnectedProfileInfo = async (friendshipId: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://${API}/vibez/friends/friendshipInfo/${friendshipId}/${userId}`, {
+    const response = await axios.get(`https://${API}/friends/friendshipInfo/${friendshipId}/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -69,7 +69,7 @@ export const getConnectedProfileInfo = async (friendshipId: string) => {
 
 export const filterPendingRequests = async (friendshipId: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://${API}/vibez/friends/filterPendings/${userId}/${friendshipId}`, {
+    const response = await axios.get(`https://${API}/friends/filterPendings/${userId}/${friendshipId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -79,7 +79,7 @@ export const filterPendingRequests = async (friendshipId: string) => {
 
 export const filterAcceptedRequests = async (friendshipId: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://${API}/vibez/friends/filterAccepteds/${userId}/${friendshipId}`, {
+    const response = await axios.get(`https://${API}/friends/filterAccepteds/${userId}/${friendshipId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -89,7 +89,7 @@ export const filterAcceptedRequests = async (friendshipId: string) => {
 
 export const getAllFriends = async () => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`http://${API}/vibez/friends/getAll/${userId}`, {
+    const response = await axios.get(`https://${API}/friends/getAll/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },

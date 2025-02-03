@@ -13,6 +13,8 @@ import { DotLoader } from 'react-spinners';
 import { validateFriendship, getFriendshipId } from '../Services/FriendshipService';
 import EmojiPicker from 'emoji-picker-react';
 import { useIsMobile } from '../hooks/useIsMobile';
+import mainDark from '@/assets/Wallpapers/dark.png';
+import mainLight from '@/assets/Wallpapers/light.png';
 
 export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, darkMode, receiverId, fetchUnreadMessages, setChatsMenu, setShowMobileRight}) {
 
@@ -23,7 +25,6 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
 
   const [isBeta, setIsBeta] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
-  const chatWallpaper = darkMode ? 'url(./src/assets/Wallpapers/dark.png)' : 'url(./src/assets/Wallpapers/light.png)';
   const [magicReplyButton, setMagicReplyButton] = useState(false);
   const [userName, setUserName] = useState('');
   const [userAvatar, setUserAvatar] = useState('');
@@ -257,7 +258,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
   return (
     <div>
         <div className={`${darkMode ? 'bg-[#262729]' : 'bg-background' } min-h-screen flex flex-col`} >
-        <div className={`${darkMode ? 'border-gray-600' : 'border-border'} flex items-center px-4 py-3 border-b`}>
+        <div className={`${darkMode ? 'border-gray-600' : 'border-border'} flex items-center px-4 py-3 border-b`} style={{ height: isMobile ? '10vh' : ''}}>
             {loading ? (
               <div>
                 <div className="flex items-center">
@@ -284,7 +285,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
             ) }
             {isMobile && <p onClick={handleBackButton} className="text-primary font-medium text-lg cursor-pointer right-6 absolute">Back</p>}
         </div>
-        <div className="p-4" ref={chatRef} style={{height: isMobile ? '82vh' : '78vh', overflowY:'auto', scrollbarWidth:'none', backgroundImage: chatWallpaper, backgroundSize: 'cover'}}>
+        <div className="p-4" ref={chatRef} style={{height: isMobile ? '80vh' : '78vh', overflowY:'auto', scrollbarWidth:'none', backgroundImage: `url(${darkMode ? mainDark : mainLight})`, backgroundSize: 'cover'}}>
         {showScrollButton && !isMobile && <i onClick={scrollToBottom} className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} cursor-pointer absolute bi bi-arrow-down-circle-fill text-4xl text-primary`} style={{left: '67%'}}></i>}
           {chatsLoading ? (
             <div className="text-center">
@@ -327,7 +328,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
         </div>
         </div>}
         </div>
-        <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3  border-t`} style={{display:'flex', alignItems:'center',columnGap:'1rem'}}>
+        <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3  border-t`} style={{display:'flex', alignItems:'center',columnGap:'1rem', height: isMobile ? '10vh':''}}>
             {isFriend ? (<>
             {showEmojiPicker && 
               <div className="absolute" style={{left: '39%', bottom: '11%'}}>

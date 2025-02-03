@@ -13,7 +13,7 @@ export const WebSocketProvider = ({ children, isLoggedIn }) => {
     if (isLoggedIn) {
       const token = sessionStorage.getItem('token');
       const userId = sessionStorage.getItem('userId');
-      const ws = new WebSocket(`ws://${API}/vibez-websocket?token=${token}`);
+      const ws = new WebSocket(`wss://${API}/vibez-websocket?token=${token}`);
 
       ws.onopen = () => {
         ws.send(JSON.stringify({ action: 'subscribe', userId, topic: 'profileService' }));

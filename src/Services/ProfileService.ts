@@ -3,7 +3,7 @@ import axios from 'axios';
 const API = import.meta.env.VITE_API;
 
 export const createAccount = async (email: string, name: string, password: string, picture: string, about: string) => {
-    const response = await axios.post(`http://${API}/vibez/register`, {
+    const response = await axios.post(`https://${API}/register`, {
         userName: name,
         email: email,
         password: password,
@@ -14,7 +14,7 @@ export const createAccount = async (email: string, name: string, password: strin
 }
 
 export const fetchUserId = async () => {
-    const response = await axios.get(`http://${API}/vibez/profile`, {
+    const response = await axios.get(`https://${API}/profile`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -23,7 +23,7 @@ export const fetchUserId = async () => {
 }
 
 export const fetchUserMetaData = async () => {
-    const response = await axios.get(`http://${API}/vibez/profile`, {
+    const response = await axios.get(`https://${API}/profile`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -32,7 +32,7 @@ export const fetchUserMetaData = async () => {
 }
 
 export const fetchUserMetaDataById = async (userId: string) => {
-    const response = await axios.get(`http://${API}/vibez/profile/${userId}`, {
+    const response = await axios.get(`https://${API}/profile/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -42,7 +42,7 @@ export const fetchUserMetaDataById = async (userId: string) => {
 
 export const updateDarkMode = async (darkMode: boolean) => {
     await axios.put(
-        `http://${API}/vibez/profile/darkmode/${sessionStorage.getItem('userId')}/${darkMode}`,
+        `https://${API}/profile/darkmode/${sessionStorage.getItem('userId')}/${darkMode}`,
         {},
         {
             headers: {
@@ -53,7 +53,7 @@ export const updateDarkMode = async (darkMode: boolean) => {
 }
 
 export const getdarkModePreference = async () => {
-    const response = await axios.get(`http://${API}/vibez/profile`, {
+    const response = await axios.get(`https://${API}/profile`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -62,7 +62,7 @@ export const getdarkModePreference = async () => {
 }
 
 export const fetchPeopleMetaData = async (userId: string) => {
-    const response = await axios.get(`http://${API}/vibez/profile/${userId}`, {
+    const response = await axios.get(`https://${API}/profile/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -72,7 +72,7 @@ export const fetchPeopleMetaData = async (userId: string) => {
 
 export const deleteDirectChats = async () => {
     await axios.put(
-        `http://${API}/vibez/delete/directChats/${sessionStorage.getItem('userId')}`,
+        `https://${API}/delete/directChats/${sessionStorage.getItem('userId')}`,
         {},
         {
             headers: {
@@ -84,7 +84,7 @@ export const deleteDirectChats = async () => {
 
 export const deleteDirectChat = async (chatId: string) => {
     await axios.put(
-        `http://${API}/vibez/delete/chat/${chatId}/${sessionStorage.getItem('userId')}`,
+        `https://${API}/delete/chat/${chatId}/${sessionStorage.getItem('userId')}`,
         {},
         {
             headers: {
@@ -96,7 +96,7 @@ export const deleteDirectChat = async (chatId: string) => {
 
 export const deleteGroupChats = async () => {
     await axios.put(
-        `http://${API}/vibez/delete/groupChats/${sessionStorage.getItem('userId')}`,
+        `https://${API}/delete/groupChats/${sessionStorage.getItem('userId')}`,
         {},
         {
             headers: {
