@@ -14,6 +14,8 @@ export function GlobalProvider({ children }) {
   const [about, setAbout] = useState('');
   const [email, setEmail] = useState('');
   const [profilePicture, setProfilePicture] = useState('');
+  const [productList, setProductList] = useState([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
 
   const value = {
     directChats,
@@ -37,7 +39,11 @@ export function GlobalProvider({ children }) {
     setName,
     setEmail,
     setAbout,
-    setProfilePicture
+    setProfilePicture,
+    productList,
+    setProductList,
+    loadingProducts,
+    setLoadingProducts
   };
 
   return (
