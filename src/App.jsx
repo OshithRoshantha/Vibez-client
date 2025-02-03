@@ -3,6 +3,7 @@ import Signin from './Pages/Signin';
 import Signup from './Pages/Signup';
 import Dashboard from './Pages/Dashboard';
 import { WebSocketProvider } from './Context/WebSocketContext';
+import { GlobalProvider } from './States/UseStore';
 import { useState} from 'react';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
   return (
     <>
     <WebSocketProvider isLoggedIn={isLoggedIn}>
+    <GlobalProvider>
       <Router>
         <Routes>
           <Route path='/' element={<Signin onLogin={handleLogin} />} />
@@ -22,6 +24,7 @@ function App() {
           <Route path='/Dashboard' element={<Dashboard/>} />
         </Routes>
       </Router>
+      </GlobalProvider>
     </WebSocketProvider>
     </>
   )

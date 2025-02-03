@@ -22,11 +22,16 @@ import { getUnreadGroupMessages } from '../Services/GroupsService';
 import mainDark from '@/assets/Wallpapers/dark.png';
 import mainLight from '@/assets/Wallpapers/light.png';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { useGlobalStore } from '../States/UseStore';
+import { getAllChats, getChatPreivew } from '../Services/ChatService';
+import { getAllGroups, getGroupInfo } from '../Services/GroupsService';
+
 
 export default function Dashboard() {
 
     const isMobile = useIsMobile();
     const { messages } = useWebSocket();
+    const { directChats, setDirectChats, setLoadingDirectChats, groupChats, setGroupChats, setLoadingGroupChats } = useGlobalStore();
     const [processedMessages, setProcessedMessages] = useState([]);
     
     const audioRef = useRef(null);
@@ -112,6 +117,8 @@ export default function Dashboard() {
         fetchPendingRequests();
         fetchUnreadMessages();
         fetchUnreadGroupMessages();
+        fetchAllChats();
+        fetchAllGroups();
     }, []);
 
     useEffect(() => {
@@ -171,13 +178,56 @@ export default function Dashboard() {
                         if(lastMessage.sender !== sessionStorage.getItem('userId')){
                             audioRef2.current.play();
                         }
+                        const hasMatchingChat = directChats.some(chat => chat.chatId === lastMessage.chatId);
+                        console.log(lastMessage);
+                        if (hasMatchingChat) {
+                          setDirectChats(prevChats => 
+                            prevChats.map(chat => 
+                              chat.chatId === lastMessage.chatId
+                                ? {
+                                    ...chat,
+                                    lastMessage: lastMessage.payload.message,
+                                    lastMessageSender: lastMessage.payload.sender === sessionStorage.getItem('userId') ? 'Me' : lastMessage.payload.senderName,
+                                    lastActiveTime: convertToISOTimestamp(lastMessage.payload.timestamp)
+                                  }
+                                : chat
+                            )
+                          );
+                        } else {
+                          fetchAllChats(); 
+                        }    
                     }
                     else if(lastMessage.type === 'group'){
                         fetchUnreadGroupMessages();
                         if(lastMessage.sender !== sessionStorage.getItem('userId')){
                             audioRef2.current.play();
                         }
+                        const hasMatchingGroup = groupChats.some(group => group.groupId === lastMessage.groupId);
+                        if (hasMatchingGroup) {
+                          setGroupChats(prevGroups => 
+                            prevGroups.map(group => 
+                              group.groupId === lastMessage.groupId
+                                ? {
+                                    ...group,
+                                    lastMessage: lastMessage.payload.message,
+                                    lastMessageSender: lastMessage.payload.sender === sessionStorage.getItem('userId') ? 'Me' : lastMessage.payload.senderName, 
+                                    lastUpdate: convertToISOTimestamp(lastMessage.payload.timestamp) 
+                                  }
+                                : group
+                            )
+                          );
+                        } else {
+                          fetchAllGroups(); 
+                        }
                     }
+                }
+                else if(lastMessage.action === 'profileService'){
+                    if(directChats.some(chat => chat.friendId === lastMessage.body)){ 
+                        fetchAllChats();
+                    }
+                }
+                else if(lastMessage.action === 'accountDelete' && lastMessage.typeOfAction === 'directChat'){
+                    fetchAllChats();
                 }
             }
             setProcessedMessages(prevProcessedMessages => [
@@ -188,7 +238,37 @@ export default function Dashboard() {
         handleMessages();
     }, [messages, processedMessages]); 
     
+    const fetchAllChats = async () => {
+        try {
+            const friendIds = await getAllChats(); 
+            const chatPreviews = await Promise.all(
+                friendIds.map(async (friendId) => {
+                    const chatPreview = await getChatPreivew(friendId);
+                    return chatPreview;
+                })
+            );
+            setDirectChats(chatPreviews); 
+        }
+        finally {
+            setLoadingDirectChats(false);
+        }
+    }; 
     
+    const fetchAllGroups = async () => {
+        try{
+            const groupIds = await getAllGroups();
+            const groupPreviews = await Promise.all(
+                groupIds.map(async (groupId) => {
+                    const groupPreview = await getGroupInfo(groupId);
+                    return groupPreview;
+                })
+            );
+            setGroupChats(groupPreviews);
+        } 
+        finally{
+            setLoadingGroupChats(false);
+        }
+    };
 
     function hideWelcomeVideo(){
         setWelcomeVideo(false);
@@ -302,6 +382,21 @@ export default function Dashboard() {
         setFriendInfoMenu(false);
     }
 
+    const convertToISOTimestamp = (time) => {
+        const [hours, minutes] = time.split(':').map(Number); 
+        const now = new Date(); 
+        const newDate = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          hours,
+          minutes,
+          now.getSeconds(),
+          now.getMilliseconds()
+        );
+        return newDate.toISOString(); 
+    };    
+
     useEffect(() => {
         if (showNotification) {
           audioRef.current.play();
@@ -322,7 +417,7 @@ export default function Dashboard() {
             setShowSessionExipred(true);
         }, 20 * 60 * 1000); 
         return () => clearTimeout(timer);
-      }, []);
+    }, []);
 
   return (
     <div className='dashboard-conatiner'>
