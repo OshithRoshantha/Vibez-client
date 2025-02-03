@@ -76,24 +76,6 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
                 setLoading3(false);
             }
     };
-        
-    const fetchAllChats = async () => {
-        try {
-            const friendIds = await getAllChats(); 
-            const chatPreviews = await Promise.all(
-                friendIds.map(async (friendId) => {
-                    const chatPreview = await getChatPreivew(friendId);
-                    return chatPreview;
-                })
-            );
-            setChats(chatPreviews); 
-
-
-        }
-        finally {
-            setLoading(false);
-        }
-    };
     
     const showAllChats = () => {
         setShowAll(true);
@@ -106,15 +88,11 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
         if (value.length > 0) {
             getSearchResults(value);
         }
-        else{
-            fetchAllChats();
-        }
     };
 
     const handleIconClick = async () => {
         if (searchKeyword !== '') {
           setSearchKeyword(''); 
-          fetchAllChats();
         }
     };
 
