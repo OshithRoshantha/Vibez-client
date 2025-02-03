@@ -9,6 +9,8 @@ import { useWebSocket } from '../Context/WebSocketContext';
 import { isConnectedProfile } from '../Services/FriendshipService';
 import PreviewAcceptedRequests from './PreviewAcceptedRequests';
 import { useIsMobile } from '../hooks/useIsMobile';
+import errDark from '@/assets/Icons/searchErdark.png';
+import errLight from '@/assets/Icons/searchEr.png';
 
 export default function Friends({darkMode, setPendingRequests, fetchPendingRequests, showDirectMessages, setReceiverId, setShowMobileRight}) {
 
@@ -27,8 +29,6 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
     const [pendingProfiles, setPendingProfiles] = useState([]);
     const [acceptedProfiles, setAcceptedProfiles] = useState([]);
     const prevPendingCountRef = useRef(0);
-
-    const err = darkMode ? './src/assets/Icons/searchErdark.png' : './src/assets/Icons/searchEr.png';
 
     const handleIconClick = () => {
         if (searchKeyword !== '') {
@@ -311,7 +311,7 @@ export default function Friends({darkMode, setPendingRequests, fetchPendingReque
                                         <img
                                             aria-hidden="true"
                                             alt="document-icon"
-                                            src={err}
+                                            src={`${darkMode ? errDark : errLight}`}
                                             style={{ height: '125px', width: '125px' }}
                                         />
                                         <h2 className={`${darkMode ? 'text-white' : ''} mt-4 text-lg font-semibold`}>
