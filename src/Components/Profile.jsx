@@ -1,11 +1,11 @@
-import { useRef, useState, useEffect} from 'react';
+import { useRef, useState } from 'react';
 import './Styles/Column2.css'
 import AvatarEditor from 'react-avatar-editor'
 import Slider from '@mui/material/Slider';
-import { fetchUserMetaData } from '../Services/ProfileService';
 import { uploadFile } from '../Services/s3Service';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { useWebSocket } from '../Context/WebSocketContext';
+import { useGlobalStore } from '../States/UseStore';
 
 export default function Profile({darkMode, setUserPicture}) {
     
@@ -20,21 +20,8 @@ export default function Profile({darkMode, setUserPicture}) {
     const [cropedImage, setCropedImage] = useState(null);
     const fileInputRef = useRef(null);
     const avatarEditorRef = useRef(null);  
-    const [name, setName] = useState('');
-    const [about, setAbout] = useState('');
-    const [email, setEmail] = useState('');
-    const [profilePicture, setProfilePicture] = useState('');
+    const { setName, setEmail, setAbout, setProfilePicture, name, email, about, profilePicture } = useGlobalStore();
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            const response = await fetchUserMetaData();
-            setName(response.userName);
-            setAbout(response.about);
-            setEmail(response.email);
-            setProfilePicture(response.profilePicture);
-        };
-        fetchUser();
-    }, []);    
 
     const handleImageUpload = async () => {
         const blob = await fetch(selectedImage).then(res => res.blob());
