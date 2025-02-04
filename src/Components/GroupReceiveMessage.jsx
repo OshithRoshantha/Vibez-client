@@ -8,11 +8,10 @@ export default function GroupReceiveMessage({message, time, senderName}) {
             <span className="text-primary" style={{fontSize:'85%'}}>{senderName}</span>
             <p style={{fontSize:'95%'}}>{message}</p>
             <span className="text-xs text-muted-foreground">
-              {(() => {
-                  const [hours, minutes] = time.split(':').map(num => parseInt(num));
-                  const colomboHours = (hours + 5 + 30 / 60) % 24;
-                  const colomboMinutes = minutes;
-                  return `${Math.floor(colomboHours).toString().padStart(2, '0')}:${colomboMinutes.toString().padStart(2, '0')}`;
+                {(() => {
+                  const [hours, minutes] = time.split(':').map(Number);
+                  const colomboDate = new Date(0, 0, 0, hours + 5, minutes + 30);
+                  return colomboDate.toTimeString().slice(0, 5);
                 })()}
             </span>
         </div>
