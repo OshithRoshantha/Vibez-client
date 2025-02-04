@@ -183,22 +183,26 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
                                 .map((chat) => {
                                     const now = new Date();
                                     const date = new Date(chat.lastActiveTime);
+
+                                    const colomboOffset = 5.5 * 60;
+                                    const colomboDate = new Date(date.getTime() + colomboOffset * 60000);
+
                                     let formattedTime;
 
                                     if (
-                                        now.getFullYear() === date.getFullYear() &&
-                                        now.getMonth() === date.getMonth() &&
-                                        now.getDate() === date.getDate()
+                                        now.getFullYear() === colomboDate.getFullYear() &&
+                                        now.getMonth() === colomboDate.getMonth() &&
+                                        now.getDate() === colomboDate.getDate()
                                     ) {
-                                        formattedTime = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+                                        formattedTime = `${colomboDate.getHours().toString().padStart(2, '0')}:${colomboDate.getMinutes().toString().padStart(2, '0')}`;
                                     } else if (
-                                        now.getFullYear() === date.getFullYear() &&
-                                        now.getMonth() === date.getMonth() &&
-                                        now.getDate() - date.getDate() === 1
+                                        now.getFullYear() === colomboDate.getFullYear() &&
+                                        now.getMonth() === colomboDate.getMonth() &&
+                                        now.getDate() - colomboDate.getDate() === 1
                                     ) {
                                         formattedTime = 'Yesterday';
                                     } else {
-                                        formattedTime = `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
+                                        formattedTime = `${colomboDate.getFullYear()}/${(colomboDate.getMonth() + 1).toString().padStart(2, '0')}/${colomboDate.getDate().toString().padStart(2, '0')}`;
                                     }
 
                                     return (
