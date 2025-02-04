@@ -116,7 +116,6 @@ export default function GroupChat({ showGroupInfoMenu, darkMode, groupId, fetchU
   useEffect(() => {
     markMessagesAsRead();
     fetchGroupInfo();
-    fetchChatMessages();
   }, []);
 
   useEffect(() => {
