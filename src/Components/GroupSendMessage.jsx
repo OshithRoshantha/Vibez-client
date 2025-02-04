@@ -9,10 +9,9 @@ export default function GroupSendMessage({message, time}) {
             <div className='pr-1' style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
               <span className="text-xs text-gray-600 pr-5">
                 {(() => {
-                  const [hours, minutes] = time.split(':').map(num => parseInt(num));
-                  const colomboHours = (hours + 5 + 30 / 60) % 24;
-                  const colomboMinutes = minutes;
-                  return `${Math.floor(colomboHours).toString().padStart(2, '0')}:${colomboMinutes.toString().padStart(2, '0')}`;
+                  const [hours, minutes] = time.split(':').map(Number);
+                  const colomboDate = new Date(0, 0, 0, hours + 5, minutes + 30);
+                  return colomboDate.toTimeString().slice(0, 5);
                 })()}
               </span>
               <i className="bi bi-check2-all"></i>
