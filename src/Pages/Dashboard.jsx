@@ -202,6 +202,9 @@ export default function Dashboard() {
                     }
                     fetchMarketplaceItems();
                 }
+                else if (lastMessage.action === 'groupService'){
+                    fetchAllGroups();
+                }
                 else if (lastMessage.action === 'messageService'){
                     if(lastMessage.type === 'direct'){
                         fetchUnreadMessages();
