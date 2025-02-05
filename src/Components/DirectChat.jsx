@@ -254,7 +254,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
   return (
     <div>
         <div className={`${darkMode ? 'bg-[#262729]' : 'bg-background' } min-h-screen flex flex-col`} >
-        <div className={`${darkMode ? 'border-gray-600' : 'border-border'} flex items-center px-4 py-3 border-b`} style={{ height: isMobile ? '10vh' : ''}}>
+        <div className={`${darkMode ? 'border-gray-600' : 'border-border'} flex items-center px-4 py-3 border-b`} style={{ height: isMobile ? '10vh' : '10vh'}}>
             {loading ? (
               <div>
                 <div className="flex items-center">
@@ -281,7 +281,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
             ) }
             {isMobile && <p onClick={handleBackButton} className="text-primary font-medium text-lg cursor-pointer right-6 absolute">Back</p>}
         </div>
-        <div className="p-4" ref={chatRef} style={{height: isMobile ? '80vh' : '78vh', overflowY:'auto', scrollbarWidth:'none', backgroundImage: `url(${darkMode ? mainDark : mainLight})`, backgroundSize: 'cover'}}>
+        <div className="p-4" ref={chatRef} style={{height: isMobile ? '80vh' : '80vh', overflowY:'auto', scrollbarWidth:'none', backgroundImage: `url(${darkMode ? mainDark : mainLight})`, backgroundSize: 'cover'}}>
         {showScrollButton && !isMobile && <i onClick={scrollToBottom} className={`${darkMode ? 'bg-[#262729]' : 'bg-white'} cursor-pointer absolute bi bi-arrow-down-circle-fill text-4xl text-primary`} style={{left: '67%'}}></i>}
           {chatsLoading ? (
             <div className="text-center">
@@ -324,7 +324,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
         </div>
         </div>}
         </div>
-        <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3  border-t`} style={{display:'flex', alignItems:'center',columnGap:'1rem', height: isMobile ? '10vh':''}}>
+        <div className={`${darkMode ? 'border-gray-600 bg-[#262729]' : 'border-border bg-card'} px-4 py-3  border-t`} style={{display:'flex', alignItems:'center',columnGap:'1rem', height: isMobile ? '10vh':'10vh'}}>
             {isFriend ? (<>
             {showEmojiPicker && 
               <div className="absolute" style={{left: '39%', bottom: '11%'}}>
