@@ -575,12 +575,12 @@ export default function Dashboard() {
             {!isMobile && <>
             <div className="flex-1 p-0 messages-column" style={{height:'100vh'}}>
                 {welcomeVideo &&
-                <div className="w-full flex flexflex-column items-center justify-center" style={{height:'100vh', backgroundImage: `url(${darkMode ? mainDark : mainLight})`, backgroundSize: 'cover'}}>
+                <div className="w-full pl-2 flex flex-column items-center justify-center" style={{height:'100vh', backgroundImage: `url(${darkMode ? mainDark : mainLight})`, backgroundSize: 'cover'}}>
                     <img src={mainLogo} className='absolute mt-[-35%] right-[4%]'  style={{width:'10%'}}/>
-                    <MorphingText  texts={texts} className="text-primary dark:text-white right-[7%] absolute mt-[-8%] text-left"/>
-                    <div className='text-primary mt-[60%]'>
+                    <MorphingText  texts={texts} className="text-primary dark:text-white text-left mt-[-10%]"/>
+                    <div className='text-primary absolute bottom-[5%] ml-[-2%]'>
                         <i className="bi bi-lock-fill"></i>&nbsp;<p className='inline'>Your personal messages are end-to-end encrypted</p>
-                    </div>  
+                    </div>
                 </div>
                 }
                 {directMessages && <DirectChat fetchUnreadMessages={fetchUnreadMessages} receiverId={receiverId} darkMode={darkMode} showFriendInfoMenu={showFriendInfoMenu}/>} 
