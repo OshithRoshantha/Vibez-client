@@ -364,30 +364,35 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
                           </div>
                         ) : (
                             groupChats
-                                .sort((a, b) => new Date(b.lastUpdate) - new Date(a.lastUpdate))
+                                .sort((a, b) => {
+                                    const colomboOffset = 5.5 * 60 * 60000;
+
+                                    const dateA = new Date(new Date(a.lastUpdate).getTime() + colomboOffset);
+                                    const dateB = new Date(new Date(b.lastUpdate).getTime() + colomboOffset);
+
+                                    return dateB - dateA;
+                                })
                                 .map((group) => {
-                                    const now = new Date();
-                                    const date = new Date(group.lastUpdate);
-                                
-                                    const colomboOffset = 5.5 * 60; 
-                                    const colomboDate = new Date(date.getTime() + colomboOffset * 60000); 
+                                    const colomboOffset = 5.5 * 60 * 60000;
+                                    const now = new Date(new Date().getTime() + colomboOffset);
+                                    const date = new Date(new Date(group.lastUpdate).getTime() + colomboOffset);
 
                                     let formattedTime;
 
                                     if (
-                                        now.getFullYear() === colomboDate.getFullYear() &&
-                                        now.getMonth() === colomboDate.getMonth() &&
-                                        now.getDate() === colomboDate.getDate()
+                                        now.getFullYear() === date.getFullYear() &&
+                                        now.getMonth() === date.getMonth() &&
+                                        now.getDate() === date.getDate()
                                     ) {
-                                        formattedTime = `${colomboDate.getHours().toString().padStart(2, '0')}:${colomboDate.getMinutes().toString().padStart(2, '0')}`;
+                                        formattedTime = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
                                     } else if (
-                                        now.getFullYear() === colomboDate.getFullYear() &&
-                                        now.getMonth() === colomboDate.getMonth() &&
-                                        now.getDate() - colomboDate.getDate() === 1
+                                        now.getFullYear() === date.getFullYear() &&
+                                        now.getMonth() === date.getMonth() &&
+                                        now.getDate() - date.getDate() === 1
                                     ) {
                                         formattedTime = 'Yesterday';
                                     } else {
-                                        formattedTime = `${colomboDate.getFullYear()}/${(colomboDate.getMonth() + 1).toString().padStart(2, '0')}/${colomboDate.getDate().toString().padStart(2, '0')}`;
+                                        formattedTime = `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
                                     }
 
                                     return (
