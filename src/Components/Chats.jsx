@@ -179,30 +179,35 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
                           </div>
                         ) : (
                             (searchKeyword === '' ? directChats : chats)
-                                .sort((a, b) => new Date(b.lastActiveTime) - new Date(a.lastActiveTime))
-                                .map((chat) => {
-                                    const now = new Date();
-                                    const date = new Date(chat.lastActiveTime);
+                                .sort((a, b) => {
+                                    const colomboOffset = 5.5 * 60 * 60000;
 
-                                    const colomboOffset = 5.5 * 60;
-                                    const colomboDate = new Date(date.getTime() + colomboOffset * 60000);
+                                    const dateA = new Date(new Date(a.lastActiveTime).getTime() + colomboOffset);
+                                    const dateB = new Date(new Date(b.lastActiveTime).getTime() + colomboOffset);
+
+                                    return dateB - dateA;
+                                })
+                                .map((chat) => {
+                                    const colomboOffset = 5.5 * 60 * 60000;
+                                    const now = new Date(new Date().getTime() + colomboOffset);
+                                    const date = new Date(new Date(chat.lastActiveTime).getTime() + colomboOffset);
 
                                     let formattedTime;
 
                                     if (
-                                        now.getFullYear() === colomboDate.getFullYear() &&
-                                        now.getMonth() === colomboDate.getMonth() &&
-                                        now.getDate() === colomboDate.getDate()
+                                        now.getFullYear() === date.getFullYear() &&
+                                        now.getMonth() === date.getMonth() &&
+                                        now.getDate() === date.getDate()
                                     ) {
-                                        formattedTime = `${colomboDate.getHours().toString().padStart(2, '0')}:${colomboDate.getMinutes().toString().padStart(2, '0')}`;
+                                        formattedTime = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
                                     } else if (
-                                        now.getFullYear() === colomboDate.getFullYear() &&
-                                        now.getMonth() === colomboDate.getMonth() &&
-                                        now.getDate() - colomboDate.getDate() === 1
+                                        now.getFullYear() === date.getFullYear() &&
+                                        now.getMonth() === date.getMonth() &&
+                                        now.getDate() - date.getDate() === 1
                                     ) {
                                         formattedTime = 'Yesterday';
                                     } else {
-                                        formattedTime = `${colomboDate.getFullYear()}/${(colomboDate.getMonth() + 1).toString().padStart(2, '0')}/${colomboDate.getDate().toString().padStart(2, '0')}`;
+                                        formattedTime = `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
                                     }
 
                                     return (
