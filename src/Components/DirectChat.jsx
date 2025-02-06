@@ -129,7 +129,7 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
     checkIsFriends();
     fetchFriendshipId();
     setIsFriend(true);
-    if (sessionStorage.getItem('userId') === '679babbb1945b9025f11568c') {
+    if (sessionStorage.getItem('userId') === '67a23983781fc24b8f9b71a1') {
       setIsBeta(true);
     }
 
