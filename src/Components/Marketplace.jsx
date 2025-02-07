@@ -374,7 +374,7 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
                     </div>
                 </div>
                 <h2 className={`${darkMode ? 'text-white':''} text-lg font-semibold mb-2 mt-5`}>New listing</h2>
-                <div className="bg-background p-6 rounded-lg w-full" style={{backgroundColor: darkMode ? '#262729' : ''}}>
+                <div className={`bg-background ${isMobile ? 'py-6 px-1' : 'p-6'} rounded-lg w-full`} style={{backgroundColor: darkMode ? '#262729' : ''}}>
                 <div className="flex flex-col items-center mb-4">
                 <div style={{display:'flex',flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
                     <div className="grid grid-cols-3 gap-1 mb-4">
