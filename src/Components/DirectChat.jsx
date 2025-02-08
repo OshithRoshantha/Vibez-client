@@ -133,7 +133,6 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
       setIsBeta(true);
     }*/
     setIsBeta(true);
-
     const chatContainer = chatRef.current;
     if (chatContainer) {
       chatContainer.addEventListener("scroll", handleScroll);
