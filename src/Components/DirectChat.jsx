@@ -129,9 +129,10 @@ export default function DirectChat({setMarketplaceMenu, showFriendInfoMenu, dark
     checkIsFriends();
     fetchFriendshipId();
     setIsFriend(true);
-    if (sessionStorage.getItem('userId') === '67a23983781fc24b8f9b71a1') {
+    /*if (sessionStorage.getItem('userId') === '67a23983781fc24b8f9b71a1') {
       setIsBeta(true);
-    }
+    }*/
+    setIsBeta(true);
 
     const chatContainer = chatRef.current;
     if (chatContainer) {
