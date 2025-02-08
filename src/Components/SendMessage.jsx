@@ -10,7 +10,7 @@ export default function SendMessage({message, time}) {
               <span className="text-xs text-gray-600 pr-5">
                 {(() => {
                   const [hours, minutes] = time.split(':').map(Number);
-                  const colomboDate = new Date(0, 0, 0, hours + 5, minutes + 30);
+                  const colomboDate = new Date(0, 0, 0, hours + 0, minutes + 0);
                   return colomboDate.toTimeString().slice(0, 5);
                 })()}               
               </span>

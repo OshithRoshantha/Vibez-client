@@ -181,28 +181,24 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
                             (searchKeyword === '' ? directChats : chats)
                             .sort((a, b) => new Date(b.lastActiveTime) - new Date(a.lastActiveTime))
                             .map((chat) => {
-                                const now = new Date();
-                                const date = new Date(chat.lastActiveTime);
-                            
-                                const offset = 10.5 * 60 * 60 * 1000; 
-                                const sriLankaTime = new Date(date.getTime() + offset);
-                            
+                                const colomboOffset = 0;
+                                const now = new Date(new Date().getTime() + colomboOffset);
+                                const date = new Date(new Date(chat.lastActiveTime).getTime() + colomboOffset);
                                 let formattedTime;
-                            
                                 if (
-                                    now.getFullYear() === sriLankaTime.getFullYear() &&
-                                    now.getMonth() === sriLankaTime.getMonth() &&
-                                    now.getDate() === sriLankaTime.getDate()
+                                    now.getFullYear() === date.getFullYear() &&
+                                    now.getMonth() === date.getMonth() &&
+                                    now.getDate() === date.getDate()
                                 ) {
-                                    formattedTime = `${sriLankaTime.getHours().toString().padStart(2, '0')}:${sriLankaTime.getMinutes().toString().padStart(2, '0')}`;
+                                    formattedTime = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
                                 } else if (
-                                    now.getFullYear() === sriLankaTime.getFullYear() &&
-                                    now.getMonth() === sriLankaTime.getMonth() &&
-                                    now.getDate() - sriLankaTime.getDate() === 1
+                                    now.getFullYear() === date.getFullYear() &&
+                                    now.getMonth() === date.getMonth() &&
+                                    now.getDate() - date.getDate() === 1
                                 ) {
                                     formattedTime = 'Yesterday';
                                 } else {
-                                    formattedTime = `${sriLankaTime.getFullYear()}/${(sriLankaTime.getMonth() + 1).toString().padStart(2, '0')}/${sriLankaTime.getDate().toString().padStart(2, '0')}`;
+                                    formattedTime = `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
                                 }
                                 return (
                                         <DirectChatPreview
