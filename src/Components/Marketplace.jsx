@@ -3,7 +3,7 @@ import './Styles/Column2.css'
 import ProductInfo from './ProductInfo';
 import YourListings from './YourListings';
 import EditListing from './EditListing';
-import { getMarketplaceItems, getActiveListingCount, getMyListings, isUserSeller, getTotalClicks, searchProducts} from  '../Services/MarketplaceService';
+import { getActiveListingCount, getMyListings, getTotalClicks, searchProducts} from  '../Services/MarketplaceService';
 import PreviewProduct from './PreviewProduct';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useWebSocket } from '../Context/WebSocketContext';
@@ -11,19 +11,18 @@ import { uploadMultipleFiles } from '../Services/s3Service';
 import { useIsMobile } from '../hooks/useIsMobile';
 import errDark from '@/assets/Icons/listingErdark.png';
 import errLight from '@/assets/Icons/listingEr.png';
+import { useGlobalStore } from '../States/UseStore';
 
 export default function Marketplace({darkMode, showDirectMessages, setReceiverId, setShowMobileRight}) {
 
     const isMobile = useIsMobile();
-    const { messages, addListing } = useWebSocket();
-    const [processedMessages, setProcessedMessages] = useState([]);
+    const { addListing } = useWebSocket();
 
-    const [productList, setProductList] = useState([]);
+    const { productList, loadingProducts } = useGlobalStore();
     const [resultsList, setResultsList] = useState([]);
     const [myListings, setMyListings] = useState([]);
     const [editingProductId, setEditingProductId] = useState();
     const [expandingProductId, setExpandingProductId] = useState();
-    const [loading, setLoading] = useState(true); 
     const [loadingResults, setLoadingResults] = useState(true);
  
     const [forYouMenu, setForYouMenu] = useState(true);
@@ -156,18 +155,14 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
         }
     }
     
-    const fetchMarketplaceItems = async () => {
-        try{
-            const response = await getMarketplaceItems();
-            setProductList(response);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     const fetchSearchResults = async () => {
-        const response = await searchProducts(searchKeyword);
-        setResultsList(response);
+        try{
+            const response = await searchProducts(searchKeyword);
+            setResultsList(response);
+            console.log(response);
+        } finally{
+            setLoadingResults(false);
+        }
     }
 
     const fetchActiveListingCount = async () => {
@@ -192,9 +187,6 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
         fetchMyListings();
     }, [productList]);
 
-    useEffect(() => {
-        fetchMarketplaceItems();
-    }, []);
 
     function handleFileChange(event) {
         const files = Array.from(event.target.files); 
@@ -255,46 +247,6 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
         setYourListningMenu(false);
         setShowResults(false);
     }
-
-    useEffect(() => {
-        const handleMessages = async () => {
-            if (messages.length === 0) {
-                return;
-            }
-            const newMessages = messages.filter(message => !processedMessages.includes(message.id));
-            if (newMessages.length === 0) {
-                return; 
-            }
-            for (const lastMessage of newMessages) {
-                switch (lastMessage.action) {
-                    case 'marketplaceService': {
-                        fetchMarketplaceItems();
-                        break; 
-                    }
-                    case 'profileService': {
-                        const response = await isUserSeller(lastMessage.body);
-                        if(response){
-                            fetchMarketplaceItems();
-                        }
-                        break;  
-                    }
-                    case 'accountDelete':{
-                        if (lastMessage.typeOfAction === 'marketplace') {
-                            fetchMarketplaceItems();
-                        }
-                        break;
-                    }
-                    default:
-                        break;
-                }
-            }
-            setProcessedMessages(prevProcessedMessages => [
-                ...prevProcessedMessages,
-                ...newMessages.map(message => message.id),
-            ]);
-        };
-        handleMessages();
-    }, [messages, processedMessages]); 
 
   return (
     <div>
@@ -367,7 +319,7 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
             {forYouMenu && 
                 <div className='product-list' style={{height: isMobile ? '55vh' : ''}}>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-5 p-0 w-full"> 
-                    {loading ? (<>
+                    {loadingProducts ? (<>
                         {Array.from({ length: 6 }).map((_, index) => (
                             <div
                             key={index}
@@ -422,7 +374,7 @@ export default function Marketplace({darkMode, showDirectMessages, setReceiverId
                     </div>
                 </div>
                 <h2 className={`${darkMode ? 'text-white':''} text-lg font-semibold mb-2 mt-5`}>New listing</h2>
-                <div className="bg-background p-6 rounded-lg w-full" style={{backgroundColor: darkMode ? '#262729' : ''}}>
+                <div className={`bg-background ${isMobile ? 'py-6 px-1' : 'p-6'} rounded-lg w-full`} style={{backgroundColor: darkMode ? '#262729' : ''}}>
                 <div className="flex flex-col items-center mb-4">
                 <div style={{display:'flex',flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
                     <div className="grid grid-cols-3 gap-1 mb-4">

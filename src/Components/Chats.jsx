@@ -1,23 +1,23 @@
 import './Styles/Column2.css'
 import { useState, useEffect, useRef } from 'react';
-import { getAllChats, getChatPreivew, searchChats } from '../Services/ChatService';
+import { getChatPreivew, searchChats } from '../Services/ChatService';
 import DirectChatPreview from './DirectChatPreview';
-import { useWebSocket } from '../Context/WebSocketContext';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useIsMobile } from '../hooks/useIsMobile';
 import PreviewAcceptedRequests from './PreviewAcceptedRequests';
 import { getConnectedProfileInfo, filterPendingRequests } from '../Services/FriendshipService';
+import { useGlobalStore } from '../States/UseStore';
 
 export default function Chats({showDirectMessages, darkMode, setReceiverId, setShowMobileRight}) {
 
     const isMobile = useIsMobile();
-    const { messages } = useWebSocket();
-    const [processedMessages, setProcessedMessages] = useState([]);
+    const { directChats, setDirectChats, loadingDirectChats } = useGlobalStore();
 
     const [chats, setChats] = useState([]);
     const [favouriteChats, setFavouriteChats] = useState([]);
     const [acceptedProfiles, setAcceptedProfiles] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [isFetched, setIsFetched] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [loading2, setLoading2] = useState(true);
     const [loading3, setLoading3] = useState(true);
     const [showAll, setShowAll] = useState(true);
@@ -25,8 +25,14 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
     const [searchKeyword, setSearchKeyword] = useState('');
     const [showFriends, setShowFriends] = useState(false);
 
+    useEffect(() => {
+        setIsFetched(true);
+    }, [directChats]);
+
     const getSearchResults = async (value) => {
         try {
+            setLoading(true);
+            setChats([]); 
             const friendIds = await searchChats(value); 
             const chatPreviews = await Promise.all(
                 friendIds.map(async (friendId) => {
@@ -70,96 +76,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
                 setLoading3(false);
             }
     };
-        
-
-    const fetchAllChats = async () => {
-        try {
-            const friendIds = await getAllChats(); 
-            const chatPreviews = await Promise.all(
-                friendIds.map(async (friendId) => {
-                    const chatPreview = await getChatPreivew(friendId);
-                    return chatPreview;
-                })
-            );
-            setChats(chatPreviews); 
-
-
-        }
-        finally {
-            setLoading(false);
-        }
-    };
     
-    const convertToISOTimestamp = (time) => {
-        const [hours, minutes] = time.split(':').map(Number); 
-        const now = new Date(); 
-        const newDate = new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate(),
-          hours,
-          minutes,
-          now.getSeconds(),
-          now.getMilliseconds()
-        );
-        return newDate.toISOString(); 
-      };
-    
-   useEffect(() => {
-        const handleMessages = async () => {
-            if (messages.length === 0) {
-                return;
-            }
-            const newMessages = messages.filter(
-                (message) => !processedMessages.includes(message.id)
-            );
-            if (newMessages.length === 0) {
-                return;
-            }
-            for (const lastMessage of newMessages) {
-                if (lastMessage.action === 'messageService') {
-                    const hasMatchingChat = chats.some(chat => chat.chatId === lastMessage.chatId);
-                    if (hasMatchingChat) {
-                      setChats(prevChats => 
-                        prevChats.map(chat => 
-                          chat.chatId === lastMessage.chatId
-                            ? {
-                                ...chat,
-                                lastMessage: lastMessage.payload.message,
-                                lastMessageSender: lastMessage.payload.sender === sessionStorage.getItem('userId') ? 'Me' : lastMessage.payload.senderName,
-                                lastActiveTime: convertToISOTimestamp(lastMessage.payload.timestamp)
-                              }
-                            : chat
-                        )
-                      );
-                    } else {
-                      fetchAllChats(); 
-                    }
-                }
-
-                if(lastMessage.action === 'profileService'){
-                    if(chats.some(chat => chat.friendId === lastMessage.body)){ 
-                        fetchAllChats();
-                    }
-                }
-
-                if(lastMessage.action === 'accountDelete' && lastMessage.typeOfAction === 'directChat'){
-                    fetchAllChats();
-                }
-
-            }
-            setProcessedMessages((prevProcessedMessages) => [
-                ...prevProcessedMessages,
-                ...newMessages.map((message) => message.id),
-            ]);
-        };
-        handleMessages();
-    }, [messages, processedMessages]);
-    
-    useEffect(() => {
-        fetchAllChats();
-    }, []);
-
     const showAllChats = () => {
         setShowAll(true);
         setShowFriends(false);
@@ -171,15 +88,11 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
         if (value.length > 0) {
             getSearchResults(value);
         }
-        else{
-            fetchAllChats();
-        }
     };
 
     const handleIconClick = async () => {
         if (searchKeyword !== '') {
           setSearchKeyword(''); 
-          fetchAllChats();
         }
     };
 
@@ -232,24 +145,24 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
                             ) : (
                             acceptedProfiles.map(profile => (
                                 <PreviewAcceptedRequests
-                                key={profile.friendshipId}
-                                darkMode={darkMode}
-                                friendshipId={profile.friendshipId}
-                                profileName={profile.profileName}
-                                profilePicture={profile.profilePicture}
-                                profileAbout={profile.profileAbout}
-                                fetchFriendships={fetchFriendships}
-                                showDirectMessages={showDirectMessages}
-                                setReceiverId={setReceiverId}
-                                friendId={profile.profileId}
-                                setShowMobileRight={setShowMobileRight}
+                                    key={profile.friendshipId}
+                                    darkMode={darkMode}
+                                    friendshipId={profile.friendshipId}
+                                    profileName={profile.profileName}
+                                    profilePicture={profile.profilePicture}
+                                    profileAbout={profile.profileAbout}
+                                    fetchFriendships={fetchFriendships}
+                                    showDirectMessages={showDirectMessages}
+                                    setReceiverId={setReceiverId}
+                                    friendId={profile.profileId}
+                                    setShowMobileRight={setShowMobileRight}
                                 />
                             ))
                             )}
                         </>
                         )}
                     {showAll ? (
-                        loading ? (
+                        loadingDirectChats || loading ? (
                             <div>
                             {[...Array(6)].map((_, index) => (
                               <div key={index} className="space-y-2">
@@ -265,11 +178,20 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
                             ))}
                           </div>
                         ) : (
-                            chats
-                                .sort((a, b) => new Date(b.lastActiveTime) - new Date(a.lastActiveTime))
+                            (searchKeyword === '' ? directChats : chats)
+                                .sort((a, b) => {
+                                    const colomboOffset = 5.5 * 60 * 60000;
+
+                                    const dateA = new Date(new Date(a.lastActiveTime).getTime() + colomboOffset);
+                                    const dateB = new Date(new Date(b.lastActiveTime).getTime() + colomboOffset);
+
+                                    return dateB - dateA;
+                                })
                                 .map((chat) => {
-                                    const now = new Date();
-                                    const date = new Date(chat.lastActiveTime);
+                                    const colomboOffset = 5.5 * 60 * 60000;
+                                    const now = new Date(new Date().getTime() + colomboOffset);
+                                    const date = new Date(new Date(chat.lastActiveTime).getTime() + colomboOffset);
+
                                     let formattedTime;
 
                                     if (
@@ -360,7 +282,7 @@ export default function Chats({showDirectMessages, darkMode, setReceiverId, setS
                                             darkMode={darkMode}
                                         />
                                     );
-                                })
+                            })
                         )
                     )}                    
                 </div>
