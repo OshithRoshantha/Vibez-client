@@ -364,36 +364,31 @@ export default function GroupChats({showGroupMessages, darkMode, setGroupId, set
                           </div>
                         ) : (
                             groupChats
-                                .sort((a, b) => {
-                                    const colomboOffset = 5.5 * 60 * 60000;
-
-                                    const dateA = new Date(new Date(a.lastUpdate).getTime() + colomboOffset);
-                                    const dateB = new Date(new Date(b.lastUpdate).getTime() + colomboOffset);
-
-                                    return dateB - dateA;
-                                })
-                                .map((group) => {
-                                    const colomboOffset = 5.5 * 60 * 60000;
-                                    const now = new Date(new Date().getTime() + colomboOffset);
-                                    const date = new Date(new Date(group.lastUpdate).getTime() + colomboOffset);
-
-                                    let formattedTime;
-
-                                    if (
-                                        now.getFullYear() === date.getFullYear() &&
-                                        now.getMonth() === date.getMonth() &&
-                                        now.getDate() === date.getDate()
-                                    ) {
-                                        formattedTime = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-                                    } else if (
-                                        now.getFullYear() === date.getFullYear() &&
-                                        now.getMonth() === date.getMonth() &&
-                                        now.getDate() - date.getDate() === 1
-                                    ) {
-                                        formattedTime = 'Yesterday';
-                                    } else {
-                                        formattedTime = `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
-                                    }
+                            .sort((a, b) => new Date(b.lastUpdate) - new Date(a.lastUpdate))
+                            .map((group) => {
+                                const now = new Date();
+                                const date = new Date(group.lastUpdate);
+                            
+                                const offset = 10.5 * 60 * 60 * 1000; 
+                                const sriLankaTime = new Date(date.getTime() + offset);
+                            
+                                let formattedTime;
+                            
+                                if (
+                                    now.getFullYear() === sriLankaTime.getFullYear() &&
+                                    now.getMonth() === sriLankaTime.getMonth() &&
+                                    now.getDate() === sriLankaTime.getDate()
+                                ) {
+                                    formattedTime = `${sriLankaTime.getHours().toString().padStart(2, '0')}:${sriLankaTime.getMinutes().toString().padStart(2, '0')}`;
+                                } else if (
+                                    now.getFullYear() === sriLankaTime.getFullYear() &&
+                                    now.getMonth() === sriLankaTime.getMonth() &&
+                                    now.getDate() - sriLankaTime.getDate() === 1
+                                ) {
+                                    formattedTime = 'Yesterday';
+                                } else {
+                                    formattedTime = `${sriLankaTime.getFullYear()}/${(sriLankaTime.getMonth() + 1).toString().padStart(2, '0')}/${sriLankaTime.getDate().toString().padStart(2, '0')}`;
+                                }
 
                                     return (
                                         <GroupChatPreview
