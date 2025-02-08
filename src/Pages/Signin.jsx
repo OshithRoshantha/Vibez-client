@@ -137,7 +137,7 @@ export default function Signin({ onLogin }) {
             <div className={`fixed inset-0 flex ${isMobile ? 'items-end' : 'items-start'} justify-center bg-black bg-opacity-50`} style={{ zIndex: '9999' }}>
             <div className={`p-0 py-1 shadow-lg bg-yellow-600 top-0 text-center w-full`}>
                 <div className={`flex ${isMobile ? 'flex-col-reverse p-3' : 'flex-row'} items-center justify-between`}>
-                <p className="flex-1"><b>Beta Mode:</b> Since VIBEZ services are in testing, this may lead to server failures and longer loading times. Report issues to <b>oedirisuriya@gmail.com</b>. Thank you for your understanding and support!</p>
+                <p className="flex-1">Loading times may be longer than usual due to limited resources. We appreciate your patience and understanding!</p>
                 <i onClick={() => setNotice(false)} className={`bi bi-x-circle-fill cursor-pointer ${isMobile ? 'mb-2  text-3xl' : 'mr-10  text-2xl'}`}></i>
                 </div>
             </div>
