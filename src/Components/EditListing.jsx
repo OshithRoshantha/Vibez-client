@@ -2,6 +2,7 @@ import './Styles/Column2.css'
 import { useState, useEffect } from 'react';
 import { getProductDetails } from  '../Services/MarketplaceService';
 import { useWebSocket } from '../Context/WebSocketContext';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function EditListing({showYourListningMenu, darkMode, editingProductId, autoScroll}) {
 
@@ -16,6 +17,7 @@ export default function EditListing({showYourListningMenu, darkMode, editingProd
     const [listedDate, setListedDate] = useState("");
     const [hideFromFriends, setHideFromFriends] = useState(false);
     const [errors, setErrors] = useState({});
+    const isMobile = useIsMobile();
 
     const validateFields = () => {
         const newErrors = {};
@@ -70,7 +72,7 @@ export default function EditListing({showYourListningMenu, darkMode, editingProd
     }
 
   return (
-    <div className="p-6 pt-1 bg-card text-card-foreground" style={{backgroundColor: darkMode ? '#262729' : ''}}>
+    <div className={`${isMobile ? 'py-6 px-1' : 'p-6'} pt-1 bg-card text-card-foreground`} style={{backgroundColor: darkMode ? '#262729' : ''}}>
         <h2 className={`${darkMode ? 'text-white':''} text-lg font-semibold mb-4`}>Edit listing</h2>
         <div className="bg-background px-4 py-0 rounded-lg w-full" style={{backgroundColor: darkMode ? '#262729' : ''}}>
                 <div className="mb-4">
