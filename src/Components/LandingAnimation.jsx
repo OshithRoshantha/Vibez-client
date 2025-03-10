@@ -64,7 +64,7 @@ const reviews = [
     },
   ];
 
-const firstRow = reviews.slice(0, reviews.length / 2);
+const firstRow = reviews;
 
 const ReviewCard = ({ img, name, username, body }) => {
   return (
@@ -94,7 +94,7 @@ const ReviewCard = ({ img, name, username, body }) => {
 export default function LandingAnimation() {
   return (
     <div className="relative flex h-[500px] w-full flex-col items-center justify-center overflow-hidden rounded-lg ">
-      <Marquee pauseOnHover className="[--duration:20s]">
+      <Marquee pauseOnHover className="[--duration:50s]">
         {firstRow.map((review) => (
           <ReviewCard key={review.username} {...review} />
         ))}

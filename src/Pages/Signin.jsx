@@ -15,20 +15,38 @@ import { Button } from "@/components/ui/button"
 import { GoogleLogin } from '@react-oauth/google';
 import LandingAnimation from '@/Components/LandingAnimation';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 
 export default function Signin() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [emailNotFound, setEmailNotFound] = useState(false);
+  const [incorrectPassword, setIncorrectPassword] = useState(false);
   const navigate = useNavigate();
   const [swiped, setSwiped] = useState(false);
-  const handleSwipe = () => {
+  
+  function handleClickShowPassword() {
+    setShowPassword(!showPassword);
+  }
+
+  function handleSwipe() {
     setSwiped(!swiped);
-    console.log(swiped);
-  };
-  const navSignup = () => {
-    setTimeout(() => {
+  }
+  
+  function navSignup() {
+    setTimeout(function() {
       navigate('/Signup');
     }, 400);
-  };
+  }
+
+  function navDashboard() {
+      navigate('/Dashboard');
+  }
 
   return (
     <div className={`main-container ${swiped ? 'swiped' : ''}`}>
@@ -46,7 +64,7 @@ export default function Signin() {
                     <CardDescription>
                         Welcome to <img src={mainLogo} className='text-logo' alt='Main Logo'/>
                     </CardDescription>
-                    <CardTitle className='card-heading'>{swiped ? 'Sign Up' : 'Sign In'}</CardTitle>  {/* Conditionally render */}
+                    <CardTitle className='card-heading'>{swiped ? 'Sign Up' : 'Sign In'}</CardTitle>  
                 </CardHeader>
                 <CardContent>
                     {swiped ? (
@@ -65,8 +83,10 @@ export default function Signin() {
                                     theme="outline"
                                     width={282}
                                     onSuccess={credentialResponse => {
-                                        console.log(credentialResponse);
                                         handleSwipe();
+                                        navDashboard();
+                                        const decoded = jwtDecode(credentialResponse.credential);
+                                        console.log(decoded);
                                     }}
                                     onError={() => {
                                         console.log('Login Failed');
@@ -79,11 +99,32 @@ export default function Signin() {
                                 &nbsp;&nbsp;Or&nbsp;&nbsp;
                                 <div className='divider-line'></div>
                             </div>
-                            <Label htmlFor="email">Enter your email address</Label>
-                            <Input className='rounded-custom-md input-group' type="email" id="email" placeholder="Jhon@example.com" />
-                            <Label htmlFor="email">Enter your password</Label>
-                            <Input className='rounded-custom-md input-group' type="password" id="email" placeholder="Password" />
-                            <Button className='sign-in-btn-main rounded-custom-md' onClick={() => { handleSwipe(); }}>Sign In</Button>
+                            <TextField id="outlined-basic" label="Email address" className='w-full mb-3' type="email" helperText={emailNotFound ? "The email address you entered isn't connected to an account." : ''} error={emailNotFound}  placeholder="Jhon@example.com" InputProps={{ sx: { borderRadius: '20px'} }}/>
+                            <TextField
+                            id="outlined-password"
+                            className='w-full'
+                            label="Password"
+                            error={incorrectPassword}
+                            helperText={incorrectPassword ? "The password that you've entered is incorrect." : ''}
+                            variant="outlined"
+                            placeholder="Password"
+                            InputProps={{
+                                sx: { borderRadius: '20px'},
+                                endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                    onClick={handleClickShowPassword}
+                                    onMouseDown={(e) => e.preventDefault()}
+                                    edge="end"
+                                    >
+                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                                ),
+                            }}
+                            type={showPassword ? "text" : "password"}
+                            />
+                            <Button className='sign-in-btn-main rounded-custom-md' onClick={() => { handleSwipe(); navDashboard();}}>Sign In</Button>
                         </>
                     )}
                 </CardContent>
@@ -92,7 +133,6 @@ export default function Signin() {
                 </CardFooter>
             </Card>
         </div>
-
     </div>
   )
 }
