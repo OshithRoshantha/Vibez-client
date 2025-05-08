@@ -22,7 +22,7 @@ export const WebSocketProvider = ({ children, isLoggedIn }) => {
     const userId = sessionStorage.getItem('userId');
     isConnecting.current = true;
     
-    const ws = new WebSocket(`wss://${API}/vibez-websocket?token=${token}`);
+    const ws = new WebSocket(`ws://${API}/vibez-websocket?token=${token}`);
     wsRef.current = ws;
 
     ws.onopen = () => {

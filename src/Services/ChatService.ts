@@ -4,7 +4,7 @@ const API = import.meta.env.VITE_API;
 
 export const getAllChats = async () => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`https://${API}/allChats/${userId}`, {
+    const response = await axios.get(`http://${API}/allChats/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -14,7 +14,7 @@ export const getAllChats = async () => {
 
 export const getFavaouriteChats = async () => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`https://${API}/favoriteChats/${userId}`, {
+    const response = await axios.get(`http://${API}/favoriteChats/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -24,7 +24,7 @@ export const getFavaouriteChats = async () => {
 
 export const getChatPreivew = async (chatId: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`https://${API}/directChat/preview/${userId}/${chatId}`, {
+    const response = await axios.get(`http://${API}/directChat/preview/${userId}/${chatId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -34,7 +34,7 @@ export const getChatPreivew = async (chatId: string) => {
 
 export const checkIsRelated = async (chatId: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`https://${API}/directChat/isRelated/${userId}/${chatId}`, {
+    const response = await axios.get(`http://${API}/directChat/isRelated/${userId}/${chatId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -44,7 +44,7 @@ export const checkIsRelated = async (chatId: string) => {
 
 export const getChatMessages = async (reciverId: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`https://${API}/message/directChat/${userId}/${reciverId}`, {
+    const response = await axios.get(`http://${API}/message/directChat/${userId}/${reciverId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -57,7 +57,7 @@ export const markAsRead = async (receiverId: string) => {
     const token = sessionStorage.getItem('token');
     
     const response = await axios.put(
-        `https://${API}/message/markAsRead/${receiverId}/${userId}`, 
+        `http://${API}/message/markAsRead/${receiverId}/${userId}`, 
         {},  
         {
             headers: {
@@ -70,7 +70,7 @@ export const markAsRead = async (receiverId: string) => {
 
 export const getUnreadCount = async () => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`https://${API}/message/unReadCount/${userId}`, {
+    const response = await axios.get(`http://${API}/message/unReadCount/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -80,7 +80,7 @@ export const getUnreadCount = async () => {
 
 export const checkIsUnreadChat = async (chatId: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`https://${API}/messages/checkUnread/${chatId}/${userId}`, {
+    const response = await axios.get(`http://${API}/messages/checkUnread/${chatId}/${userId}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
@@ -90,7 +90,7 @@ export const checkIsUnreadChat = async (chatId: string) => {
 
 export const searchChats = async (keyword: string) => {
     const userId = sessionStorage.getItem('userId');
-    const response = await axios.get(`https://${API}/directChat/find/${userId}/${keyword}`, {
+    const response = await axios.get(`http://${API}/directChat/find/${userId}/${keyword}`, {
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
